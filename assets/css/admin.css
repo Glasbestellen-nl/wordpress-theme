@@ -1,0 +1,57 @@
+.postbox-space-medium .inside {
+   padding: 1.875em;
+}
+
+.postbox-space-large .inside {
+   padding: 2.5em;
+}
+
+.form-row {
+   margin-bottom: 1.5em;
+}
+
+.form-row-underlined {
+   padding-bottom: 1.5em;
+   border-bottom: 1px dotted #e5e5e5;
+}
+
+.form-row-label {
+   margin-bottom: 0.5em;
+   display: block;
+   font-size: 1.125em;
+   font-weight: bold;
+}
+
+.postbox-checklist {
+   margin-top: 0.75em;
+   padding: 0.625em;
+   border: solid 1px #ddd;
+   background-color: #fdfdfd;
+}
+
+.textarea-large {
+   width: 100%;
+   padding: 1.25em;
+   box-sizing: border-box;
+}
+
+.postbox-checklist ul {
+   margin: 0;
+}
+
+.postbox-checklist ul li {
+   padding: 0.625em;
+   margin: 0;
+}
+
+.postbox-checklist ul li:nth-child(odd) {
+   background-color: #eee;
+}
+
+.postbox-checklist ul li label {
+   line-height: 0.5em;
+}
+
+.tab-support {
+   tab-size: 4;
+}
