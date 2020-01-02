@@ -7,49 +7,47 @@ class Single extends \Configurator {
       parent::__construct( $configurator_id );
    }
 
-   public function set_configuration( $c = [] ) {
+   public function set_configuration( $configuration = [] ) {
 
-      if ( empty( $c ) )
+      if ( empty( $configuration ) )
          return;
 
-      foreach ( $c as $step_id => $input ) {
+      foreach ( $configuration as $step_id => $input ) {
 
-         if ( $step_id == 'dimensions' ) {
+         if ( 'dimensions' == $step_id ) {
 
-            $slot = false;
+            $slot = $this->get_part_slot( $step_id, $configuration['strips'] );
 
-            if ( ! empty( $c['strips'] ) ) {
-               $part = $this->get_step_part( $step_id, $c['strips'] );
-               if ( ! empty( $part['slot'] ) ) {
-                  $slot = $part['slot'];
-               }
-            }
+            $opening_width  = $input['opening_width'];
+            $opening_height = $input['opening_height'];
 
-            $ow = $input['opening_width'];
-            $oh = $input['opening_height'];
-
-            $this->add_row( __( 'Afmetingen opening', 'glasbestellen' ), $ow . 'mm x ' . $oh . 'mm' );
-
-            $gw = $ow - 6;
-            $gh = $oh - 5;
+            // Default glass dimensions
+            $glass_width    = $opening_width  - 6;
+            $glass_height   = $opening_height - 5;
 
             if ( $slot ) {
 
-               switch( $slot ) {
+               // Glass deduction by type of strips
+               switch ( $slot ) {
 
                   case '1':
-                     $gh = $oh - 15;
+                     $glass_height = $opening_height - 15;
                      break;
+
                   case '2':
-                     $gw = $ow - 12;
+                     $glass_width  = $opening_width  - 12;
                      break;
+
                   case '3':
-                     $gw = $ow - 12;
-                     $gh = $oh - 15;
+                     $glass_width  = $opening_width  - 12;
+                     $glass_height = $opening_height - 15;
                      break;
                }
             }
-            $this->add_row( __( 'Glasmaten', 'glasbestellen' ), $gw . 'mm x ' . $gh . 'mm' );
+
+            // Add customised rows to product summary
+            $this->add_row( __( 'Afmetingen opening', 'glasbestellen' ), $opening_width . 'mm x ' . $opening_height . 'mm' );
+            $this->add_row( __( 'Glasmaten', 'glasbestellen' ), $glass_width . 'mm x ' . $glass_height . 'mm' );
 
          } else {
             $this->add_row(
@@ -57,13 +55,11 @@ class Single extends \Configurator {
                get_the_title( $input )
             );
          }
-
       }
 
       if ( ! $this->get_errors() ) {
-         $this->configuration = $c;
+         $this->configuration = $configuration;
       }
    }
-
 
 }

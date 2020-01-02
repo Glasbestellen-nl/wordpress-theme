@@ -7,55 +7,49 @@ class Double extends \Configurator {
       parent::__construct( $configurator_id );
    }
 
-   public function set_configuration( $c = [] ) {
+   public function set_configuration( $configuration = [] ) {
 
-      if ( empty( $c ) )
+      if ( empty( $configuration ) )
          return;
 
-      foreach ( $c as $step_id => $input ) {
+      foreach ( $configuration as $step_id => $input ) {
 
          if ( $step_id == 'dimensions' ) {
 
-            $slot = false;
+            $slot = $this->get_part_slot( $step_id, $configuration['strips'] );
 
-            if ( ! empty( $c['strips'] ) ) {
-               $part = $this->get_step_part( $step_id, $c['strips'] );
-               if ( ! empty( $part['slot'] ) ) {
-                  $slot = $part['slot'];
-               }
-            }
-
-            $ow = $input['opening_width'];
-            $oh = $input['opening_height'];
-
-            $this->add_row( __( 'Afmetingen opening', 'glasbestellen' ), $ow . 'mm x ' . $oh . 'mm' );
+            $opening_width  = $input['opening_width'];
+            $opening_height = $input['opening_height'];
 
             // Deduction per door
-            $ddw = 5;
-            $ddh = 5;
+            $deduct_width  = 5;
+            $deduct_height = 5;
 
             if ( $slot ) {
 
-               switch( $slot ) {
+               // Glass deduction by type of strips
+               switch ( $slot ) {
 
                   case '1':
-                     $ddh = 15;
+                     $deduct_height = 15;
                      break;
                   case '2':
-                     $ddw - 13;
+                     $deduct_width - 13;
                      break;
                   case '3':
-                     $ddw = 13;
-                     $ddh = 15;
+                     $deduct_width = 13;
+                     $deduct_height = 15;
                      break;
                }
             }
 
-            $gw = ( $ow / 2 ) - $ddw;
-            $gh = $oh - $ddh;
+            $glass_width  = ( $opening_width / 2 ) - $deduct_width;
+            $glass_height = $opening_height - $deduct_height;
 
-            $this->add_row( __( 'Deur links', 'glasbestellen' ), $gw . 'mm x ' . $gh . 'mm' );
-            $this->add_row( __( 'Deur rechts', 'glasbestellen' ), $gw . 'mm x ' . $gh . 'mm' );
+            // Add customised rows to product summary
+            $this->add_row( __( 'Afmetingen opening', 'glasbestellen' ), $opening_width . 'mm x ' . $opening_height . 'mm' );
+            $this->add_row( __( 'Deur links', 'glasbestellen' ), $glass_width . 'mm x ' . $glass_height . 'mm' );
+            $this->add_row( __( 'Deur rechts', 'glasbestellen' ), $glass_width . 'mm x ' . $glass_height . 'mm' );
 
          } else {
             $this->add_row(
@@ -67,7 +61,7 @@ class Double extends \Configurator {
       }
 
       if ( ! $this->get_errors() ) {
-         $this->configuration = $c;
+         $this->configuration = $configuration;
       }
    }
 

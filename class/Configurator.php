@@ -34,7 +34,7 @@ abstract class Configurator {
       $this->errors = false;
    }
 
-   abstract function set_configuration( $c = [] );
+   abstract function set_configuration( $configuration = [] );
 
    public function get_configuration( $step_id = null, $field = null ) {
 
@@ -209,6 +209,17 @@ abstract class Configurator {
       return 0;
    }
 
+   public function get_part_slot( $step_id = null, $part_id = null ) {
+
+      if ( empty( $part_id ) )
+         return;
+
+      if ( $part = $this->get_step_part( $step_id, $part_id ) ) {
+         return isset( $part['slot'] ) ? $part['slot'] : false;
+      }
+      return false;
+   }
+
    public function get_part_price_difference( $step_id = null, $part_id = null ) {
 
       $c_price = $this->get_part_price( $step_id, $part_id );
@@ -361,7 +372,6 @@ abstract class Configurator {
 
             $part_price = 0;
             $price_default = 0;
-            $price_configured = 0;
 
             if ( $this->get_part_price( $step_id, $input ) ) {
                $part_price = $this->get_part_price( $step_id, $input );

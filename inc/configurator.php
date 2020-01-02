@@ -242,6 +242,7 @@ function gb_get_configurator( $configurator_id = 0, $auto_set = true ) {
    $classes = [
       'single-showerdoor' => 'Showerdoor\Single',
       'double-showerdoor' => 'Showerdoor\Double',
+      'with-sidepanel-in-clamps' => 'Showerdoor\With_Sidepanel_In_Clamps'
    ];
    $classes = apply_filters( 'available_configurators', $classes );
 
