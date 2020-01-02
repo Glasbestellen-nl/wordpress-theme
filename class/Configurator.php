@@ -41,14 +41,14 @@ abstract class Configurator {
       if ( empty( $step_id ) )
          return $this->configuration;
 
-      if ( ! empty( $this->configuration[$step_id] ) ) {
-         if ( ! is_array( $this->configuration[$step_id] ) )
-            return $this->configuration[$step_id];
+      if ( empty( $this->configuration[$step_id] ) )
+         return;
 
-         if ( ! empty( $field ) ) {
-            return $this->configuration[$step_id][$field];
-         }
-      }
+      if ( ! is_array( $this->configuration[$step_id] ) )
+         return $this->configuration[$step_id];
+
+      if ( ! empty( $field ) )
+         return $this->configuration[$step_id][$field];
    }
 
    public function get_default_configuration( $step_id = null ) {
@@ -339,6 +339,10 @@ abstract class Configurator {
       return true;
    }
 
+   public function calculate_square_meters( $width = 0, $length = 0 ) {
+      return ( $width * $length ) / 1000000;
+   }
+
    public function calculate_price_table( $c = [] ) {
 
       $price_table = [];
@@ -350,7 +354,7 @@ abstract class Configurator {
          $m2s = 0;
 
          if ( ! empty( $c['dimensions']['opening_width'] ) && ! empty( $c['dimensions']['opening_height'] ) ) {
-            $m2s = $c['dimensions']['opening_width'] * $c['dimensions']['opening_height'] / 1000000;
+            $m2s = $this->calculate_square_meters( $c['dimensions']['opening_width'], $c['dimensions']['opening_height'] );
          }
 
          foreach ( $c as $step_id => $input ) {
@@ -366,33 +370,24 @@ abstract class Configurator {
             switch ( $step_id ) {
 
                case 'dimensions' :
-                  if ( $m2s ) {
-                     if ( ! empty( $d['glasstype'] ) ) {
-                        $price_table[$step_id] = $m2s * $this->get_part_price( 'glasstype', $d['glasstype'] );
-                     }
+                  if ( ! empty( $d['glasstype'] ) ) {
+                     $price_table[$step_id] = $m2s * $this->get_part_price( 'glasstype', $d['glasstype'] );
                   }
                   break;
 
                case 'glasstype' :
-                  if ( $m2s ) {
-                     if ( ! empty( $d['glasstype'] ) ) {
-                        $price_default         = $this->get_part_price( 'glasstype', $d['glasstype'] );
-                        $price_table[$step_id] = $m2s * ( $part_price - $price_default );
-                     }
+                  if ( ! empty( $d['glasstype'] ) ) {
+                     $price_default         = $this->get_part_price( 'glasstype', $d['glasstype'] );
+                     $price_table[$step_id] = $m2s * ( $part_price - $price_default );
                   }
                   break;
 
                case 'coating' :
-                  if ( $m2s ) {
-                     $price_table[$step_id] = $m2s * $part_price;
-                  }
+                  $price_table[$step_id] = $m2s * $part_price;
                   break;
 
                default :
-                  if ( ! empty( $input ) ) {
-                     $price_table[$step_id] = $part_price;
-                  }
-
+                  $price_table[$step_id] = $part_price;
             }
          }
       }
