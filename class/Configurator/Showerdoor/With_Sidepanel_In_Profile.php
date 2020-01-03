@@ -1,7 +1,7 @@
 <?php
 namespace Configurator\Showerdoor;
 
-class With_Sidepanel_In_Clamps extends \Configurator {
+class With_Sidepanel_In_Profile extends \Configurator {
 
    public function __construct( $configurator_id ) {
       parent::__construct( $configurator_id );
@@ -25,7 +25,8 @@ class With_Sidepanel_In_Clamps extends \Configurator {
             // Default deduction
             $door->deduct_width(3);
             $door->deduct_length(5);
-            $panel->deduct_width(5);
+            $panel->deduct_width(8);
+            $panel->deduct_length(5);
 
             // Deduction based on strips
             switch ( $slot ) {

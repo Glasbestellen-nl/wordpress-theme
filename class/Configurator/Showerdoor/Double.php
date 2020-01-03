@@ -18,12 +18,12 @@ class Double extends \Configurator {
 
             $slot = $this->get_part_slot( $step_id, $configuration['strips'] );
 
-            $opening_width  = $input['opening_width'];
-            $opening_height = $input['opening_height'];
+            $opening = new \Rectangle( $input['opening_width'], $input['opening_height'] );
+            $door = new \Rectangle( $input['opening_width'] / 2, $input['opening_height'] );
 
             // Deduction per door
-            $deduct_width  = 5;
-            $deduct_height = 5;
+            $door->deduct_width(5);
+            $door->deduct_length(5);
 
             if ( $slot ) {
 
@@ -31,25 +31,22 @@ class Double extends \Configurator {
                switch ( $slot ) {
 
                   case '1':
-                     $deduct_height = 15;
+                     $door->deduct_length(10);
                      break;
                   case '2':
-                     $deduct_width - 13;
+                     $door->deduct_width(7);
                      break;
                   case '3':
-                     $deduct_width = 13;
-                     $deduct_height = 15;
+                     $door->deduct_width(7);
+                     $door->deduct_length(10);
                      break;
                }
             }
 
-            $glass_width  = ( $opening_width / 2 ) - $deduct_width;
-            $glass_height = $opening_height - $deduct_height;
-
             // Add customised rows to product summary
-            $this->add_row( __( 'Afmetingen opening', 'glasbestellen' ), $opening_width . 'mm x ' . $opening_height . 'mm' );
-            $this->add_row( __( 'Deur links', 'glasbestellen' ), $glass_width . 'mm x ' . $glass_height . 'mm' );
-            $this->add_row( __( 'Deur rechts', 'glasbestellen' ), $glass_width . 'mm x ' . $glass_height . 'mm' );
+            $this->add_row( __( 'Afmetingen opening', 'glasbestellen' ), $opening->display_dimensions() );
+            $this->add_row( __( 'Deur links', 'glasbestellen' ), $door->display_dimensions() );
+            $this->add_row( __( 'Deur rechts', 'glasbestellen' ), $door->display_dimensions() );
 
          } else {
             $this->add_row(

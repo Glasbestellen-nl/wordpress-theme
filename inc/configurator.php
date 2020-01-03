@@ -242,7 +242,10 @@ function gb_get_configurator( $configurator_id = 0, $auto_set = true ) {
    $classes = [
       'single-showerdoor' => 'Showerdoor\Single',
       'double-showerdoor' => 'Showerdoor\Double',
-      'with-sidepanel-in-clamps' => 'Showerdoor\With_Sidepanel_In_Clamps'
+      'showerdoor-with-sidepanel-in-clamps' => 'Showerdoor\With_Sidepanel_In_Clamps',
+      'showerdoor-with-sidepanel-in-profile' => 'Showerdoor\With_Sidepanel_In_Profile',
+      'showerdoor-on-sidepanel-in-clamps' => 'Showerdoor\On_Sidepanel_In_Clamps',
+      'showerdoor-on-sidepanel-in-profile' => 'Showerdoor\On_Sidepanel_In_Profile',
    ];
    $classes = apply_filters( 'available_configurators', $classes );
 

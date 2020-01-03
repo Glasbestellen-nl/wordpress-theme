@@ -18,36 +18,33 @@ class Single extends \Configurator {
 
             $slot = $this->get_part_slot( $step_id, $configuration['strips'] );
 
-            $opening_width  = $input['opening_width'];
-            $opening_height = $input['opening_height'];
+            $opening = new \Rectangle( $input['opening_width'], $input['opening_height'] );
+            $door = new \Rectangle( $input['opening_width'], $input['opening_height'] );
 
             // Default glass dimensions
-            $glass_width    = $opening_width  - 6;
-            $glass_height   = $opening_height - 5;
+            $door->deduct_width(6);
+            $door->deduct_length(5);
 
-            if ( $slot ) {
+            // Glass deduction by type of strips
+            switch ( $slot ) {
 
-               // Glass deduction by type of strips
-               switch ( $slot ) {
+               case '1':
+                  $door->deduct_length(10);
+                  break;
 
-                  case '1':
-                     $glass_height = $opening_height - 15;
-                     break;
+               case '2':
+                  $door->deduct_width(6);
+                  break;
 
-                  case '2':
-                     $glass_width  = $opening_width  - 12;
-                     break;
-
-                  case '3':
-                     $glass_width  = $opening_width  - 12;
-                     $glass_height = $opening_height - 15;
-                     break;
-               }
+               case '3':
+                  $door->deduct_width(6);
+                  $door->deduct_length(10);
+                  break;
             }
 
             // Add customised rows to product summary
-            $this->add_row( __( 'Afmetingen opening', 'glasbestellen' ), $opening_width . 'mm x ' . $opening_height . 'mm' );
-            $this->add_row( __( 'Glasmaten', 'glasbestellen' ), $glass_width . 'mm x ' . $glass_height . 'mm' );
+            $this->add_row( __( 'Afmetingen opening', 'glasbestellen' ), $opening->display_dimensions() );
+            $this->add_row( __( 'Glasmaten', 'glasbestellen' ), $door->display_dimensions() );
 
          } else {
             $this->add_row(

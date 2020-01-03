@@ -1,7 +1,7 @@
 <?php
 namespace Configurator\Showerdoor;
 
-class With_Sidepanel_In_Clamps extends \Configurator {
+class On_Sidepanel_In_Clamps extends \Configurator {
 
    public function __construct( $configurator_id ) {
       parent::__construct( $configurator_id );
@@ -23,7 +23,7 @@ class With_Sidepanel_In_Clamps extends \Configurator {
             $panel    = new \Rectangle( $input['opening_width'] - $input['door_width'], $input['opening_height'] );
 
             // Default deduction
-            $door->deduct_width(3);
+            $door->deduct_width(4);
             $door->deduct_length(5);
             $panel->deduct_width(5);
 
@@ -35,14 +35,12 @@ class With_Sidepanel_In_Clamps extends \Configurator {
                   break;
 
                case 2 :
-                  $door->deduct_width(10);
-                  $panel->deduct_width(7);
+                  $door->deduct_width(6);
                   break;
 
                case 3 :
-                  $door->deduct_width(10);
+                  $door->deduct_width(6);
                   $door->deduct_height(10);
-                  $panel->deduct_width(7);
                   break;
             }
 
