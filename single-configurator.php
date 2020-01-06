@@ -66,7 +66,7 @@
                               </div>
 
                               <div class="config-details__submit-button space-below">
-                                 <button class="btn btn--tertiary btn--block btn--next"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
+                                 <button class="btn btn--tertiary btn--block btn--next js-configurator-to-cart"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
                               </div>
 
                               <ul class="config-details__checkmarks">

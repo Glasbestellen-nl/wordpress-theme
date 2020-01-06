@@ -1,6 +1,8 @@
 const Configurator = (function() {
 
-   function Cnf(element) {
+   let instance;
+
+   function ConfiguratorObject(element) {
 
       this.element = element;
 
@@ -12,7 +14,7 @@ const Configurator = (function() {
          this.element.addEventListener('click', e => {
 
             // Select choice
-            if (e.target.closest('.js-choice')) {
+            if (e.target && e.target.closest('.js-choice')) {
                let choice = e.target.closest('.js-choice');
                let partId = choice.dataset.choiceValue;
                this.selectChoice(choice);
@@ -33,6 +35,19 @@ const Configurator = (function() {
                      let partId = choiceField.value;
                      self.updateChoiceEnlargement(partId);
                   }
+               });
+            }
+
+            // Add configuration to cart
+            if (e.target && e.target.closest('.js-configurator-to-cart')) {
+               let data = {
+                  action: 'handle_configurator_to_cart',
+                  configurator_id: gb.configuratorId
+               }
+               jQuery.post(gb.ajaxUrl, data, function(url) {
+                  // Redirect to cart page
+                  if (url)
+                     window.location.replace(url);
                });
             }
 
@@ -213,22 +228,20 @@ const Configurator = (function() {
 
    }
 
-   let cnf;
-
    function createInstance(element) {
-      cnf = new Cnf(element);
-      return cnf;
+      instance = new ConfiguratorObject(element);
+      return instance;
    }
 
    return {
       getInstance: (element) => {
-         if (!cnf)
-            cnf = createInstance(element);
-         return cnf;
+         if (!instance)
+            instance = createInstance(element);
+         return instance;
       }
    }
 
 })();
 
-const configurator = Configurator.getInstance(document.querySelector('.single-configurator'));
+const configurator = Configurator.getInstance(document.querySelector('.js-configurator'));
 configurator.init();

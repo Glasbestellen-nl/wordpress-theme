@@ -25,6 +25,10 @@ function gb_enqueue_scripts() {
       wp_enqueue_script( 'configurator-js', get_template_directory_uri() . '/assets/js/configurator.js', ['jquery', 'main-js'], $version, true );
    }
 
+   if ( gb_is_cart_page() ) {
+      wp_enqueue_script( 'cart-js', get_template_directory_uri() . '/assets/js/cart.js', ['jquery', 'main-js'], $version, true );
+   }
+
    // Localize scripts
    wp_localize_script( 'main-js', 'gb',
       array(

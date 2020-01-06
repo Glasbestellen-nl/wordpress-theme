@@ -1,6 +1,7 @@
 <?php
 // Template name: Cart
-get_header(); ?>
+get_header();
+$cart = gb_get_cart(); ?>
 
    <main class="main-section main-section--space-around main-section--grey">
 
@@ -35,106 +36,109 @@ get_header(); ?>
 
                      <h1 class="h1"><?php _e( 'Winkelwagen', 'glasbestellen' ); ?></h1>
 
-                     <div class="cart-table">
+                     <?php if ( $cart->have_items() ) { ?>
 
-                        <div class="cart-table__body">
+                        <div class="cart-table">
 
-                           <div class="cart-table__row">
+                           <div class="cart-table__body">
 
-                              <div class="cart-table__col cart-table__col--image">
-                                 <img src="https://www.glasbestellen.nl/wp-content/uploads/2019/06/startopstelling-enkele-douchedeur.jpg" class="rounded-corners">
-                              </div>
+                              <?php
+                              while ( $cart->have_items() ) {
+                                 $cart->the_item(); ?>
 
-                              <div class="cart-table__col cart-table__col--info">
+                                 <div class="cart-table__row js-cart-item" data-item-id="<?php echo $cart->get_item_id(); ?>">
 
-                                 <h3 class="h4 cart-table__product-title">Dubbele douchedeur</h3>
+                                    <?php if ( $cart->get_item_thumbnail() ) { ?>
+                                       <div class="cart-table__col cart-table__col--image">
+                                          <img src="<?php echo $cart->get_item_thumbnail(); ?>" class="rounded-corners">
+                                       </div>
+                                    <?php } ?>
 
-                                 <table class="cart-table__summary" width="100%">
-                                    <tr class="cart-table__summary-row">
-                                       <td class="cart-table__summary-col cart-table__summary-col--title">Draairichting:</td>
-                                       <td class="cart-table__summary-col">Linksdraaiend</td>
-                                    </tr>
-                                    <tr class="cart-table__summary-row">
-                                       <td class="cart-table__summary-col cart-table__summary-col--title">Afmetingen opening:</td>
-                                       <td class="cart-table__summary-col">800mm x 1800mm</td>
-                                    </tr>
-                                    <tr class="cart-table__summary-row">
-                                       <td class="cart-table__summary-col cart-table__summary-col--title">Glasmaten:</td>
-                                       <td class="cart-table__summary-col">794mm x 1795mm</td>
-                                    </tr>
-                                    <tr class="cart-table__summary-row">
-                                       <td class="cart-table__summary-col cart-table__summary-col--title">Glassoort:</td>
-                                       <td class="cart-table__summary-col">8mm Helder glas</td>
-                                    </tr>
-                                    <tr class="cart-table__summary-row">
-                                       <td class="cart-table__summary-col cart-table__summary-col--title">Scharnieren:</td>
-                                       <td class="cart-table__summary-col">Scharnier Basic Chroom</td>
-                                    </tr>
-                                    <tr class="cart-table__summary-row">
-                                       <td class="cart-table__summary-col cart-table__summary-col--title">Deuropener:</td>
-                                       <td class="cart-table__summary-col">Knop Basic Chroom</td>
-                                    </tr>
-                                 </table>
+                                    <div class="cart-table__col cart-table__col--info">
 
-                              </div>
+                                       <h3 class="h4 cart-table__product-title"><?php echo $cart->get_item_title(); ?></h3>
 
-                              <div class="cart-table__col cart-table__col--amount">
+                                       <?php if ( $cart->get_item_summary() ) { ?>
 
-                                 <select class="cart-table__dropdown cart-table__dropdown--amount dropdown">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                 </select>
+                                          <table class="cart-table__summary" width="100%">
 
-                                 <div class="cart-table__delete-trigger"><?php _e( 'Verwijder', 'glasbestellen' ); ?></div>
+                                             <?php foreach ( $cart->get_item_summary() as $row ) { ?>
 
-                              </div>
+                                                <tr class="cart-table__summary-row">
+                                                   <td class="cart-table__summary-col cart-table__summary-col--title"><?php echo $row['label']; ?>:</td>
+                                                   <td class="cart-table__summary-col"><?php echo $row['value']; ?></td>
+                                                </tr>
 
-                              <div class="cart-table__col cart-table__col--price">€337,00</div>
+                                             <?php } ?>
+
+                                          </table>
+
+                                       <?php } ?>
+
+                                    </div>
+
+                                    <div class="cart-table__col cart-table__col--amount">
+
+                                       <select class="cart-table__dropdown cart-table__dropdown--amount dropdown js-quantity-dropdown">
+                                          <?php
+                                          for ( $i = 1; $i <= 20; $i ++ ) {
+                                             echo '<option ' . selected( $i, $cart->get_item_quantity(), false ) . ' value="' . $i . '">' . $i . '</option>';
+                                          }
+                                          ?>
+                                       </select>
+
+                                       <div class="cart-table__delete-trigger"><?php _e( 'Verwijder', 'glasbestellen' ); ?></div>
+
+                                    </div>
+
+                                    <div class="cart-table__col cart-table__col--price"><?php echo Money::display( $cart->get_item_price() ); ?></div>
+
+                                 </div>
+
+                              <?php } ?>
 
                            </div>
 
                         </div>
 
-                     </div>
+                        <div class="row no-gutters">
 
-                     <div class="row no-gutters">
+                           <div class="col-12 col-lg-4 offset-lg-8">
 
-                        <div class="col-12 col-lg-4 offset-lg-8">
+                              <table class="cart-table-totals" width="100%">
 
-                           <table class="cart-table-totals" width="100%">
+                                 <tbody class="cart-table-totals__body">
 
-                              <tbody class="cart-table-totals__body">
+                                    <tr class="cart-table-totals__row">
+                                       <td class="cart-table-totals__col cart-table-totals__col--title"><?php _e( 'Subtotaal', 'glasbestellen' ); ?></td>
+                                       <td class="cart-table-totals__col cart-table-totals__col--value"><?php echo Money::display( $cart->get_total_price(), false ); ?></td>
+                                    </tr>
 
-                                 <tr class="cart-table-totals__row">
-                                    <td class="cart-table-totals__col cart-table-totals__col--title"><?php _e( 'Subtotaal', 'glasbestellen' ); ?></td>
-                                    <td class="cart-table-totals__col cart-table-totals__col--value">00,00</td>
-                                 </tr>
+                                    <tr class="cart-table-totals__row--shipping">
+                                       <td class="cart-table-totals__col cart-table-totals__col--title"><?php _e( 'Verzendkosten', 'glasbestellen' ); ?></td>
+                                       <td class="cart-table-totals__col cart-table-totals__col--value"><?php _e( 'Gratis', 'glasbestellen' ); ?></td>
+                                    </tr>
 
-                                 <tr class="cart-table-totals__row--shipping">
-                                    <td class="cart-table-totals__col cart-table-totals__col--title"><?php _e( 'Verzendkosten', 'glasbestellen' ); ?></td>
-                                    <td class="cart-table-totals__col cart-table-totals__col--value">Gratis</td>
-                                 </tr>
+                                    <tr class="cart-table-totals__row--total">
+                                       <td class="cart-table-totals__col cart-table-totals__col--title"><?php _e( 'Totaal', 'glasbestellen' ); ?></td>
+                                       <td class="cart-table-totals__col cart-table-totals__col--value"><?php echo Money::display( $cart->get_total_price() ); ?></td>
+                                    </tr>
 
-                                 <tr class="cart-table-totals__row--total">
-                                    <td class="cart-table-totals__col cart-table-totals__col--title"><?php _e( 'Totaal', 'glasbestellen' ); ?></td>
-                                    <td class="cart-table-totals__col cart-table-totals__col--value">00,00</td>
-                                 </tr>
+                                    <tr class="cart-table-totals__row">
+                                       <td class="cart-table-totals__col" colspan="2">
+                                          <a href="<?php echo get_permalink( get_page_id_by_template( 'checkout.php' ) ); ?>" class="btn btn--primary btn--block btn--next">Verder naar bestellen</a>
+                                       </td>
+                                    </tr>
 
-                                 <tr class="cart-table-totals__row">
-                                    <td class="cart-table-totals__col" colspan="2">
-                                       <a href="<?php echo get_permalink( get_page_id_by_template( 'checkout.php' ) ); ?>" class="btn btn--primary btn--block btn--next">Verder naar bestellen</a>
-                                    </td>
-                                 </tr>
+                                 </tbody>
 
-                              </tbody>
+                              </table>
 
-                           </table>
+                           </div>
 
                         </div>
 
-                     </div>
+                     <?php } ?>
 
                   </div>
 

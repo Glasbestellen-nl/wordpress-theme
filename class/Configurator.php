@@ -124,11 +124,7 @@ abstract class Configurator {
    }
 
    public function have_steps() {
-
-      if ( $this->current_step < count( $this->steps ) ) {
-         return true;
-      }
-      return false;
+      return $this->current_step < count( $this->steps );
    }
 
    public function the_step() {

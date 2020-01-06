@@ -6,6 +6,10 @@ function gb_configurator_body_class( $class ) {
    if ( is_tax( 'startopstelling' ) || is_singular( 'configurator' ) ) {
       $class[] = 'body--grey';
    }
+   // Adds javascript handler
+   if ( is_singular( 'configurator' ) ) {
+      $class[] = 'js-configurator';
+   }
    return $class;
 }
 add_action( 'body_class', 'gb_configurator_body_class' );
@@ -191,6 +195,41 @@ function gb_handle_configurator_form_submit() {
 }
 add_action( 'wp_ajax_handle_configurator_form_submit', 'gb_handle_configurator_form_submit' );
 add_action( 'wp_ajax_nopriv_handle_configurator_form_submit', 'gb_handle_configurator_form_submit' );
+
+function gb_handle_configurator_to_cart() {
+
+   if ( ! empty( $_POST['configurator_id'] ) ) {
+
+      $configurator_id = $_POST['configurator_id'];
+
+      // Get configurator object
+      $configurator = gb_get_configurator( $configurator_id );
+
+      if ( ! $configurator->configuration_done() ) wp_die();
+
+      // Get cart object
+      $cart = gb_get_cart();
+
+      // Add item to cart
+      $price         = $configurator->get_total_price();
+      $summary       = $configurator->get_summary();
+      $configuration = $configurator->get_configuration();
+      $cart->add_item( $configurator_id, $price, 1, $summary, $configuration );
+
+      // Store items back in session
+      gb_update_cart_session_items( $cart->get_items() );
+
+      // Return cart page url
+      $cart_url = get_permalink( get_page_id_by_template( 'cart.php' ) );
+
+      echo $cart_url;
+
+   }
+
+   wp_die();
+}
+add_action( 'wp_ajax_handle_configurator_to_cart', 'gb_handle_configurator_to_cart' );
+add_action( 'wp_ajax_nopriv_handle_configurator_to_cart', 'gb_handle_configurator_to_cart' );
 
 function gb_validate_configurator_input() {
 
