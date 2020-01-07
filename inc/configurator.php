@@ -219,8 +219,11 @@ function gb_handle_configurator_to_cart() {
       // Store items back in session
       gb_update_cart_session_items( $cart->get_items() );
 
+      // Empty configuration session
+      gb_unset_configuration_session( $configurator_id );
+
       // Return cart page url
-      $cart_url = get_permalink( get_page_id_by_template( 'cart.php' ) );
+      $cart_url = gb_get_cart_url();
 
       echo $cart_url;
 
@@ -306,12 +309,17 @@ function gb_get_configurator( $configurator_id = 0, $auto_set = true ) {
    return false;
 }
 
-function gb_get_configurator_type( $configurator_id ) {
+function gb_unset_configuration_session( int $configurator_id ) {
+   if ( empty( $configurator_id ) ) return;
+   unset( $_SESSION['configuration'][$configurator_id] );
+}
+
+function gb_get_configurator_type( int $configurator_id ) {
    $settings = gb_get_configurator_settings( $configurator_id );
    return ( isset( $settings['type'] ) ) ? $settings['type'] : false;
 }
 
-function gb_get_configurator_settings( $configurator_id ) {
+function gb_get_configurator_settings( int $configurator_id ) {
    if ( $settings = get_post_meta( $configurator_id, 'configurator_settings', true ) ) {
       return $settings;
    }

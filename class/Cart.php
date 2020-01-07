@@ -1,69 +1,121 @@
 <?php
 class Cart {
 
+   // Cart items array
    protected $items;
 
+   // Current index in cart items array
    protected $current_index;
 
-   protected $item;
+   // Current id in cart items array
+   protected $current_id;
 
-   protected $total;
+   // Current cart item
+   protected $item;
 
    public function __construct( array $items = [] ) {
       $this->items = $items;
       $this->current_index = 0;
-      $this->item = false;
-      $this->total = 0;
+      $this->current_id = 0;
+      $this->item = [];
    }
 
+   /**
+    * Returns current cart item id
+    */
    public function get_item_id() {
-      return key( $this->items );
+      return $this->current_id;
    }
 
+   /**
+    * Checks whether there are cart items
+    */
+   public function have_items() {
+      return $this->current_index < count( $this->items );
+   }
+
+   /**
+    * Sets the current cart item and sets index to the next
+    */
+   public function the_item() {
+      $this->set_current_item();
+      $this->current_index ++;
+   }
+
+   /**
+    * Sets current cart item id
+    */
+   public function set_current_id() {
+      $this->have_items();
+      $ids = array_keys( $this->items );
+      $this->current_id = $ids[$this->current_index];
+   }
+
+   /**
+    * Sets current cart item
+    */
+   public function set_current_item() {
+      $this->set_current_id();
+      $this->item = $this->items[$this->current_id];
+   }
+
+   /**
+    * Returns all the cart items
+    */
+   public function get_items() {
+      return $this->items;
+   }
+
+   /**
+    * Returns cart item thumbnail
+    */
    public function get_item_thumbnail() {
       $this->item_exists();
       return get_the_post_thumbnail_url( $this->item['post_id'] );
    }
 
+   /**
+    * Returns cart item title
+    */
    public function get_item_title() {
       $this->item_exists();
       return get_the_title( $this->item['post_id'] );
    }
 
+   /**
+    * Returns cart item summary
+    */
    public function get_item_summary() {
       $this->item_exists();
       return $this->item['summary'];
    }
 
+   /**
+    * Returns cart item quantity
+    */
    public function get_item_quantity() {
       $this->item_exists();
       return $this->item['quantity'];
    }
 
+   /**
+    * Returns cart item price
+    */
    public function get_item_price() {
       $this->item_exists();
       return $this->item['price'] * $this->item['quantity'];
    }
 
+   /**
+    * Checks whether current item isset
+    */
    public function item_exists() {
-      if ( ! $this->item ) return;
+      if ( empty( $this->item ) ) return;
    }
 
-   public function the_item() {
-      $id = $this->get_item_id();
-      $this->item = $this->items[$id];
-      next( $this->items );
-      $this->current_index ++;
-   }
-
-   public function have_items() {
-      return $this->current_index < count( $this->items );
-   }
-
-   public function get_items() {
-      return ! empty( $this->items ) ? $this->items : false;
-   }
-
+   /**
+    * Returns total cart price
+    */
    public function get_total_price() {
 
       $total = 0;
@@ -79,6 +131,9 @@ class Cart {
       return $total;
    }
 
+   /**
+    * Adds cart item
+    */
    public function add_item( int $post_id = null, float $price = 0, int $quantity = 1, array $summary, array $configuration ) {
 
       if ( empty( $post_id ) )
@@ -96,11 +151,17 @@ class Cart {
       return $id;
    }
 
-   public function remove_item( int $id = 0 ) {
+   /**
+    * Deleted cart item
+    */
+   public function delete_item( int $id = 0 ) {
       unset( $this->items[$id] );
       return true;
    }
 
+   /**
+    * Updates cart item quantity
+    */
    public function update_item_quantity( int $id = 0, int $quantity = 0 ) {
 
       if ( empty( $this->items[$id] ) ) return;
@@ -108,16 +169,9 @@ class Cart {
       if ( $quantity > 0 ) {
          $this->items[$id]['quantity'] = $quantity;
       } else {
-         $this->remove_item( $id );
+         $this->delete_item( $id );
       }
-
       return true;
    }
-
-
-
-   // Edit (configured) cart item
-
-   // Configure another one
 
 }

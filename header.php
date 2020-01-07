@@ -17,7 +17,7 @@
                   </a>
                </div>
 
-               <a href="<?php echo get_permalink( get_page_id_by_template( 'cart.php' ) ); ?>" class="header-top__cart">
+               <a href="<?php echo gb_get_cart_url(); ?>" class="header-top__cart">
                   <i class="fas fa-shopping-cart header-top__cart-icon"></i>
                   <span class="header-top__cart-number">0</span>
                </a>

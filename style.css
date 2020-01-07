@@ -116,7 +116,7 @@ h3, .h3 {
    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 
-a {
+a, .link {
    text-decoration: none;
    color: #007bff;
 }
@@ -2168,16 +2168,25 @@ Cart
    text-align: right;
 }
 
+.cart-table__product-title {
+   margin-bottom: 1em;
+}
+
+.cart-table__summary {
+   margin-bottom: 1.25em;
+}
+
 .cart-table__summary-row {
-   padding-bottom: 0.625em;
+   padding: 0.5em 0;
    display: block;
+   border-bottom: 1px #dbdbdb dotted;
 }
 
 .cart-table__summary-col {
    width: 100%;
+   margin-bottom: 0.45em;
    display: block;
-   padding: 0 0 0.3125em 0;
-   font-size: 0.8125em;
+   font-size: 0.875em;
 }
 
 .cart-table__summary-col--title {
@@ -2190,8 +2199,8 @@ Cart
 
 .cart-table__delete-trigger {
    display: block;
-   font-size: 0.875em;
    font-weight: 400;
+   font-size: 0.875em;
    color: #d18181;
    cursor: pointer;
 }
@@ -2229,6 +2238,10 @@ Cart
    padding-bottom: 0.625em;
 }
 
+.cart-table-totals__row--shopping .cart-table-totals__col--value {
+   color: green;
+}
+
 .cart-table-totals__row--total {
    border-top: 1px solid #dbdbdb;
 }
@@ -2237,18 +2250,48 @@ Cart
    padding: 0.625em 0 1.25em 0;
 }
 
+.cart-table__actions {
+   display: block;
+}
+
+.cart-table__action {
+   margin: 0 0.625em 0.625em 0;
+   padding: 0.75em 0.875em;
+   border: 1px solid #dbdbdb;
+   border-radius: 3px;
+   font-size: 0.875em;
+   cursor: pointer;
+}
+
+.cart-table__action:hover {
+   border: 1px solid #bababa;
+}
+
+.cart-table__action::before {
+   margin-right: 0.45em;
+   font-weight: 600;
+   font-family: "Font Awesome 5 Free";
+   color: #007bff;
+}
+
+.cart-table__action--edit::before {
+   content: "\f304";
+}
+
+.cart-table__action--redo::before {
+   content: "\f2f9";
+}
+
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 
-
    .cart-table__summary-row {
-      clear: both;
+      display: flex;
    }
 
    .cart-table__summary-col {
       width: 50%;
-      padding-bottom: 0.625em;
-      float: left;
+      margin-bottom: 0;
    }
 
 }
@@ -2257,12 +2300,16 @@ Cart
 @media (min-width: 992px) {
 
    .cart-table__col--image {
-      width: 12%;
+      width: 18%;
       align-self: flex-start;
    }
 
    .cart-table__col--info {
       width: 40%;
+   }
+
+   .cart-table__actions {
+      display: flex;
    }
 
 }

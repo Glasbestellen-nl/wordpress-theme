@@ -60,26 +60,31 @@ $cart = gb_get_cart(); ?>
 
                                        <?php if ( $cart->get_item_summary() ) { ?>
 
-                                          <table class="cart-table__summary" width="100%">
+                                          <div class="cart-table__summary" width="100%">
 
                                              <?php foreach ( $cart->get_item_summary() as $row ) { ?>
 
-                                                <tr class="cart-table__summary-row">
-                                                   <td class="cart-table__summary-col cart-table__summary-col--title"><?php echo $row['label']; ?>:</td>
-                                                   <td class="cart-table__summary-col"><?php echo $row['value']; ?></td>
-                                                </tr>
+                                                <div class="cart-table__summary-row">
+                                                   <div class="cart-table__summary-col cart-table__summary-col--title"><?php echo $row['label']; ?>:</div>
+                                                   <div class="cart-table__summary-col"><?php echo $row['value']; ?></div>
+                                                </div>
 
                                              <?php } ?>
 
-                                          </table>
+                                          </div>
 
                                        <?php } ?>
+
+                                       <div class="cart-table__actions">
+                                          <div class="cart-table__action cart-table__action--edit js-cart-item-edit"><?php _e( 'Bewerken', 'glasbestellen' ); ?></div>
+                                          <div class="cart-table__action cart-table__action--redo js-cart-item-redo"><?php _e( 'Nog een samenstellen', 'glasbestellen' ); ?></div>
+                                       </div>
 
                                     </div>
 
                                     <div class="cart-table__col cart-table__col--amount">
 
-                                       <select class="cart-table__dropdown cart-table__dropdown--amount dropdown js-quantity-dropdown">
+                                       <select class="cart-table__dropdown cart-table__dropdown--amount dropdown js-cart-item-quantity">
                                           <?php
                                           for ( $i = 1; $i <= 20; $i ++ ) {
                                              echo '<option ' . selected( $i, $cart->get_item_quantity(), false ) . ' value="' . $i . '">' . $i . '</option>';
@@ -87,7 +92,7 @@ $cart = gb_get_cart(); ?>
                                           ?>
                                        </select>
 
-                                       <div class="cart-table__delete-trigger"><?php _e( 'Verwijder', 'glasbestellen' ); ?></div>
+                                       <div class="cart-table__delete-trigger js-cart-item-delete"><?php _e( 'Verwijder', 'glasbestellen' ); ?></div>
 
                                     </div>
 
@@ -111,7 +116,7 @@ $cart = gb_get_cart(); ?>
 
                                     <tr class="cart-table-totals__row">
                                        <td class="cart-table-totals__col cart-table-totals__col--title"><?php _e( 'Subtotaal', 'glasbestellen' ); ?></td>
-                                       <td class="cart-table-totals__col cart-table-totals__col--value"><?php echo Money::display( $cart->get_total_price(), false ); ?></td>
+                                       <td class="cart-table-totals__col cart-table-totals__col--value"><?php echo Money::display( $cart->get_total_price() ); ?></td>
                                     </tr>
 
                                     <tr class="cart-table-totals__row--shipping">
@@ -126,7 +131,7 @@ $cart = gb_get_cart(); ?>
 
                                     <tr class="cart-table-totals__row">
                                        <td class="cart-table-totals__col" colspan="2">
-                                          <a href="<?php echo get_permalink( get_page_id_by_template( 'checkout.php' ) ); ?>" class="btn btn--primary btn--block btn--next">Verder naar bestellen</a>
+                                          <a href="<?php echo gb_get_checkout_url(); ?>" class="btn btn--primary btn--block btn--next">Verder naar bestellen</a>
                                        </td>
                                     </tr>
 
@@ -136,6 +141,12 @@ $cart = gb_get_cart(); ?>
 
                            </div>
 
+                        </div>
+
+                     <?php } else { ?>
+
+                        <div class="text">
+                           <p><?php _e( 'De winkelwagen is leeg.', 'glasbestellen' ); ?></p>
                         </div>
 
                      <?php } ?>

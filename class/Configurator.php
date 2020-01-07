@@ -34,8 +34,14 @@ abstract class Configurator {
       $this->errors = false;
    }
 
+   /**
+    * Sets configuration
+    */
    abstract function set_configuration( $configuration = [] );
 
+   /**
+    * Returns configuration
+    */
    public function get_configuration( $step_id = null, $field = null ) {
 
       if ( empty( $step_id ) )
@@ -51,6 +57,9 @@ abstract class Configurator {
          return $this->configuration[$step_id][$field];
    }
 
+   /**
+    * Returns default configuration
+    */
    public function get_default_configuration( $step_id = null ) {
 
       $configuration = [];
@@ -78,6 +87,9 @@ abstract class Configurator {
       return $configuration;
    }
 
+   /**
+    * Returns total price
+    */
    public function get_total_price( $round = true ) {
 
       $total = 0;
@@ -108,10 +120,16 @@ abstract class Configurator {
       return $total;
    }
 
+   /**
+    * Returns errors
+    */
    public function get_errors() {
       return $this->errors;
    }
 
+   /**
+    * Adds error
+    */
    public function add_error( $id, $message ) {
       $this->errors[] = [
          'id' => $id,
@@ -119,47 +137,80 @@ abstract class Configurator {
       ];
    }
 
+   /**
+    * Checks whether all steps are configured
+    */
    public function configuration_done() {
       return ( count( $this->configuration ) === count( $this->steps ) );
    }
 
+   /**
+    * Checks whether there are steps available
+    */
    public function have_steps() {
       return $this->current_step < count( $this->steps );
    }
 
+   /**
+    * Sets current step and sets pointer to next step
+    */
    public function the_step() {
       $this->step = $this->steps[$this->current_step];
       $this->current_step ++;
    }
 
+   /**
+    * Returns configurator id
+    */
    public function get_id() {
       return $this->id;
    }
 
+   /**
+    * Returns step id
+    */
    public function get_step_id() {
       return $this->get_step_field( 'id' );
    }
 
+   /**
+    * Returns step title
+    */
    public function get_step_title( $step_id = null ) {
       return $this->get_step_field( 'title', $step_id );
    }
 
+   /**
+    * Returns step placeholder
+    */
    public function get_step_placeholder( $step_id = null ) {
       return $this->get_step_field( 'placeholder', $step_id );
    }
 
+   /**
+    * Returns step description
+    */
    public function get_step_description( $step_id = null ) {
       return $this->get_step_field( 'description', $step_id );
    }
 
+   /**
+    * Returns step type
+    */
    public function get_step_type( $step_id = null ) {
       return $this->get_step_field( 'type', $step_id );
    }
 
+   /**
+    * Returns step visual
+    */
    public function get_step_visual( $step_id = null ) {
       return $this->get_step_field( 'visual', $step_id );
    }
 
+   /**
+    * Returns step configured image
+    */
    public function get_step_image( $step_id = null ) {
 
       if ( empty( $step_id ) )
@@ -174,6 +225,9 @@ abstract class Configurator {
       return false;
    }
 
+   /**
+    * Returns step parts
+    */
    public function get_step_parts( $step_id = null ) {
       if ( $parts = $this->get_step_field( 'parts', $step_id ) ) {
          return array_map( function( $part ) {
@@ -190,6 +244,9 @@ abstract class Configurator {
       return false;
    }
 
+   /**
+    * Returns step part
+    */
    public function get_step_part( $step_id = null, $part_id = null ) {
       if ( $parts = $this->get_step_parts( $step_id ) ) {
          $index = array_search( $part_id, array_column( $parts, 'id' ) );
@@ -198,6 +255,9 @@ abstract class Configurator {
       return false;
    }
 
+   /**
+    * Returns part price
+    */
    public function get_part_price( $step_id = null, $part_id = null ) {
       if ( $part = $this->get_step_part( $step_id, $part_id ) ) {
          return isset( $part['price'] ) ? $part['price'] : 0;
@@ -205,6 +265,9 @@ abstract class Configurator {
       return 0;
    }
 
+   /**
+    * Returns part slot
+    */
    public function get_part_slot( $step_id = null, $part_id = null ) {
 
       if ( empty( $part_id ) )
@@ -216,6 +279,9 @@ abstract class Configurator {
       return false;
    }
 
+   /**
+    * Returns part price difference
+    */
    public function get_part_price_difference( $step_id = null, $part_id = null ) {
 
       $c_price = $this->get_part_price( $step_id, $part_id );
@@ -260,10 +326,16 @@ abstract class Configurator {
    }
 
 
+   /**
+    * Returns current step
+    */
    public function get_current_step() {
       return $this->step;
    }
 
+   /**
+    * Returns step choice
+    */
    public function get_step_choice( $step_id = null, $default = true ) {
       if ( ! empty( $this->configuration[$step_id] ) ) {
          return $this->configuration[$step_id];
@@ -274,6 +346,9 @@ abstract class Configurator {
       return false;
    }
 
+   /**
+    * Returns step field
+    */
    public function get_step_field( $field, $step_id = null ) {
 
       if ( $step_id ) {
@@ -285,6 +360,9 @@ abstract class Configurator {
       return isset( $step[$field] ) ? $step[$field] : false;
    }
 
+   /**
+    * Returns a step by id
+    */
    public function get_step_by_id( $step_id ) {
       $index = array_search( $step_id, array_column( $this->steps, 'id' ) );
       if ( $index !== FALSE ) {
@@ -293,6 +371,9 @@ abstract class Configurator {
       return false;
    }
 
+   /**
+    * Checks whether a step is done
+    */
    public function is_step_done( $step_id = null ) {
 
       if ( empty( $step_id ) )
@@ -301,6 +382,9 @@ abstract class Configurator {
       return isset( $this->configuration[$step_id] );
    }
 
+   /**
+    * Returns formatted step configuration
+    */
    public function get_formatted_step_configuration( $step_id = null ) {
 
       if ( empty( $step_id ) )
@@ -326,6 +410,9 @@ abstract class Configurator {
       return false;
    }
 
+   /**
+    * Returns validation rules for a field
+    */
    public function get_validation_rules( $step_id = null, $field = null ) {
 
       if ( $step = $this->get_step_by_id( $step_id ) ) {
@@ -334,10 +421,16 @@ abstract class Configurator {
       return false;
    }
 
+   /**
+    * Returns configuration summary
+    */
    public function get_summary() {
       return ! empty( $this->summary ) ? $this->summary : false;
    }
 
+   /**
+    * Adds a row to the summary
+    */
    public function add_row( $label, $value ) {
       $this->summary[] = [
          'label' => $label,
@@ -346,10 +439,16 @@ abstract class Configurator {
       return true;
    }
 
+   /**
+    * Calculates square meters
+    */
    public function calculate_square_meters( $width = 0, $length = 0 ) {
       return ( $width * $length ) / 1000000;
    }
 
+   /**
+    * Calculates prices per steps
+    */
    public function calculate_price_table( $c = [] ) {
 
       $price_table = [];
