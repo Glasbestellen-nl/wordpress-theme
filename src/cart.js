@@ -43,7 +43,13 @@ const Cart = (function() {
          })
          // Redo configuration with same item
          .on('click', '.js-cart-item-redo', function() {
-
+            let data = {
+               action: 'handle_cart_item_redo',
+               id: self.getItemId(this)
+            }
+            jQuery.post(gb.ajaxUrl, data, url => {
+               window.location.replace(url);
+            });
          });
       }
 

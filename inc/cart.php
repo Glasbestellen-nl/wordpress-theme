@@ -55,21 +55,65 @@ function gb_handle_cart_item_edit() {
 
    if ( empty( $_POST['id'] ) ) wp_die();
 
+   // Get cart object
    $cart = gb_get_cart();
 
+   // Get cart item
+   $item = $cart->get_item( $_POST['id'] );
+
+   // Check whether required input exist
+   if ( empty( $item['configuration'] ) || empty( $item['post_id'] ) ) wp_die();
+
    // Get cart item configuration
+   $configuration = $item['configuration'];
 
    // Get cart item configurator id
+   $configurator_id = $item['post_id'];
 
    // Load cart item configuration in configurator
+   $_SESSION['configuration'][$configurator_id] = $configuration;
 
-   // Redirect to configurator
+   // Delete current cart item
+   $cart->delete_item( $_POST['id'] );
+
+   // Update cart session
+   gb_update_cart_session_items( $cart->get_items() );
+
+   // Return configurator url
+   echo get_permalink( $configurator_id );
 
    wp_die();
 }
 add_action( 'wp_ajax_handle_cart_item_edit', 'gb_handle_cart_item_edit' );
 add_action( 'wp_ajax_nopriv_handle_cart_item_edit', 'gb_handle_cart_item_edit' );
 
+/**
+ * Handles cart item redo requests
+ */
+function gb_handle_cart_item_redo() {
+
+   if ( empty( $_POST['id'] ) ) wp_die();
+
+   // Get cart object
+   $cart = gb_get_cart();
+
+   // Get cart item
+   $item = $cart->get_item( $_POST['id'] );
+
+   // Check whether required input exist
+   if ( empty( $item['post_id'] ) ) wp_die();
+
+   // Get cart item configurator id
+   $configurator_id = $item['post_id'];
+
+   // Return configurator url
+   echo get_permalink( $configurator_id );
+
+   wp_die();
+
+}
+add_action( 'wp_ajax_handle_cart_item_redo', 'gb_handle_cart_item_redo' );
+add_action( 'wp_ajax_nopriv_handle_cart_item_redo', 'gb_handle_cart_item_redo' );
 
 /**
  * Updates cart items in session

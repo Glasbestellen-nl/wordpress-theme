@@ -67,6 +67,13 @@ class Cart {
    }
 
    /**
+    * Returns a cart item by id
+    */
+   public function get_item( int $id ) {
+      return ! empty( $this->items[$id] ) ? $this->items[$id] : false;
+   }
+
+   /**
     * Returns cart item thumbnail
     */
    public function get_item_thumbnail() {
