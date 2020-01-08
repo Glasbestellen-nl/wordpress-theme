@@ -72,6 +72,8 @@
       this.addEventListener('load', update, true);
    });
 
+   $('')
+
    /**
     * Delegate click events
     */
@@ -117,6 +119,40 @@
             hideModal();
             return;
          }
+
+         /**
+          * Hide target
+          */
+         if (e.target.closest('.js-hide-target-trigger')) {
+            let target = e.target.dataset.hideTarget;
+            let element = document.querySelector(target);
+            element.classList.add('d-none');
+            element.classList.remove('d-block');
+            return;
+         }
+
+         /**
+          * Show target
+          */
+         if (e.target.closest('.js-show-target-trigger')) {
+            let target = e.target.dataset.showTarget;
+            let element = document.querySelector(target);
+            element.classList.add('d-block');
+            element.classList.remove('d-none');
+            return;
+         }
+
+         /**
+          * Toggle target
+          */
+         if (e.target.closest('.js-toggle-target-trigger')) {
+            let target = e.target.dataset.toggleTarget;
+            let element = document.querySelector(target);
+            element.classList.toggle('d-block');
+            element.classList.toggle('d-none');
+            return;
+         }
+
       }
 
    });

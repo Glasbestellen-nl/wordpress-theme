@@ -131,7 +131,7 @@ $cart = gb_get_cart(); ?>
 
                                     <tr class="cart-table-totals__row">
                                        <td class="cart-table-totals__col" colspan="2">
-                                          <a href="<?php echo gb_get_checkout_url(); ?>" class="btn btn--primary btn--block btn--next">Verder naar bestellen</a>
+                                          <a href="<?php echo gb_get_checkout_url(); ?>" class="btn btn--primary btn--block btn--next"><?php _e( 'Verder naar bestellen', 'glasbestellen' ); ?></a>
                                        </td>
                                     </tr>
 

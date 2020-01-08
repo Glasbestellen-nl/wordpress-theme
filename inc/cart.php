@@ -150,3 +150,11 @@ function gb_get_cart_url() {
    if ( $page_id = get_page_id_by_template( 'cart.php' ) )
    return get_permalink( $page_id );
 }
+
+/**
+ * Returns total cart quantity
+ */
+function gb_get_cart_quantity() {
+   $cart = gb_get_cart();
+   return $cart->get_total_quantity();
+}

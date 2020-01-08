@@ -139,6 +139,22 @@ class Cart {
    }
 
    /**
+    * Returns total cart quantity
+    */
+   public function get_total_quantity() {
+
+      $quantity = 0;
+
+      if ( empty( $this->items ) )
+         return $quantity;
+
+      $quantity = array_sum( array_column( $this->items, 'quantity' ) );
+
+      return $quantity;
+
+   }
+
+   /**
     * Adds cart item
     */
    public function add_item( int $post_id = null, float $price = 0, int $quantity = 1, array $summary, array $configuration ) {
@@ -180,5 +196,6 @@ class Cart {
       }
       return true;
    }
+
 
 }
