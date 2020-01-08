@@ -27,4 +27,7 @@ Temporary Items
 .apdisk
 
 # Node modules
-/node_modules
+node_modules
+
+# Composer
+vendor
