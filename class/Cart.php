@@ -77,7 +77,6 @@ class Cart {
     * Returns cart item thumbnail
     */
    public function get_item_thumbnail() {
-      $this->item_exists();
       return get_the_post_thumbnail_url( $this->item['post_id'] );
    }
 
@@ -85,7 +84,6 @@ class Cart {
     * Returns cart item title
     */
    public function get_item_title() {
-      $this->item_exists();
       return get_the_title( $this->item['post_id'] );
    }
 
@@ -93,7 +91,6 @@ class Cart {
     * Returns cart item summary
     */
    public function get_item_summary() {
-      $this->item_exists();
       return $this->item['summary'];
    }
 
@@ -101,7 +98,6 @@ class Cart {
     * Returns cart item quantity
     */
    public function get_item_quantity() {
-      $this->item_exists();
       return $this->item['quantity'];
    }
 
@@ -109,7 +105,6 @@ class Cart {
     * Returns cart item price
     */
    public function get_item_price() {
-      $this->item_exists();
       return $this->item['price'] * $this->item['quantity'];
    }
 

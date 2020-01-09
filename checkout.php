@@ -36,7 +36,7 @@ $cart = gb_get_cart(); ?>
 
                      <?php if ( $cart->have_items() ) { ?>
 
-                        <form method="post" class="form checkout-form ">
+                        <form method="post" class="form checkout-form js-form-validation">
 
                            <fieldset class="form-section">
 
@@ -44,11 +44,11 @@ $cart = gb_get_cart(); ?>
 
                               <div class="form-group">
                                  <label class="form-check form-check--inline">
-                                    <input type="radio" name="billing[order_type]" class="form-check__input js-hide-target-trigger" data-hide-target="#business_fields" checked>
+                                    <input type="radio" name="billing[order_type]" class="form-check__input js-hide-target-trigger" value="private" data-hide-target="#business_fields" checked>
                                     <span class="form-check__label"><?php _e( 'Particulier', 'glasbestellen' ); ?></span>
                                  </label>
                                  <label class="form-check form-check--inline">
-                                    <input type="radio" name="billing[order_type]" class="form-check__input js-show-target-trigger" data-show-target="#business_fields">
+                                    <input type="radio" name="billing[order_type]" class="form-check__input js-show-target-trigger" value="business" data-show-target="#business_fields">
                                     <span class="form-check__label"><?php _e( 'Zakelijk', 'glasbestellen' ); ?></span>
                                  </label>
                               </div>
@@ -59,12 +59,12 @@ $cart = gb_get_cart(); ?>
 
                                     <div class="form-group col-12 col-md-6">
                                        <label class="form-label"><?php _e( 'Bedrijfsnaam', 'glasbestellen' ); ?>:</label>
-                                       <input type="text" name="billing[company]" class="form-control">
+                                       <input type="text" name="billing[company]" class="form-control js-form-validate">
                                     </div>
 
                                     <div class="form-group col-12 col-md-6">
                                        <label class="form-label"><?php _e( 'Referentie', 'glasbestellen' ); ?>:</label>
-                                       <input type="text" name="billing[reference]" class="form-control">
+                                       <input type="text" name="billing[reference]" class="form-control js-form-validate">
                                     </div>
 
                                  </div>
@@ -119,7 +119,7 @@ $cart = gb_get_cart(); ?>
 
                                  <div class="form-group col-12 col-md-3">
                                     <label class="form-label"><?php _e( 'Toevoeging', 'glasbestellen' ); ?>:</label>
-                                    <input type="text" name="billing[addition]" class="form-control">
+                                    <input type="text" name="billing[addition]" class="form-control js-form-validate">
                                  </div>
 
                                  <div class="form-group js-form-group col-12 col-md-6">
@@ -161,27 +161,27 @@ $cart = gb_get_cart(); ?>
 
                                     <div class="form-group col-12 col-md-6">
                                        <label class="form-label"><?php _e( 'Straat', 'glasbestellen' ); ?>:</label>
-                                       <input name="delivery_address[street]" type="text" class="form-control">
+                                       <input name="delivery_address[street]" type="text" class="form-control js-form-validate">
                                     </div>
 
                                     <div class="form-group col-12 col-md-3">
                                        <label class="form-label"><?php _e( 'Huisnummer', 'glasbestellen' ); ?>:</label>
-                                       <input name="delivery_address[number]" type="number" class="form-control">
+                                       <input name="delivery_address[number]" type="number" class="form-control js-form-validate">
                                     </div>
 
                                     <div class="form-group col-12 col-md-3">
                                        <label class="form-label"><?php _e( 'Toevoeging', 'glasbestellen' ); ?>:</label>
-                                       <input name="delivery_address[addition]" type="text" class="form-control">
+                                       <input name="delivery_address[addition]" type="text" class="form-control js-form-validate">
                                     </div>
 
                                     <div class="form-group col-12 col-md-6">
                                        <label class="form-label"><?php _e( 'Postcode', 'glasbestellen' ); ?>:</label>
-                                       <input name="delivery_address[zipcode]" type="text" class="form-control">
+                                       <input name="delivery_address[zipcode]" type="text" class="form-control js-form-validate">
                                     </div>
 
                                     <div class="form-group col-12 col-md-6">
                                        <label class="form-label"><?php _e( 'Woonplaats', 'glasbestellen' ); ?>:</label>
-                                       <input name="delivery_address[city]" type="text" class="form-control">
+                                       <input name="delivery_address[city]" type="text" class="form-control js-form-validate">
                                     </div>
 
                                  </div>
@@ -279,7 +279,7 @@ $cart = gb_get_cart(); ?>
 
                <div class="layout space-below">
                   <div class="layout__column">
-                     <h2 class="h3 h-underlined">Betaal bij ons met</h2>
+                     <h2 class="h3 h-underlined"><?php _e( 'Betaal bij ons met', 'glasbestellen' ); ?></h2>
                      <div class="payment-icons">
                         <img src="<?php echo get_template_directory_uri() . '/assets/images/payment-icons.png'; ?>">
                      </div>

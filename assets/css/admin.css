@@ -1,8 +1,10 @@
-.postbox-space-medium .inside {
+.postbox-space-medium .inside,
+.space-medium {
    padding: 1.875em;
 }
 
-.postbox-space-large .inside {
+.postbox-space-large .inside,
+.space-large {
    padding: 2.5em;
 }
 
@@ -54,4 +56,16 @@
 
 .tab-support {
    tab-size: 4;
+}
+
+.item-summary {
+   padding-top: 1.25em;
+}
+
+.item-summary-row {
+   margin-bottom: 0.625em;
+}
+
+.item-summary-col-title {
+   font-weight: 600;
 }

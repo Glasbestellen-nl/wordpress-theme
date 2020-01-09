@@ -23,6 +23,12 @@ jQuery(document).ready(function($) {
       }
    });
 
+   $('.js-toggle-target').on('click', function(e) {
+      e.preventDefault();
+      let target = $(this).data('toggle-target');
+      $(target).slideToggle();
+   });
+
    $(function() {
 
    	var enabled = true;

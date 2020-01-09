@@ -12,8 +12,12 @@ class Money {
       return number_format( $value, 2, ',', '.' );
    }
 
-   public static function including_vat( $value ) {
+   public static function including_vat( $value = 0 ) {
       return $value * 1.21;
+   }
+
+   public static function vat( $value = 0 ) {
+      return $value * 0.21;
    }
 
 }

@@ -45,7 +45,7 @@ $cart = gb_get_cart(); ?>
                               <?php
                               while ( $cart->have_items() ) {
                                  $cart->the_item(); ?>
-
+ 
                                  <div class="cart-table__row js-cart-item" data-item-id="<?php echo $cart->get_item_id(); ?>">
 
                                     <?php if ( $cart->get_item_thumbnail() ) { ?>
@@ -60,7 +60,7 @@ $cart = gb_get_cart(); ?>
 
                                        <?php if ( $cart->get_item_summary() ) { ?>
 
-                                          <div class="cart-table__summary" width="100%">
+                                          <div class="cart-table__summary">
 
                                              <?php foreach ( $cart->get_item_summary() as $row ) { ?>
 
