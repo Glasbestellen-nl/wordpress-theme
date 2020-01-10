@@ -1,4 +1,4 @@
-<form method="post" class="js-form-validation" enctype="multipart/form-data" action="handle_review_form_submit" novalidate>
+<form method="post" class="js-form-validation" enctype="multipart/form-data" novalidate>
 
    <p class="js-error-alert alert alert--danger" style="display: none;"></p>
 
@@ -44,5 +44,7 @@
    <div class="form-group">
       <button class="btn btn--primary btn--block btn--next"><?php _e( 'Verstuur', 'glasbestellen' ); ?></button>
    </div>
+
+   <input type="hidden" name="action" class="js-form-action" value="handle_review_form_submit">
 
 </form>

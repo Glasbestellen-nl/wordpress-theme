@@ -33,7 +33,7 @@ get_header();
 
                <div class="col-12 col-lg-8">
 
-                  <form method="post" enctype="multipart/form-data" class="layout__column js-form-validation" action="handle_lead_form_submit" novalidate>
+                  <form method="post" enctype="multipart/form-data" class="layout__column js-form-validation" novalidate>
 
                      <p class="js-error-alert alert alert--danger" style="display: none;"></p>
 
@@ -84,6 +84,7 @@ get_header();
 
                         <input type="hidden" name="client[remote_address]" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>">
                         <input type="hidden" name="client[gclid]" class="gclid_field">
+                        <input type="hidden" name="action" class="js-form-action" value="handle_lead_form_submit">
 
                      </div>
 
