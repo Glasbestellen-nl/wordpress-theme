@@ -67,6 +67,10 @@ class Transaction {
       return get_post_meta( $this->post_id, 'transaction_id', true );
    }
 
+   public function get_post_id() {
+      return $this->post_id;
+   }
+
    public function get_status() {
       return get_post_meta( $this->post_id, 'transaction_status', true );
    }

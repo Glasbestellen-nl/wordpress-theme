@@ -24,7 +24,6 @@ function gb_handle_checkout_form() {
 
    $transaction->update_delivery_data( $delivery_address );
 
-   // Initialize cart
    $cart = gb_get_cart();
 
    $transaction->update_items( $cart->get_items() );
@@ -43,9 +42,12 @@ function gb_handle_checkout_form() {
          "currency" => "EUR",
          "value"    => $value
       ],
-      "description" => "My first API payment",
-      "redirectUrl" => "https://webshop.example.org/order/12345/",
-      "webhookUrl"  => "https://webshop.example.org/mollie-webhook/",
+      "description" => '#' . $transaction->generate_transaction_id(),
+      "redirectUrl" => site_url(),
+      "webhookUrl"  => site_url( '/webhook' ),
+      "metadata" => [
+         "order_id" => $transaction->get_post_id(),
+      ],
    ]);
 
    $response['redirect'] = $payment->getCheckoutUrl();
