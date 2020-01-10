@@ -240,6 +240,7 @@
                      form.querySelector('button[type=submit]').disabled = true;
                   },
                   success: function(response) {
+                     console.log(response);
                      if (response) {
                         let parsed = JSON.parse(response);
                         if (parsed.error) {
@@ -248,7 +249,7 @@
                            hideErrorAlert(form);
                            form.querySelector('button[type=submit]').disabled = false;
                            if (parsed.redirect) {
-                              window.location.replace(parsed.redirect);
+                              window.location.href = parsed.redirect;
                            }
                         }
                      }

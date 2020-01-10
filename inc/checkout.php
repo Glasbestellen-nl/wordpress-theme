@@ -2,11 +2,12 @@
 /**
  * Handles checkout form
  */
-
 function gb_handle_checkout_form() {
 
+   $response = [];
+
    // Check whether form is submitted and billing fields are too
-   if ( ! isset( $_POST['submit_checkout_form'] ) || empty( $_POST['billing'] ) ) return;
+   if ( empty( $_POST['billing'] ) ) wp_die();
 
    $transaction = new Transaction;
 
@@ -21,16 +22,13 @@ function gb_handle_checkout_form() {
       return ! empty( $value );
    });
 
-   // Update delivery address details
    $transaction->update_delivery_data( $delivery_address );
 
    // Initialize cart
    $cart = gb_get_cart();
 
-   // Store cart items in transaction data
    $transaction->update_items( $cart->get_items() );
 
-   // Update total price
    $transaction->update_total_price( $cart->get_total_price() );
 
    // Format the total value right (1000.00) including vat
@@ -40,21 +38,25 @@ function gb_handle_checkout_form() {
    $mollie = gb_get_mollie_client();
 
    // Create payment
-   // $payment = $mollie->payments->create([
-   //    "amount" => [
-   //       "currency" => "EUR",
-   //       "value"    => $value
-   //    ],
-   //    "description" => "My first API payment",
-   //    "redirectUrl" => "https://webshop.example.org/order/12345/",
-   //    "webhookUrl"  => "https://webshop.example.org/mollie-webhook/",
-   // ]);
-   //
-   // wp_redirect( $payment->getCheckoutUrl(), 303 );
-   // exit;
+   $payment = $mollie->payments->create([
+      "amount" => [
+         "currency" => "EUR",
+         "value"    => $value
+      ],
+      "description" => "My first API payment",
+      "redirectUrl" => "https://webshop.example.org/order/12345/",
+      "webhookUrl"  => "https://webshop.example.org/mollie-webhook/",
+   ]);
+
+   $response['redirect'] = $payment->getCheckoutUrl();
+
+   echo json_encode( $response );
+
+   wp_die();
 
 }
-add_action( 'init', 'gb_handle_checkout_form' );
+add_action( 'wp_ajax_handle_checkout_form', 'gb_handle_checkout_form' );
+add_action( 'wp_ajax_nopriv_handle_checkout_form', 'gb_handle_checkout_form' );
 
 /**
  * Initializes mollie payment client

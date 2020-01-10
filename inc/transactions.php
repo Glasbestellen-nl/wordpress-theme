@@ -15,48 +15,57 @@ add_action( 'add_meta_boxes', 'gb_add_transaction_meta_boxes' );
  */
 function gb_transaction_billing_meta_box( $post ) {
    $transaction = new Transaction( $post->ID );
-   $data = $transaction->get_billing_data();
+   if ( $data = $transaction->get_billing_data() ) {
    ?>
 
-   <div class="space-medium">
+      <div class="space-medium">
 
-      <div class="form-row">
-         <label class="form-row-label"><?php _e( 'Klant', 'glasbestellen' ); ?>:</label>
-         <span><?php echo $data['first_name'] . ' ' . $data['last_name']; ?></span>
+         <?php if ( isset( $data['first_name'] ) && isset( $data['last_name'] ) ) { ?>
+            <div class="form-row">
+               <label class="form-row-label"><?php _e( 'Klant', 'glasbestellen' ); ?>:</label>
+               <span><?php echo $data['first_name'] . ' ' . $data['last_name']; ?></span>
+            </div>
+         <?php } ?>
+
+         <?php if ( isset( $data['email'] ) ) { ?>
+            <div class="form-row">
+               <label class="form-row-label"><?php _e( 'E-mail', 'glasbestellen' ); ?>:</label>
+               <span><?php echo $data['email']; ?></span>
+            </div>
+         <?php } ?>
+
+         <?php if ( isset( $data['phone'] ) ) { ?>
+            <div class="form-row">
+               <label class="form-row-label"><?php _e( 'Telefoonnummer', 'glasbestellen' ); ?>:</label>
+               <span><?php echo $data['phone']; ?></span>
+            </div>
+         <?php } ?>
+
+         <?php if ( isset( $data['street'] ) ) { ?>
+            <div class="form-row">
+               <label class="form-row-label"><?php _e( 'Adres', 'glasbestellen' ); ?>:</label>
+               <span><?php echo $data['street'] . ' ' . $data['number'] . ' ' . ( ! empty( $data['addition'] ) ? $data['addition'] : '' ) . ' ' . $data['zipcode'] . ', ' . $data['city']; ?></span>
+            </div>
+         <?php } ?>
+
+         <?php if ( isset( $data['company'] ) ) { ?>
+            <div class="form-row">
+               <label class="form-row-label"><?php _e( 'Bedrijf', 'glasbestellen' ); ?>:</label>
+               <span><?php echo $data['company']; ?></span>
+            </div>
+         <?php } ?>
+
+         <?php if ( isset( $data['reference'] ) ) { ?>
+            <div class="form-row">
+               <label class="form-row-label"><?php _e( 'Referentie', 'glasbestellen' ); ?>:</label>
+               <span><?php echo $data['reference']; ?></span>
+            </div>
+         <?php } ?>
+
       </div>
-
-      <div class="form-row">
-         <label class="form-row-label"><?php _e( 'E-mail', 'glasbestellen' ); ?>:</label>
-         <span><?php echo $data['email']; ?></span>
-      </div>
-
-      <div class="form-row">
-         <label class="form-row-label"><?php _e( 'Telefoonnummer', 'glasbestellen' ); ?>:</label>
-         <span><?php echo $data['phone']; ?></span>
-      </div>
-
-      <div class="form-row">
-         <label class="form-row-label"><?php _e( 'Adres', 'glasbestellen' ); ?>:</label>
-         <span><?php echo $data['street'] . ' ' . $data['number'] . ' ' . ( ! empty( $data['addition'] ) ? $data['addition'] : '' ) . ' ' . $data['zipcode'] . ', ' . $data['city']; ?></span>
-      </div>
-
-      <?php if ( isset( $data['company'] ) ) { ?>
-         <div class="form-row">
-            <label class="form-row-label"><?php _e( 'Bedrijf', 'glasbestellen' ); ?>:</label>
-            <span><?php echo $data['company']; ?></span>
-         </div>
-      <?php } ?>
-
-      <?php if ( isset( $data['reference'] ) ) { ?>
-         <div class="form-row">
-            <label class="form-row-label"><?php _e( 'Referentie', 'glasbestellen' ); ?>:</label>
-            <span><?php echo $data['reference']; ?></span>
-         </div>
-      <?php } ?>
-
-   </div>
 
    <?php
+   }
 }
 
 /**
@@ -189,36 +198,38 @@ function gb_transaction_items_meta_box( $post ) {
  */
 function gb_transaction_order_meta_box( $post ) {
    $transaction = new Transaction( $post->ID );
+   if ( $transaction->get_total_price() ) {
    ?>
 
-   <div class="space-medium">
+      <div class="space-medium">
 
-      <div class="form-row">
-         <label class="form-row-label"><?php _e( 'Order ID', 'glasbestellen' ); ?>:</label>
-         <span><?php echo $transaction->get_transaction_id(); ?></span>
+         <div class="form-row">
+            <label class="form-row-label"><?php _e( 'Order ID', 'glasbestellen' ); ?>:</label>
+            <span><?php echo $transaction->get_transaction_id(); ?></span>
+         </div>
+
+         <div class="form-row">
+            <label class="form-row-label"><?php _e( 'Status', 'glasbestellen' ); ?>:</label>
+            <span><?php echo $transaction->get_status(); ?></span>
+         </div>
+
+         <div class="form-row">
+            <label class="form-row-label"><?php _e( 'Totaal ex. 21% BTW', 'glasbestellen' ); ?>:</label>
+            <span><?php echo Money::display( $transaction->get_total_price(), false ); ?></span>
+         </div>
+
+         <div class="form-row">
+            <label class="form-row-label"><?php _e( '21% BTW', 'glasbestellen' ); ?>:</label>
+            <span><?php echo Money::display( Money::vat( $transaction->get_total_price() ), false ); ?></span>
+         </div>
+
+         <div class="form-row">
+            <label class="form-row-label"><?php _e( 'Totaal incl. 21% BTW', 'glasbestellen' ); ?>:</label>
+            <span><?php echo Money::display( $transaction->get_total_price() ); ?></span>
+         </div>
+
       </div>
-
-      <div class="form-row">
-         <label class="form-row-label"><?php _e( 'Status', 'glasbestellen' ); ?>:</label>
-         <span><?php echo $transaction->get_status(); ?></span>
-      </div>
-
-      <div class="form-row">
-         <label class="form-row-label"><?php _e( 'Totaal ex. 21% BTW', 'glasbestellen' ); ?>:</label>
-         <span><?php echo Money::display( $transaction->get_total_price(), false ); ?></span>
-      </div>
-
-      <div class="form-row">
-         <label class="form-row-label"><?php _e( '21% BTW', 'glasbestellen' ); ?>:</label>
-         <span><?php echo Money::display( Money::vat( $transaction->get_total_price() ), false ); ?></span>
-      </div>
-
-      <div class="form-row">
-         <label class="form-row-label"><?php _e( 'Totaal incl. 21% BTW', 'glasbestellen' ); ?>:</label>
-         <span><?php echo Money::display( $transaction->get_total_price() ); ?></span>
-      </div>
-
-   </div>
 
    <?php
+   }
 }

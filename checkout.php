@@ -201,6 +201,8 @@ $cart = gb_get_cart(); ?>
 
                            <fieldset>
 
+                           <input type="hidden" name="action" class="js-form-action" value="handle_checkout_form">
+
                         </form>
 
                      <?php } else { ?>
