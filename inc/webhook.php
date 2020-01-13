@@ -27,20 +27,21 @@ function gb_webhook_template_include( $template ) {
 
       try {
 
-         $mollie = gb_get_mollie_client();
-
+         $mollie  = gb_get_mollie_client();
          $payment = $mollie->payments->get( $_POST['id'] );
          $post_id = $payment->metadata->order_id;
 
          $transaction = new Transaction( $post_id );
-
          $transaction->update_status( $payment->status );
 
          if ( $payment->isPaid() && ! $payment->hasRefunds() && ! $payment->hasChargebacks() ) {
 
-            // Send email
+            // Send order confirmation email
+            gb_get_order_confirmation_email_object( $transaction );
+            $email->send();
 
             // Send data to Google Analytics
+
 
          } elseif ( $payment->isOpen() ) {
          } elseif ( $payment->isPending() ) {

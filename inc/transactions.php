@@ -178,7 +178,7 @@ function gb_transaction_items_meta_box( $post ) {
 
                      </td>
                      <td><?php echo $cart->get_item_quantity(); ?></td>
-                     <td><?php echo Money::display( $cart->get_item_price() ); ?></td>
+                     <td><?php echo Money::display( $cart->get_item_price() * $cart->get_item_quantity() ); ?></td>
                   </tr>
 
                <?php } ?>
