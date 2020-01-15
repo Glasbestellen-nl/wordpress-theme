@@ -10,24 +10,19 @@ function gb_handle_checkout_form() {
    if ( empty( $_POST['billing'] ) ) wp_die();
 
    $transaction = new Transaction;
+   $cart = gb_get_cart();
 
    $billing = array_filter( $_POST['billing'], function( $value ) {
       return ! empty( $value );
    });
-   $transaction->update_billing_data( $billing );
-
-   // Filter delivery details
    $delivery_address = array_filter( $_POST['delivery_address'], function( $value ) {
       return ! empty( $value );
    });
+
+   $transaction->update_billing_data( $billing );
    $transaction->update_delivery_data( $delivery_address );
-
    $transaction->update_client_data( $_POST['client'] );
-
-   $cart = gb_get_cart();
-
    $transaction->update_items( $cart->get_items() );
-
    $transaction->update_total_price( $cart->get_total_price() );
 
    // Format the total value right (1000.00) including vat
@@ -42,7 +37,7 @@ function gb_handle_checkout_form() {
          "currency" => "EUR",
          "value"    => $value
       ],
-      "description" => '#' . $transaction->generate_transaction_id(),
+      "description" => sprintf( __( 'Bestelling #%s', 'glasbestellen' ), $transaction->get_transaction_id() ),
       "redirectUrl" => site_url(),
       "webhookUrl"  => site_url( '/webhook' ),
       "metadata" => [

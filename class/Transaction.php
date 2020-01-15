@@ -88,7 +88,7 @@ class Transaction {
 
    public function get_billing_data( $meta_key = null ) {
       $data = get_post_meta( $this->post_id, 'transaction_billing_data', true );
-      if ( empty( $meta_key ) ) {
+      if ( ! empty( $meta_key ) ) {
          return ! empty( $data[$meta_key] ) ? $data[$meta_key] : false;
       }
       return $data;
@@ -100,7 +100,7 @@ class Transaction {
 
    public function get_client_data( $meta_key = null ) {
       $data = get_post_meta( $this->post_id, 'transaction_client_data', true );
-      if ( empty( $meta_key ) ) {
+      if ( ! empty( $meta_key ) ) {
          return ! empty( $data[$meta_key] ) ? $data[$meta_key] : false;
       }
       return $data;

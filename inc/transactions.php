@@ -6,6 +6,7 @@ function gb_add_transaction_meta_boxes() {
    add_meta_box( 'transaction_billing_meta_box', __( 'Factuur gegevens', 'glasbestellen' ), 'gb_transaction_billing_meta_box', 'transactie' );
    add_meta_box( 'transaction_delivery_meta_box', __( 'Afleveradres', 'glasbestellen' ), 'gb_transaction_delivery_meta_box', 'transactie' );
    add_meta_box( 'transaction_items_meta_box', __( 'Bestelde producten', 'glasbestellen' ), 'gb_transaction_items_meta_box', 'transactie' );
+   add_meta_box( 'transaction_client_meta_box', __( 'Technische gegevens', 'glasbestellen' ), 'gb_transaction_client_meta_box', 'transactie' );
    add_meta_box( 'transaction_order_meta_box', __( 'Order gegevens', 'glasbestellen' ), 'gb_transaction_order_meta_box', 'transactie', 'side', 'high' );
 }
 add_action( 'add_meta_boxes', 'gb_add_transaction_meta_boxes' );
@@ -232,4 +233,28 @@ function gb_transaction_order_meta_box( $post ) {
 
    <?php
    }
+}
+
+/**
+ * Transaction client details meta box
+ */
+function gb_transaction_client_meta_box( $post ) {
+   $transaction = new Transaction( $post->ID );
+   ?>
+
+   <div class="space-medium">
+
+      <div class="form-row">
+         <label class="form-row-label"><?php _e( 'IP address', 'glasbestellen' ); ?>:</label>
+         <span><?php echo $transaction->get_client_data( 'ip' ); ?></span>
+      </div>
+
+      <div class="form-row">
+         <label class="form-row-label"><?php _e( 'Client ID', 'glasbestellen' ); ?>:</label>
+         <span><?php echo $transaction->get_client_data( 'ga_client_id' ); ?></span>
+      </div>
+
+   </div>
+
+   <?php
 }

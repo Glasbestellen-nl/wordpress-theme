@@ -38,24 +38,18 @@ function gb_webhook_template_include( $template ) {
 
          if ( $payment->isPaid() && ! $payment->hasRefunds() && ! $payment->hasChargebacks() ) {
 
-            // 1. Send confirmation email
+            // 1. Send confirmation email to customer and admin
             $subject = __( 'Orderbevestiging en Factuur', 'glasbestellen' );
-
-            // Customer email
             $email->send( $transaction->get_billing_data( 'email' ), $subject );
-
-            // Admin email
             $email->send( get_option( 'company_email' ), $subject );
 
             // 2. Send ecommerce data to google analytics
             if ( ! get_option( 'ga_tracking_id' ) || ! $transaction->get_client_data( 'ga_client_id' ) ) return;
 
-            $cart = new Cart( $transaction->get_items() );
-
             $analytics = new Analytics();
             $analytics->setProtocolVersion('1')
                ->setTrackingId( get_option( 'ga_tracking_id' ) )
-               ->setClientId( $transaction->get_meta_data( 'ga_client_id' ) );
+               ->setClientId( $transaction->get_client_data( 'ga_client_id' ) );
 
             $analytics->setTransactionId( $transaction->get_transaction_id() )
                ->setRevenue( $transaction->get_total_price() )
@@ -63,6 +57,8 @@ function gb_webhook_template_include( $template ) {
                ->setTax( Money::vat( $transaction->get_total_price() ) )
                ->sendTransaction();
 
+            $cart = new Cart( $transaction->get_items() );
+            
             while ( $cart->have_items() ) {
                $cart->the_item();
 
