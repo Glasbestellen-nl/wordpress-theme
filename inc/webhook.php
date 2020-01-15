@@ -1,4 +1,6 @@
 <?php
+use TheIconic\Tracking\GoogleAnalytics\Analytics;
+
 /**
  * Adds webhook query var
  */
@@ -36,20 +38,43 @@ function gb_webhook_template_include( $template ) {
 
          if ( $payment->isPaid() && ! $payment->hasRefunds() && ! $payment->hasChargebacks() ) {
 
-            // Send order confirmation email
-            gb_get_order_confirmation_email_object( $transaction );
-            $email->send();
+            // 1. Send confirmation email
+            $subject = __( 'Orderbevestiging en Factuur', 'glasbestellen' );
 
-            // Send data to Google Analytics
+            // Customer email
+            $email->send( $transaction->get_billing_data( 'email' ), $subject );
 
+            // Admin email
+            $email->send( get_option( 'company_email' ), $subject );
 
-         } elseif ( $payment->isOpen() ) {
-         } elseif ( $payment->isPending() ) {
-         } elseif ( $payment->isFailed() ) {
-         } elseif ( $payment->isExpired() ) {
-         } elseif ( $payment->isCanceled() ) {
-         } elseif ( $payment->hasRefunds() ) {
-         } elseif ( $payment->hasChargebacks() ) {
+            // 2. Send ecommerce data to google analytics
+            if ( ! get_option( 'ga_tracking_id' ) || ! $transaction->get_client_data( 'ga_client_id' ) ) return;
+
+            $cart = new Cart( $transaction->get_items() );
+
+            $analytics = new Analytics();
+            $analytics->setProtocolVersion('1')
+               ->setTrackingId( get_option( 'ga_tracking_id' ) )
+               ->setClientId( $transaction->get_meta_data( 'ga_client_id' ) );
+
+            $analytics->setTransactionId( $transaction->get_transaction_id() )
+               ->setRevenue( $transaction->get_total_price() )
+               ->setShipping( $transaction->get_total_shipping_price() )
+               ->setTax( Money::vat( $transaction->get_total_price() ) )
+               ->sendTransaction();
+
+            while ( $cart->have_items() ) {
+               $cart->the_item();
+
+               $response = $analytics->setTransactionId( $transaction->get_transaction_id() )
+                  ->setItemName( $cart->get_item_title() )
+                  ->setItemCode( $cart->get_item_id() )
+                  ->setItemCategory( $cart->get_item_category() )
+                  ->setItemPrice( $cart->get_item_price() )
+                  ->setItemQuantity( $cart->get_item_quantity() )
+                  ->sendItem();
+            }
+
          }
 
       } catch ( \Mollie\Api\Exceptions\ApiException $e ) {
