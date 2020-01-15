@@ -9,8 +9,8 @@ function gb_render_order_confirmation_email( $template ) {
       $transaction_id = $_GET['order_email'];
       $transaction = new Transaction( $transaction_id );
 
-      $email = gb_get_order_confirmation_email_object( $transaction );
-      $email->render_html();
+      $html = gb_get_order_confirmation_email_html( $transaction );
+      echo $html;
 
       return;
    }
@@ -19,9 +19,9 @@ function gb_render_order_confirmation_email( $template ) {
 add_action( 'template_include', 'gb_render_order_confirmation_email' );
 
 /**
- * Initalized order confirmation object by transaction input
+ * Returns order confirmation email html by transaction input
  */
-function gb_get_order_confirmation_email_object( Transaction $transaction ) {
+function gb_get_order_confirmation_email_html( Transaction $transaction ) {
 
    if ( empty( $transaction ) ) return;
 
@@ -34,8 +34,8 @@ function gb_get_order_confirmation_email_object( Transaction $transaction ) {
    $data['items']            = $transaction->get_items();
    $data['shipping']         = true;
 
-   $email = new HTML_Email( $template_path, $data );
+   $builder = new Email_Template_Builder( $template_path, $data );
 
-   return $email;
+   return $builder->get_html();
 
 }
