@@ -24,6 +24,19 @@ function get_page_id_by_template( $template = '' ) {
 	}
 }
 
+/**
+ * Get first term by post id
+ */
+function get_first_term_by_id( $post_id, $taxonomy, $output = 'term_id' ) {
+   if ( empty( $post_id ) || empty( $taxonomy ) ) return;
+
+   $terms = get_the_terms( $post_id, $taxonomy );
+   if ( ! empty( $terms ) ){
+      $term = array_shift( $terms );
+   }
+   return $term->$output;
+}
+
 /*
  * Returns path to lead attachments directory
  */

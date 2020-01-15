@@ -50,6 +50,13 @@ class Transaction {
       update_post_meta( $this->post_id, 'transaction_delivery_data', $data );
    }
 
+   /**
+    * Updates client data like ip address and client id
+    */
+   public function update_client_data( array $data = [] ) {
+      update_post_meta( $this->post_id, 'transaction_client_data', $data );
+   }
+
    public function update_items( array $items = [] ) {
       update_post_meta( $this->post_id, 'transaction_items', $items );
    }
@@ -79,16 +86,46 @@ class Transaction {
       return get_post_meta( $this->post_id, 'transaction_items', true );
    }
 
-   public function get_billing_data() {
-      return get_post_meta( $this->post_id, 'transaction_billing_data', true );
+   public function get_billing_data( $meta_key = null ) {
+      $data = get_post_meta( $this->post_id, 'transaction_billing_data', true );
+      if ( empty( $meta_key ) ) {
+         return ! empty( $data[$meta_key] ) ? $data[$meta_key] : false;
+      }
+      return $data;
    }
 
    public function get_delivery_data() {
       return get_post_meta( $this->post_id, 'transaction_delivery_data', true );
    }
 
+   public function get_client_data( $meta_key = null ) {
+      $data = get_post_meta( $this->post_id, 'transaction_client_data', true );
+      if ( empty( $meta_key ) ) {
+         return ! empty( $data[$meta_key] ) ? $data[$meta_key] : false;
+      }
+      return $data;
+   }
+
    public function get_total_price() {
       return get_post_meta( $this->post_id, 'transaction_total_price', true );
+   }
+
+   /**
+    * Returns highest shipping price of all items
+    */
+   public function get_total_shipping_price() {
+
+      $shipping_price = 0;
+
+      if ( ! $this->get_items() ) return $shipping_price;
+
+      $shipping_price = max( array_map( function( $item ) {
+         $settings = gb_get_configurator_settings( $item['post_id'] );
+         return ! empty( $settings['shipping'] ) ? $settings['shipping'] : 0;
+      },
+      $this->get_items() ) );
+
+      return $shipping_price;
    }
 
    public function generate_transaction_id( int $start = 200 ) {

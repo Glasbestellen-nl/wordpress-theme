@@ -199,8 +199,10 @@ $cart = gb_get_cart(); ?>
                                  <button type="submit" name="submit_checkout_form" class="btn btn--primary btn--next checkout-form__submit-btn"><?php _e( 'Naar betaalscherm', 'glasbestellen' ); ?></button>
                               </div>
 
-                           <fieldset>
+                           </fieldset>
 
+                           <input type="hidden" name="client[remote_address]" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>">
+                           <input type="hidden" name="client[gclid]" class="gclid_field">
                            <input type="hidden" name="action" class="js-form-action" value="handle_checkout_form">
 
                         </form>
