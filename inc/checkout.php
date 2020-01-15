@@ -14,15 +14,15 @@ function gb_handle_checkout_form() {
    $billing = array_filter( $_POST['billing'], function( $value ) {
       return ! empty( $value );
    });
-
    $transaction->update_billing_data( $billing );
 
    // Filter delivery details
    $delivery_address = array_filter( $_POST['delivery_address'], function( $value ) {
       return ! empty( $value );
    });
-
    $transaction->update_delivery_data( $delivery_address );
+
+   $transaction->update_client_data( $_POST['client'] );
 
    $cart = gb_get_cart();
 

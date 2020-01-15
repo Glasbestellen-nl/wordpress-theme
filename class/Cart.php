@@ -46,7 +46,7 @@ class Cart {
     * Sets current cart item id
     */
    public function set_current_id() {
-      $this->have_items();
+      if ( ! $this->have_items() ) return;
       $ids = array_keys( $this->items );
       $this->current_id = $ids[$this->current_index];
    }
@@ -106,6 +106,10 @@ class Cart {
     */
    public function get_item_price() {
       return $this->item['price'] * $this->item['quantity'];
+   }
+
+   public function get_item_category( $taxonomy = 'startopstelling', $output = 'name' ) {
+      return get_first_term_by_id( $this->item['post_id'], $taxonomy, $output );
    }
 
    /**

@@ -115,6 +115,24 @@ function gb_init_theme_options() {
 	add_settings_field( $id, __( 'Review success', 'glasbestellen' ), 'gb_settings_select_pages', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
 	register_setting( 'theme-settings', $id );
 
+	/**
+	 * Tracking settings
+	 */
+	$section = 'tracking_settings_section';
+
+	// Add redirect settings section
+	add_settings_section( $section, __( 'Tracking', 'glasbestellen' ), 'gb_display_tracking_settings_section', $page );
+
+	// Add google analytics tracking id setting
+	$id = 'ga_tracking_id';
+	add_settings_field( $id, __( 'Google Analytics Tracking ID', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
+	register_setting( 'theme-settings', $id );
+
+	// Add google tag manager container id setting
+	$id = 'gtm_container_id';
+	add_settings_field( $id, __( 'GTM Container ID', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
+	register_setting( 'theme-settings', $id );
+
 }
 add_action( 'admin_init', 'gb_init_theme_options' );
 
@@ -126,11 +144,19 @@ function gb_display_company_settings_section() {
 }
 
 /**
- * Displays the desired company settings section content
+ * Displays the desired page settings section content
  */
 function gb_display_page_settings_section() {
 	echo '<p>' . __( 'Stel hieronder specifieke pagina\'s in', 'glasbestellen' ) . '.</p>';
 }
+
+/**
+ * Displays the desired company settings section content
+ */
+function gb_display_tracking_settings_section() {
+	echo '<p>' . __( 'Stel hieronder tracking gegevens in', 'glasbestellen' ) . '.</p>';
+}
+
 
 /**
  * Renders settings text field
