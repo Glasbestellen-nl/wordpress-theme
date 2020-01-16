@@ -39,3 +39,21 @@ function gb_get_order_confirmation_email_html( Transaction $transaction ) {
    return $builder->get_html();
 
 }
+
+/**
+ * Changes admin from email address
+ */
+function gb_mail_from( $email ) {
+    $email = get_bloginfo( 'admin_email' );
+    return $email;
+}
+add_filter( 'wp_mail_from', 'gb_mail_from' );
+
+/**
+ * Changes admin from email name
+ */
+function gb_mail_from_name( $name ) {
+	$name = get_bloginfo( 'name' );
+	return $name;
+}
+add_filter( 'wp_mail_from_name', 'gb_mail_from_name' );

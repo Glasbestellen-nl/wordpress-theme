@@ -18,13 +18,8 @@
                      </div>
 
                      <div class="hero__buttons">
-                        <div class="hero__button-group">
-                           <div class="hero__button">
-                              <span class="btn btn--primary btn--large btn--next"><?php _e( 'Samenstellen', 'glasbestellen' ); ?></span>
-                           </div>
-                           <div class="hero__button">
-                              <span class="btn btn--secondary btn--large btn--next js-popup-form" data-formtype="lead"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
-                           </div>
+                        <div class="hero__button">
+                           <span class="btn btn--primary btn--large btn--next js-popup-form" data-formtype="lead"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
                         </div>
                         <span class="hero__button-cta space-above"><?php _e( 'Binnen 1 dag in je mail!', 'glasbestellen' ); ?></span>
                      </div>

@@ -39,17 +39,18 @@ function gb_webhook_template_include( $template ) {
          if ( $payment->isPaid() && ! $payment->hasRefunds() && ! $payment->hasChargebacks() ) {
 
             // 1. Send confirmation email to customer and admin
-            $subject = __( 'Orderbevestiging en Factuur', 'glasbestellen' );
-            $email->send( $transaction->get_billing_data( 'email' ), $subject );
-            $email->send( get_option( 'company_email' ), $subject );
+            $email_template = gb_get_order_confirmation_email_html( $transaction );
+            $email = new Email( __( 'Orderbevestiging en Factuur', 'glasbestellen' ) );
+            $email->set_template( $email_template );
+            $email->add_receiver_email( $transaction->get_billing_data( 'email' ) );
+            $email->add_receiver_email( get_bloginfo( 'admin_email' ) );
+            $email->send();
 
             // 2. Send ecommerce data to google analytics
-            if ( ! get_option( 'ga_tracking_id' ) || ! $transaction->get_client_data( 'ga_client_id' ) ) return;
-
             $analytics = new Analytics();
             $analytics->setProtocolVersion('1')
                ->setTrackingId( get_option( 'ga_tracking_id' ) )
-               ->setClientId( $transaction->get_client_data( 'ga_client_id' ) );
+               ->setClientId( $transaction->get_client_data( 'gclid' ) );
 
             $analytics->setTransactionId( $transaction->get_transaction_id() )
                ->setRevenue( $transaction->get_total_price() )
@@ -58,13 +59,13 @@ function gb_webhook_template_include( $template ) {
                ->sendTransaction();
 
             $cart = new Cart( $transaction->get_items() );
-            
+
+            // Transaction item requests to analytics
             while ( $cart->have_items() ) {
                $cart->the_item();
-
-               $response = $analytics->setTransactionId( $transaction->get_transaction_id() )
+               $analytics->setTransactionId( $transaction->get_transaction_id() )
                   ->setItemName( $cart->get_item_title() )
-                  ->setItemCode( $cart->get_item_id() )
+                  ->setItemCode( $cart->get_item_post_id() )
                   ->setItemCategory( $cart->get_item_category() )
                   ->setItemPrice( $cart->get_item_price() )
                   ->setItemQuantity( $cart->get_item_quantity() )

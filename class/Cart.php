@@ -73,6 +73,10 @@ class Cart {
       return ! empty( $this->items[$id] ) ? $this->items[$id] : false;
    }
 
+   public function get_item_post_id() {
+      return $this->item['post_id'];
+   }
+
    /**
     * Returns cart item thumbnail
     */

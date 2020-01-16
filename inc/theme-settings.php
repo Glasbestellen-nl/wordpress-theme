@@ -120,7 +120,7 @@ function gb_init_theme_options() {
 	 */
 	$section = 'tracking_settings_section';
 
-	// Add redirect settings section
+	// Add tracking settings section
 	add_settings_section( $section, __( 'Tracking', 'glasbestellen' ), 'gb_display_tracking_settings_section', $page );
 
 	// Add google analytics tracking id setting
@@ -131,6 +131,24 @@ function gb_init_theme_options() {
 	// Add google tag manager container id setting
 	$id = 'gtm_container_id';
 	add_settings_field( $id, __( 'GTM Container ID', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
+	register_setting( 'theme-settings', $id );
+
+	/**
+	 * Payment settings
+	 */
+	$section = 'payment_settings_section';
+
+	// Add redirect settings section
+	add_settings_section( $section, __( 'Payment', 'glasbestellen' ), 'gb_display_payment_settings_section', $page );
+
+	// Add payment webhook url setting
+	$id = 'payment_webhook_url';
+	add_settings_field( $id, __( 'Custom webhook URL', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
+	register_setting( 'theme-settings', $id );
+
+	// Add payment redirect setting
+	$id = 'payment_redirect_url';
+	add_settings_field( $id, __( 'Payment redirect URL', 'glasbestellen' ), 'gb_settings_select_pages', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
 	register_setting( 'theme-settings', $id );
 
 }
@@ -156,6 +174,14 @@ function gb_display_page_settings_section() {
 function gb_display_tracking_settings_section() {
 	echo '<p>' . __( 'Stel hieronder tracking gegevens in', 'glasbestellen' ) . '.</p>';
 }
+
+/**
+ * Displays the desired company settings section content
+ */
+function gb_display_payment_settings_section() {
+	echo '<p>' . __( 'Stel hieronder betaalgegevens in', 'glasbestellen' ) . '.</p>';
+}
+
 
 
 /**

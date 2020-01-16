@@ -52,7 +52,7 @@
                                  <div class="col-8 col-md-6 offset-md-1 offset-lg-0 col-lg-12">
 
                                     <div class="config-details__about space-below">
-                                       <span class="config-details__subline"><?php _e( 'Uw startopstelling', 'glasbestelle' ); ?>:</span>
+                                       <!-- <span class="config-details__subline"><?php _e( 'Uw startopstelling', 'glasbestelle' ); ?>:</span> -->
                                        <h3 class="h3 config-details__headline"><?php the_title(); ?></h3>
                                     </div>
 

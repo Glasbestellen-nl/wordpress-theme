@@ -9,8 +9,8 @@ function gb_handle_checkout_form() {
    // Check whether form is submitted and billing fields are too
    if ( empty( $_POST['billing'] ) ) wp_die();
 
-   $transaction = new Transaction;
    $cart = gb_get_cart();
+   $transaction = new Transaction;
 
    $billing = array_filter( $_POST['billing'], function( $value ) {
       return ! empty( $value );
@@ -38,8 +38,8 @@ function gb_handle_checkout_form() {
          "value"    => $value
       ],
       "description" => sprintf( __( 'Bestelling #%s', 'glasbestellen' ), $transaction->get_transaction_id() ),
-      "redirectUrl" => site_url(),
-      "webhookUrl"  => site_url( '/webhook' ),
+      "redirectUrl" => gb_get_payment_redirect_url(),
+      "webhookUrl"  => gb_get_payment_webhook_url(),
       "metadata" => [
          "order_id" => $transaction->get_post_id(),
       ],
@@ -75,4 +75,19 @@ function gb_get_mollie_client() {
 function gb_get_checkout_url() {
    if ( $page_id = get_page_id_by_template( 'checkout.php' ) )
    return get_permalink( $page_id );
+}
+
+/**
+ * Returns payment redirect url from options table
+ */
+function gb_get_payment_redirect_url() {
+   return get_permalink( get_option( 'payment_redirect_url' ) );
+}
+
+/**
+ * Returns payment webhook url from options table
+ */
+function gb_get_payment_webhook_url() {
+   $option = get_option( 'payment_webhook_url' );
+   return ( ! empty( $option ) ) ? $option : site_url( '/webhook' );
 }

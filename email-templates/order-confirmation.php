@@ -86,7 +86,7 @@
 											?>
 										</td>
 										<td align="center" style="padding: 10px 0;"><?php echo $cart->get_item_quantity(); ?></td>
-										<td align="right" style="padding: 10px 40px 10px 0;"><?php echo Money::display( $cart->get_item_price() * $cart->get_item_quantity() ); ?></td>
+										<td align="right" style="padding: 10px 40px 10px 0;"><?php echo Money::display( $cart->get_item_price() ); ?></td>
 									</tr>
 
 								<?php
@@ -173,7 +173,6 @@
 
 								<table style="border-collapse: collapse; font-family: Arial, sans-serif; font-size: 12px;" border="0" cellpadding="0" cellspacing="0" width="100%">
 
-
 									<tr>
 										<td width="10%" style="padding-bottom: 10px;"></td>
 										<th align="right" style="padding-bottom: 10px;"><?php _e( 'Subtotaal', 'glasbestellen' ); ?>:</th>
@@ -203,7 +202,7 @@
 									<tr>
 										<td width="10%" style="padding-bottom: 10px;"></td>
 										<th align="right" style="padding-bottom: 10px;"></th>
-										<td align="right" style="padding-bottom: 10px; font-style: italic; font-size: 11px;">(<?php echo __( 'Waarvan BTW', 'glasbestellen' ) . ' ' . Money::display( Money::vat( $total_price, false ) ); ?>)</td>
+										<td align="right" style="padding-bottom: 10px; font-style: italic; font-size: 11px;">(<?php echo __( 'Waarvan BTW', 'glasbestellen' ) . ' ' . Money::display( Money::vat( $total_price, false ), false ); ?>)</td>
 									</tr>
 
 									<tr>

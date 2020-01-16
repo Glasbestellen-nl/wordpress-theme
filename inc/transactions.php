@@ -179,7 +179,7 @@ function gb_transaction_items_meta_box( $post ) {
 
                      </td>
                      <td><?php echo $cart->get_item_quantity(); ?></td>
-                     <td><?php echo Money::display( $cart->get_item_price() * $cart->get_item_quantity() ); ?></td>
+                     <td><?php echo Money::display( $cart->get_item_price() ); ?></td>
                   </tr>
 
                <?php } ?>
@@ -246,12 +246,12 @@ function gb_transaction_client_meta_box( $post ) {
 
       <div class="form-row">
          <label class="form-row-label"><?php _e( 'IP address', 'glasbestellen' ); ?>:</label>
-         <span><?php echo $transaction->get_client_data( 'ip' ); ?></span>
+         <span><?php echo $transaction->get_client_data( 'remote_address' ); ?></span>
       </div>
 
       <div class="form-row">
          <label class="form-row-label"><?php _e( 'Client ID', 'glasbestellen' ); ?>:</label>
-         <span><?php echo $transaction->get_client_data( 'ga_client_id' ); ?></span>
+         <span><?php echo $transaction->get_client_data( 'gclid' ); ?></span>
       </div>
 
    </div>
