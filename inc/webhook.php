@@ -53,6 +53,7 @@ function gb_webhook_template_include( $template ) {
                ->setClientId( $transaction->get_client_data( 'gclid' ) );
 
             $analytics->setTransactionId( $transaction->get_transaction_id() )
+               ->setAffiliation( 'online' )
                ->setRevenue( $transaction->get_total_price() )
                ->setShipping( $transaction->get_total_shipping_price() )
                ->setTax( Money::vat( $transaction->get_total_price() ) )
