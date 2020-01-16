@@ -72,8 +72,6 @@
       this.addEventListener('load', update, true);
    });
 
-   $('')
-
    /**
     * Delegate click events
     */
@@ -291,23 +289,17 @@
    /**
     * Popup form
     */
-   const popupForm = document.querySelector('.js-popup-form');
-   if (popupForm !== null) {
-      popupForm.addEventListener('click', e => {
-         const xhttp = new XMLHttpRequest();
-         const url = gb.ajaxUrl + '?action=get_form_modal_input&formtype=' + e.target.dataset.formtype;
-         xhttp.open('GET', url);
-         xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-               let response = JSON.parse(this.responseText);
-               showModal(response.html, response.title);
-               // To add event listeners to dynamic loaded content
-               addFormEventListeners();
-            }
-         }
-         xhttp.send();
+   $(document).on('click', '.js-popup-form', function() {
+      let data = {
+         action: 'get_form_modal_input',
+         formtype: $(this).data('formtype')
+      }
+      $.get(gb.ajaxUrl, data, function(json) {
+         let response = JSON.parse(json);
+         showModal(response.html, response.title);
+         addFormEventListeners();
       });
-   }
+   });
 
 })(jQuery);
 
