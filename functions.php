@@ -35,3 +35,5 @@ $files = glob( TEMPLATEPATH . '/inc/*.php' );
 foreach ( $files as $file ) {
    require_once $file;
 }
+
+$offline_conversion_tracking = new Offline_Conversion_Tracking\Core;

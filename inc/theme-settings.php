@@ -151,6 +151,11 @@ function gb_init_theme_options() {
 	add_settings_field( $id, __( 'Payment redirect URL', 'glasbestellen' ), 'gb_settings_select_pages', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
 	register_setting( 'theme-settings', $id );
 
+	$id = 'conversion_selectable_products';
+	add_settings_field( $id, __( 'Kiesbare producten', 'glasbestellen' ), 'gb_settings_comma_textarea', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
+	register_setting( 'theme-settings', $id );
+
+
 }
 add_action( 'admin_init', 'gb_init_theme_options' );
 
@@ -245,4 +250,14 @@ function gb_settings_select_pages( $args ) {
 
 	}
 
+}
+
+function gb_settings_comma_textarea( $args ) {
+
+	$value = get_option( $args['id'] ); ?>
+
+	<textarea class="regular-text" name="<?php echo $args['id']; ?>" rows="8"><?php echo $value; ?></textarea>
+	<p class="description"><?php _e( 'Scheidt producten met komma.', 'glasbestellen' ); ?><p>
+
+	<?php
 }

@@ -1,27 +1,67 @@
 jQuery(document).ready(function($) {
 
+   /**
+    * Offline conversion tracking dashboard
+    */
+   (function() {
+
+      const dashboard = $('.js-conversion-tracking-dashboard');
+
+      $(dashboard).on('click', '.js-add-item-button', function(e) {
+
+         e.preventDefault();
+         let data = {
+            action: 'get_dashboard_item_row_html'
+         };
+         $.get(gb.ajaxUrl, data, function(row) {
+            $('.js-items-table tbody', dashboard).append(row);
+         });
+
+      }).on('click', '.js-submit-button', function(e) {
+
+         e.preventDefault();
+
+         let self = $(this);
+
+         let leadId = $('[name="lead_id"]').val();
+         let data   = $(':input', dashboard).serialize() + '&action=save_dasboard_conversion&lead_id=' + leadId;
+
+         $.post(gb.ajaxUrl, data, function(response) {
+         });
+         
+      }).on('click', '.js-delete-item-button', function(e) {
+         e.preventDefault();
+         $(this).parents('tr').remove();
+      });
+
+   })();
+
    $('.js-change-update-lead').change(updateLead);
    $('.js-blur-update-lead').blur(updateLead);
-
    $('.js-delete-lead').click(function(e) {
-
       e.preventDefault();
-
       if (confirm(gb.msg.sureDeleteLead)) {
-
          let lead_id = $('[name="lead_id"]').val();
-
          let data = {
             action: 'delete_lead',
             lead_id: lead_id
          };
-
          $.post(gb.ajaxUrl, data, function(redirect) {
             window.location.replace(redirect);
          });
-
       }
    });
+   $('.js-conversion-tracking-settings').on('click', '.js-add-item-button', function(e) {
+      e.preventDefault();
+
+   });
+
+   function updateLead(callback) {
+      const data = $('.js-lead-form').serialize() + '&action=update_lead';
+      $.post(gb.ajaxUrl, data, function(response) {
+         callback();
+      });
+   }
 
    $('.js-toggle-target').on('click', function(e) {
       e.preventDefault();
@@ -127,12 +167,5 @@ jQuery(document).ready(function($) {
    		return true;
    	});
    });
-
-   function updateLead() {
-      const data = $('.js-lead-form').serialize() + '&action=update_lead';
-      $.post(gb.ajaxUrl, data, function(response) {
-         console.log(response);
-      });
-   }
 
 });

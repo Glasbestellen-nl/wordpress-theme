@@ -37,6 +37,19 @@ function get_first_term_by_id( $post_id, $taxonomy, $output = 'term_id' ) {
    return $term->$output;
 }
 
+/**
+ * Returns list of selectable products to select
+ * in offline conversion tracking
+ */
+function gb_get_selectable_products() {
+	if ( $option = get_option( 'conversion_selectable_products' ) ) {
+		$products_names = explode( ',', $option );
+		rsort( $products_names );
+		return $products_names;
+	}
+	return false;
+}
+
 /*
  * Returns path to lead attachments directory
  */

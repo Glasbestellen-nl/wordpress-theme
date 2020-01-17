@@ -96,6 +96,34 @@
 
                </div>
 
+               <div class="postbox postbox-space-large">
+
+                  <h2 class="hndle"><?php _e( 'Offline Conversion Tracking', 'glasbestellen' ); ?></h2>
+
+                  <div class="inside">
+
+                     <div class="js-conversion-tracking-dashboard">
+
+                        <?php
+                        $conversion_meta = CRM::get_lead_meta( $_GET['lead_id'], 'conversion_data', true );
+                        $conversion_data = new Offline_Conversion_Tracking\Conversion_Data( $conversion_meta );
+                        $dashboard_ui    = new Offline_Conversion_Tracking\Dashboard_UI;
+                        $dashboard_ui->set_conversion_data( $conversion_data );
+                        $dashboard_ui->render_fields();
+                        ?>
+
+                        <div class="js-items-table">
+                           <?php $dashboard_ui->render_table(); ?>
+                        </div>
+
+                        <p><?php $dashboard_ui->render_buttons(); ?></p>
+
+                     </div>
+
+                  </div>
+
+               </div>
+
             </div>
 
             <div id="postbox-container-1" class="postbox-container">

@@ -14,7 +14,7 @@ class CRM {
    private static $leadmeta_table;
 
    // Holds available lead statuses
-   private static $lead_statuses;
+   private static $statuses;
 
    /**
     * Sets properties
@@ -30,7 +30,7 @@ class CRM {
          self::$leads_table = $wpdb->prefix . 'leads';
          self::$leadmeta_table = $wpdb->prefix . 'leadmeta';
 
-         self::$lead_statuses = [
+         self::$statuses = [
             'open'       => __( 'Open', 'glasbestellen' ),
             'wait'       => __( 'Afwachten', 'glasbestellen' ),
             'answered'   => __( 'Beantwoord', 'glasbestellen' ),
@@ -79,6 +79,27 @@ class CRM {
          $query .= " " . $where;
       }
 
+      $rows = self::$wpdb->get_results( $query );
+      if ( ! empty( $rows ) ) {
+         foreach ( $rows as $lead_data ) {
+            $leads[] = new Lead( $lead_data, self::get_lead_custom( $lead_data->lead_id ) );
+         }
+      }
+      return $leads;
+   }
+
+   public static function get_leads_by_status( $status = 'order' ) {
+
+      self::init();
+
+      $leads = false;
+
+      $query = "
+         SELECT *
+         FROM " . self::$leads_table . " l
+         JOIN " . self::$leadmeta_table . " m ON m.lead_id = l.lead_id
+         WHERE m.meta_key = 'lead_status' AND m.meta_value = '$status';
+      ";
       $rows = self::$wpdb->get_results( $query );
       if ( ! empty( $rows ) ) {
          foreach ( $rows as $lead_data ) {
@@ -211,13 +232,12 @@ class CRM {
             $lead_id, $meta_key
          )
       );
-      if ( ! empty( $row ) ) {
-         if ( $single ) {
-            return $row->meta_value;
-         }
-         return $row;
+      if ( empty( $row ) ) return false;
+
+      if ( $single ) {
+         return ( @unserialize( $row->meta_value ) !== false ) ? unserialize( $row->meta_value ) : $row->meta_value;
       }
-      return false;
+      return $row;
    }
 
    /**
@@ -233,6 +253,9 @@ class CRM {
 
       if ( empty( $lead_id ) )
          return;
+
+      if ( is_array( $meta_value ) )
+         $meta_value = serialize( $meta_value );
 
       if ( self::get_lead_meta( $lead_id, $meta_key ) ) {
 
@@ -317,9 +340,9 @@ class CRM {
          return;
 
       // Check whether is a valid status
-      if ( in_array( $status, array_keys( self::$lead_statuses ) ) ) {
-         self::update_lead_meta( $lead_id, 'lead_status', $status );
-      }
+      if ( ! self::accept_status( $status ) ) return;
+
+      self::update_lead_meta( $lead_id, 'lead_status', $status );
       return true;
    }
 
@@ -344,7 +367,7 @@ class CRM {
     */
    public static function get_lead_statuses() {
       self::init();
-      return ! empty( self::$lead_statuses ) ? self::$lead_statuses : false;
+      return ! empty( self::$statuses ) ? self::$statuses : false;
    }
 
    /**
@@ -415,6 +438,10 @@ class CRM {
       ];
       return get_users( $args );
 
+   }
+
+   public static function accept_status( string $status ) {
+      return in_array( $status, array_keys( self::$statuses ) );
    }
 
 }
