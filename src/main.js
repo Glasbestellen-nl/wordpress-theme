@@ -19,6 +19,25 @@
       };
    }
 
+   // Fancybox
+   jQuery('.js-fancybox').fancybox({
+      prevEffect: 'none',
+      nextEffect: 'none',
+   });
+
+   // Fancybox iframe
+   jQuery('.js-fancybox-various').fancybox({
+      maxWidth: 800,
+      maxHeight: 600,
+      fitToView: false,
+      width: '80%',
+      height: '80%',
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none'
+   });
+
    /**
     * Rotator
     */

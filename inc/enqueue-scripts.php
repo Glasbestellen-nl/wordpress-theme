@@ -14,12 +14,14 @@ function gb_enqueue_scripts() {
    wp_enqueue_style( 'grid', get_template_directory_uri() . '/assets/css/grid.css' );
    wp_enqueue_style( 'normalize', get_template_directory_uri() . '/assets/css/normalize.css' );
    wp_enqueue_style( 'font-awesome', get_template_directory_uri() . '/assets/css/fontawesome-all.css' );
+   wp_enqueue_style( 'fancybox', get_template_directory_uri() . '/assets/fancybox/jquery.fancybox.css' );
 
    // Scripts
    wp_enqueue_script( 'jquery' );
    wp_enqueue_script( 'masonry' );
    wp_enqueue_script( 'lazysizes-js', get_template_directory_uri() . '/assets/js/lazysizes.min.js', null, true );
-   wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', [], $version, true );
+   wp_enqueue_script( 'fancybox-js', get_template_directory_uri() . '/assets/fancybox/jquery.fancybox.js', ['jquery'], null, true );
+   wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', ['jquery', 'fancybox-js'], $version, true );
 
    if ( is_singular( 'configurator' ) ) {
       wp_enqueue_script( 'configurator-js', get_template_directory_uri() . '/assets/js/configurator.js', ['jquery', 'main-js'], $version, true );
