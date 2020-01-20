@@ -1,4 +1,70 @@
 <?php
+/*
+* Add transactions custom table columns
+*
+* This function adds custom table columns to transactions
+* admin overview
+*/
+function gb_transaction_table_head( $defaults ) {
+
+  $columns = array();
+
+  // Add new columns
+  $defaults['total']    = __( 'Totaal incl. BTW.', 'glasbestellen' );
+  $defaults['status'] 	= __( 'Status', 'glasbestellen' );
+
+  foreach ( $defaults as $key => $value ) {
+
+     // Place columns before date
+     if ( 'date' == $key ) {
+        $columns['total'] = '';
+        $columns['status'] = '';
+     }
+
+     $columns[$key] = $value;
+  }
+
+  return $columns;
+
+}
+add_filter( 'manage_transactie_posts_columns', 'gb_transaction_table_head' );
+
+/**
+* Add transactions custom table columns content
+*
+* This function adds custom table columns content to transactions
+* admin overview
+*/
+function gb_transaction_table_content( $column_name, $post_id ) {
+
+   $transaction = new Transaction( $post_id );
+
+  switch ( $column_name ) {
+
+     case 'total' :
+        echo Money::display( $transaction->get_total_price() );
+        break;
+
+     case 'status' :
+        echo ucfirst( $transaction->get_status() );
+        break;
+  }
+
+}
+add_action( 'manage_transactie_posts_custom_column', 'gb_transaction_table_content', 10, 2 );
+
+/**
+ * Turns admin transactions order to newest first
+ */
+function gb_admin_transactions_order( $query ) {
+
+   if ( is_admin() ) {
+      $query->set( 'order', 'DESC' );
+   }
+   return $query;
+}
+add_action( 'pre_get_posts', 'gb_admin_transactions_order' );
+
 /**
  * Adds transaction meta boxes
  */
