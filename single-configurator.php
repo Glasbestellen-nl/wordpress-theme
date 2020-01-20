@@ -69,11 +69,15 @@
                                  <button class="btn btn--tertiary btn--block btn--next js-configurator-to-cart"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
                               </div>
 
-                              <ul class="config-details__checkmarks">
-                                 <li class="config-details__checkmark">Nu gratis verzending</li>
-                                 <li class="config-details__checkmark">Ongeveer 2 weken levertijd</li>
-                                 <li class="config-details__checkmark">Laten plaatsen? Geen probleem!</li>
-                              </ul>
+                              <?php if ( $usps = $configurator->get_usps() ) { ?>
+                                 <ul class="config-details__checkmarks">
+                                    <?php
+                                    foreach ( $usps as $usp ) {
+                                       echo '<li class="config-details__checkmark">' . $usp . '</li>';
+                                    }
+                                    ?>
+                                 </ul>
+                              <?php } ?>
 
                            </div>
 

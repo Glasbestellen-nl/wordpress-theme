@@ -421,6 +421,10 @@ abstract class Configurator {
       return false;
    }
 
+   public function get_usps() {
+      return ! empty( $this->settings['usps'] ) ? $this->settings['usps'] : false;
+   }
+
    /**
     * Returns configuration summary
     */
