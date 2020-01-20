@@ -33,6 +33,7 @@ class Dashboard_UI {
             <tr>
                <th><?php _e( 'Product', 'glasbestellen' ); ?></th>
                <th><?php _e( 'Prijs ex. BTW.', 'glasbestellen' ); ?></th>
+               <th><?php _e( 'Aantal', 'glasbestellen' ); ?></th>
                <th><?php _e( 'Verwijder', 'glasbestellen' ); ?></th>
             </tr>
          </thead>
@@ -53,8 +54,9 @@ class Dashboard_UI {
    public function render_table_row( array $item = [] ) {
 
       $products = gb_get_selectable_products();
-      $name  = ! empty( $item['name'] ) ? $item['name'] : '';
-      $price = ! empty( $item['price'] ) ? $item['price'] : ''; ?>
+      $name     = ! empty( $item['name'] ) ? $item['name'] : '';
+      $price    = ! empty( $item['price'] ) ? $item['price'] : '';
+      $quantity = ! empty( $item['quantity'] ) ? $item['quantity'] : 1; ?>
 
       <tr class="alternate">
          <td>
@@ -72,6 +74,16 @@ class Dashboard_UI {
          </td>
          <td>
             <input type="text" name="conversion[item_prices][]" value="<?php echo $price; ?>" placeholder="00.00">
+         </td>
+         <td>
+            <select name="conversion[item_quantities][]">
+               <?php
+               for ( $i = 1; $i <= 20; $i ++ ) {
+                  $selected = selected( $quantity, $i, false );
+                  echo '<option value="' . $i . '" ' . $selected . '>' . $i . '</option>';
+               }
+               ?>
+            </select>
          </td>
          <td>
             <button class="button button-secondary js-delete-item-button"><?php _e( 'Verwijder', 'glasbestellen' ); ?></button>

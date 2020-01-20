@@ -64,7 +64,7 @@ function gb_admin_enqueue_scripts() {
    wp_localize_script( 'admin-js', 'gb',
       array(
          'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-         'mgs' => [
+         'msg' => [
             'sureDeleteLead' => __( 'Weet je zeker dat je deze lead wilt verwijderen?', 'glasbestellen' )
          ]
       )

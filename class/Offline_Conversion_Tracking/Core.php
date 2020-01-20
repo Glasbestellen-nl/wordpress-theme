@@ -5,6 +5,7 @@ class Core {
 
    public function __construct() {
       $hooks = new Hooks;
+      $data_pusher = new Data_Pusher;
    }
 
 }

@@ -17,7 +17,7 @@ class Conversion_Data {
 
       if ( ! empty( $data['items'] ) ) {
          foreach ( $data['items'] as $item ) {
-            $this->add_item( $item['name'], $item['price'] );
+            $this->add_item( $item['name'], $item['price'], $item['quantity'] );
          }
       }
    }
@@ -30,10 +30,11 @@ class Conversion_Data {
       $this->data['shipping_price'] = $value;
    }
 
-   public function add_item( string $name = '', float $price = 0 ) {
+   public function add_item( string $name = '', float $price = 0, $quantity = 1 ) {
       $item = [
-         'name' => $name,
-         'price' => $price
+         'name'     => $name,
+         'price'    => $price,
+         'quantity' => $quantity
       ];
       $this->data['items'][] = $item;
       return true;

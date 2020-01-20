@@ -29,8 +29,9 @@ class Hooks {
 
       if ( ! empty( $input['item_names'] ) ) {
          foreach ( $input['item_names'] as $index => $item_name ) {
+
             if ( ! empty( $input['item_prices'][$index] ) )
-               $conversion_data->add_item( $item_name, $input['item_prices'][$index] );
+            $conversion_data->add_item( $item_name, $input['item_prices'][$index], $input['item_quantities'][$index] );
          }
       }
 
