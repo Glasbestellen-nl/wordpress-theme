@@ -32,12 +32,17 @@
                   <div class="row">
 
                      <?php
-                     $articles = new WP_Query( [
+                     $articles = new WP_Query([
                         'post_type' => 'artikel',
                         'tax_query' => [
-                           'taxonomy' => $subject->term_id,
+                           [
+                              'taxonomy' => 'onderwerp',
+                              'field'    => 'term_id',
+                              'terms'    => $subject->term_id,
+                           ]
                         ],
-                        'posts_per_page' => -1
+                        'posts_per_page' => -1,
+                        'order' => 'ASC'
                      ]);
                      if ( $articles->have_posts() ) {
                         while ( $articles->have_posts() ) {
