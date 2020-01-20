@@ -16,7 +16,7 @@ add_action( 'pre_get_posts', 'gb_pre_get_reviews' );
  *
  * @param bool $double return avarage as out of 5 or 10
  */
-function gb_get_review_average( $double = false, $category = null ) {
+function gb_get_review_average( $double = false, $category = null, int $decimals = 1 ) {
 
    $total = 0;
    $reviews = gb_get_reviews( -1, $category );
@@ -29,7 +29,7 @@ function gb_get_review_average( $double = false, $category = null ) {
       }
       $avarage = $total / count( $reviews );
       $avarage = ( $double ) ? $avarage * 2 : $avarage;
-      return round( $avarage, 1 );
+      return round( $avarage, $decimals );
    }
 
    return 5;
