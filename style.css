@@ -474,7 +474,7 @@ Button
    -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,0.2);
    box-shadow: 0 2px 1px 0 rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,0.2);
    font-weight: 600;
-   font-size: 1em;
+   font-size: 1.125em;
    text-align: center;
    color: #fff;
    cursor: pointer;
@@ -544,7 +544,6 @@ Button
    line-height: 1.35em;
 }
 
-
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 
@@ -565,6 +564,16 @@ Button
       padding-right: 2.5em;
    }
 
+}
+
+/*--------------------------------------------------------------
+Caption
+--------------------------------------------------------------*/
+
+.caption {
+   display: block;
+   text-align: center;
+   font-size: 0.875em;
 }
 
 /*--------------------------------------------------------------
@@ -1054,7 +1063,7 @@ Page header
 }
 
 .page-header__headline--large {
-   font-size: 1.875em;
+   font-size: 1.625em;
 }
 
 

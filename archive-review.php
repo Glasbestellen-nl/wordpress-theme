@@ -22,6 +22,9 @@
             </div>
 
             <span class="btn btn--primary btn--next space-above space-below js-popup-form" data-formtype="review"><?php _e( 'Review schrijven', 'glasbestellen' ); ?></span>
+            <div class="caption">
+               <?php echo '...' . sprintf( __( 'of via <a href="%s" target="_blank">Facebook</a> of <a href="%s" target="_blank">Google</a>', 'glasbestellen' ), 'https://www.facebook.com/pg/glasbestellen.nl/reviews/', 'http://search.google.com/local/writereview?placeid=ChIJQ09hFjOZxkcRKJSdguzRcTg' ); ?>
+            </div>
 
          </section>
 
