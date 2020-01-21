@@ -51,16 +51,9 @@
 
          <?php } ?>
 
-         <?php paginate_links(); ?>
-
          <div class="pagination">
-            <a href="#" class="pagination__item pagination__prev">Vorige</a>
-            <a href="#" class="pagination__item pagination__number">1</a>
-            <a href="#" class="pagination__item pagination__number pagination__current">2</a>
-            <span class="pagination__item pagination__dots">...</span>
-            <a href="#" class="pagination__item pagination__number">12</a>
-            <a href="#" class="pagination__item pagination__next">Volgende</a>
-         </div>
+            <?php echo paginate_links(); ?>
+         </div>   
 
       </div>
 

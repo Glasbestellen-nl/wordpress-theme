@@ -807,7 +807,7 @@ Pagination
    justify-content: center;
 }
 
-.pagination__item {
+.pagination .page-numbers {
    margin: 0 0.1em;
    padding: 0.625em 0.875em;
    border: 1px solid #c7d4ea;
@@ -818,15 +818,15 @@ Pagination
    color: #7a9ed3;
 }
 
-.pagination__item:hover {
+.pagination .page-numbers:hover {
    border-color: #afbfd8;
    color: #6287bc;
 }
 
-.pagination__dots,
-.pagination__current,
-.pagination__dots:hover,
-.pagination__current:hover {
+.pagination .dots,
+.pagination .current,
+.pagination .dots:hover,
+.pagination .current:hover {
    border-color: #dbdbdb;
    color: #878787;
 }
