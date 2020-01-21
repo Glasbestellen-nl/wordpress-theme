@@ -17,57 +17,39 @@
 
          </div>
 
-         <div class="row">
+         <?php if ( have_posts() ) { ?>
 
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="row">
 
-               <article class="teaser teaser--short space-below">
+               <?php
+               while ( have_posts() ) {
+                  the_post();
 
-                  <a href="#" class="teaser__image teaser__image--cover">
-                     <img src="https://www.glasbestellen.nl/wp-content/uploads/2014/06/glazen-keuken-achterwand-thumb.jpg" alt="" class="teaser__image-img">
-                  </a>
+                  if ( ! get_post_meta( get_the_id(), 'hide_on_archive', true ) ) { ?>
 
-                  <a href="#" class="teaser__body teaser__body--full">
-                     <h3 class="h-default teaser__headline">Keukenwanden</h3>
-                  </a>
+                     <div class="col-12 col-md-6 col-lg-4">
 
-               </article>
+                        <article class="teaser teaser--short space-below">
 
-            </div>
+                           <a href="<?php the_permalink(); ?>" class="teaser__image teaser__image--cover">
+                              <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="" class="teaser__image-img">
+                           </a>
 
-            <div class="col-12 col-md-6 col-lg-4">
+                           <a href="<?php the_permalink(); ?>" class="teaser__body teaser__body--full">
+                              <h3 class="h-default teaser__headline"><?php the_title(); ?></h3>
+                           </a>
 
-               <article class="teaser teaser--short space-below">
+                        </article>
 
-                  <a href="#" class="teaser__image teaser__image--cover">
-                     <img src="https://www.glasbestellen.nl/wp-content/uploads/2014/06/douchedeur-thumb.jpg" alt="" class="teaser__image-img">
-                  </a>
+                     </div>
 
-                  <a href="#" class="teaser__body teaser__body--full">
-                     <h3 class="h-default teaser__headline">Douchedeuren</h3>
-                  </a>
+                  <?php } ?>
 
-               </article>
+               <?php } ?>
 
             </div>
 
-            <div class="col-12 col-md-6 col-lg-4">
-
-               <article class="teaser teaser--short space-below">
-
-                  <a href="#" class="teaser__image teaser__image--cover">
-                     <img src="https://www.glasbestellen.nl/wp-content/uploads/2014/06/douchewand-thumb.jpg" alt="" class="teaser__image-img">
-                  </a>
-
-                  <a href="#" class="teaser__body teaser__body--full">
-                     <h3 class="h-default teaser__headline">Douchewanden</h3>
-                  </a>
-
-               </article>
-
-            </div>
-            
-         </div>
+         <?php } ?>
 
       </div>
 
