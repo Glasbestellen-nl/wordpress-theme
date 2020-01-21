@@ -37,7 +37,7 @@
                <div class="col-md-4 col-lg-6">
 
                   <a href="<?php echo home_url(); ?>" class="site-logo header-inner__logo">
-                     <img src="<?php echo get_template_directory_uri() . '/assets/images/logo.png'; ?>" class="site-logo__image">
+                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/logo.png'; ?>" class="lazyload site-logo__image" alt="Logo">
                      <span class="site-logo__slogan"><?php bloginfo( 'description' ); ?></span>
                   </a>
 

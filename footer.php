@@ -143,7 +143,7 @@
             <div class="footer-bottom__inner">
 
                <div class="payment-icons payment-icons--footer">
-                  <img src="<?php echo get_template_directory_uri() . '/assets/images/payment-icons.png'; ?>">
+                  <img data-src="<?php echo get_template_directory_uri() . '/assets/images/payment-icons.png'; ?>" class="lazyload" alt="<?php _e( 'Betaal logo\'s', 'glasbestellen' ); ?>">
                </div>
 
                   <ul class="footer-bottom__inline">
