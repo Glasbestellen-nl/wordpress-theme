@@ -18,8 +18,8 @@ p, ul, ol {
 }
 
 img {
-   width: 100%;
-   vertical-align: bottom;
+   max-width: 100%;
+   height: auto;
 }
 
 fieldset {
@@ -158,6 +158,20 @@ a, .link {
 .text ol:last-child,
 .text ul:last-child {
    margin-bottom: 0;
+}
+
+.text img {
+   display: inline-block;
+}
+
+.text .alignright {
+   margin: .9375em 0 .9375em 1.25em;
+   float: right;
+}
+
+.text .alignleft {
+   margin: .9375em 1.25em .9375em 0;
+   float: left;
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -740,6 +754,9 @@ Form
 .dropdown {
    width: 100%;
    padding: 0.625em 2.5em 0.625em 0.875em;
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
+   border-radius: 4px;
    -moz-appearance: none;
    -webkit-appearance: none;
    appearance: none;
@@ -1415,6 +1432,7 @@ Image slider
    -ms-user-select: none;
 }
 
+
 /*--------------------------------------------------------------
 Gallery
 --------------------------------------------------------------*/
@@ -1474,9 +1492,10 @@ Pins
 }
 
 .pin__image {
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
    border-radius: 4px;
 }
-
 
 /*--------------------------------------------------------------
 Hero
@@ -2066,6 +2085,10 @@ Side nav
    font-size: 0.9375em;
    font-weight: 400;
    color: #000;
+}
+
+.side-nav__link--current {
+   background-color: #f4f4f4;
 }
 
 .side-nav__link:hover {
