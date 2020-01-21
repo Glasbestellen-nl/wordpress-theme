@@ -17,9 +17,10 @@ p, ul, ol {
    list-style: none;
 }
 
-img {
+img, iframe {
    max-width: 100%;
    height: auto;
+   vertical-align: middle;
 }
 
 fieldset {
@@ -474,8 +475,8 @@ Button
    -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,0.2);
    -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,0.2);
    box-shadow: 0 2px 1px 0 rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,0.2);
-   font-weight: 600;
-   font-size: 1.125em;
+   font-weight: 700;
+   font-size: 1.25em;
    text-align: center;
    color: #fff;
    cursor: pointer;
@@ -483,6 +484,7 @@ Button
 
 .btn--large {
    padding: 0.875em 1.5em;
+   font-size: 1.35em;
 }
 
 .btn--block {
@@ -550,7 +552,6 @@ Button
 
    .btn {
       padding: 0.75em 1.125em;
-      font-size: 1.25em;
    }
 
    .btn--large {
@@ -1109,7 +1110,7 @@ Collapse box
    position: relative;
    border-left: 0;
    border-right: 0;
-   font-size: 0.875em;
+   font-size: 1em;
    background-color: #fcfcfc;
    cursor: pointer;
 }
@@ -1145,7 +1146,7 @@ Collapse box
 
    .collapse-box__header::before,
    .collapse-box__title {
-      font-size: 1.25em;
+      font-size: 1.125em;
    }
 
    .collapse-box__header::before {
@@ -1310,7 +1311,7 @@ Teaser
 }
 
 .teaser__headline--large {
-   font-size: 1.875em;
+   font-size: 2.5em;
    font-weight: 500;
 }
 
@@ -1562,7 +1563,7 @@ Hero
    -moz-text-shadow: 0 1px 10px rgba(0,0,0,0.7);
    -webkit-text-shadow: 0 1px 1px rgba(0,0,0,0.7);
    text-shadow: 0 1px 2px rgba(0,0,0,0.7);
-   font-size: 1.625em;
+   font-size: 2em;
    font-weight: 700;
    color: #fff;
 }
@@ -1978,7 +1979,6 @@ Main nav
 
 .main-nav__sub-link {
    padding-left: 0;
-   font-weight: normal;
 }
 
 /* Large devices (desktops, 992px and up) */
