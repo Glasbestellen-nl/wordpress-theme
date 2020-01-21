@@ -39,6 +39,30 @@
    });
 
    /**
+    * Toggle side nav
+    */
+   $('.js-side-nav-list-toggler').on('click', function() {
+      let targetElement = $(this).parent().find('.js-side-nav-list');
+      targetElement.toggleClass('d-none');
+   });
+
+   /**
+    * Masonry
+    */
+   $('.js-bricks').each(function() {
+      const $bricks = $(this);
+      const update = function() {
+         $bricks.masonry({
+            itemSelector: '.js-brick'
+         });
+      };
+      $bricks.masonry({
+         itemSelector: '.js-brick'
+      });
+      this.addEventListener('load', update, true);
+   });
+
+   /**
     * Rotator
     */
    (function() {
@@ -78,28 +102,36 @@
    })();
 
    /**
-    * Toggle side nav
+    * Main navigation
     */
-   $('.js-side-nav-list-toggler').on('click', function() {
-      let targetElement = $(this).parent().find('.js-side-nav-list');
-      targetElement.toggleClass('d-none');
-   });
+   (function() {
 
-   /**
-    * Masonry
-    */
-   $('.js-bricks').each(function() {
-      const $bricks = $(this);
-      const update = function() {
-         $bricks.masonry({
-            itemSelector: '.js-brick'
-         });
-      };
-      $bricks.masonry({
-         itemSelector: '.js-brick'
+      const parentSelector = '.js-nav-item-parent';
+
+      // Stops bubbling up in the DOM by click a menu subitem link
+      $(document).on('click', parentSelector + ', .js-nav-subitem-link', function(e) {
+         e.stopPropagation();
+      })
+
+      // Closes sublevels by click outside
+      .on('click', 'body', function() {
+         $(parentSelector).removeClass('open');
+      })
+
+      // Opens sublevel and closes siblings
+      .on('click', parentSelector, function(e) {
+         e.preventDefault();
+         $(this).toggleClass('open');
+         $(parentSelector).not(this).removeClass('open');
+      })
+
+      // Toggles nav menu on mobile menu
+      .on('click', '.js-nav-toggler', function() {
+         $(this).toggleClass('open');
+         $('.js-nav-items').toggleClass('open');
       });
-      this.addEventListener('load', update, true);
-   });
+
+   })();
 
    /**
     * Delegate click events
@@ -107,29 +139,6 @@
    document.addEventListener('click', e => {
 
       if (e.target) {
-
-         /**
-         * Stop bubbling up in the DOM by click a menu subitem link
-         */
-         if (e.target && e.target.matches('.js-nav-subitem-link')) {
-            e.stopPropagation();
-            return;
-         }
-
-         /**
-          * Sub nav toggle
-          */
-         if (e.target && e.target.closest('.js-nav-item-parent')) {
-            e.preventDefault();
-            const parent = e.target.closest('.js-nav-item-parent');
-            parent.classList.toggle('open');
-            document.querySelectorAll('.js-nav-item-parent').forEach(item => {
-               if (item !== parent) {
-                  item.classList.remove('open');
-               }
-            });
-            return;
-         }
 
          /**
           * Collapse box
@@ -213,9 +222,7 @@
             e.target.parentNode.querySelector('.js-file-input-trigger-text').innerHTML = filesCount + ' ' + gb.msg.filesSelected;
             return;
          }
-
       }
-
    });
 
    /**
@@ -291,29 +298,9 @@
    /**
     * Form validation per input on blur
     */
-   function addFormEventListeners() {
-
-      const formValidateElements = document.querySelectorAll('.js-form-validate');
-      if (formValidateElements !== null) {
-         formValidateElements.forEach(element => {
-            element.addEventListener('blur', () => {
-               validateInput(element);
-            });
-         });
-      }
-   }
-   addFormEventListeners();
-
-   /**
-    * Main nav toggle
-    */
-   const navToggler = document.querySelector('.js-nav-toggler');
-   if (document.querySelector('.js-nav-toggler') !== null) {
-      navToggler.addEventListener('click', (e) => {
-         e.target.classList.toggle('open');
-         document.querySelector('.js-nav-items').classList.toggle('open');
-      });
-   }
+   $(document).on('blur', '.js-form-validate', function() {
+      validateInput(this);
+   });
 
    /**
     * Popup form
@@ -326,7 +313,6 @@
       $.get(gb.ajaxUrl, data, function(json) {
          let response = JSON.parse(json);
          showModal(response.html, response.title);
-         addFormEventListeners();
       });
    });
 
