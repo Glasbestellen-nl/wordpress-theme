@@ -20,13 +20,13 @@
    }
 
    // Fancybox
-   jQuery('.js-fancybox').fancybox({
+   $('.js-fancybox').fancybox({
       prevEffect: 'none',
       nextEffect: 'none',
    });
 
    // Fancybox iframe
-   jQuery('.js-fancybox-various').fancybox({
+   $('.js-fancybox-various').fancybox({
       maxWidth: 800,
       maxHeight: 600,
       fitToView: false,
@@ -41,39 +41,49 @@
    /**
     * Rotator
     */
-   const rotators = document.querySelectorAll('.js-rotator');
-   if (rotators !== null) {
-      rotators.forEach(rotator => {
+   (function() {
+      const rotators = document.querySelectorAll('.js-rotator');
+      if (rotators !== null) {
+         rotators.forEach(rotator => {
 
-         let items = rotator.querySelectorAll('.js-rotator-item');
-         let isPaused = false;
-         let index = 0;
+            let items = rotator.querySelectorAll('.js-rotator-item');
+            let isPaused = false;
+            let index = 0;
 
-         rotate();
-         setInterval(rotate, 4000);
+            rotate();
+            setInterval(rotate, 4000);
 
-         rotator.addEventListener('mouseenter', () => {
-            isPaused = true;
-         });
-         rotator.addEventListener('mouseleave', () => {
-            isPaused = false;
-         });
+            rotator.addEventListener('mouseenter', () => {
+               isPaused = true;
+            });
+            rotator.addEventListener('mouseleave', () => {
+               isPaused = false;
+            });
 
-         function rotate() {
-            if (!isPaused) {
-               items[index].classList.add('visible');
-               items.forEach(item => {
-                  if (item !== items[index]) {
-                     item.classList.remove('visible');
-                  }
-               });
-               index ++;
-               if (index == items.length)
-                  index = 0;
+            function rotate() {
+               if (!isPaused) {
+                  items[index].classList.add('visible');
+                  items.forEach(item => {
+                     if (item !== items[index]) {
+                        item.classList.remove('visible');
+                     }
+                  });
+                  index ++;
+                  if (index == items.length)
+                     index = 0;
+               }
             }
-         }
-      });
-   }
+         });
+      }
+   })();
+
+   /**
+    * Toggle side nav
+    */
+   $('.js-side-nav-list-toggler').on('click', function() {
+      let targetElement = $(this).parent().find('.js-side-nav-list');
+      targetElement.toggleClass('d-none');
+   });
 
    /**
     * Masonry

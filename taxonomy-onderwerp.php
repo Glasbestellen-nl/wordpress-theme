@@ -13,47 +13,7 @@
          <div class="row">
 
             <div class="col-12 col-lg-3">
-
-               <nav class="side-nav">
-
-                  <div class="side-nav__section">
-
-                     <h2 class="side-nav__heading">Toepassingen</h2>
-
-                     <ul class="side-nav__list">
-                        <li class="side-nav__item">
-                           <a href="#" class="side-nav__link">Dubbel glas</a>
-                        </li>
-                        <li class="side-nav__item">
-                           <a href="#" class="side-nav__link">Driedubbel glas</a>
-                        </li>
-                        <li class="side-nav__item">
-                           <a href="#" class="side-nav__link">Geslepen glas</a>
-                        </li>
-                     </ul>
-
-                  </div>
-
-                  <div class="side-nav__section">
-
-                     <h2 class="side-nav__heading">Soorten glas</h2>
-
-                     <ul class="side-nav__list">
-                        <li class="side-nav__item">
-                           <a href="#" class="side-nav__link">Dubbel glas</a>
-                        </li>
-                        <li class="side-nav__item">
-                           <a href="#" class="side-nav__link">Driedubbel glas</a>
-                        </li>
-                        <li class="side-nav__item">
-                           <a href="#" class="side-nav__link">Geslepen glas</a>
-                        </li>
-                     </ul>
-
-                  </div>
-
-               </nav>
-
+               <?php get_template_part( 'template-parts/subjects-side-nav' ); ?>
             </div>
 
             <div class="col-12 col-lg-9">
