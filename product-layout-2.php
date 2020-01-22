@@ -91,7 +91,7 @@ get_header();
 
                                  <?php the_sub_field( 'featured_item_content' ); ?>
 
-                                 <span class="btn btn--primary btn--next js-popup-form" data-formtype="lead">Offerte aanvragen</span>
+                                 <span class="btn btn--primary btn--next space-above d-block d-md-inline-block js-popup-form" data-formtype="lead"><?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?></span>
 
                               </div>
 

@@ -131,7 +131,7 @@ a, .link {
 .text ol,
 .text ul {
    margin-bottom: 1.25em;
-   font-size: 0.9375em;
+   font-size: 1em;
    line-height: 1.5em;
 }
 
@@ -156,12 +156,6 @@ a, .link {
    list-style: disc;
 }
 
-.text p:last-child,
-.text ol:last-child,
-.text ul:last-child {
-   margin-bottom: 0;
-}
-
 .text img {
    display: inline-block;
 }
@@ -174,6 +168,24 @@ a, .link {
 .text .alignleft {
    margin: .9375em 1.25em .9375em 0;
    float: left;
+}
+
+.mobile-more-text {
+   display: none;
+}
+
+.mobile-more-text-button {
+   margin-bottom: 1.25em;
+   display: block;
+   vertical-align: middle;
+   cursor: pointer;
+}
+
+.mobile-more-text-button::after {
+   content: "\f0d7";
+   margin-left: 0.5em;
+   font-family: "Font Awesome 5 Free";
+   font-weight: bold;
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -225,6 +237,19 @@ a, .link {
    .text--small p {
       font-size: 0.9375rem;
       line-height: 1.5em;
+   }
+
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+   .mobile-more-text {
+      display: block;
+   }
+
+   .mobile-more-text-button {
+      display: none;
    }
 
 }
@@ -1557,7 +1582,7 @@ Hero
 }
 
 .hero__body {
-   padding: 2.5em 0 4em 0;
+   padding: 2.5em 0;
    position: relative;
 }
 
