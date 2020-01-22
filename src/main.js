@@ -20,13 +20,13 @@
    }
 
    // Fancybox
-   $('.js-fancybox').fancybox({
+   $('.fancybox').fancybox({
       prevEffect: 'none',
       nextEffect: 'none',
    });
 
    // Fancybox iframe
-   $('.js-fancybox-various').fancybox({
+   $('.fancybox-various').fancybox({
       maxWidth: 800,
       maxHeight: 600,
       fitToView: false,

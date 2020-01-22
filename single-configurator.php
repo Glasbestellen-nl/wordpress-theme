@@ -42,7 +42,7 @@
                                  <div class="col-4 col-md-5 col-lg-12">
 
                                     <div class="config-details__image space-below">
-                                       <a href="<?php echo get_the_post_thumbnail_url( get_the_id(), 'large' ); ?>" class="js-fancybox">
+                                       <a href="<?php echo get_the_post_thumbnail_url( get_the_id(), 'large' ); ?>" class="fancybox">
                                           <img src="<?php echo get_the_post_thumbnail_url( get_the_id(), 'large' ); ?>" class="config-details__image-img">
                                        </a>
                                     </div>

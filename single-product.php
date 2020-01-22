@@ -148,7 +148,7 @@
 
                         <?php foreach ( $gallery_images as $image ) { ?>
 
-                           <a href="<?php echo $image['url']; ?>" class="gallery__item js-fancybox">
+                           <a href="<?php echo $image['url']; ?>" class="gallery__item fancybox">
                               <img data-src="<?php echo $image['url']; ?>" alt="<?php get_post_meta( $image['id'], '_wp_attachment_image_alt', true ); ?>" class="lazyload gallery__image" />
                            </a>
 
