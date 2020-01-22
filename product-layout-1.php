@@ -3,73 +3,82 @@
 // Template post type: product
 get_header(); ?>
 
-   <main class="main-section main-section--space-around">
+   <?php
+   if ( have_posts() ) {
+      while ( have_posts() ) {
+         the_post(); ?>
 
-      <div class="container">
+         <main class="main-section main-section--space-around">
 
-         <div class="row">
+            <div class="container">
 
-            <div class="col-12 col-lg-6">
+               <div class="row">
 
-               <div class="image-slider space-below">
-                  <div class="image-slider__container image-slider__main">
-                     <div class="image-slider__arrows">
-                        <div class="image-slider__arrow image-slider__arrow--prev">
-                           <i class="fas fa-chevron-left"></i>
+                  <div class="col-12 col-lg-6">
+
+                     <?php if ( $gallery_images = get_field( 'gallery_images' ) ) { ?>
+
+                        <div class="image-slider space-below js-image-slider">
+                           <div class="image-slider__container image-slider__main">
+                              <div class="image-slider__arrows">
+                                 <div class="image-slider__arrow image-slider__arrow--prev js-prev">
+                                    <i class="fas fa-chevron-left"></i>
+                                 </div>
+                                 <div class="image-slider__arrow image-slider__arrow--next js-next">
+                                    <i class="fas fa-chevron-right"></i>
+                                 </div>
+                              </div>
+                              <img data-src="<?php echo $gallery_images[0]['url']; ?>" class="lazyload image-slider__img image-slider__main-img js-main" alt="<?php echo $gallery_images[0]['alt']; ?>">
+                           </div>
+
+                           <div class="image-slider__thumbs">
+
+                              <?php
+                              $index = 0;
+                              foreach ( $gallery_images as $image ) {
+                                 $index ++; ?>
+
+                                 <div class="image-slider__container image-slider__thumb js-thumb <?php echo ( $index == 1 ) ? 'current' : ''; ?>">
+                                    <img data-src="<?php echo $image['url']; ?>" class="lazyload image-slider__img image-slider__thumb-img" alt="<?php echo $image['alt']; ?>" data-index="<?php echo $index; ?>" data-image="<?php echo $image['url']; ?>">
+                                 </div>
+
+                              <?php } ?>
+
+                           </div>
                         </div>
-                        <div class="image-slider__arrow image-slider__arrow--next">
-                           <i class="fas fa-chevron-right"></i>
-                        </div>
-                     </div>
-                     <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2019/07/Schuifdeursysteem-SlideTec-wand.jpg" class="lazyload image-slider__img image-slider__main-img">
-                  </div>
-                  <div class="image-slider__thumbs">
-                     <div class="image-slider__container image-slider__thumb image-slider__thumb--current">
-                        <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2019/07/Schuifdeursysteem-SlideTec-wand.jpg" class="lazyload image-slider__img image-slider__thumb-img">
-                     </div>
-                     <div class="image-slider__container image-slider__thumb">
-                        <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2019/07/glazen-schuifdeur-kantoren.png" class="lazyload image-slider__img image-slider__thumb-img">
-                     </div>
-                     <div class="image-slider__container image-slider__thumb">
-                        <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2019/07/glazen-schuifdeur-kantoren.png" class="lazyload image-slider__img image-slider__thumb-img">
-                     </div>
-                     <div class="image-slider__container image-slider__thumb">
-                        <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2019/07/glazen-schuifdeur-kantoren.png" class="lazyload image-slider__img image-slider__thumb-img">
-                     </div>
-                     <div class="image-slider__container image-slider__thumb">
-                        <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2019/07/glazen-schuifdeur-kantoren.png" class="lazyload image-slider__img image-slider__thumb-img">
-                     </div>
-                  </div>
-               </div>
 
-               <section class="text space-below">
-                  <?php
-                  if ( have_posts() ) {
-                     while ( have_posts() ) {
+                     <?php } ?>
+
+                     <section class="text space-below">
+                        <?php
                         the_title( '<h1 class="h1">', '</h1>' );
-                        the_post();
                         the_content();
-                     }
-                  }
-                  ?>
-               </section>
+                        ?>
+                     </section>
 
-            </div>
+                  </div>
 
-            <div class="col-12 col-lg-6">
+                  <div class="col-12 col-lg-6">
 
-               <div class="layout layout--grey full-height">
+                     <div class="layout layout--grey full-height">
 
-                  <div class="layout__column full-height">
+                        <div class="layout__column full-height">
 
-                     <header class="text large-space-below">
-                        <h2>Glazen schuifdeur offerte</h2>
-                        <p>Laat ons met u meedenken over de perfecte glazen schuifdeur voor uw situatie. We werken graag een vrijblijvende offerte voor u uit ​–​ eventueel inclusief inmeten en monteren.</p>
-                        <p>Heeft u andere vragen of gewoon benieuwd naar de mogelijkheden? Ook dan helpt ons team van experts u graag verder!</p>
-                     </header>
+                           <?php if ( get_field( 'extra_title' ) ) { ?>
 
-                     <div class="form form--lead sticky">
-                        <?php get_template_part( 'template-parts/lead-form' ); ?>
+                              <header class="text large-space-below">
+                                 <h2><?php echo get_field( 'extra_title' ); ?></h2>
+                                 <?php echo get_field( 'extra_content' ); ?>
+                              </header>
+
+                           <?php } ?>
+
+                           <div class="form form--lead sticky" id="lead_form">
+                              <?php get_template_part( 'template-parts/lead-form' ); ?>
+                           </div>
+
+                        </div>
+
                      </div>
 
                   </div>
@@ -78,10 +87,16 @@ get_header(); ?>
 
             </div>
 
-         </div>
+         </main>
 
+      <?php } ?>
+
+   <?php } ?>
+
+   <div class="fixed-bottom-wrapper fixed-bottom-wrapper--mobile js-hide-when" data-hide-when="#lead_form">
+      <div class="container">
+         <span class="btn btn--primary btn--next btn--block js-scroll-to" data-scroll-to="#lead_form"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
       </div>
+   </div>
 
-   </main>
-
-   <?php get_footer(); ?>
+<?php get_footer(); ?>

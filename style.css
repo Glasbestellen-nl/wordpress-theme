@@ -607,6 +607,29 @@ Button
 }
 
 /*--------------------------------------------------------------
+Fixed bottom wrapper
+--------------------------------------------------------------*/
+
+.fixed-bottom-wrapper {
+   width: 100%;
+   padding: 0.9375em;
+   box-sizing: border-box;
+   position: fixed;
+   bottom: 0;
+   background-color: rgba(255,255,255,.8);
+   z-index: 5;
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+   .fixed-bottom-wrapper--mobile {
+      display: none;
+   }
+
+}
+
+/*--------------------------------------------------------------
 Caption
 --------------------------------------------------------------*/
 
@@ -1461,7 +1484,8 @@ Image slider
    cursor: pointer;
 }
 
-.image-slider__thumb--current {
+.image-slider__thumb--current,
+.image-slider__thumb.current {
    opacity: 1;
    -moz-box-shadow: 0 1px 5px rgba(0,0,0,.3);
    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,.3);

@@ -75,15 +75,15 @@ get_header();
 
                         <div class="row align-items-lg-center<?php echo ( $count % 2 ) ? '' : ' flex-md-row-reverse'; ?>">
 
-                           <div class="col-12 col-md-6 col-lg-4">
+                           <div class="col-12 col-md-5 col-lg-4">
                               <?php if ( $image = get_sub_field( 'featured_item_image' ) ) { ?>
                                  <a href="<?php echo $image['url']; ?>" class="fancybox space-below">
-                                    <img data-src="<?php echo $image['url']; ?>" class="lazyload rounded-corners box-shadow">
+                                    <img data-src="<?php echo $image['sizes']['medium_large']; ?>" class="lazyload rounded-corners box-shadow" alt="<?php echo $image['alt']; ?>">
                                  </a>
                               <?php } ?>
                            </div>
 
-                           <div class="col col-md-6 col-lg-8">
+                           <div class="col col-md-7 col-lg-8">
 
                               <div class="text text--small area__text space-below space-md-left">
 
