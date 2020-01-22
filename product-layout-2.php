@@ -1,88 +1,51 @@
 <?php
 // Template name: Product layout 2
 // Template post type: product
-get_header(); ?>
+get_header();
 
-   <div class="hero">
+   if ( have_posts() ) {
+      while ( have_posts() ) {
+         the_post();
+         ?>
 
-      <div class="hero__inner">
+         <div class="hero">
 
-         <div class="container">
+            <div class="hero__inner">
 
-            <div class="row">
+               <div class="container">
 
-               <div class="col-12 col-lg-6">
+                  <div class="row">
 
-                  <div class="hero__body hero__body--fade full-height">
+                     <div class="col-12 col-lg-6">
 
-                     <section class="text hero__text space-lg-right">
-                        <?php
-                        if ( have_posts() ) {
-                           while ( have_posts() ) {
+                        <div class="hero__body hero__body--fade full-height">
+
+                           <section class="text hero__text space-lg-right">
+                              <?php
                               the_title( '<h1 class="h1">', '</h1>' );
-                              the_post();
                               the_content();
-                           }
-                        }
-                        ?>
-                     </section>
+                              ?>
+                           </section>
 
-                  </div>
+                        </div>
 
-               </div>
+                     </div>
 
-               <div class="col-12 col-lg-6 d-none d-lg-block">
+                     <div class="col-12 col-lg-6 d-none d-lg-block">
 
-                  <div class="hero__overlay space-lg-left full-height">
+                        <div class="hero__overlay space-lg-left full-height">
 
-                     <header class="text-center space-below">
-                        <span class="h2 h-dark-bg h-shadow">Ontvang vrijblijvend een offerte</span>
-                     </header>
+                           <header class="text-center space-below">
+                              <span class="h2 h-dark-bg h-shadow"><?php _e( 'Ontvang vrijblijvend een offerte', 'glasbestellen' ); ?></span>
+                           </header>
 
-                     <form class="form form--dark-bg form--no-label" enctype="multipart/form-data">
-                        <?php get_template_part( 'template-parts/lead-form' ); ?>
-                     </form>
+                           <div class="form form--dark-bg form--no-label" enctype="multipart/form-data">
+                              <?php get_template_part( 'template-parts/lead-form' ); ?>
+                           </div>
 
-                  </div>
+                        </div>
 
-               </div>
-
-            </div>
-
-         </div>
-
-      </div>
-
-      <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2014/08/background-wrapper.png" class="lazyload hero__background">
-
-   </div>
-
-   <main class="main-section">
-
-      <div class="area">
-
-         <div class="container">
-
-            <div class="row align-items-lg-center">
-
-               <div class="col-12 col-md-6 col-lg-4">
-                  <a href="#" class="fancybox space-below">
-                     <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2019/07/glazen-taatsdeur-768x768.jpg" class="lazyload rounded-corners box-shadow">
-                  </a>
-               </div>
-
-               <div class="col col-md-6 col-lg-8">
-
-                  <div class="text text--small area__text space-below space-md-left">
-
-                     <h2 class="h2">Taatsdeur</h2>
-
-                     <p>Onze glazen taatsdeur is zeer geschikt voor het afsluiten van een nis of doorgang zonder kozijn. De moderne onder- en bovenschoen worden met slechts een paar boorgaten in de vloer en het plafond geschroefd.</p>
-                     <p>Een taatsdeur is doorslaand en kan dus naar beide kanten worden geopend. Door het hydraulische, zelfsluitende scharnier in de onderschoen valt de deur altijd mooi terug in het vooraf ingestelde nulpunt.
-                     Verder wordt de deur standaard uitgevoerd in 10mm dik gehard veiligheidsglas. U kunt hierbij kiezen tussen helder glas, mat glas of glas met een tint ​– zoals grijs of brons. Daarnaast kunt u de uitstraling van uw deur aanpassen door te kiezen voor geborsteld rvs of mat zwart hang en sluitwerk.</p>
-                     <p>Vanwege zijn aantrekkelijk prijs en het eenvoudige monteren is de glazen taatsdeur een populaire, veel gekozen optie.</p>
-
-                     <span class="btn btn--primary btn--next js-popup-form" data-formtype="lead">Offerte aanvragen</span>
+                     </div>
 
                   </div>
 
@@ -90,80 +53,64 @@ get_header(); ?>
 
             </div>
 
+            <?php if ( $background_image = get_field( 'background_image' ) ) { ?>
+               <img data-src="<?php echo $background_image['url']; ?>" class="lazyload hero__background">
+            <?php } ?>
+
          </div>
 
-      </div>
+         <main class="main-section">
 
-      <div class="area area--grey">
+            <?php
+            $count = 0;
+            if ( have_rows( 'featured_items' ) ) {
+               while ( have_rows( 'featured_items' ) ) {
+                  the_row();
+                  $count ++;
+                  $area_class = ( $count % 2 ) ? 'area' : 'area area--grey'; ?>
 
-         <div class="container">
+                  <div class="<?php echo $area_class; ?>">
 
-            <div class="row align-items-lg-center flex-md-row-reverse">
+                     <div class="container">
 
-               <div class="col-12 col-md-6 col-lg-4">
-                  <a href="#" class="fancybox space-below">
-                     <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2019/07/glazen-taatsdeur-768x768.jpg" class="lazyload rounded-corners box-shadow">
-                  </a>
-               </div>
+                        <div class="row align-items-lg-center<?php echo ( $count % 2 ) ? '' : ' flex-md-row-reverse'; ?>">
 
-               <div class="col col-md-6 col-lg-8">
+                           <div class="col-12 col-md-6 col-lg-4">
+                              <?php if ( $image = get_sub_field( 'featured_item_image' ) ) { ?>
+                                 <a href="<?php echo $image['url']; ?>" class="fancybox space-below">
+                                    <img data-src="<?php echo $image['url']; ?>" class="lazyload rounded-corners box-shadow">
+                                 </a>
+                              <?php } ?>
+                           </div>
 
-                  <div class="text text--small area__text space-below space-md-right">
+                           <div class="col col-md-6 col-lg-8">
 
-                     <h2 class="h2">Taatsdeur</h2>
+                              <div class="text text--small area__text space-below space-md-left">
 
-                     <p>Onze glazen taatsdeur is zeer geschikt voor het afsluiten van een nis of doorgang zonder kozijn. De moderne onder- en bovenschoen worden met slechts een paar boorgaten in de vloer en het plafond geschroefd.</p>
-                     <p>Een taatsdeur is doorslaand en kan dus naar beide kanten worden geopend. Door het hydraulische, zelfsluitende scharnier in de onderschoen valt de deur altijd mooi terug in het vooraf ingestelde nulpunt.
-                     Verder wordt de deur standaard uitgevoerd in 10mm dik gehard veiligheidsglas. U kunt hierbij kiezen tussen helder glas, mat glas of glas met een tint ​– zoals grijs of brons. Daarnaast kunt u de uitstraling van uw deur aanpassen door te kiezen voor geborsteld rvs of mat zwart hang en sluitwerk.</p>
-                     <p>Vanwege zijn aantrekkelijk prijs en het eenvoudige monteren is de glazen taatsdeur een populaire, veel gekozen optie.</p>
+                                 <h2 class="h2"><?php the_sub_field( 'featured_item_title' ); ?></h2>
 
-                     <span class="btn btn--primary btn--next js-popup-form" data-formtype="lead">Offerte aanvragen</span>
+                                 <?php the_sub_field( 'featured_item_content' ); ?>
+
+                                 <span class="btn btn--primary btn--next js-popup-form" data-formtype="lead">Offerte aanvragen</span>
+
+                              </div>
+
+                           </div>
+
+                        </div>
+
+                     </div>
 
                   </div>
 
-               </div>
+               <?php } ?>
 
-            </div>
+            <?php } ?>
 
-         </div>
+         </main>
 
-      </div>
+      <?php } ?>
 
-      <div class="area">
-
-         <div class="container">
-
-            <div class="row align-items-lg-center">
-
-               <div class="col-12 col-md-6 col-lg-4">
-                  <a href="#" class="fancybox space-below">
-                     <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2019/07/glazen-taatsdeur-768x768.jpg" class="lazyload rounded-corners box-shadow">
-                  </a>
-               </div>
-
-               <div class="col col-md-6 col-lg-8">
-
-                  <div class="text text--small area__text space-below space-md-left">
-
-                     <h2 class="h2">Taatsdeur</h2>
-
-                     <p>Onze glazen taatsdeur is zeer geschikt voor het afsluiten van een nis of doorgang zonder kozijn. De moderne onder- en bovenschoen worden met slechts een paar boorgaten in de vloer en het plafond geschroefd.</p>
-                     <p>Een taatsdeur is doorslaand en kan dus naar beide kanten worden geopend. Door het hydraulische, zelfsluitende scharnier in de onderschoen valt de deur altijd mooi terug in het vooraf ingestelde nulpunt.
-                     Verder wordt de deur standaard uitgevoerd in 10mm dik gehard veiligheidsglas. U kunt hierbij kiezen tussen helder glas, mat glas of glas met een tint ​– zoals grijs of brons. Daarnaast kunt u de uitstraling van uw deur aanpassen door te kiezen voor geborsteld rvs of mat zwart hang en sluitwerk.</p>
-                     <p>Vanwege zijn aantrekkelijk prijs en het eenvoudige monteren is de glazen taatsdeur een populaire, veel gekozen optie.</p>
-
-                     <span class="btn btn--primary btn--next js-popup-form" data-formtype="lead">Offerte aanvragen</span>
-
-                  </div>
-
-               </div>
-
-            </div>
-
-         </div>
-
-      </div>
-
-   </main>
+   <?php } ?>
 
 <?php get_footer(); ?>
