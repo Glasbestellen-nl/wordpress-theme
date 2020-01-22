@@ -1,7 +1,7 @@
 (function($) {
 
    /**
-    * Closest() polyfil
+    * Closest polyfil
     */
    if (!Element.prototype.matches) {
       Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
@@ -18,6 +18,27 @@
          return null;
       };
    }
+
+   /**
+    * jQuery plugin: Checks whether element in viewport
+    */
+   $.fn.isInViewport = function() {
+      var elementTop = $(this).offset().top;
+      var elementBottom = elementTop + $(this).outerHeight();
+      var viewportTop = $(window).scrollTop();
+      var viewportBottom = viewportTop + $(window).height();
+      return elementBottom > viewportTop && elementTop < viewportBottom;
+   };
+
+   /**
+    * jQuery plugin: Scrolls to given element
+    */
+   $.fn.scrollTo = function(offset) {
+      offset = typeof offset !== 'undefined' ? offset : -30;
+      $('html, body').animate({
+         scrollTop: $(this).offset().top + offset
+      }, 500);
+   };
 
    // Fancybox
    $('.fancybox').fancybox({
@@ -60,6 +81,24 @@
          itemSelector: '.js-brick'
       });
       this.addEventListener('load', update, true);
+   });
+
+   // Hide element when in viewport on scroll
+   $(window).on('scroll', function() {
+      $('.js-hide-when').each(function(index, element) {
+         const target = $(element).data('hide-when');
+         if ($(target).isInViewport()) {
+            $(element).hide();
+         } else {
+            $(element).show();
+         }
+      });
+   });
+
+   // Scroll to specific element
+   $('.js-scroll-to').click(function() {
+      const target = $(this).data('scroll-to');
+      $(target).scrollTo(20);
    });
 
    /**
@@ -130,6 +169,56 @@
          $(this).toggleClass('open');
          $('.js-nav-items').toggleClass('open');
       });
+
+   })();
+
+   /**
+    * Image slider
+    */
+   (function() {
+
+      const container     = $('.js-image-slider');
+      const main          = $('.js-main', container);
+      const totalSlides   = $('.js-thumb img', container).length;
+      let currentIndex    = 1;
+
+      container.on('click', '.js-thumb img', function() {
+         const index = $(this).data('index');
+         change(index);
+      })
+      .on('click', '.js-next', next)
+      .on('click', '.js-prev', previous);
+
+      function change(index) {
+
+         // Change current index
+         if (index > totalSlides) {
+            currentIndex = 1;
+         } else if (index < 1) {
+            currentIndex = totalSlides;
+         } else {
+            currentIndex = index;
+         }
+
+         // Get current element
+         const current = $('[data-index="' + currentIndex + '"]', container);
+         const url = current.data('image');
+
+         // Change main image url
+         main.attr('src', url);
+
+         // Change current index class
+         const currentClass = 'current';
+         current.parent().addClass(currentClass).siblings().removeClass(currentClass);
+      }
+
+      function next() {
+         change(currentIndex + 1);
+      }
+
+      function previous() {
+         change(currentIndex - 1);
+      }
 
    })();
 
