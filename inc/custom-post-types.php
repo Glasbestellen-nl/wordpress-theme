@@ -91,7 +91,7 @@ function gb_register_post_types() {
 		'label'                 => __( 'Review', 'glasbestellen' ),
 		'description'           => __( 'Post Type Description', 'glasbestellen' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'editor', 'custom-fields', 'excerpt' ),
+		'supports'              => array( 'title', 'editor', 'custom-fields', 'excerpt', 'comments' ),
 		'taxonomies'            => array(),
 		'hierarchical'          => false,
 		'public'                => false,

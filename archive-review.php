@@ -69,10 +69,27 @@
                            </div>
 
                            <div class="review__body">
+
                               <div class="text review__text">
                                  <?php the_content(); ?>
                                  <p><?php echo '- ' . get_post_meta( get_the_id(), 'name', true ); ?></p>
                               </div>
+
+                              <?php if ( $responses = get_comments( ['post_id' => get_the_id()] ) ) { ?>
+                                 <div class="review__responses">
+                                    <?php foreach ( $responses as $response ) { ?>
+
+                                       <div class="review__response text">
+                                          <h3 class="h5 review__response-title"><?php echo sprintf( __( 'Reactie van %s', 'glasbestellen' ), get_bloginfo( 'name' ) ); ?></h3>
+                                          <div class="review__response-body">
+                                             <?php echo wpautop( $response->comment_content ); ?>
+                                          </div>
+                                       </div>
+
+                                    <?php } ?>
+                                 </div>
+                              <?php } ?>
+
                            </div>
 
                         </article>

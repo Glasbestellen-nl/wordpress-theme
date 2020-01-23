@@ -1763,6 +1763,11 @@ Review
    text-align: center;
 }
 
+.review__response {
+   padding-left: 1.25em;
+   border-left: 2px solid #f6a41d;
+}
+
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
