@@ -24,11 +24,11 @@
 
          <div class="side-nav__section">
 
-            <h2 class="side-nav__heading"><?php echo $subject->name; ?></h2>
+            <h2 class="side-nav__heading js-side-nav-list-toggler"><?php echo $subject->name; ?></h2>
 
             <?php if ( $articles->have_posts() ) { ?>
 
-               <ul class="side-nav__list d-none d-lg-block">
+               <ul class="side-nav__list js-side-nav-list d-none d-lg-block">
 
                   <?php
                   while ( $articles->have_posts() ) {
