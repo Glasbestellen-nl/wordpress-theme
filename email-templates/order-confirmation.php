@@ -256,11 +256,11 @@
 												<tr>
 													<th style="padding: 0 15px 0 0; font-size: 18px; vertical-align: middle; text-align: left;">2.</th>
 													<td style="padding: 15px; border: 1px solid #dbdad7; background: #fcfcfd;">
-														<strong><?php if ( isset( $shipping ) ) _e( 'Bericht leverdatum van uw bestelling', 'glasbestellen' ); else _e( 'Bericht datum afhalen van uw bestelling', 'glasbestellen' ); ?></strong>
+														<strong><?php if ( isset( $shipping ) ) _e( 'Afspraak levering', 'glasbestellen' ); else _e( 'Bericht datum afhalen van uw bestelling', 'glasbestellen' ); ?></strong>
 														<p style="line-height: 20px;">
 															<?php
 															if ( isset( $shipping ) )
-																_e( 'U ontvangt van ons bericht met de geplande leverdatum, zodra deze vanuit productie bekend is.', 'glasbestellen' );
+																_e( 'Transport neemt voorafgaand aan de levering contact met u op om een leverdatum en tijd met u af te spreken.', 'glasbestellen' );
 															else
 																_e( 'U ontvangt van ons bericht met de datum waarop uw bestelling afhaal gereed staat, zodra deze vanuit productie bekend is.', 'glasbestellen' );
 															?>
@@ -269,13 +269,13 @@
 												</tr>
 
 												<?php if ( isset( $shipping ) ) { ?>
-													<tr>
+													<!-- <tr>
 														<th style="padding: 0 15px 0 0; font-size: 18px; vertical-align: middle; text-align: left;">3.</th>
 														<td style="padding: 15px; border: 1px solid #dbdad7; background: #fcfcfd;">
 															<strong><?php _e( 'Bericht levertijd', 'glasbestellen' ); ?></strong>
 															<p style="line-height: 20px;"><?php _e( 'U ontvangt van ons, daags voor levering, bericht met het tijdsvak waarbinnen we bij u komen leveren.', 'glasbestellen' ); ?></p>
 														</td>
-													</tr>
+													</tr> -->
 												<?php } ?>
 											</table>
 
