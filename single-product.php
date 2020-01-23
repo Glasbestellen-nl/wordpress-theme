@@ -63,6 +63,15 @@
                         the_content();
                         ?>
 
+                        <?php if ( $youtube_url = get_post_meta( get_the_id(), 'youtube_video', 'true' ) ) { ?>
+                           <div class="iconic-link">
+                              <i class="iconic-link__icon fab fa-youtube"></i>
+                              <a href="<?php echo $youtube_url; ?>" class="iconic-link__text fancybox-various fancybox.iframe">
+                                 <?php echo sprintf( __( 'Bekijk onze <strong>%s</strong> informatie video.', 'glasbestellen' ), strtolower( get_the_title() ) ); ?>
+                              </a>
+                           </div>
+                        <?php } ?>
+
                      </section>
 
                   </div>
