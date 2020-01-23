@@ -184,7 +184,7 @@
 
                                  <article class="card">
 
-                                    <div class="card__body">
+                                    <div class="card__body" data-mh="usp-card-body">
 
                                        <strong class="h4 card__title"><?php the_sub_field( 'title' ); ?></strong>
                                        <div class="text card__text">
