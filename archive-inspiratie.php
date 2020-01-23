@@ -9,16 +9,7 @@
             <h1 class="h1 page-header__headline"><?php _e( 'Geleverd werk', 'glasbestellen' ); ?></h1>
 
             <div class="page-header__dropdown">
-               <select class="dropdown js-url-dropdown">
-                  <option selected="true" disabled="disabled"><?php _e( 'Filter op product', 'glasbestellen' ); ?></option>
-                  <?php
-                  if ( $categories = get_terms( 'taxonomy=inspiratie-categorie&hide_empty=0' ) ) {
-                     foreach ( $categories as $category ) {
-                        echo '<option value="' . get_term_link( $category ) . '">' . $category->name . '</option>';
-                     }
-                  }
-                  ?>
-               </select>
+               <?php get_template_part( 'template-parts/inspiration-category-dropdown' ); ?>
             </div>
 
          </header>
@@ -33,7 +24,7 @@
 
                   <div class="col-12 col-md-6 col-lg-4 js-brick">
 
-                     <div class="pin">
+                     <div class="pin js-popup-pin" data-pin-id="<?php the_id(); ?>">
 
                         <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" class="lazyload pin__image" />
 
@@ -53,7 +44,7 @@
 
          <div class="pagination">
             <?php echo paginate_links(); ?>
-         </div>   
+         </div>
 
       </div>
 

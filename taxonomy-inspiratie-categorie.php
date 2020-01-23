@@ -9,17 +9,7 @@
             <h1 class="h1 page-header__headline"><?php single_term_title(); ?></h1>
 
             <div class="page-header__dropdown">
-               <select class="dropdown js-url-dropdown">
-                  <option selected="true" disabled="disabled"><?php _e( 'Filter op product', 'glasbestellen' ); ?></option>
-                  <?php
-                  if ( $categories = get_terms( 'taxonomy=inspiratie-categorie&hide_empty=0' ) ) {
-                     foreach ( $categories as $category ) {
-                        $selected = selected( $category->term_id, get_queried_object_id(), false );
-                        echo '<option value="' . get_term_link( $category ) . '" ' . $selected . '>' . $category->name . '</option>';
-                     }
-                  }
-                  ?>
-               </select>
+               <?php get_template_part( 'template-parts/inspiration-category-dropdown' ); ?>
             </div>
 
          </header>
