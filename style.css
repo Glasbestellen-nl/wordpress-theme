@@ -306,6 +306,11 @@ Spacing
    display: block;
 }
 
+.large-space-above {
+   margin-top: 1.875em;
+   display: block;
+}
+
 .large-space-below {
    margin-bottom: 1.875em;
    display: block;
@@ -580,6 +585,21 @@ Button
 
 .btn--tertiary:hover {
    background-image: linear-gradient(180deg, #7bda68 0%,#52a741 100%);
+}
+
+.btn--quaternary {
+   border: 1px solid #074b7e;
+   background-image: -moz-linear-gradient(90deg,#0069b3 0%,#0382d8 100%);
+   background-image: -webkit-linear-gradient(90deg,#0069b3 0%,#0382d8 100%);
+   background-image: -ms-linear-gradient(90deg,#0069b3 0%,#0382d8 100%);
+   box-shadow: 0 3px 2px 0 rgba(0,0,0,.16), inset 0 1px 0 0 rgba(255,255,255,.35);
+}
+
+.btn--quaternary:hover {
+   background-image: -moz-linear-gradient(90deg,#0382d8 0%,#0069b3 100%);
+   background-image: -webkit-linear-gradient(90deg,#0382d8 0%,#0069b3 100%);
+   background-image: -ms-linear-gradient(90deg,#0382d8 0%,#0069b3 100%);
+   box-shadow: 0 3px 2px 0 rgba(0,0,0,.16), inset 0 1px 0 0 rgba(255,255,255,.35);
 }
 
 .btn--next {
@@ -868,6 +888,32 @@ Form
    -webkit-border-radius: 3px;
    border-radius: 3px;
    background-color: #f3f3f3;
+}
+
+/*--------------------------------------------------------------
+Yellow form
+--------------------------------------------------------------*/
+
+.form-yellow {
+   padding: 1.875em;
+   background-color: #fcf8d2;
+   -webkit-border-top-left-radius: 4px;
+   -webkit-border-top-right-radius: 4px;
+   -moz-border-radius-topleft: 4px;
+   -moz-border-radius-topright: 4px;
+   border-top-left-radius: 4px;
+   border-top-right-radius: 4px;
+   border: 10px solid rgba(0,0,0,0.1);
+   border-bottom: none;
+}
+
+.form-yellow__headline,
+.form-yellow__subline {
+   color: #5e5d4f;
+}
+
+.form-yellow__headline {
+   margin-bottom: 0.25em;
 }
 
 /*--------------------------------------------------------------
@@ -1685,6 +1731,32 @@ Hero
 
 .hero__overlay-heading {
    color: #fff;
+}
+
+.hero__frame {
+   margin-bottom: .625em;
+   padding: 1.5em 1.25em;
+   -webkit-border-radius: 3px;
+   -moz-border-radius: 3px;
+   border-radius: 3px;
+   background: rgba(0,0,0,.4);
+   text-align: center;
+}
+
+.hero__frame-headline,
+.hero__frame-subline {
+   color: #fff;
+}
+
+.hero__frame-headline {
+   margin-bottom: .625rem;
+   font-size: 1.875em;
+   line-height: 1em;
+   text-shadow: 0 1px 1px rgba(0,0,0,.5);
+}
+
+.hero__frame-subline {
+   font-size: 1.125em;
 }
 
 /* Medium devices (tablets, 768px and up) */
