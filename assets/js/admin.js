@@ -1,6 +1,13 @@
 jQuery(document).ready(function($) {
 
    /**
+    * Confirmation when clicking delete link
+    */
+   $('.js-lead-row-delete-link').click(function() {
+      return confirm(gb.msg.sureDeleteLead);
+   });
+
+   /**
     * Offline conversion tracking dashboard
     */
    (function() {
@@ -28,7 +35,7 @@ jQuery(document).ready(function($) {
 
          $.post(gb.ajaxUrl, data, function(response) {
          });
-         
+
       }).on('click', '.js-delete-item-button', function(e) {
          e.preventDefault();
          $(this).parents('tr').remove();
@@ -53,7 +60,6 @@ jQuery(document).ready(function($) {
    });
    $('.js-conversion-tracking-settings').on('click', '.js-add-item-button', function(e) {
       e.preventDefault();
-
    });
 
    function updateLead(callback) {

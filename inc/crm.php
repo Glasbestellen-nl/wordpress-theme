@@ -83,6 +83,26 @@ function gb_delete_leads() {
 add_action( 'admin_post_delete', 'gb_delete_leads' );
 
 /**
+ * Deletes lead by get action parameter
+ */
+function gb_handle_action_delete() {
+
+	if ( ! empty( $_GET['lead_id'] ) && ! empty( $_GET['action'] ) ) {
+
+		if ( $_GET['action'] == 'delete' ) {
+
+			CRM::delete_lead( $_GET['lead_id'] );
+
+			// Redirect url
+			wp_redirect( admin_url( 'admin.php?page=crm' ) );
+			exit;
+		}
+	}
+
+}
+add_action( 'admin_init', 'gb_handle_action_delete' );
+
+/**
  * Deletes leads owned by relation
  */
 function gb_delete_relation( $user_id ) {
@@ -92,7 +112,6 @@ function gb_delete_relation( $user_id ) {
 			CRM::delete_lead( $lead->get_id() );
 		}
 	}
-
 
 }
 add_action( 'delete_user', 'gb_delete_relation' );

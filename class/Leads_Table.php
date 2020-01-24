@@ -90,7 +90,7 @@ class Leads_Table extends WP_List_Table {
 
       switch ( $column_name ) {
          case 'name' :
-            return '<strong><a href="' . admin_url( 'admin.php?page=crm&lead_id=' . $item['lead_id'] ) . '">' . $item[$column_name] . '</a></strong>';
+            return $this->get_name_column_html( $item, $column_name );
             break;
          case 'owner' :
          case 'status' :
@@ -214,6 +214,22 @@ class Leads_Table extends WP_List_Table {
          'email' => array( 'email', false ),
          'residence' => array( 'residence', false )
       );
+   }
+
+   public function get_name_column_html( $item, $column_name ) {
+
+      if ( empty( $item ) || empty( $column_name ) ) return;
+
+      $edit_link   = admin_url( 'admin.php?page=crm&lead_id=' . $item['lead_id'] );
+      $delete_link = admin_url( 'admin.php?page=crm&lead_id=' . $item['lead_id'] . '&action=delete' );
+      $actions = [
+         'edit'    => '<a href="' . $edit_link . '">' . __( 'Bewerken', 'glasbestellen' ) . '</a>',
+         'delete'  => '<a href="' . $delete_link . '" class="js-lead-row-delete-link">' . __( 'Verwijderen', 'glasbestellen' ) . '</a>'
+      ];
+      $html  = '<strong><a href="' . $edit_link . '">' . $item[$column_name] . '</a></strong>';
+      $html .= $this->row_actions( $actions );
+
+      return $html;
    }
 
 }
