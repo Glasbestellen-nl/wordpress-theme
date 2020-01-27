@@ -32,7 +32,7 @@
                         <article class="teaser teaser--short space-below">
 
                            <a href="<?php the_permalink(); ?>" class="teaser__image teaser__image--cover">
-                              <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="" class="teaser__image-img">
+                              <img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php echo get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true ); ?>" class="teaser__image-img">
                            </a>
 
                            <a href="<?php the_permalink(); ?>" class="teaser__body teaser__body--full">

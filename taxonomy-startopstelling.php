@@ -27,7 +27,7 @@
                               <a href="<?php the_permalink(); ?>" class="teaser space-below">
 
                                  <div class="teaser__image">
-                                    <img src="<?php echo get_the_post_thumbnail_url( get_the_id(), 'large' ); ?>" class="teaser__image-img">
+                                    <img src="<?php echo get_the_post_thumbnail_url( get_the_id(), 'large' ); ?>" class="teaser__image-img" alt="<?php echo get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true ); ?>">
                                  </div>
 
                                  <div class="teaser__body teaser__body--below">

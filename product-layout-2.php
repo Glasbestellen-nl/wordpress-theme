@@ -54,7 +54,7 @@ get_header();
             </div>
 
             <?php if ( $background_image = get_field( 'background_image' ) ) { ?>
-               <img data-src="<?php echo $background_image['url']; ?>" class="lazyload hero__background">
+               <img data-src="<?php echo $background_image['url']; ?>" class="lazyload hero__background" alt="<?php echo $background_image['alt']; ?>">
             <?php } ?>
 
          </div>

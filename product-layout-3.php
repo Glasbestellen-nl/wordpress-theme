@@ -108,7 +108,7 @@ get_header();
 
             </div>
 
-            <img data-src="<?php echo gb_get_cover_image_url( get_the_id() ); ?>" class="lazyload hero__background">
+            <img data-src="<?php echo gb_get_cover_image_url( get_the_id() ); ?>" class="lazyload hero__background" alt="<?php echo get_post_meta( get_post_thumbnail_id( get_the_id() ), '_wp_attachment_image_alt', true ); ?>">
 
          </div>
 
