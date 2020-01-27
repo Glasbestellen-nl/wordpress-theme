@@ -306,6 +306,11 @@ Spacing
    display: block;
 }
 
+.large-space-around {
+   margin: 1.875em;
+   display: block;
+}
+
 .large-space-above {
    margin-top: 1.875em;
    display: block;
@@ -1637,6 +1642,33 @@ Pins
    color: #000;
    font-weight: 400;
    font-size: 0.875em;
+}
+
+.pin__button {
+   margin-bottom: 0.625em;
+}
+
+/*--------------------------------------------------------------
+Tags
+--------------------------------------------------------------*/
+
+.tags {
+   display: flex;
+}
+
+.tag {
+   margin-right: 0.5em;
+   padding: 0.625em 0.9375em;
+   display: block;
+   border-radius: 4px;
+   border: 1px solid #ababab;
+   line-height: 1em;
+   color: #909090;
+}
+
+.tag:hover {
+   border-color: #808080;
+   color: #707070;
 }
 
 /*--------------------------------------------------------------

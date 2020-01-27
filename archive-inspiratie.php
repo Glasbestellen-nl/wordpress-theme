@@ -22,11 +22,11 @@
                while ( have_posts() ) {
                   the_post(); ?>
 
-                  <div class="col-12 col-md-6 col-lg-4 js-brick">
+                  <div class="col-6 col-md-6 col-lg-4 js-brick">
 
                      <div class="pin js-popup-pin" data-pin-id="<?php the_id(); ?>">
 
-                        <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" class="lazyload pin__image" />
+                        <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" class="lazyload pin__image" alt="<?php echo get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true ); ?>" />
 
                         <div class="pin__body">
                            <h2 class="h5 h-default pin__title"><?php the_title(); ?></h2>

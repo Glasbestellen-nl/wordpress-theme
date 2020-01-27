@@ -24,6 +24,17 @@ function get_page_id_by_template( $template = '' ) {
 	}
 }
 
+function gb_get_product_id_by_string( string $string ) {
+
+	if ( empty( $string ) ) return;
+
+	if ( $post = get_page_by_title( $string, OBJECT, 'product' ) ) {
+		return $post->ID;
+	}
+
+	return false;
+}
+
 /**
  * Get first term by post id
  */

@@ -405,6 +405,20 @@
       });
    });
 
+   /**
+    * Popup pin
+    */
+   $(document).on('click', '.js-popup-pin', function() {
+      let data = {
+         action: 'get_single_popup_html',
+         post_id: $(this).data('pin-id')
+      }
+      $.get(gb.ajaxUrl, data, function(html) {
+         showModal(html, gb.msg.inspiration, 'large');
+      });
+   });
+
+
 })(jQuery);
 
 /**
@@ -421,9 +435,13 @@ function hideModal() {
 * Shows modal
 */
 function showModal(html, title, size = 'small') {
-   document.querySelector('.js-modal-title').innerHTML = title;
-   document.querySelector('.js-modal-body').innerHTML = html;
-   document.querySelector('.js-modal').classList.add('show', 'modal-' + size);
+   jQuery('.js-modal-title').html(title);
+   jQuery('.js-modal-body').html(html);
+   // Remove modal size classes
+   jQuery('.js-modal').removeClass(function (index, className) {
+      return (className.match (/(^|\s)modal-\S+/g) || []).join(' ');
+   });
+   jQuery('.js-modal').addClass('show modal-' + size);
 }
 
 /**

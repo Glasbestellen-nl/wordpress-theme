@@ -4,7 +4,8 @@
    <?php
    if ( $categories = get_terms( 'taxonomy=inspiratie-categorie&hide_empty=0' ) ) {
       foreach ( $categories as $category ) {
-         echo '<option value="' . get_term_link( $category ) . '">' . $category->name . '</option>';
+         $selected = selected( get_queried_object_id(), $category->term_id, false );
+         echo '<option value="' . get_term_link( $category ) . '" ' . $selected . '>' . $category->name . '</option>';
       }
    }
    ?>
