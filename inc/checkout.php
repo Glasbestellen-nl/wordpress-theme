@@ -60,11 +60,15 @@ add_action( 'wp_ajax_nopriv_handle_checkout_form', 'gb_handle_checkout_form' );
  */
 function gb_get_mollie_client() {
 
+   $api_key = ( get_option( 'payment_test_mode' ) )
+      ? get_option( 'payment_api_key_test' ) 
+      : get_option( 'payment_api_key_live' );
+
    // Initialize mollie client
    $mollie = new \Mollie\Api\MollieApiClient();
 
    // Set mollie api key
-   $mollie->setApiKey( 'test_1exrtgcKzYp3nAqiFJe7w9HZFFWGpj' );
+   $mollie->setApiKey( $api_key );
 
    return $mollie;
 }

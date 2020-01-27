@@ -141,6 +141,21 @@ function gb_init_theme_options() {
 	// Add redirect settings section
 	add_settings_section( $section, __( 'Payment', 'glasbestellen' ), 'gb_display_payment_settings_section', $page );
 
+	// Add payment test mode
+	$id = 'payment_test_mode';
+	add_settings_field( $id, __( 'Test mode actief', 'glasbestellen' ), 'gb_settings_checkbox', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
+	register_setting( 'theme-settings', $id );
+
+	// Add payment live api key (mollie)
+	$id = 'payment_api_key_live';
+	add_settings_field( $id, __( 'Live API key', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
+	register_setting( 'theme-settings', $id );
+
+	// Add payment test api key (mollie)
+	$id = 'payment_api_key_test';
+	add_settings_field( $id, __( 'Test API key', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
+	register_setting( 'theme-settings', $id );
+
 	// Add payment webhook url setting
 	$id = 'payment_webhook_url';
 	add_settings_field( $id, __( 'Custom webhook URL', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
@@ -227,11 +242,9 @@ function gb_settings_select_pages( $args ) {
 
 	if ( isset( $args['id'] ) ) {
 
-		// Get option
-		$option 	= get_option( $args['id'] );
+		$option = get_option( $args['id'] );
 
-		// Get pages
-		$pages 	= get_posts(
+		$pages = get_posts(
 			array(
 				'post_type' 		=> 'page',
 				'posts_per_page' 	=> -1
@@ -250,6 +263,22 @@ function gb_settings_select_pages( $args ) {
 
 	}
 
+}
+
+/**
+ * Renders settings checkbox
+ */
+function gb_settings_checkbox( $args ) {
+
+	if ( isset( $args['id'] ) ) {
+
+		$option = get_option( $args['id'] );
+
+		$html = '<input type="checkbox" name="' . $args['id'] .'" ' . checked( 'on', $option, false ) . '>';
+
+		echo $html;
+
+	}
 }
 
 function gb_settings_comma_textarea( $args ) {
