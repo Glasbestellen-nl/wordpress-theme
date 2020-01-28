@@ -17,7 +17,6 @@ function gb_enqueue_scripts() {
    wp_enqueue_style( 'fancybox', get_template_directory_uri() . '/assets/fancybox/jquery.fancybox.css' );
 
    // Scripts
-   wp_enqueue_script( 'jquery' );
    wp_enqueue_script( 'masonry' );
    wp_enqueue_script( 'lazysizes-js', get_template_directory_uri() . '/assets/js/lazysizes.min.js', null, true );
    wp_enqueue_script( 'fancybox-js', get_template_directory_uri() . '/assets/fancybox/jquery.fancybox.js', ['jquery'], null, true );

@@ -9,10 +9,10 @@
             <div class="header-top__inner">
 
                <div class="header-top__inline d-md-none">
-                  <a href="#" class="header-top__inline-item header-top__inline-item--first">
+                  <a href="tel:<?php echo get_option( 'company_phone_number' ); ?>" class="header-top__inline-item header-top__inline-item--first">
                      <i class="fas fa-phone-alt header-top__inline-item-icon"></i> <?php echo get_option( 'company_phone_number' ); ?>
                   </a>
-                  <a href="#" class="header-top__inline-item">
+                  <a href="mailto:<?php echo get_option( 'company_email' ); ?>" class="header-top__inline-item">
                      <i class="fas fa-envelope header-top__inline-item-icon"></i> <?php echo get_option( 'company_email' ); ?>
                   </a>
                </div>
@@ -55,10 +55,10 @@
                         </div>
                      </a>
 
-                     <a href="https://wa.me/<?php echo str_replace( ' ', '', get_option( 'company_phone_number' ) ); ?>" class="contact-option contact-option--phone" target="_blank">
+                     <a href="tel:<?php echo str_replace( ' ', '', get_option( 'company_phone_number' ) ); ?>" class="contact-option contact-option--phone" target="_blank">
                         <div class="contact-option__icon"></div>
                         <div class="contact-option__text">
-                           <span class="contact-option__headline"><?php _e( 'Bel of Whatsapp ons', 'glasbestellen' ); ?></span>
+                           <span class="contact-option__headline"><?php _e( 'Bel ons gerust', 'glasbestellen' ); ?></span>
                            <span class="contact-option__subline"><?php echo get_option( 'company_phone_number' ); ?></span>
                         </div>
                      </a>

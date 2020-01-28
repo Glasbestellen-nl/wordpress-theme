@@ -1571,17 +1571,9 @@ Image slider
 Gallery
 --------------------------------------------------------------*/
 
-.gallery {
-   width: 100%;
-   display: flex;
-   flex-flow: row wrap;
-}
-
 .gallery__item {
-   width: 30%;
-   height: 8em;
-   margin: 0.5em;
-   flex: auto;
+   margin-bottom: 1.25em;
+   display: block;
    -moz-border-radius: 2px;
    -webkit-border-radius: 2px;
    border-radius: 2px;
@@ -1606,9 +1598,6 @@ Gallery
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
 
-   .gallery__item {
-      height: 15.625em;
-   }
 
 }
 

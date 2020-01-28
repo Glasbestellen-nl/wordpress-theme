@@ -45,13 +45,13 @@ $cart = gb_get_cart(); ?>
                               <?php
                               while ( $cart->have_items() ) {
                                  $cart->the_item(); ?>
- 
+
                                  <div class="cart-table__row js-cart-item" data-item-id="<?php echo $cart->get_item_id(); ?>">
 
                                     <?php if ( $cart->get_item_thumbnail() ) { ?>
-                                       <div class="cart-table__col cart-table__col--image">
-                                          <img src="<?php echo $cart->get_item_thumbnail(); ?>" class="rounded-corners">
-                                       </div>
+                                       <a href="<?php echo $cart->get_item_thumbnail(); ?>" class="fancybox cart-table__col cart-table__col--image" title="<?php echo $cart->get_item_title(); ?>">
+                                          <img data-src="<?php echo $cart->get_item_thumbnail(); ?>" class="lazyload rounded-corners">
+                                       </a>
                                     <?php } ?>
 
                                     <div class="cart-table__col cart-table__col--info">

@@ -153,13 +153,17 @@
 
                   <div class="container">
 
-                     <section class="gallery">
+                     <section class="row gallery js-bricks">
 
                         <?php foreach ( $gallery_images as $image ) { ?>
 
-                           <a href="<?php echo $image['url']; ?>" class="gallery__item fancybox">
-                              <img data-src="<?php echo $image['url']; ?>" alt="<?php get_post_meta( $image['id'], '_wp_attachment_image_alt', true ); ?>" class="lazyload gallery__image" />
-                           </a>
+                           <div class="col-6 col-md-4 col-lg-3 js-brick">
+
+                              <a href="<?php echo $image['url']; ?>" class="gallery__item fancybox" rel="product-images" title="<?php echo $image['caption']; ?>">
+                                 <img data-src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" class="lazyload gallery__image" />
+                              </a>
+
+                           </div>
 
                         <?php } ?>
 
