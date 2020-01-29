@@ -19,7 +19,6 @@ p, ul, ol {
 
 img, iframe {
    max-width: 100%;
-   height: auto;
    vertical-align: middle;
 }
 
@@ -1929,7 +1928,7 @@ Header
 }
 
 .header-top__inline-item-icon {
-   margin-right: 0.25em;
+   display: none;
 }
 
 .header-top__cart {
@@ -2016,6 +2015,16 @@ Header
 .contact-option__subline {
    font-size: 1em;
    color: #104f80;
+}
+
+/* Ultra small devices (small phones, 321px and up) */
+@media (min-width: 321px) {
+
+   .header-top__inline-item-icon {
+      display: inline-block;
+      margin-right: 0.25em;
+   }
+
 }
 
 /* Medium devices (tablets, 768px and up) */

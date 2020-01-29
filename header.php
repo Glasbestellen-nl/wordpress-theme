@@ -10,10 +10,10 @@
 
                <div class="header-top__inline d-md-none">
                   <a href="tel:<?php echo get_option( 'company_phone_number' ); ?>" class="header-top__inline-item header-top__inline-item--first">
-                     <i class="fas fa-phone-alt header-top__inline-item-icon"></i> <?php echo get_option( 'company_phone_number' ); ?>
+                     <div class="header-top__inline-item-icon"><i class="fas fa-phone-alt"></i></div> <?php echo get_option( 'company_phone_number' ); ?>
                   </a>
                   <a href="mailto:<?php echo get_option( 'company_email' ); ?>" class="header-top__inline-item">
-                     <i class="fas fa-envelope header-top__inline-item-icon"></i> <?php echo get_option( 'company_email' ); ?>
+                     <div class="header-top__inline-item-icon"><i class="fas fa-envelope"></i></div> <?php echo get_option( 'company_email' ); ?>
                   </a>
                </div>
 
