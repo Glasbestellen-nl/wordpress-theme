@@ -25,7 +25,7 @@
 
    <body <?php body_class(); ?>
 
-      <?php if ( isset( $gtm_container_id ) ) { ?>
+      <?php if ( $gtm_container_id = get_option( 'gtm_container_id' ) ) { ?>
          <!-- Google Tag Manager (noscript) -->
          <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm_container_id; ?>"
          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
