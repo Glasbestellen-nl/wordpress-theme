@@ -22,7 +22,7 @@
                while ( have_posts() ) {
                   the_post(); ?>
 
-                  <div class="col-6 col-md-6 col-lg-4 js-brick">
+                  <div class="col-6 col-md-6 col-lg-3 js-brick">
 
                      <div class="pin js-popup-pin" data-pin-id="<?php the_id(); ?>">
 
