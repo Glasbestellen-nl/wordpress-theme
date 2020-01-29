@@ -470,6 +470,7 @@ function validateInput(element) {
    clearValidate(element)
 
    let valid = true;
+   let showFeedback = true;
 
    let type   = element.type;
    let value  = element.value;
@@ -480,6 +481,8 @@ function validateInput(element) {
    if (!value) {
       if (req !== undefined) {
          valid = false;
+      } else {
+         showFeedback = false;
       }
    } else {
 
@@ -491,10 +494,12 @@ function validateInput(element) {
       }
    }
 
-   if (valid) {
-      isValid(element);
-   } else {
-      isInvalid(element, msg);
+   if (showFeedback) {
+      if (valid) {
+         isValid(element);
+      } else {
+         isInvalid(element, msg);
+      }
    }
    return valid;
 }
