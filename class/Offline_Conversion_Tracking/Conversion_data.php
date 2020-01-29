@@ -30,7 +30,7 @@ class Conversion_Data {
       $this->data['shipping_price'] = $value;
    }
 
-   public function add_item( string $name = '', float $price = 0, $quantity = 1 ) {
+   public function add_item( string $name = '', float $price = 0, int $quantity = 1 ) {
       $item = [
          'name'     => $name,
          'price'    => $price,
@@ -56,6 +56,5 @@ class Conversion_Data {
       if ( empty( $key ) ) return $this->data;
       return isset( $this->data[$key] ) ? $this->data[$key] : false;
    }
-
 
 }

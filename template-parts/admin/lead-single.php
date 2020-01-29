@@ -1,3 +1,8 @@
+<?php
+use Offline_Conversion_Tracking\Conversion_Data;
+use Offline_Conversion_Tracking\Dashboard_UI;
+?>
+
 <div class="wrap">
 
    <h2><?php echo __( 'Lead', 'glasbestellen' ) . ' #' . $_GET['lead_id']; ?></h2>
@@ -106,8 +111,8 @@
 
                         <?php
                         $conversion_meta = CRM::get_lead_meta( $_GET['lead_id'], 'conversion_data', true );
-                        $conversion_data = new Offline_Conversion_Tracking\Conversion_Data( $conversion_meta );
-                        $dashboard_ui    = new Offline_Conversion_Tracking\Dashboard_UI;
+                        $conversion_data = new Conversion_Data( $conversion_meta );
+                        $dashboard_ui    = new Dashboard_UI;
                         $dashboard_ui->set_conversion_data( $conversion_data );
                         $dashboard_ui->render_fields();
                         ?>
