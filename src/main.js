@@ -449,16 +449,23 @@ function showModal(html, title, size = 'small') {
 */
 function validateForm(form, callback) {
    let valid = true;
+   let invalidInputs = [];
    const formElements = form.querySelectorAll('.js-form-validate');
    if (formElements !== null) {
       formElements.forEach(element => {
          if (!validateInput(element)) {
             valid = false;
+            invalidInputs.push(element);
          }
       });
    }
    if (valid) {
       callback(form);
+   } else {
+      // Scroll to first invalid field
+      const firstInput = jQuery(invalidInputs[0]);
+      if (!firstInput.isInViewport())
+         firstInput.scrollTo(-50);
    }
 }
 
