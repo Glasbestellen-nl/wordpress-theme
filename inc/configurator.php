@@ -21,6 +21,11 @@ function gb_configurator_hide_main_nav( $show_nav ) {
    if ( is_tax( 'startopstelling' ) || is_singular( 'configurator' ) ) {
       $show_nav = false;
    }
+
+   if ( get_queried_object_id() == 2368 ) { // Tijdelijke oplossing
+      $show_nav = true;
+   }
+
    return $show_nav;
 }
 add_filter( 'gb_show_main_nav', 'gb_configurator_hide_main_nav' );
