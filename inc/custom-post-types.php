@@ -236,6 +236,7 @@ function gb_register_post_types() {
 		'exclude_from_search'   => false,
 		'publicly_queryable'    => true,
 		'capability_type'       => 'page',
+		'rewrite'					=> ['slug' => 'producten/%product%']
 	);
 	register_post_type( 'configurator', $args );
 
