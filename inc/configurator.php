@@ -3,7 +3,7 @@
  * Add configurator body classes
  */
 function gb_configurator_body_class( $class ) {
-   if ( is_tax( 'startopstelling' ) || is_singular( 'configurator' ) ) {
+   if ( is_tax( 'startopstelling' ) || ( is_singular( 'configurator' ) && ! is_page_template() ) ) {
       $class[] = 'body--grey';
    }
    // Adds javascript handler

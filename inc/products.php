@@ -1,6 +1,6 @@
 <?php
 /**
- * Rewrites product url so that a next level configurator is possible
+ * Rewrites product url so that a configurator level visitable
  */
 function gb_add_configurable_product_rewrite_rules() {
    add_rewrite_rule( '^' . _x( 'producten', 'Product slug', 'glasbestellen' ) . '/([^/]*)/([^/]*)/?$', 'index.php?post_type=configurator&name=$matches[2]', 'top' );
@@ -14,18 +14,15 @@ function gb_modify_configurator_breadcrumb( $links ) {
 
    global $post;
 
+   // Is single onfigurator connected to product
    if ( is_singular( 'configurator' ) && gb_get_product_by_configurator_id( $post->ID ) ) {
 
       $product = gb_get_product_by_configurator_id( $post->ID );
 
-      // Keep home
-      $new_links[] = $links[0];
-      // Product archive
-      $new_links[] = ['ptarchive' => 'product'];
-      // Product single
-      $new_links[] = ['id' => $product->ID];
-      // Configurator single
-      $new_links[] = ['id' => $post->ID];
+      $new_links[] = $links[0]; // Home
+      $new_links[] = ['ptarchive' => 'product']; // Product archive
+      $new_links[] = ['id' => $product->ID]; // Product single
+      $new_links[] = ['id' => $post->ID]; // Configurator single
 
       return $new_links;
    }
