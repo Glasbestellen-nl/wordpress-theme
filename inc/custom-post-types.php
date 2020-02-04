@@ -6,7 +6,7 @@ function gb_register_post_types() {
 
 	// Product
 	$labels = array(
-		'name'                  => _x( 'Product', 'Post Type General Name', 'glasbestellen' ),
+		'name'                  => _x( 'Producten', 'Post Type General Name', 'glasbestellen' ),
 		'singular_name'         => _x( 'Product', 'Post Type Singular Name', 'glasbestellen' ),
 		'menu_name'             => __( 'Producten', 'glasbestellen' ),
 		'name_admin_bar'        => __( 'Product', 'glasbestellen' ),

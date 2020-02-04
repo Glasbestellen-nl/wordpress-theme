@@ -8,6 +8,32 @@ function gb_add_configurable_product_rewrite_rules() {
 add_action( 'init', 'gb_add_configurable_product_rewrite_rules', 10, 0 );
 
 /**
+ * Modifies breadcrumbs for configurator connected to product
+ */
+function gb_modify_configurator_breadcrumb( $links ) {
+
+   global $post;
+
+   if ( is_singular( 'configurator' ) && gb_get_product_by_configurator_id( $post->ID ) ) {
+
+      $product = gb_get_product_by_configurator_id( $post->ID );
+
+      // Keep home
+      $new_links[] = $links[0];
+      // Product archive
+      $new_links[] = ['ptarchive' => 'product'];
+      // Product single
+      $new_links[] = ['id' => $product->ID];
+      // Configurator single
+      $new_links[] = ['id' => $post->ID];
+
+      return $new_links;
+   }
+   return $links;
+}
+add_filter( 'wpseo_breadcrumb_links', 'gb_modify_configurator_breadcrumb' );
+
+/**
  * Replaces tag in configurator with (parent) product
  */
 function gb_filter_configurator_post_link( $permalink, $post ) {
@@ -15,29 +41,19 @@ function gb_filter_configurator_post_link( $permalink, $post ) {
    if ( ( 'configurator' !== $post->post_type ) || ( false === strpos( $permalink, '%product%' ) ) )
       return $permalink;
 
-   $term_id = get_first_term_by_id( $post->ID, 'startopstelling' );
-
-   if ( empty( $term_id ) ) return $permalink;
-
-   $products = get_posts([
-      'post_type'    => 'product',
-      'meta_key'     => 'configurator',
-      'meta_value'   => $term_id
-   ]);
-
-   if ( ! empty( $products[0] ) )
-      $permalink = str_replace( '%product%', $products[0]->post_name, $permalink );
+   if ( $product = gb_get_product_by_configurator_id( $post->ID ) )
+      $permalink = str_replace( '%product%', $product->post_name, $permalink );
 
    return $permalink;
 }
 add_filter( 'post_type_link', 'gb_filter_configurator_post_link', 10, 2 );
 
 /**
- * Returns child configurators of product
+ * Returns configurators connected to product
  *
  * @param int product_id the parent product id
  */
-function gb_get_configurators_by_id( int $product_id ) {
+function gb_get_configurators_by_product_id( int $product_id ) {
 
    if ( empty( $product_id ) ) return;
 
@@ -52,6 +68,28 @@ function gb_get_configurators_by_id( int $product_id ) {
       ]
    ];
    return new WP_Query( $args );
+}
+
+/**
+ * Returns the product connected to configurator
+ *
+ * @param int configurator_id the configurator id
+ */
+function gb_get_product_by_configurator_id( int $configurator_id ) {
+
+   if ( empty( $configurator_id ) ) return;
+
+   $term_id = get_first_term_by_id( $configurator_id, 'startopstelling' );
+
+   if ( empty( $term_id ) ) return $permalink;
+
+   $products = get_posts([
+      'post_type'    => 'product',
+      'meta_key'     => 'configurator',
+      'meta_value'   => $term_id
+   ]);
+
+   return ! empty( $products[0] ) ? $products[0] : false;
 }
 
 /**

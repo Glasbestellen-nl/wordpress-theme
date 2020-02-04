@@ -47,7 +47,7 @@ get_header(); ?>
                      </form>
 
                      <?php
-                     $configurators = gb_get_configurators_by_id( get_the_id() );
+                     $configurators = gb_get_configurators_by_product_id( get_the_id() );
                      if ( $configurators->have_posts() ) { ?>
 
                         <section class="row product-listings">
