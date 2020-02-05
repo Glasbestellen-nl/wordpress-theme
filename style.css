@@ -979,6 +979,7 @@ Breadcrumbs
 
 .breadcrumbs {
    font-size: 0.875em;
+   line-height: 1.5em;
 }
 
 /*--------------------------------------------------------------
@@ -2934,6 +2935,88 @@ Configurator
    color: #80858a;
 }
 
+.configurator__header {
+   padding: 0 0 1.25em 0;
+   border-bottom: 1px solid #dbdbdb;
+}
+
+.configurator__heading {
+   color: #000;
+}
+
+.configurator__info-icon {
+   color: #fcb136;
+}
+
+.configurator__energy-label {
+   width: 5em;
+}
+
+.configurator__details {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   text-align: right;
+}
+
+.configurator__detail--price {
+   margin-bottom: 0.125em;
+   font-size: 2em;
+   font-weight: bold;
+   color: #155f99;
+}
+
+.configurator__detail--tax {
+   margin-bottom: 0.75rem;
+   font-size: 0.875em;
+   color: #acacac;
+}
+
+.configurator__detail--delivery,
+.configurator__detail--shipping {
+   font-size: 0.9375em;
+}
+
+.configurator__detail--delivery {
+   margin-bottom: 0.5em;
+   font-weight: 600;
+}
+
+.configurator__form-row {
+   padding: 0.9375em 0 0.625em 0;
+   display: flex;
+   align-items: center;
+   flex-wrap: wrap;
+   border-top: 1px solid #dbdbdb;
+}
+
+.configurator__form-info {
+   width: 1.5em;
+   cursor: pointer;
+}
+
+.configurator__form-input {
+   width: 100%;
+   margin-top: 0.625em;
+   flex: 0 0 100%;
+}
+
+.configurator__form-control {
+   padding: 0.5em 0.625em;
+}
+
+.configurator__checks-item {
+   font-size: 0.875em;
+   line-height: 1.25em;
+}
+
+.configurator__checks-item::before {
+   content: "\f00c";
+   margin-right: 0.5em;
+   font-family: "Font Awesome 5 Free";
+   font-weight: bold;
+}
+
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 
@@ -2970,6 +3053,17 @@ Configurator
       padding: 1.25em 3em;
    }
 
+   .configurator__form-row {
+      padding: 0.625em 0;
+      flex-wrap: nowrap;
+   }
+
+   .configurator__form-input {
+      width: 55%;
+      flex: none;
+      margin: 0 0 0 auto;
+   }
+
    /* Large devices (desktops, 992px and up) */
    @media (min-width: 992px) {
 
@@ -2981,6 +3075,10 @@ Configurator
       .v-step--done .v-step__body::after {
          right: -1.875em;
          font-size: 1.875em;
+      }
+
+      .configurator {
+         padding: 0.625em;
       }
 
    }
