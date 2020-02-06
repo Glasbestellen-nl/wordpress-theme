@@ -139,45 +139,47 @@ class CRM {
 
       self::init();
 
-      if ( ! empty( $lead_data['name'] ) && ! empty( $lead_data['email'] ) ) {
+      if ( empty( $lead_data['name'] ) || empty( $lead_data['email'] ) )
+         return;
 
-         // Create of get relation (user)
-         if ( email_exists( $lead_data['email'] ) ) {
-            $relation_id = get_user_by( 'email', $lead_data['email'] )->ID;
-         } else {
-            $relation_id = self::insert_relation( $lead_data['email'], $lead_data['name'] );
-         }
-
-         // Insert lead
-         self::$wpdb->insert( self::$leads_table,
-            array(
-               'lead_relation'   => $relation_id,
-               'lead_content'    => sanitize_textarea_field( $lead_data['content'] ),
-               'lead_date'       => current_time( 'mysql' )
-            )
-         );
-
-         // Get lead id from last inserted row
-         $lead_id = self::$wpdb->insert_id;
-
-         // Update status
-         self::update_lead_status( $lead_id, 'open' );
-
-         // Update relation data
-         $relation_data = [];
-         if ( ! empty( $lead_data['phone'] ) ) {
-            $relation_data['user_phone'] = $lead_data['phone'];
-         }
-         if ( ! empty( $lead_data['residence'] ) ) {
-            $relation_data['user_residence'] = $lead_data['residence'];
-         }
-         self::update_relation_meta( $relation_id, $relation_data );
-
-         return $lead_id;
-
+      // Create or get relation (user)
+      if ( email_exists( $lead_data['email'] ) ) {
+         $relation_id = get_user_by( 'email', $lead_data['email'] )->ID;
+      } else {
+         $relation_id = self::insert_relation( $lead_data['email'], $lead_data['name'] );
       }
-      return false;
 
+      // Insert lead
+      self::$wpdb->insert( self::$leads_table,
+         array(
+            'lead_relation'   => $relation_id,
+            'lead_content'    => sanitize_textarea_field( $lead_data['content'] ),
+            'lead_date'       => current_time( 'mysql' )
+         )
+      );
+      $lead_id = self::$wpdb->insert_id;
+
+      self::update_lead_status( $lead_id, 'open' );
+
+      // Update relation data
+      wp_update_user( ['ID' => $relation_id, 'display_name' => $lead_data['name']] );
+
+      $relation_data = [];
+      if ( ! empty( $lead_data['phone'] ) )
+         $relation_data['user_phone'] = $lead_data['phone'];
+
+      if ( ! empty( $lead_data['residence'] ) )
+         $relation_data['user_residence'] = $lead_data['residence'];
+
+      self::update_relation_meta( $relation_id, $relation_data );
+
+      /* Store all lead data (except the content) to be sure, because relation data is stored
+       * under user and can be changed when using same email address while inserting a new lead. */
+      self::update_lead_meta( $lead_id, 'lead_data', array_filter( $lead_data, function( $key ) {
+         return $key !== 'content';
+      }, ARRAY_FILTER_USE_KEY ));
+
+      return $lead_id;
    }
 
    /**
@@ -279,7 +281,6 @@ class CRM {
          );
       }
       return true;
-
    }
 
    /**
