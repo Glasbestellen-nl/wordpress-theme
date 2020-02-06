@@ -2936,8 +2936,12 @@ Configurator
 }
 
 .configurator__header {
-   padding: 0 0 1.25em 0;
+   padding: 0.625em 0 1.25em 0;
+   position: sticky;
+   top: 0;
+   z-index: 1;
    border-bottom: 1px solid #dbdbdb;
+   background-color: #fff;
 }
 
 .configurator__heading {
@@ -3078,7 +3082,7 @@ Configurator
       }
 
       .configurator {
-         padding: 0.625em;
+         padding: 0 0.625em;
       }
 
    }
