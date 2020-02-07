@@ -1,5 +1,5 @@
 <div class="choice__enlargement-image">
-   <img src="<?php echo get_the_post_thumbnail_url( $_GET['part_id'] ); ?>"/>
+   <img src="<?php echo get_the_post_thumbnail_url( $_GET['part_id'] ); ?>" class="choice__enlargement-img"/>
 </div>
 <div class="choice__enlargement-body">
    <h3 class="h3 choice__enlargement-title"><?php echo get_the_title( $_GET['part_id'] ); ?></h3>
