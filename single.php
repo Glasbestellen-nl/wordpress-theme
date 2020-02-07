@@ -31,9 +31,9 @@
                            </article>
 
                            <?php if ( $tags = get_the_tags() ) { ?>
-                              <div class="tags space-below">
+                              <div class="taggers space-below">
                                  <?php foreach ( $tags as $tag ) { ?>
-                                    <a href="<?php echo get_term_link( $tag->term_id ); ?>" class="tag"><?php echo strtolower( $tag->name ); ?></a>
+                                    <a href="<?php echo get_term_link( $tag->term_id ); ?>" class="tagger"><?php echo strtolower( $tag->name ); ?></a>
                                  <?php } ?>
                               </div>
                            <?php } ?>

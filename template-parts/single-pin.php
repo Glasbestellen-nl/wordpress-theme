@@ -18,9 +18,9 @@
             </div>
 
             <?php if ( $terms = get_the_terms( get_the_id(), 'inspiratie-categorie' ) ) { ?>
-               <div class="pin__tags tags large-space-below">
+               <div class="pin__tags taggers large-space-below">
                   <?php foreach ( $terms as $term ) { ?>
-                     <a href="<?php echo get_term_link( $term->term_id ); ?>" class="tag"><?php echo strtolower( $term->name ); ?></a>
+                     <a href="<?php echo get_term_link( $term->term_id ); ?>" class="tagger"><?php echo strtolower( $term->name ); ?></a>
                   <?php } ?>
                </div>
             <?php } ?>
