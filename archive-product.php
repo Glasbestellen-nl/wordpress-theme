@@ -42,9 +42,11 @@
 
             <div class="col">
 
+               <?php $page_content = get_option( 'product_post_type_content' ); ?>
+
                <section class="text">
-                  <h1 class="h1">Glas op maat</h1>
-                  <p>Glas wordt steeds vaker gebruikt in en rondom het huis. Iedere situatie vraagt om maatwerk en hier helpen we u bij Glasbestellen.nl graag mee. Glas is een geweldig product en de toepassingen zijn voor velen nog onbekend.</p>
+                  <h1 class="h1"><?php echo ! empty( $page_content['title'] ) ? $page_content['title'] : post_type_archive_title( '', false ); ?></h1>
+                  <?php echo ! empty( $page_content['content'] ) ? wpautop( $page_content['content'] ) : ''; ?>
                </section>
 
             </div>
