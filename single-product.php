@@ -77,69 +77,65 @@
                   </div>
 
                   <?php
-                  if ( $review_category = get_field( 'review_category' ) ) {
+                  if ( $reviews = gb_get_reviews( $number = 14, get_field( 'review_category' ) ) ) { ?>
 
-                     if ( $reviews = gb_get_reviews( $number = 14, $review_category ) ) { ?>
+                     <div class="col-12 col-md-12 col-lg-5">
 
-                        <div class="col-12 col-md-12 col-lg-5">
+                        <section class="section">
 
-                           <section class="section">
+                           <strong class="h3"><?php _e( 'Wat onze klanten zeggen..', 'glasbestellen' ); ?></strong>
 
-                              <strong class="h3"><?php _e( 'Wat onze klanten zeggen..', 'glasbestellen' ); ?></strong>
+                           <div class="card rotator js-rotator">
 
-                              <div class="card rotator js-rotator">
+                              <?php foreach ( $reviews as $review ) { ?>
 
-                                 <?php foreach ( $reviews as $review ) { ?>
+                                 <div class="rotator__item js-rotator-item">
 
-                                    <div class="rotator__item js-rotator-item">
+                                    <article class="review">
 
-                                       <article class="review">
+                                       <div class="review__header">
 
-                                          <div class="review__header">
+                                          <div class="review__title">
+                                             <strong class="h5 h-default"><?php echo $review->post_title; ?></strong>
+                                          </div>
 
-                                             <div class="review__title">
-                                                <strong class="h5 h-default"><?php echo $review->post_title; ?></strong>
-                                             </div>
+                                          <?php if ( $rating = get_field( 'rating', $review->ID ) ) { ?>
 
-                                             <?php if ( $rating = get_field( 'rating', $review->ID ) ) { ?>
-
-                                                <div class="review__rating rating">
-                                                   <div class="stars rating__stars">
-                                                      <?php
-                                                      for ( $i = 1; $i <= 5; $i ++ ) {
-                                                         $class = 'star';
-                                                         if ( $i <= $rating ) {
-                                                            $class .= ' star--checked';
-                                                         }
-                                                         echo '<div class="fas fa-star ' . $class . '"></div> ';
+                                             <div class="review__rating rating">
+                                                <div class="stars rating__stars">
+                                                   <?php
+                                                   for ( $i = 1; $i <= 5; $i ++ ) {
+                                                      $class = 'star';
+                                                      if ( $i <= $rating ) {
+                                                         $class .= ' star--checked';
                                                       }
-                                                      ?>
-                                                   </div>
+                                                      echo '<div class="fas fa-star ' . $class . '"></div> ';
+                                                   }
+                                                   ?>
                                                 </div>
-
-                                             <?php } ?>
-
-                                          </div>
-
-                                          <div class="review__body">
-                                             <div class="text text--small review__text">
-                                                <?php echo wpautop( get_the_excerpt( $review->ID ) ); ?>
                                              </div>
+
+                                          <?php } ?>
+
+                                       </div>
+
+                                       <div class="review__body">
+                                          <div class="text text--small review__text">
+                                             <?php echo wpautop( get_the_excerpt( $review->ID ) ); ?>
                                           </div>
+                                       </div>
 
-                                       </article>
+                                    </article>
 
-                                    </div>
+                                 </div>
 
-                                 <?php } ?>
+                              <?php } ?>
 
-                              </div>
+                           </div>
 
-                           </section>
+                        </section>
 
-                        </div>
-
-                     <?php } ?>
+                     </div>
 
                   <?php } ?>
 
