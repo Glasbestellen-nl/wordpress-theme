@@ -154,7 +154,7 @@ class CRM {
          array(
             'lead_relation'   => $relation_id,
             'lead_content'    => sanitize_textarea_field( $lead_data['content'] ),
-            'lead_date'       => current_time( 'mysql' )
+            'lead_date'       => isset( $lead_data['date'] ) ? $lead_data['date'] : current_time( 'mysql' )
          )
       );
       $lead_id = self::$wpdb->insert_id;

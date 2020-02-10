@@ -171,7 +171,7 @@ class Leads_Table extends WP_List_Table {
 
       // Set defaults
       $orderby = 'lead_id';
-      $order = 'desc';
+      $order = 'asc';
 
       // If orderby is set, use this as the sort column
       if ( ! empty( $_GET['orderby'] ) ) {
