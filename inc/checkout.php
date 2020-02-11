@@ -56,12 +56,27 @@ add_action( 'wp_ajax_handle_checkout_form', 'gb_handle_checkout_form' );
 add_action( 'wp_ajax_nopriv_handle_checkout_form', 'gb_handle_checkout_form' );
 
 /**
+ * Handles payment return. For example: emptying shopping cart
+ */
+function gb_handle_payment_return() {
+
+   if ( empty( $_GET['order_id'] ) ) return;
+
+   $transaction = new Transaction( $_GET['order_id'] );
+
+   if ( 'paid' == $transaction->get_status() )
+      gb_update_cart_session_items([]);
+
+}
+add_action( 'init', 'gb_handle_payment_return' );
+
+/**
  * Initializes mollie payment client
  */
 function gb_get_mollie_client() {
 
    $api_key = ( get_option( 'payment_test_mode' ) )
-      ? get_option( 'payment_api_key_test' ) 
+      ? get_option( 'payment_api_key_test' )
       : get_option( 'payment_api_key_live' );
 
    // Initialize mollie client
