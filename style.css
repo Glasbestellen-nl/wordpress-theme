@@ -1878,6 +1878,10 @@ Review
    text-align: center;
 }
 
+.review__text p:last-child {
+   margin-bottom: 0;
+}
+
 .review__response {
    padding-left: 1.25em;
    border-left: 2px solid #f6a41d;
