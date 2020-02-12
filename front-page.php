@@ -28,7 +28,7 @@
                <div class="teaser space-below">
 
                   <a href="<?php echo get_post_type_archive_link( 'product' ); ?>douchedeur/" class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/douchedeur.png'; ?>" alt="Glazen douchedeur op maat" class="lazyload teaser__image-img">
+                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/douchedeur.jpg'; ?>" alt="Glazen douchedeur op maat" class="lazyload teaser__image-img">
                   </a>
 
                   <div class="teaser__body teaser__body--bottom">
