@@ -55,6 +55,7 @@ function get_first_term_by_id( $post_id, $taxonomy, $output = 'term_id' ) {
 function gb_get_selectable_products() {
 	if ( $option = get_option( 'conversion_selectable_products' ) ) {
 		$products_names = explode( ',', $option );
+		$products_names = array_map( 'trim', $products_names );
 		rsort( $products_names );
 		return $products_names;
 	}

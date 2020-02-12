@@ -20,7 +20,7 @@ class Hooks {
 
       if ( empty( $_POST['lead_id'] ) ) wp_die();
 
-      if ( empty( $_POST['conversion']['revenue'] ) || empty( $_POST['conversion']['shipping_price'] ) ) wp_die();
+      if ( empty( $_POST['conversion']['revenue'] ) ) wp_die();
 
       $input = $_POST['conversion'];
 

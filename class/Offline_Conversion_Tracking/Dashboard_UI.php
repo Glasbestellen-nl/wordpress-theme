@@ -56,7 +56,9 @@ class Dashboard_UI {
       $products = gb_get_selectable_products();
       $name     = ! empty( $item['name'] ) ? $item['name'] : '';
       $price    = ! empty( $item['price'] ) ? $item['price'] : '';
-      $quantity = ! empty( $item['quantity'] ) ? $item['quantity'] : 1; ?>
+      $quantity = ! empty( $item['quantity'] ) ? $item['quantity'] : 1;
+
+      print_r( $item ); ?>
 
       <tr class="alternate">
          <td>
