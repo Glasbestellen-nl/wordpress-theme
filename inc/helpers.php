@@ -115,6 +115,7 @@ function gb_get_cover_image_url( $post_id ) {
 function gb_find_product_by_string( string $string ) {
 	$products = get_posts( 'post_type=product&posts_per_page=-1' );
 	if ( ! $products ) return;
+	$match = false;
 	foreach ( $products as $product ) {
 		if ( preg_match( '/' . $product->post_title . '/i', $string, $matched ) )
 			$match = $product;
