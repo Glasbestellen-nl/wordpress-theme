@@ -128,7 +128,8 @@ class Leads_Table extends WP_List_Table {
                'name'       => $relation->get_name() ? $relation->get_name() : __( 'Onbekende relatie', 'glasbestellen' ),
                'owner'      => isset( $owner->display_name ) ? $owner->display_name : '-',
                'status'     => CRM::get_status_label( $lead->get_status() ),
-               'date'       => $lead->get_date( 'd F Y' ),
+               'date'       => $lead->get_date( 'd M Y' ),
+               'date_time'  => strtotime( $lead->get_date() ),
                'email'      => $relation->get_email(),
                'phone'      => $relation->get_phone(),
                'residence'  => $relation->get_residence()
@@ -170,8 +171,8 @@ class Leads_Table extends WP_List_Table {
    private function sort_data( $a, $b ) {
 
       // Set defaults
-      $orderby = 'lead_id';
-      $order = 'asc';
+      $orderby = 'date_time';
+      $order = 'desc';
 
       // If orderby is set, use this as the sort column
       if ( ! empty( $_GET['orderby'] ) ) {
@@ -210,7 +211,7 @@ class Leads_Table extends WP_List_Table {
          'name' => array( 'name', false ),
          'owner' => array( 'owner', false ),
          'status' => array( 'status', false ),
-         'date' => array( 'date', false ),
+         'date' => array( 'date_time', false ),
          'email' => array( 'email', false ),
          'residence' => array( 'residence', false )
       );
