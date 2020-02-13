@@ -68,7 +68,7 @@
                                     <div class="card__body text text-center">
                                        <h2 class="h3 card__title"><?php _e( 'Neem contact op', 'glasbestellen' ); ?></h2>
                                        <p class="card__text space-below"><?php _e( 'Bel of mail ons voor advies. Wij informeren u graag!', 'glasbestellen' ); ?></p>
-                                       <span class="btn btn--secondary btn--block btn--next js-popup-form" data-formtype="lead"><?php _e( 'Neem contact op', 'glasbestellen' ); ?></a>
+                                       <span class="btn btn--secondary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php _e( 'Contact opnemen', 'glasbestellen' ); ?>"><?php _e( 'Neem contact op', 'glasbestellen' ); ?></a>
                                     </div>
                                  </div>
 

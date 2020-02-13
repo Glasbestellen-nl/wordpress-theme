@@ -3070,6 +3070,10 @@ Modal
    color: #115081;
 }
 
+.modal__body {
+   position: relative;
+}
+
 .modal__row {
    display: flex;
 }
@@ -3077,9 +3081,6 @@ Modal
 .modal__column {
    height: 100%;
    padding: 1.875em;
-}
-
-.modal__column--main {
 }
 
 .modal__column--side {

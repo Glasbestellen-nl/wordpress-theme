@@ -395,13 +395,16 @@
     * Popup form
     */
    $(document).on('click', '.js-popup-form', function() {
+
+      let modalTitle = $(this).data('popup-title');
+      showModal(modalTitle);
+
       let data = {
          action: 'get_form_modal_input',
          formtype: $(this).data('formtype')
       }
-      $.get(gb.ajaxUrl, data, function(json) {
-         let response = JSON.parse(json);
-         showModal(response.html, response.title);
+      $.get(gb.ajaxUrl, data, function(html) {
+         loadModalContent(html);
       });
    });
 
@@ -409,12 +412,15 @@
     * Popup pin
     */
    $(document).on('click', '.js-popup-pin', function() {
+
+      showModal(gb.msg.inspiration, 'large');
+
       let data = {
          action: 'get_single_popup_html',
          post_id: $(this).data('pin-id')
       }
       $.get(gb.ajaxUrl, data, function(html) {
-         showModal(html, gb.msg.inspiration, 'large');
+         loadModalContent(html);
       });
    });
 
@@ -425,23 +431,30 @@
 * Hides modal
 */
 function hideModal() {
-   const modal = document.querySelector('.js-modal');
+   const modal = jQuery('.js-modal');
    if (modal !== null) {
-      modal.classList.remove('show');
+      modal.removeClass('show');
+      jQuery('.js-modal-body').html('');
    }
 }
 
 /**
 * Shows modal
 */
-function showModal(html, title, size = 'small') {
+function showModal(title, size = 'small') {
    jQuery('.js-modal-title').html(title);
-   jQuery('.js-modal-body').html(html);
    // Remove modal size classes
    jQuery('.js-modal').removeClass(function (index, className) {
       return (className.match (/(^|\s)modal-\S+/g) || []).join(' ');
    });
    jQuery('.js-modal').addClass('show modal-' + size);
+}
+
+/**
+* Loads modal content
+*/
+function loadModalContent(html) {
+   jQuery('.js-modal-body').html(html);
 }
 
 /**

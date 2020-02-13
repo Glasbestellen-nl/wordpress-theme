@@ -19,7 +19,7 @@
 
                      <div class="hero__buttons">
                         <div class="hero__button">
-                           <span class="btn btn--primary btn--large btn--next js-popup-form" data-formtype="lead"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
+                           <span class="btn btn--primary btn--large btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?>"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
                         </div>
                         <span class="hero__button-cta space-above"><?php _e( 'Binnen 1 dag in je mail!', 'glasbestellen' ); ?></span>
                      </div>
@@ -253,7 +253,7 @@
 
                   <div class="divider divider--line-behind divider--centered divider--end">
                      <div class="divider__content">
-                        <span class="btn btn--primary btn--large btn--next js-popup-form" data-formtype="lead"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
+                        <span class="btn btn--primary btn--large btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?>"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
                      </div>
                   </div>
 

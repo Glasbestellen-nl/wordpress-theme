@@ -4,6 +4,6 @@
       <div class="text space-below">
          <p class="card__text"><?php _e( 'Bel of mail ons voor advies. Wij informeren u graag!', 'glasbestellen' ); ?></p>
       </div>
-      <span class="btn btn--secondary btn--next js-popup-form" data-formtype="lead"><?php _e( 'Neem contact op', 'glasbestellen' ); ?></a>
+      <span class="btn btn--secondary btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php _e( 'Contact opnemen', 'glasbestellen' ); ?>"><?php _e( 'Neem contact op', 'glasbestellen' ); ?></a>
    </div>
 </div>

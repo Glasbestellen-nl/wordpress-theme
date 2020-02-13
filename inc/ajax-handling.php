@@ -9,16 +9,6 @@ function gb_handle_get_form_modal_input() {
 
    if ( ! empty( $_GET['formtype'] ) ) {
 
-      // Set title by form type
-      switch ( $_GET['formtype'] ) {
-         case 'lead' :
-            $response['title'] = __( 'Offerte aanvragen', 'glasbestellen' );
-            break;
-         case 'review' :
-            $response['title'] = __( 'Ervaring schrijven', 'glasbestellen' );
-            break;
-      }
-
       // Create form html by form type
       $html .= '<div class="modal__column">';
          ob_start();
@@ -26,11 +16,9 @@ function gb_handle_get_form_modal_input() {
          $html .= ob_get_clean();
       $html .= '</div>';
 
-      $response['html'] = $html;
-
    }
+   echo $html;
 
-   echo json_encode( $response );
    wp_die();
 
 }

@@ -91,7 +91,7 @@ get_header();
 
                                  <?php the_sub_field( 'featured_item_content' ); ?>
 
-                                 <span class="btn btn--primary btn--next space-above d-block d-md-inline-block js-popup-form" data-formtype="lead"><?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?></span>
+                                 <span class="btn btn--primary btn--next space-above d-block d-md-inline-block js-popup-form" data-popup-title="<?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?>" data-formtype="lead"><?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?></span>
 
                               </div>
 
