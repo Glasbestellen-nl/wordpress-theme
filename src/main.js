@@ -101,6 +101,13 @@
       $(target).scrollTo(20);
    });
 
+   // Load cart quantity dynamically
+   (function() {
+      $.get(gb.ajaxUrl, {action: 'get_cart_quantity'}, function(number) {
+         $('.js-total-cart-quantity').text(number);
+      });
+   })();
+
    /**
     * Rotator
     */
