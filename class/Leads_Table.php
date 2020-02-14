@@ -2,6 +2,7 @@
 class Leads_Table extends WP_List_Table {
 
    public function __construct() {
+      parent::__construct();
       $this->prepare_items();
       $this->screen = get_current_screen();
    }
@@ -128,7 +129,7 @@ class Leads_Table extends WP_List_Table {
                'name'       => $relation->get_name() ? $relation->get_name() : __( 'Onbekende relatie', 'glasbestellen' ),
                'owner'      => isset( $owner->display_name ) ? $owner->display_name : '-',
                'status'     => CRM::get_status_label( $lead->get_status() ),
-               'date'       => $lead->get_date( 'd M Y' ),
+               'date'       => $lead->get_date( 'd M Y H:i' ),
                'date_time'  => strtotime( $lead->get_date() ),
                'email'      => $relation->get_email(),
                'phone'      => $relation->get_phone(),
