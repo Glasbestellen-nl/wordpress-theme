@@ -130,7 +130,7 @@ class Leads_Table extends WP_List_Table {
                'owner'      => isset( $owner->display_name ) ? $owner->display_name : '-',
                'status'     => CRM::get_status_label( $lead->get_status() ),
                'date'       => $lead->get_date( 'd M Y H:i' ),
-               'date_time'  => strtotime( $lead->get_date() ),
+               'date_time'  => $lead->get_date( 'YmdHi' ),
                'email'      => $relation->get_email(),
                'phone'      => $relation->get_phone(),
                'residence'  => $relation->get_residence()
