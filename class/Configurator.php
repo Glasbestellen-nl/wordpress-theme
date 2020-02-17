@@ -1,5 +1,5 @@
 <?php
-abstract class Configurator {
+class Configurator {
 
    // Holds configurator (post) id
    protected $id;
@@ -26,18 +26,40 @@ abstract class Configurator {
    protected $summary;
 
    public function __construct( $configurator_id ) {
-      $this->id = $configurator_id;
-      $this->settings = gb_get_configurator_settings( $configurator_id );
-      $this->steps = ! empty( $this->settings['steps'] ) ? $this->settings['steps'] : false;
-      $this->step = false;
+      $this->id           = $configurator_id;
+      $this->settings     = gb_get_configurator_settings( $configurator_id );
+      $this->steps        = ! empty( $this->settings['steps'] ) ? $this->settings['steps'] : false;
+      $this->step         = false;
       $this->current_step = 0;
-      $this->errors = false;
+      $this->errors       = false;
    }
 
    /**
     * Sets configuration
     */
-   abstract function set_configuration( $configuration = [] );
+   public function set_configuration( $configuration = [] ) {
+
+      if ( empty( $configuration ) ) return;
+
+      foreach ( $configuration as $step_id => $input ) {
+
+         if ( in_array( $step_id, ['width', 'height'] ) ) {
+
+            $this->add_row( __( 'Breedte', 'glasbestellen' ), $input['width'] . 'mm' );
+            $this->add_row( __( 'Hoogte', 'glasbestellen' ), $input['height'] . 'mm' );
+
+         } else {
+            $this->add_row(
+               $this->get_step_title( $step_id ),
+               get_the_title( $input )
+            );
+         }
+      }
+
+      if ( ! $this->get_errors() ) {
+         $this->configuration = $configuration;
+      }
+   }
 
    /**
     * Returns configuration
@@ -195,6 +217,24 @@ abstract class Configurator {
    }
 
    /**
+    * Returns step explanation content from database
+    */
+   public function get_step_explanation( $step_id = null ) {
+      $explanation_id = $this->get_step_explanation_id( $step_id );
+      if ( ! $explanation_id ) return;
+      $post = get_post( $explanation_id );
+      return $post->post_content;
+   }
+
+   /**
+    * Returns step explanation (post) id
+    */
+   public function get_step_explanation_id( $step_id = null ) {
+      $field = $this->get_step_field( 'description', $step_id );
+      return ! empty( $field['id'] ) ? $field['id'] : false;
+   }
+
+   /**
     * Returns step type
     */
    public function get_step_type( $step_id = null ) {
@@ -242,6 +282,14 @@ abstract class Configurator {
          $parts );
       }
       return false;
+   }
+
+   /**
+    * Returns step options
+    */
+   public function get_step_options( $step_id = null ) {
+      $options = $this->get_step_field( 'options', $step_id );
+      return ( $options ) ? $options : false;
    }
 
    /**
@@ -306,22 +354,12 @@ abstract class Configurator {
       $d = $this->calculate_price_table( $this->get_default_configuration() );
       $c = $this->calculate_price_table( $this->configuration );
 
-      if ( isset( $c[$step_id] ) ) {
-         $c_price = $c[$step_id];
-      } else {
-         $c_price = 0;
-      }
-
-      if ( isset( $d[$step_id] ) ) {
-         $d_price = $d[$step_id];
-      } else {
-         $d_price = 0;
-      }
+      $c_price = isset( $c[$step_id] ) ? $c[$step_id] : 0;
+      $d_price = isset( $d[$step_id] ) ? $d[$step_id] : 0;
 
       if ( $c_price > $d_price ) {
          $price = $c_price - $d_price;
       }
-
       return $price;
    }
 
@@ -350,13 +388,7 @@ abstract class Configurator {
     * Returns step field
     */
    public function get_step_field( $field, $step_id = null ) {
-
-      if ( $step_id ) {
-         $step = $this->get_step_by_id( $step_id );
-      } else {
-         $step = $this->step;
-      }
-
+      $step = ( $step_id ) ? $this->get_step_by_id( $step_id ) : $this->step;
       return isset( $step[$field] ) ? $step[$field] : false;
    }
 
@@ -380,6 +412,10 @@ abstract class Configurator {
          $step_id = $this->step['id'];
 
       return isset( $this->configuration[$step_id] );
+   }
+
+   public function is_step_required( $step_id = null ) {
+      return $this->get_step_field( 'required', $step_id );
    }
 
    /**
@@ -414,11 +450,9 @@ abstract class Configurator {
     * Returns validation rules for a field
     */
    public function get_validation_rules( $step_id = null, $field = null ) {
-
-      if ( $step = $this->get_step_by_id( $step_id ) ) {
-         return ! empty( $step['rules'][$field] ) ? json_encode( $step['rules'][$field] ) : false;
-      }
-      return false;
+      $step  = ( $step_id ) ? $this->get_step_by_id( $step_id ) : $this->step;
+      $rules = empty( $field ) ? $step['rules'] : $step['rules'][$field];
+      return ! empty( $rules ) ? json_encode( $rules ) : false;
    }
 
    public function get_usps() {
@@ -454,53 +488,6 @@ abstract class Configurator {
     * Calculates prices per steps
     */
    public function calculate_price_table( $c = [] ) {
-
-      $price_table = [];
-
-      $d = $this->get_default_configuration();
-
-      if ( ! empty( $c ) ) {
-
-         $m2s = 0;
-
-         if ( ! empty( $c['dimensions']['opening_width'] ) && ! empty( $c['dimensions']['opening_height'] ) ) {
-            $m2s = $this->calculate_square_meters( $c['dimensions']['opening_width'], $c['dimensions']['opening_height'] );
-         }
-
-         foreach ( $c as $step_id => $input ) {
-
-            $part_price = 0;
-            $price_default = 0;
-
-            if ( $this->get_part_price( $step_id, $input ) ) {
-               $part_price = $this->get_part_price( $step_id, $input );
-            }
-
-            switch ( $step_id ) {
-
-               case 'dimensions' :
-                  if ( ! empty( $d['glasstype'] ) ) {
-                     $price_table[$step_id] = $m2s * $this->get_part_price( 'glasstype', $d['glasstype'] );
-                  }
-                  break;
-
-               case 'glasstype' :
-                  if ( ! empty( $d['glasstype'] ) ) {
-                     $price_default         = $this->get_part_price( 'glasstype', $d['glasstype'] );
-                     $price_table[$step_id] = $m2s * ( $part_price - $price_default );
-                  }
-                  break;
-
-               case 'coating' :
-                  $price_table[$step_id] = $m2s * $part_price;
-                  break;
-
-               default :
-                  $price_table[$step_id] = $part_price;
-            }
-         }
-      }
-      return $price_table;
    }
 
 }

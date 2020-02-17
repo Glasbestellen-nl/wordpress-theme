@@ -204,7 +204,7 @@ const Configurator = (function() {
             if (jsonRules) {
                const rules = JSON.parse(jsonRules);
                if (rules.min !== undefined) {
-                  if (value <= parseInt(rules.min)) {
+                  if (value < parseInt(rules.min)) {
                      valid = false;
                      msg = gb.msg.dimensionValueTooSmall.replace('{0}', rules.min);
                   }

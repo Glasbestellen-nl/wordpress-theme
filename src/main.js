@@ -431,6 +431,21 @@
       });
    });
 
+   /**
+    * Popup explanation
+    */
+   $(document).on('click', '.js-popup-explanation', function() {
+
+      showModal('', 'large');
+
+      let data = {
+         action: 'get_explanation_content',
+         post_id: $(this).data('explanation-id')
+      }
+      $.get(gb.ajaxUrl, data, function(response) {
+         loadModalContent(response.html, response.title);
+      });
+   });
 
 })(jQuery);
 
@@ -460,8 +475,11 @@ function showModal(title, size = 'small') {
 /**
 * Loads modal content
 */
-function loadModalContent(html) {
+function loadModalContent(html, title = '') {
    jQuery('.js-modal-body').html(html);
+   if (title) {
+      jQuery('.js-modal-title').html(title);
+   }
 }
 
 /**
@@ -547,9 +565,9 @@ function clearValidate(element) {
 function isValid(element) {
    const parent = jQuery(element).parents('.js-form-group');
    const feedback = parent.find('.js-invalid-feedback');
-   element.classList.remove('invalid');
-   element.classList.add('valid');
-   feedback.text('');
+   jQuery(element).removeClass('invalid');
+   jQuery(element).addClass('valid');
+   feedback.hide().text('');
 }
 
 /**
@@ -558,9 +576,9 @@ function isValid(element) {
 function isInvalid(element, msg) {
    const parent = jQuery(element).parents('.js-form-group');
    const feedback = parent.find('.js-invalid-feedback');
-   element.classList.remove('valid');
-   element.classList.add('invalid');
-   feedback.text(msg);
+   jQuery(element).removeClass('valid');
+   jQuery(element).addClass('invalid');
+   feedback.show().text(msg);
 }
 
 /**

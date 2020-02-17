@@ -1,7 +1,7 @@
 <?php
 namespace Configurator\Showerdoor;
 
-class With_Sidepanel_In_Clamps extends \Configurator {
+class With_Sidepanel extends Showerdoor {
 
    public function __construct( $configurator_id ) {
       parent::__construct( $configurator_id );
@@ -14,7 +14,7 @@ class With_Sidepanel_In_Clamps extends \Configurator {
 
       foreach ( $configuration as $step_id => $input ) {
 
-         if ( $step_id == 'dimensions' ) {
+         if ( 'dimensions' == $step_id ) {
 
             $this->add_row( __( 'Breedte opening (A)', 'glasbestellen' ), $input['opening_width'] . 'mm' );
             $this->add_row( __( 'Hoogte deur (B)', 'glasbestellen' ), $input['opening_height'] . 'mm' );

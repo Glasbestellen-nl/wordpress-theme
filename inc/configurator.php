@@ -284,31 +284,30 @@ function gb_get_configurator( $configurator_id = 0, $auto_set = true ) {
    $base = 'Configurator';
 
    $classes = [
-      'single-showerdoor' => 'Showerdoor\Single',
-      'double-showerdoor' => 'Showerdoor\Double',
-      'showerdoor-with-sidepanel-in-clamps' => 'Showerdoor\With_Sidepanel_In_Clamps',
-      'showerdoor-with-sidepanel-in-profile' => 'Showerdoor\With_Sidepanel_In_Profile',
-      'showerdoor-on-sidepanel-in-clamps' => 'Showerdoor\On_Sidepanel_In_Clamps',
-      'showerdoor-on-sidepanel-in-profile' => 'Showerdoor\On_Sidepanel_In_Profile',
+      'single-showerdoor' => 'Showerdoor\Showerdoor',
+      'double-showerdoor' => 'Showerdoor\Showerdoor',
+      'showerdoor-with-sidepanel-in-clamps' => 'Showerdoor\With_Sidepanel',
+      'showerdoor-with-sidepanel-in-profile' => 'Showerdoor\With_Sidepanel',
+      'showerdoor-on-sidepanel-in-clamps' => 'Showerdoor\With_Sidepanel',
+      'showerdoor-on-sidepanel-in-profile' => 'Showerdoor\With_Sidepanel',
+      'led-mirror' => 'Configurator'
    ];
    $classes = apply_filters( 'available_configurators', $classes );
 
-   if ( $type = gb_get_configurator_type( $configurator_id ) ) {
-      if ( ! empty( $classes[$type] ) ) {
-         $class = $base . '\\' . $classes[$type];
-         if ( class_exists( $class ) ) {
-            $configurator = new $class( $configurator_id );
+   $type = gb_get_configurator_type( $configurator_id );
 
-            // If there is already something configured
-            if ( ! empty( $_SESSION['configuration'][$configurator_id] ) && $auto_set ) {
-               $configurator->set_configuration( $_SESSION['configuration'][$configurator_id] );
-            }
-            return $configurator;
-         }
-      }
-      return false;
+   if ( ! $type ) return;
+   if ( empty( $classes[$type] ) ) return;
+   $class = $base . '\\' . $classes[$type];
+   if ( ! class_exists( $class ) ) return;
+
+   $configurator = new $class( $configurator_id );
+
+   // If there is already something configured
+   if ( ! empty( $_SESSION['configuration'][$configurator_id] ) && $auto_set ) {
+      $configurator->set_configuration( $_SESSION['configuration'][$configurator_id] );
    }
-   return false;
+   return $configurator;
 }
 
 function gb_unset_configuration_session( int $configurator_id ) {

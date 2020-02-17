@@ -313,5 +313,42 @@ function gb_register_post_types() {
 	);
 	register_post_type( 'transactie', $args );
 
+	// Explanation
+	$labels = array(
+		'name'                => _x( 'Uitleg', 'Post Type General Name', 'glasbestellen' ),
+		'singular_name'       => _x( 'Uitleg', 'Post Type Singular Name', 'glasbestellen' ),
+		'menu_name'           => __( 'Uitleg', 'glasbestellen' ),
+		'parent_item_colon'   => __( 'Parent Uitleg:', 'glasbestellen' ),
+		'all_items'           => __( 'Alle Uitlegs', 'glasbestellen' ),
+		'view_item'           => __( 'Bekijk Uitleg', 'glasbestellen' ),
+		'add_new_item'        => __( 'Voeg nieuwe Uitleg toe', 'glasbestellen' ),
+		'add_new'             => __( 'Voeg nieuwe toe', 'glasbestellen' ),
+		'edit_item'           => __( 'Bewerk Uitleg', 'glasbestellen' ),
+		'update_item'         => __( 'Update Uitleg', 'glasbestellen' ),
+		'search_items'        => __( 'Zoek Uitlegs', 'glasbestellen' ),
+		'not_found'           => __( 'Niet gevonden', 'glasbestellen' ),
+		'not_found_in_trash'  => __( 'Niet gevonden in prullenbak', 'glasbestellen' ),
+	);
+	$args = array(
+		'labels'              => $labels,
+		'supports'            => array( 'title', 'custom-fields', 'editor' ),
+		'hierarchical'        => true,
+		'public'              => false,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'show_in_nav_menus'   => true,
+		'show_in_admin_bar'   => true,
+		'menu_position'       => 100,
+		'menu_icon'           => 'dashicons-info',
+		'can_export'          => true,
+		'exclude_from_search' => false,
+		'publicly_queryable'  => true,
+		'capability_type'     => 'page',
+		'has_archive'         => false,
+		'map_meta_cap'        => true,
+	);
+	register_post_type( 'uitleg', $args );
+
+
 }
 add_action( 'init', 'gb_register_post_types', 0 );
