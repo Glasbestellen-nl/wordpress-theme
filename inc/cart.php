@@ -1,4 +1,11 @@
 <?php
+function gb_handle_get_cart_quantity() {
+   echo gb_get_cart_quantity();
+   wp_die();
+}
+add_action( 'wp_ajax_get_cart_quantity', 'gb_handle_get_cart_quantity' );
+add_action( 'wp_ajax_nopriv_get_cart_quantity', 'gb_handle_get_cart_quantity' );
+
 /**
  * Adds cart body classes
  */

@@ -1147,6 +1147,19 @@ Card
 }
 
 /*--------------------------------------------------------------
+Post
+--------------------------------------------------------------*/
+
+.post__date {
+   margin-bottom: 0.3125em;
+   font-size: 0.8125em;
+}
+
+.post__text p {
+   margin-bottom: 0;
+}
+
+/*--------------------------------------------------------------
 Divider
 --------------------------------------------------------------*/
 
@@ -1660,11 +1673,11 @@ Pins
 Tags
 --------------------------------------------------------------*/
 
-.tags {
+.taggers {
    display: flex;
 }
 
-.tag {
+.tagger {
    margin-right: 0.5em;
    padding: 0.625em 0.9375em;
    display: block;
@@ -1674,7 +1687,7 @@ Tags
    color: #909090;
 }
 
-.tag:hover {
+.tagger:hover {
    border-color: #808080;
    color: #707070;
 }
@@ -1885,8 +1898,14 @@ Review
    text-align: center;
 }
 
+.review__text p:last-child {
+   margin-bottom: 0;
+}
+
 .review__response {
+   margin-top: 1.25em;
    padding-left: 1.25em;
+   overflow: hidden;
    border-left: 2px solid #f6a41d;
 }
 
@@ -2124,7 +2143,7 @@ Main nav
    padding: 1em 1.25em;
    display: block;
    border-bottom: 1px solid rgba(0,0,0,0.1);
-   font-weight: 700;
+   font-weight: 600;
    color: #fff;
 }
 
@@ -2931,6 +2950,10 @@ Configurator
    box-shadow: 0 1px 5px rgba(0,0,0,.1);
 }
 
+.choice__enlargement-img {
+   width: 100%;
+}
+
 .choice__enlargement-body {
    color: #80858a;
 }
@@ -3259,6 +3282,10 @@ Modal
    color: #115081;
 }
 
+.modal__body {
+   position: relative;
+}
+
 .modal__row {
    display: flex;
 }
@@ -3266,9 +3293,6 @@ Modal
 .modal__column {
    height: 100%;
    padding: 1.875em;
-}
-
-.modal__column--main {
 }
 
 .modal__column--side {

@@ -16,41 +16,9 @@ class With_Sidepanel_In_Profile extends \Configurator {
 
          if ( $step_id == 'dimensions' ) {
 
-            $slot = $this->get_part_slot( $step_id, $configuration['strips'] );
-
-            $opening  = new \Rectangle( $input['opening_width'], $input['opening_height'] );
-            $door     = new \Rectangle( $input['door_width'], $input['opening_height'] );
-            $panel    = new \Rectangle( $input['opening_width'] - $input['door_width'], $input['opening_height'] );
-
-            // Default deduction
-            $door->deduct_width(3);
-            $door->deduct_length(5);
-            $panel->deduct_width(8);
-            $panel->deduct_length(5);
-
-            // Deduction based on strips
-            switch ( $slot ) {
-
-               case 1 :
-                  $door->deduct_length(10);
-                  break;
-
-               case 2 :
-                  $door->deduct_width(10);
-                  $panel->deduct_width(7);
-                  break;
-
-               case 3 :
-                  $door->deduct_width(10);
-                  $door->deduct_height(10);
-                  $panel->deduct_width(7);
-                  break;
-            }
-
-            // Add rows to product summary
-            $this->add_row( __( 'Afmetingen opening', 'glasbestellen' ), $opening->display_dimensions() );
-            $this->add_row( __( 'Afmetingen deur', 'glasbestellen' ), $door->display_dimensions() );
-            $this->add_row( __( 'Afmetingen zijpaneel', 'glasbestellen' ), $panel->display_dimensions() );
+            $this->add_row( __( 'Breedte opening (A)', 'glasbestellen' ), $input['opening_width'] . 'mm' );
+            $this->add_row( __( 'Hoogte deur (B)', 'glasbestellen' ), $input['opening_height'] . 'mm' );
+            $this->add_row( __( 'Breedte deur (C)', 'glasbestellen' ), $input['door_width'] . 'mm' );
 
          } else {
             $this->add_row(

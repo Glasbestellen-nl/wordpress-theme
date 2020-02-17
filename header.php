@@ -19,7 +19,7 @@
 
                <a href="<?php echo gb_get_cart_url(); ?>" class="header-top__cart">
                   <i class="fas fa-shopping-cart header-top__cart-icon"></i>
-                  <span class="header-top__cart-number"><?php echo gb_get_cart_quantity(); ?></span>
+                  <span class="header-top__cart-number js-total-cart-quantity">0</span>
                </a>
 
             </div>

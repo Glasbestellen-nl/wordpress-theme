@@ -117,13 +117,14 @@ const Configurator = (function() {
       }
 
       this.showStep = function(stepId, title, callback) {
+         showModal(title, 'large');
          let data = {
             action: 'get_configurator_step_html',
             configurator_id: gb.configuratorId,
             step_id: stepId
          };
          jQuery.get(gb.ajaxUrl, data, function(html) {
-            showModal(html, title, 'large');
+            loadModalContent(html);
             callback(stepId);
          });
       }

@@ -22,18 +22,20 @@ class Conversion_Data {
       }
    }
 
-   public function set_revenue( float $value = 0 ) {
-      $this->data['revenue'] = $value;
+   public function set_revenue( $value = 0 ) {
+      if ( empty( $value ) ) return;
+      $this->data['revenue'] = str_replace( ',', '.', $value );
    }
 
-   public function set_shipping_price( float $value = 0 ) {
-      $this->data['shipping_price'] = $value;
+   public function set_shipping_price( $value = 0 ) {
+      if ( empty( $value ) ) return;
+      $this->data['shipping_price'] = str_replace( ',', '.', $value );
    }
 
-   public function add_item( string $name = '', float $price = 0, int $quantity = 1 ) {
+   public function add_item( $name = '', $price = 0, $quantity = 1 ) {
       $item = [
          'name'     => $name,
-         'price'    => $price,
+         'price'    => str_replace( ',', '.', $price ),
          'quantity' => $quantity
       ];
       $this->data['items'][] = $item;

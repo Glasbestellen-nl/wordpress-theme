@@ -110,6 +110,12 @@ get_header();
                               <li class="contact-details__item"><i class="fas fa-phone-alt contact-detail__icon"></i> <?php echo get_option( 'company_phone_number' ); ?></li>
                               <li class="contact-details__item"><i class="fas fa-envelope contact-detail__icon"></i> <?php echo get_option( 'company_email' ); ?></li>
                            </ul>
+                           <strong class="h3 h-orange"><?php _e( 'Openingstijden', 'glasbestellen' ); ?></strong>
+                           <ul class="contact-details--dark-bg">
+                              <li class="contact-details__item"><?php echo __( 'Maandag', 'glasbestellen' ) . ' - ' . __( 'vrijdag', 'glasbestellen' ) . ': 08:30 - 17:00'; ?></li>
+                              <li class="contact-details__item"><?php echo __( 'Zaterdag', 'glasbestellen' ) . ': ' . __( 'Op afspraak', 'glasbestellen' ); ?></li>
+                              <li class="contact-details__item"><?php echo __( 'Zondag', 'glasbestellen' ) . ': ' . __( 'Gesloten', 'glasbestellen' ); ?></li>
+                           </ul>
                         </div>
 
                      </div>

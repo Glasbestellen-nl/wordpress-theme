@@ -1,9 +1,8 @@
 <?php
 // Template name: Product layout 1
 // Template post type: product
-get_header(); ?>
+get_header();
 
-   <?php
    if ( have_posts() ) {
       while ( have_posts() ) {
          the_post(); ?>
@@ -11,6 +10,12 @@ get_header(); ?>
          <main class="main-section main-section--space-around">
 
             <div class="container">
+
+               <?php
+               if ( function_exists( 'yoast_breadcrumb' ) ) {
+                  yoast_breadcrumb( '<div class="breadcrumbs space-below">', '</div>' );
+               }
+               ?>
 
                <div class="row">
 

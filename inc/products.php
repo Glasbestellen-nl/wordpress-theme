@@ -133,25 +133,24 @@ function gb_product_rich_snippets_head() {
       ];
 
       // Product reviews
-      if ( $review_category = get_field( 'review_category' ) ) {
+      $review_category = get_field( 'review_category' );
 
-         if ( $reviews = gb_get_reviews( $number = -1, $review_category ) ) {
+      if ( $reviews = gb_get_reviews( $number = -1, $review_category ) ) {
 
-            foreach ( $reviews as $review ) {
+         foreach ( $reviews as $review ) {
 
-               $json['review'][] = [
-                  '@type' => 'Review',
-                  'reviewRating' => [
-                     '@type' => 'Rating',
-                     'ratingValue' => get_post_meta( $review->ID, 'rating', true ),
-                     'bestRating' => 5,
-                  ],
-                  'author' => [
-                     '@type' => 'Person',
-                     'name' => get_post_meta( $review->ID, 'name', true )
-                  ]
-               ];
-            }
+            $json['review'][] = [
+               '@type' => 'Review',
+               'reviewRating' => [
+                  '@type' => 'Rating',
+                  'ratingValue' => get_post_meta( $review->ID, 'rating', true ),
+                  'bestRating' => 5,
+               ],
+               'author' => [
+                  '@type' => 'Person',
+                  'name' => get_post_meta( $review->ID, 'name', true )
+               ]
+            ];
          }
 
          $json['aggregateRating'] = [
@@ -173,7 +172,6 @@ function gb_product_rich_snippets_head() {
       $output .= '</script>';
 
       echo $output;
-
    }
 
 }

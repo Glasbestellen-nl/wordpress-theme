@@ -55,6 +55,7 @@ function get_first_term_by_id( $post_id, $taxonomy, $output = 'term_id' ) {
 function gb_get_selectable_products() {
 	if ( $option = get_option( 'conversion_selectable_products' ) ) {
 		$products_names = explode( ',', $option );
+		$products_names = array_map( 'trim', $products_names );
 		rsort( $products_names );
 		return $products_names;
 	}
@@ -106,4 +107,19 @@ function gb_get_cover_image_url( $post_id ) {
 		return $cover_image;
 	}
 	return get_template_directory_uri() . '/assets/images/default-banner.jpg';
+}
+
+/**
+ * Searches for a matching product with given string
+ * Returns product object
+ */
+function gb_find_product_by_string( string $string ) {
+	$products = get_posts( 'post_type=product&posts_per_page=-1' );
+	if ( ! $products ) return;
+	$match = false;
+	foreach ( $products as $product ) {
+		if ( preg_match( '/' . $product->post_title . '/i', $string, $matched ) )
+			$match = $product;
+	}
+	return $match;
 }

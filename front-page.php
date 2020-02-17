@@ -155,7 +155,7 @@
 
                      <div class="teaser space-below">
 
-                        <a href="<?php echo get_post_type_archive_link( 'product' ); ?>belooperbaar-glas/" class="teaser__image teaser__image--cover">
+                        <a href="<?php echo get_post_type_archive_link( 'product' ); ?>beloopbaar-glas/" class="teaser__image teaser__image--cover">
                            <img data-src="<?php echo get_template_directory_uri() . '/assets/images/beloopbaar-glas-2.png'; ?>" alt="Beloopbaar glas" class="lazyload teaser__image-img">
                         </a>
 

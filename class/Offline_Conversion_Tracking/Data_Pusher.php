@@ -8,7 +8,6 @@ class Data_Pusher {
    public function __construct() {
       add_action( 'wp', array( $this, 'schedule_tasks' ) );
       add_action( 'upload_offline_conversions', array( $this, 'upload_offline_conversions' ) );
-      $this->upload_offline_conversions();
    }
 
    public function schedule_tasks() {
@@ -23,8 +22,6 @@ class Data_Pusher {
       if ( ! $this->get_conversions() ) return;
 
       $analytics = new Analytics();
-
-      print_r( $this->get_conversions() );
 
       foreach ( $this->get_conversions() as $conversion ) {
 

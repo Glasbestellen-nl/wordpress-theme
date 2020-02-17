@@ -78,3 +78,23 @@ function gb_excerpt_length() {
    return 20;
 }
 add_filter( 'excerpt_length', 'gb_excerpt_length' );
+
+/**
+ * Loads scripts in footer
+ */
+function gb_footer_scripts() { ?>
+
+   <!-- Async font awesome css -->
+   <script type="text/javascript">
+      (function() {
+         var css = document.createElement('link');
+         css.href = '<?php echo site_url(); ?>/wp-content/themes/glasbestellen/assets/css/fontawesome-all.css';
+         css.rel = 'stylesheet';
+         css.type = 'text/css';
+         document.getElementsByTagName('head')[0].appendChild(css);
+      })();
+   </script>
+
+   <?php
+}
+add_action( 'wp_footer', 'gb_footer_scripts' );

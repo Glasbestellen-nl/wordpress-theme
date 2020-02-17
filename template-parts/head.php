@@ -3,6 +3,8 @@
 
    <head>
 
+      <?php do_action( 'gb_top_of_head' ); ?>
+
       <?php if ( $gtm_container_id = get_option( 'gtm_container_id' ) ) { ?>
          <!-- Google Tag Manager -->
          <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

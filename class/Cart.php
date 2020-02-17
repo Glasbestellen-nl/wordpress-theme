@@ -47,7 +47,7 @@ class Cart {
     */
    public function set_current_id() {
       if ( ! $this->have_items() ) return;
-      $ids = array_keys( $this->items );
+      $ids = array_reverse( array_keys( $this->items ) );
       $this->current_id = $ids[$this->current_index];
    }
 

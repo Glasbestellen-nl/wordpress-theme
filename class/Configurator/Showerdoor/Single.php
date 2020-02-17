@@ -16,35 +16,8 @@ class Single extends \Configurator {
 
          if ( 'dimensions' == $step_id ) {
 
-            $slot = $this->get_part_slot( $step_id, $configuration['strips'] );
-
-            $opening = new \Rectangle( $input['opening_width'], $input['opening_height'] );
-            $door = new \Rectangle( $input['opening_width'], $input['opening_height'] );
-
-            // Default glass dimensions
-            $door->deduct_width(6);
-            $door->deduct_length(5);
-
-            // Glass deduction by type of strips
-            switch ( $slot ) {
-
-               case '1':
-                  $door->deduct_length(10);
-                  break;
-
-               case '2':
-                  $door->deduct_width(6);
-                  break;
-
-               case '3':
-                  $door->deduct_width(6);
-                  $door->deduct_length(10);
-                  break;
-            }
-
-            // Add customised rows to product summary
-            $this->add_row( __( 'Afmetingen opening', 'glasbestellen' ), $opening->display_dimensions() );
-            $this->add_row( __( 'Glasmaten', 'glasbestellen' ), $door->display_dimensions() );
+            $this->add_row( __( 'Breedte opening (A)', 'glasbestellen' ), $input['opening_width'] . 'mm' );
+            $this->add_row( __( 'Hoogte opening (B)', 'glasbestellen' ), $input['opening_height'] . 'mm' );
 
          } else {
             $this->add_row(

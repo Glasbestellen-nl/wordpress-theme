@@ -69,3 +69,47 @@
 .item-summary-col-title {
    font-weight: 600;
 }
+
+/* Admin dashboard widgets */
+
+.widget-summary-dropdown {
+   margin: 0 auto;
+   display: table;
+}
+
+.widget-summary-row {
+   margin-bottom: 0.625em;
+   margin-left: -0.3125em;
+   margin-right: -0.3125em;
+}
+
+.widget-summary-stats {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+
+.widget-summary-stat {
+   width: 50%;
+   margin: 0 0.3125em;
+   padding: 1.25em;
+   display: flex;
+   flex-direction: column;
+   border: 1px solid #e1e1e1;
+   text-align: center;
+}
+
+.widget-summary-stat .description {
+   font-style: normal;
+}
+
+.widget-summary-stat .value {
+   font-weight: bold;
+   font-size: 1.25em;
+   line-height: 1.5em;
+}
+
+.widget-summary-table th:last-child,
+.widget-summary-table td:last-child {
+   text-align: right;
+}
