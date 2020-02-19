@@ -4,8 +4,7 @@
    if ( have_posts() ) {
       while ( have_posts() ) {
          the_post();
-         if ( $configurator = gb_get_configurator( get_the_id() ) ) {
-         ?>
+         if ( $configurator = gb_get_configurator( get_the_id() ) ) { ?>
 
             <div class="container">
 

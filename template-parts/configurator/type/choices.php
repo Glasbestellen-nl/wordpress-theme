@@ -1,4 +1,3 @@
-
 <?php if ( $choices = $configurator->get_step_parts( $step_id ) ) { ?>
 
    <div class="row choices js-choices large-space-below">

@@ -1,15 +1,17 @@
 <?php
+use Configurator\Configurator_Setup;
+
 /**
  * Add configurator body classes
  */
 function gb_configurator_body_class( $class ) {
-   if ( is_tax( 'startopstelling' ) || ( is_singular( 'configurator' ) && ! is_page_template() ) ) {
+
+   if ( is_tax( 'startopstelling' ) || ( is_singular( 'configurator' ) && ! is_page_template() ) )
       $class[] = 'body--grey';
-   }
-   // Adds javascript handler
-   if ( is_singular( 'configurator' ) ) {
+
+   if ( is_singular( 'configurator' ) )
       $class[] = 'js-configurator';
-   }
+
    return $class;
 }
 add_action( 'body_class', 'gb_configurator_body_class' );
@@ -41,50 +43,6 @@ function gb_filter_part_price_difference( $value, $step_id ) {
    return '+ ' . $value;
 }
 add_filter( 'gb_step_part_price_difference', 'gb_filter_part_price_difference', 10, 2 );
-
-/**
- * Adds configurator meta boxes
- */
-function gb_add_configurator_meta_boxes() {
-   add_meta_box( 'configurator-settings-meta-box', __( 'Settings', 'glasbestellen' ), 'gb_configurator_settings_meta_box_callback', 'configurator' );
-}
-add_action( 'add_meta_boxes', 'gb_add_configurator_meta_boxes' );
-
-/**
- * Renders configurator settings meta box
- */
-function gb_configurator_settings_meta_box_callback( $post ) {
-
-   if ( $value = gb_get_configurator_settings( $post->ID ) ) {
-      $value = json_encode( $value, JSON_PRETTY_PRINT );
-   } else {
-      $value = '';
-   }
-
-   $html = '<p><textarea name="configurator_settings" class="large-text tab-support js-tab-support" rows="20">' . $value . '</textarea></p>';
-
-   echo $html;
-}
-
-/**
- * Saves configurator post settings
- */
-function gb_save_configurator( $post_id ) {
-
-   if ( ! empty( $_POST['configurator_settings'] ) ) {
-
-      // Strip slashes
-      $value = stripslashes( $_POST['configurator_settings'] );
-
-      // Check is valid json
-      if ( json_decode( $value ) != NULL ) {
-
-         // Update to database
-         update_post_meta( $post_id, 'configurator_settings', json_decode( $value, true ) );
-      }
-   }
-}
-add_action( 'save_post_configurator', 'gb_save_configurator' );
 
 /**
  * AJAX handles get single step html
@@ -156,109 +114,67 @@ add_action( 'wp_ajax_get_configurator_total_price', 'gb_get_configurator_total_p
 add_action( 'wp_ajax_nopriv_get_configurator_total_price', 'gb_get_configurator_total_price' );
 
 /**
- * AJAX handles configurator step submit
+ * Handles AJAX configurator step submit
  */
 function gb_handle_configurator_form_submit() {
 
    $response = [];
 
-   if ( ! empty( $_POST['configurator_id'] ) && ! empty( $_POST['step_id'] ) ) {
+   if ( empty( $_POST['configurator_id'] ) || empty( $_POST['step_id'] ) ) wp_die();
 
-      $configurator_id = $_POST['configurator_id'];
-      $step_id = $_POST['step_id'];
+   $configurator_id = $_POST['configurator_id'];
+   $step_id = $_POST['step_id'];
 
-      if ( ! empty( $_SESSION['configuration'][$configurator_id] ) ) {
-         $configuration = $_SESSION['configuration'][$configurator_id];
-      } else {
-         $configuration = [];
-      }
+   if ( ! empty( $_SESSION['configuration'][$configurator_id] ) ) {
+      $configuration = $_SESSION['configuration'][$configurator_id];
+   } else {
+      $configuration = [];
+   }
 
-      if ( ! empty( $_POST['configuration'] ) ) {
-         $configuration[$step_id] = $_POST['configuration'][$step_id];
-         $configurator = gb_get_configurator( $configurator_id, false );
-         $configurator->set_configuration( $configuration );
+   if ( ! empty( $_POST['configuration'] ) ) {
+      $configuration[$step_id] = $_POST['configuration'][$step_id];
+      $configurator = gb_get_configurator( $configurator_id, false );
+      $configurator->update( $configuration );
 
-         if ( $errors = $configurator->get_errors() ) {
-            $response['errors'] = $errors;
-         } else {
-            $_SESSION['configuration'][$configurator_id] = $configurator->get_configuration();
+      $_SESSION['configuration'][$configurator_id] = $configurator->get_configuration();
 
-            if ( $configurator->configuration_done() ) {
-               $response['done'] = true;
-            }
-         }
+      if ( $configurator->is_configuration_done() ) {
+         $response['done'] = true;
       }
    }
 
    wp_send_json( $response );
-
    wp_die();
-
 }
 add_action( 'wp_ajax_handle_configurator_form_submit', 'gb_handle_configurator_form_submit' );
 add_action( 'wp_ajax_nopriv_handle_configurator_form_submit', 'gb_handle_configurator_form_submit' );
 
 function gb_handle_configurator_to_cart() {
 
-   if ( ! empty( $_POST['configurator_id'] ) ) {
+   if ( empty( $_POST['configurator_id'] ) ) wp_die();
 
-      $configurator_id = $_POST['configurator_id'];
+   $configurator_id = $_POST['configurator_id'];
+   $configurator = gb_get_configurator( $configurator_id );
 
-      // Get configurator object
-      $configurator = gb_get_configurator( $configurator_id );
+   if ( ! $configurator->configuration_done() ) wp_die();
 
-      if ( ! $configurator->configuration_done() ) wp_die();
+   $cart = gb_get_cart();
 
-      // Get cart object
-      $cart = gb_get_cart();
+   $price         = $configurator->get_total_price();
+   $summary       = $configurator->get_summary();
+   $configuration = $configurator->get_configuration();
+   $cart->add_item( $configurator_id, $price, 1, $summary, $configuration );
 
-      // Add item to cart
-      $price         = $configurator->get_total_price();
-      $summary       = $configurator->get_summary();
-      $configuration = $configurator->get_configuration();
-      $cart->add_item( $configurator_id, $price, 1, $summary, $configuration );
+   gb_update_cart_session_items( $cart->get_items() );
+   gb_unset_configuration_session( $configurator_id );
 
-      // Store items back in session
-      gb_update_cart_session_items( $cart->get_items() );
-
-      // Empty configuration session
-      gb_unset_configuration_session( $configurator_id );
-
-      // Return cart page url
-      $cart_url = gb_get_cart_url();
-
-      echo $cart_url;
-
-   }
+   echo gb_get_cart_url();
 
    wp_die();
 }
 add_action( 'wp_ajax_handle_configurator_to_cart', 'gb_handle_configurator_to_cart' );
 add_action( 'wp_ajax_nopriv_handle_configurator_to_cart', 'gb_handle_configurator_to_cart' );
 
-function gb_validate_configurator_input() {
-
-   $response = [];
-
-   if ( ! empty( $_GET['configurator_id'] ) ) {
-
-      $configurator = gb_get_configurator( $_GET['configurator_id'] );
-
-      if ( ! empty( $_GET['field'] ) && ! empty( $_GET['value'] ) ) {
-         $configurator->validate_input( $_GET['field'], $_GET['value'] );
-      }
-
-      if ( $configurator->get_errors() ) {
-         $response['errors'] = $configurator->get_errors();
-      }
-   }
-
-   wp_send_json( $response );
-
-   wp_die();
-}
-add_action( 'wp_ajax_validate_configurator_input', 'gb_validate_configurator_input' );
-add_action( 'wp_ajax_nopriv_validate_configurator_input', 'gb_validate_configurator_input' );
 
 function gb_get_configurator_choice_enlargement_html() {
 
@@ -281,31 +197,13 @@ add_action( 'wp_ajax_nopriv_get_configurator_choice_enlargement_html', 'gb_get_c
 
 function gb_get_configurator( $configurator_id = 0, $auto_set = true ) {
 
-   $base = 'Configurator';
-
-   $classes = [
-      'single-showerdoor' => 'Showerdoor\Showerdoor',
-      'double-showerdoor' => 'Showerdoor\Showerdoor',
-      'showerdoor-with-sidepanel-in-clamps' => 'Showerdoor\With_Sidepanel',
-      'showerdoor-with-sidepanel-in-profile' => 'Showerdoor\With_Sidepanel',
-      'showerdoor-on-sidepanel-in-clamps' => 'Showerdoor\With_Sidepanel',
-      'showerdoor-on-sidepanel-in-profile' => 'Showerdoor\With_Sidepanel',
-      'led-mirror' => 'Configurator'
-   ];
-   $classes = apply_filters( 'available_configurators', $classes );
-
    $type = gb_get_configurator_type( $configurator_id );
 
-   if ( ! $type ) return;
-   if ( empty( $classes[$type] ) ) return;
-   $class = $base . '\\' . $classes[$type];
-   if ( ! class_exists( $class ) ) return;
-
-   $configurator = new $class( $configurator_id );
+   $configurator = Configurator_Setup::get_instance( $type, $configurator_id );
 
    // If there is already something configured
    if ( ! empty( $_SESSION['configuration'][$configurator_id] ) && $auto_set ) {
-      $configurator->set_configuration( $_SESSION['configuration'][$configurator_id] );
+      $configurator->update( $_SESSION['configuration'][$configurator_id] );
    }
    return $configurator;
 }

@@ -5,7 +5,7 @@
       <div class="form-group js-form-group">
          <label class="form-label"><?php _e( 'Breedte opening', 'glasbestellen' ); ?> (A):</label>
          <div class="input-group">
-            <input type="number" name="configuration[<?php echo $step_id; ?>][opening_width]" class="form-control form-control--addon js-form-validate" value="<?php echo $configurator->get_configuration( $step_id, 'opening_width' ); ?>" placeholder="mm" data-required="required" data-validation-rules='<?php echo $configurator->get_validation_rules( $step_id, 'opening_width' ); ?>'>
+            <input type="number" name="configuration[<?php echo $step_id; ?>][opening_width]" class="form-control form-control--addon js-form-validate" value="<?php echo $configurator->get_configured_value( 'opening_width' ); ?>" placeholder="mm" data-required="required" data-validation-rules='<?php echo $configurator->get_validation_rules( $step_id, 'opening_width' ); ?>'>
             <div class="input-group-addon">mm</div>
          </div>
          <div class="invalid-feedback js-invalid-feedback"></div>
@@ -14,7 +14,7 @@
       <div class="form-group js-form-group">
          <label class="form-label"><?php _e( 'Hoogte deur', 'glasbestellen' ); ?> (B):</label>
          <div class="input-group">
-            <input type="number" name="configuration[<?php echo $step_id; ?>][opening_height]" class="form-control form-control--addon js-form-validate" value="<?php echo $configurator->get_configuration( $step_id, 'opening_height' ); ?>" placeholder="mm" data-required="required" data-validation-rules='<?php echo $configurator->get_validation_rules( $step_id, 'opening_height' ); ?>'>
+            <input type="number" name="configuration[<?php echo $step_id; ?>][opening_height]" class="form-control form-control--addon js-form-validate" value="<?php echo $configurator->get_configured_value( 'opening_height' ); ?>" placeholder="mm" data-required="required" data-validation-rules='<?php echo $configurator->get_validation_rules( $step_id, 'opening_height' ); ?>'>
             <div class="input-group-addon">mm</div>
          </div>
          <div class="invalid-feedback js-invalid-feedback"></div>

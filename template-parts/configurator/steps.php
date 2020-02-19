@@ -1,6 +1,7 @@
 <?php if ( $configurator->have_steps() ) {
 
    $count = 0;
+   print_r( $configurator->get_configuration() );
    while ( $configurator->have_steps() ) {
       $configurator->the_step();
       $count ++; ?>
@@ -43,7 +44,7 @@
 }
 ?>
 
-<?php if ( $configurator->configuration_done() ) { ?>
+<?php if ( $configurator->is_configuration_done() ) { ?>
    <div class="text text-center">
       <p><?php _e( 'U heeft alle stappen voltooid. Plaats uw product in de winkelwagen om verder te gaan.' ); ?></p>
    </div>
