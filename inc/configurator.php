@@ -156,7 +156,7 @@ function gb_handle_configurator_to_cart() {
    $configurator_id = $_POST['configurator_id'];
    $configurator = gb_get_configurator( $configurator_id );
 
-   if ( ! $configurator->configuration_done() ) wp_die();
+   if ( ! $configurator->is_configuration_done() ) wp_die();
 
    $cart = gb_get_cart();
 

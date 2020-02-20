@@ -1,7 +1,7 @@
 <?php
 namespace Configurator;
 
-class Configurator {
+abstract class Configurator {
 
    protected $_configurator_id;
 
@@ -39,41 +39,41 @@ class Configurator {
       foreach ( $this->_configuration as $step_id => $input ) {
          if ( is_array( $input ) ) {
             foreach ( $input as $key => $val ) {
-               if ( $key == $field ) return $val;
+               if ( $key == $field )
+                  return $val;
             }
          }
-         if ( $step_id == $field ) return $input;
+         if ( $step_id == $field )
+            return $input;
       }
    }
 
-   public function get_total_price( $round = true ) {
+   public function get_total_price( bool $round = true ) {
 
-      $total_price = 0;
+      $total = $this->calculate_subtotal();
+
+      if ( ! empty( $this->_settings['shipping'] ) ) {
+         $total += $this->_settings['shipping'];
+      }
+      return ( $round ) ? \Money::round_including_vat( $total ) : $total;
+   }
+
+   protected function calculate_subtotal() {
+
+      $subtotal = 0;
       $d = $this->_default_price_table;
       $c = $this->_price_table;
 
-      if ( empty( $d ) || empty( $c ) )
-         return $total_price;
+      if ( empty( $d ) ) return $subtotal;
 
       foreach ( $d as $step_id => $price ) {
          if ( ! empty( $c[$step_id] ) ) {
-            $total_price += $c[$step_id];
+            $subtotal += $c[$step_id];
          } else {
-            $total_price += $price;
+            $subtotal += $price;
          }
       }
-
-      if ( ! empty( $this->_settings['shipping'] ) ) {
-         $total_price += $this->_settings['shipping'];
-      }
-
-      // Round off so that the included VAT price is always a round number
-      if ( $round ) {
-         $vat = 1.21;
-         $total_price = ceil( $total_price * $vat ) / $vat;
-      }
-
-      return $total_price;
+      return $subtotal;
    }
 
    public function get_steps_count() {
@@ -277,24 +277,21 @@ class Configurator {
       $this->_default_price_table = $this->calculate_price_table( $this->_default_configuration );
    }
 
-   protected function calculate_price_table( array $configuration = [] ) {
+   public function get_summary() {
 
-      if ( empty( $configuration ) ) return;
+      $summary = [];
 
-      $price_table = [];
+      if ( empty( $this->_configuration ) ) return;
 
-      foreach ( $configuration as $step_id => $input ) {
-
-         $part_price = 0;
-
-         if ( $this->get_part_price( $step_id, $input ) ) {
-            $part_price = $this->get_part_price( $step_id, $input );
-         }
-
-         $price_table[$step_id] = $part_price;
-
+      foreach ( $this->_configuration as $step_id => $value ) {
+         $summary[] = [
+            'label' => $this->get_step_title( $step_id ),
+            'value' => $this->get_formatted_step_configuration( $step_id )
+         ];
       }
-      return $price_table;
+      return $summary;
    }
+
+   abstract protected function calculate_price_table( array $configuration = [] );
 
 }

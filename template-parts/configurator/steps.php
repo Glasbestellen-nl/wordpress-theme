@@ -1,7 +1,6 @@
 <?php if ( $configurator->have_steps() ) {
 
    $count = 0;
-   print_r( $configurator->get_configuration() );
    while ( $configurator->have_steps() ) {
       $configurator->the_step();
       $count ++; ?>

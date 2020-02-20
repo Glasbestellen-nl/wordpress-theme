@@ -20,4 +20,11 @@ class Money {
       return $value * 0.21;
    }
 
+   /**
+    * Round off so that the included VAT price is always a round number
+    */
+   public static function round_including_vat( $value = 0 ) {
+      return ceil( $value * 1.21 ) / 1.21;
+   }
+
 }
