@@ -13,6 +13,8 @@ const Configurator = (function() {
          */
          this.element.addEventListener('click', e => {
 
+            const self = this;
+
             // Select choice
             if (e.target && e.target.closest('.js-choice')) {
                let choice = e.target.closest('.js-choice');
@@ -76,6 +78,36 @@ const Configurator = (function() {
                this.validateInput(e.target);
             }
 
+         });
+
+         jQuery(this.element).on('blur', '.js-configurator-blur-update .js-form-validate', function() {
+
+            console.log(self);
+
+            if (self.validateInput(this)) {
+
+               console.log(self);
+
+               const form = jQuery(this).parents('.js-configurator-blur-update');
+               if (form) {
+                  const formData = new FormData(form[0]);
+                  const action = jQuery('.js-form-action').val();
+                  formData.append('action', action);
+
+                  jQuery.ajax({
+                     url: gb.ajaxUrl,
+                     type: 'POST',
+                     data: formData,
+                     processData: false,
+                     contentType: false,
+                     context: this,
+                     success: function(response) {
+                        //console.log(this);
+                        //this.updateTotalPrice();
+                     }
+                  });
+               }
+            }
          });
 
       }

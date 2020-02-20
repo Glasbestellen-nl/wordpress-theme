@@ -30,8 +30,9 @@ class Configurator_Setup {
          case 'led-mirror' :
             return new Configurators\Mirror\Led_Mirror( $configurator_id );
             break;
-         default :
-            return new Configurator( $configurator_id );
+         case 'door' :
+            return new Configurators\Door\Configurator( $configurator_id );
+            break;
       }
 
    }

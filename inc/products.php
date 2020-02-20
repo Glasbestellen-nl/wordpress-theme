@@ -54,13 +54,17 @@ function gb_get_configurators_by_product_id( int $product_id ) {
 
    if ( empty( $product_id ) ) return;
 
+   $term_id = get_post_meta( $product_id, 'configurator', true );
+
+   if ( ! $term_id ) return;
+
    $args = [
       'post_type' => 'configurator',
       'post_per_page' => -1,
-      'meta_query' => [
+      'tax_query' => [
          [
-            'key' => 'product',
-            'value' => $product_id
+            'taxonomy' => 'startopstelling',
+            'terms' => $term_id
          ]
       ]
    ];
@@ -78,7 +82,7 @@ function gb_get_product_by_configurator_id( int $configurator_id ) {
 
    $term_id = get_first_term_by_id( $configurator_id, 'startopstelling' );
 
-   if ( empty( $term_id ) ) return $permalink;
+   if ( empty( $term_id ) ) return;
 
    $products = get_posts([
       'post_type'    => 'product',

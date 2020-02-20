@@ -77,15 +77,15 @@ get_header();
                                           <span class="h4 configurator__heading"><?php _e( 'Onze aanbieding voor u', 'glasbestellen' ); ?></span>
                                        </div>
 
-                                       <div class="col-4">
+                                       <!-- <div class="col-4">
                                           <div class="configurator__energy-label">
                                              <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload">
                                           </div>
-                                       </div>
+                                       </div> -->
 
-                                       <div class="col-8">
+                                       <div class="col-12">
                                           <div class="configurator__details">
-                                             <span class="configurator__detail--price"><?php echo Money::display( $configurator->get_total_price() ); ?></span>
+                                             <span class="configurator__detail--price js-config-total-price"><?php echo Money::display( $configurator->get_total_price() ); ?></span>
                                              <span class="configurator__detail--tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
                                              <span class="configurator__detail--delivery">Levertijd 7-14 werkdagen</span>
                                              <span class="configurator__detail--shipping"><i class="fas fa-shipping-fast"></i> <?php _e( 'Gratis verzending', 'glasbestellen' ); ?></span>
@@ -101,11 +101,11 @@ get_header();
                                     <div class="configurator__body">
 
                                        <div class="space-below">
-                                          <span class="h4 configurator__heading"><?php _e( 'Spiegel configureren', 'glasbestellen' ); ?></span>
+                                          <span class="h4 configurator__heading"><?php _e( 'Product configureren', 'glasbestellen' ); ?></span>
                                           <p>Verdere informatie klik op het <i class="fas fa-info-circle configurator__info-icon"></i> symbool.</p>
                                        </div>
 
-                                       <div class="configurator__form space-below">
+                                       <form method="post" class="configurator__form space-below js-configurator-blur-update">
 
                                           <?php
                                           while ( $configurator->have_steps() ) {
@@ -122,8 +122,8 @@ get_header();
                                                 </div>
 
                                                 <?php if ( $configurator->get_step_options() ) { ?>
-                                                   <div class="configurator__form-col configurator__form-input">
-                                                      <select class="dropdown configurator__form-control">
+                                                   <div class="configurator__form-col configurator__form-input js-form-validate">
+                                                      <select name="configuration[<?php echo $configurator->get_step_id(); ?>]" class="dropdown configurator__form-control" name="">
                                                          <?php if ( $configurator->is_step_required() ) { ?>
                                                             <option value="">---</option>
                                                          <?php }
@@ -135,31 +135,13 @@ get_header();
                                                    </div>
                                                 <?php } else { ?>
                                                    <div class="configurator__form-col configurator__form-input js-form-group">
-                                                      <input type="number" class="form-control configurator__form-control js-form-validate" placeholder="mm" data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' />
+                                                      <input type="number" name="configuration[<?php echo $configurator->get_step_id(); ?>]" class="form-control configurator__form-control js-form-validate" placeholder="mm" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' />
                                                       <div class="invalid-feedback js-invalid-feedback"></div>
                                                    </div>
                                                 <?php } ?>
                                              </div>
 
                                           <?php } ?>
-
-                                          <!-- <?php foreach ( ['Spiegel glassoort', 'Lichtkleur', 'LED band', 'Sensor', 'Zijkanten', 'Glazen plankje', 'Klok', 'Spiegelverwarming', 'Stopcontact', 'Bluetooth speaker', 'Make-up spiegel' ] as $label ) { ?>
-
-                                             <div class="configurator__form-row">
-                                                <div class="configurator__form-col configurator__form-info">
-                                                   <i class="fas fa-info-circle configurator__info-icon"></i>
-                                                </div>
-                                                <div class="configurator__form-col configurator__form-label">
-                                                   <label><?php echo $label ?></label>
-                                                </div>
-                                                <div class="configurator__form-col configurator__form-input">
-                                                   <select class="dropdown configurator__form-control">
-                                                      <option>---</option>
-                                                   </select>
-                                                </div>
-                                             </div>
-
-                                          <?php } ?> -->
 
                                           <div class="configurator__form-row space-below">
                                              <div class="configurator__form-col configurator__form-label">
@@ -180,7 +162,9 @@ get_header();
                                              <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Bestel check', 'glasbestellen' ) . ':</strong> ' . __( 'Elke bestelling wordt gecontroleerd op volledigheid.', 'glasbestellen' ); ?></li>
                                           </ul>
 
-                                       </div>
+                                          <input type="hidden" name="action" class="js-form-action" value="handle_configurator_form_submit">
+
+                                       </form>
 
                                     </div>
 

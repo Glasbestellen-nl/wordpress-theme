@@ -394,7 +394,7 @@
    /**
     * Form validation per input on blur
     */
-   $(document).on('blur', '.js-form-validate', function() {
+   $(document).on('blur', '.js-form-validation .js-form-validate', function() {
       validateInput(this);
    });
 
