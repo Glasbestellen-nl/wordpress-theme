@@ -13,8 +13,6 @@ const Configurator = (function() {
          */
          this.element.addEventListener('click', e => {
 
-            const self = this;
-
             // Select choice
             if (e.target && e.target.closest('.js-choice')) {
                let choice = e.target.closest('.js-choice');
@@ -80,19 +78,20 @@ const Configurator = (function() {
 
          });
 
-         jQuery(this.element).on('blur', '.js-configurator-blur-update .js-form-validate', function() {
+         const self = this;
 
-            console.log(self);
+         jQuery(this.element).on('change blur', '.js-configurator-blur-update .js-form-validate', function() {
 
             if (self.validateInput(this)) {
 
-               console.log(self);
-
                const form = jQuery(this).parents('.js-configurator-blur-update');
                if (form) {
-                  const formData = new FormData(form[0]);
-                  const action = jQuery('.js-form-action').val();
+                  const formData        = new FormData(form[0]);
+                  const action          = jQuery('.js-form-action').val();
+                  const configuratorId  = jQuery('.js-configurator-id').val();
+
                   formData.append('action', action);
+                  formData.append('configurator_id', configuratorId);
 
                   jQuery.ajax({
                      url: gb.ajaxUrl,
@@ -100,10 +99,10 @@ const Configurator = (function() {
                      data: formData,
                      processData: false,
                      contentType: false,
-                     context: this,
+                     context: self,
                      success: function(response) {
-                        //console.log(this);
-                        //this.updateTotalPrice();
+                        console.log(response);
+                        this.updateTotalPrice();
                      }
                   });
                }

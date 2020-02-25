@@ -101,11 +101,22 @@ abstract class Configurator {
    }
 
    protected function update_price_table() {
-      $this->_price_table = $this->calculate_price_table( $this->_configuration );
+      $configuration = $this->get_merged_configuration();
+      $this->_price_table = $this->calculate_price_table( $configuration );
    }
 
    protected function update_configuration( array $configuration = [] ) {
       $this->_configuration = $configuration;
+   }
+
+   protected function get_merged_configuration() {
+      $configuration = $this->_configuration;
+      if ( empty( $this->_default_configuration ) ) return;
+      foreach ( $this->_default_configuration as $step_id => $input ) {
+         if ( empty( $configuration[$step_id] ) )
+            $configuration[$step_id] = $this->_default_configuration[$step_id];
+      }
+      return $configuration;
    }
 
    protected function set_defaults() {
@@ -196,6 +207,15 @@ abstract class Configurator {
       if ( $default ) return $this->_default_configuration[$step_id];
 
       return false;
+   }
+
+   public function get_option_price( string $step_id = '', string $option_id ) {
+      $options = $this->get_step_options( $step_id );
+      if ( ! $options ) return 0;
+      foreach ( $options as $option ) {
+         if ( $option['title'] == $option_id ) return $option['price'];
+      }
+      return 0;
    }
 
    public function get_step_id() {

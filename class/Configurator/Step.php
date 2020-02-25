@@ -73,11 +73,18 @@ class Step {
    }
 
    public function get_default() {
+
       if ( ! empty( $this->_data['default'] ) ) {
          return $this->_data['default'];
+
       } elseif ( ! empty( $this->_data['parts'] ) ) {
          foreach ( $this->_data['parts'] as $part ) {
             if ( ! empty( $part['default'] ) ) return $part['id'];
+         }
+
+      } elseif ( $options = $this->get_options() ) {
+         foreach ( $options as $option ) {
+            if ( ! empty( $option['default'] ) ) return $option['title'];
          }
       }
       return false;

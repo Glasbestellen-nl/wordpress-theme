@@ -73,17 +73,16 @@ get_header();
 
                                     <div class="row">
 
-                                       <div class="col-12">
+                                       <div class="col-12 col-md-6">
                                           <span class="h4 configurator__heading"><?php _e( 'Onze aanbieding voor u', 'glasbestellen' ); ?></span>
+
+                                          <!-- <div class="configurator__energy-label">
+                                             <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload">
+                                          </div> -->
+
                                        </div>
 
-                                       <!-- <div class="col-4">
-                                          <div class="configurator__energy-label">
-                                             <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload">
-                                          </div>
-                                       </div> -->
-
-                                       <div class="col-12">
+                                       <div class="col-12 col-md-6">
                                           <div class="configurator__details">
                                              <span class="configurator__detail--price js-config-total-price"><?php echo Money::display( $configurator->get_total_price() ); ?></span>
                                              <span class="configurator__detail--tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
@@ -109,7 +108,8 @@ get_header();
 
                                           <?php
                                           while ( $configurator->have_steps() ) {
-                                             $configurator->the_step(); ?>
+                                             $configurator->the_step();
+                                             $configured_value = $configurator->get_configured_value( $configurator->get_step_id() ); ?>
 
                                              <div class="configurator__form-row">
                                                 <div class="configurator__form-col configurator__form-info">
@@ -121,21 +121,31 @@ get_header();
                                                    <label><?php echo $configurator->get_step_title(); ?></label>
                                                 </div>
 
-                                                <?php if ( $configurator->get_step_options() ) { ?>
-                                                   <div class="configurator__form-col configurator__form-input js-form-validate">
-                                                      <select name="configuration[<?php echo $configurator->get_step_id(); ?>]" class="dropdown configurator__form-control" name="">
-                                                         <?php if ( $configurator->is_step_required() ) { ?>
-                                                            <option value="">---</option>
-                                                         <?php }
-                                                         foreach ( $configurator->get_step_options() as $option ) {
-                                                            echo '<option value="">' . $option['title'] . '</option>';
-                                                         }
-                                                         ?>
-                                                      </select>
-                                                   </div>
+                                                <?php
+                                                if ( $options = $configurator->get_step_options() ) {
+                                                   if ( count( $options ) > 1 ) { ?>
+                                                      <div class="configurator__form-col configurator__form-input">
+                                                         <select name="configuration[<?php echo $configurator->get_step_id(); ?>]" class="dropdown configurator__form-control js-form-validate">
+                                                            <?php if ( $configurator->is_step_required() ) { ?>
+                                                               <option value="">---</option>
+                                                            <?php }
+                                                            foreach ( $options as $option ) {
+                                                               $selected = selected( $configured_value, $option['title'], false );
+                                                               echo '<option value="' . $option['title'] . '" ' . $selected . '>' . $option['title'] . '</option>';
+                                                            }
+                                                            ?>
+                                                         </select>
+                                                      </div>
+
+                                                   <?php } else { ?>
+                                                      <div class="configurator__form-col configurator__form-input configurator__form-input--default">
+                                                         <span class=""><?php echo $options[0]['title']; ?></span>
+                                                      </div>
+                                                   <?php } ?>
+
                                                 <?php } else { ?>
                                                    <div class="configurator__form-col configurator__form-input js-form-group">
-                                                      <input type="number" name="configuration[<?php echo $configurator->get_step_id(); ?>]" class="form-control configurator__form-control js-form-validate" placeholder="mm" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' />
+                                                      <input type="number" name="configuration[<?php echo $configurator->get_step_id(); ?>]" class="form-control configurator__form-control js-form-validate" placeholder="mm" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configured_value; ?>" />
                                                       <div class="invalid-feedback js-invalid-feedback"></div>
                                                    </div>
                                                 <?php } ?>
@@ -149,7 +159,9 @@ get_header();
                                              </div>
                                              <div class="configurator__form-col configurator__form-input">
                                                 <select class="dropdown configurator__form-control">
-                                                   <option>1</option>
+                                                   <?php for ( $i = 1; $i <= 10; $i ++ ) { ?>
+                                                      <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                                   <?php } ?>
                                                 </select>
                                              </div>
                                           </div>
@@ -162,6 +174,7 @@ get_header();
                                              <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Bestel check', 'glasbestellen' ) . ':</strong> ' . __( 'Elke bestelling wordt gecontroleerd op volledigheid.', 'glasbestellen' ); ?></li>
                                           </ul>
 
+                                          <input type="hidden" name="configurator_id" class="js-configurator-id" value="<?php echo $configurator->get_id(); ?>">
                                           <input type="hidden" name="action" class="js-form-action" value="handle_configurator_form_submit">
 
                                        </form>

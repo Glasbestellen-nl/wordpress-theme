@@ -120,10 +120,9 @@ function gb_handle_configurator_form_submit() {
 
    $response = [];
 
-   if ( empty( $_POST['configurator_id'] ) || empty( $_POST['step_id'] ) ) wp_die();
+   if ( empty( $_POST['configurator_id'] ) ) wp_die();
 
    $configurator_id = $_POST['configurator_id'];
-   $step_id = $_POST['step_id'];
 
    if ( ! empty( $_SESSION['configuration'][$configurator_id] ) ) {
       $configuration = $_SESSION['configuration'][$configurator_id];
@@ -132,7 +131,14 @@ function gb_handle_configurator_form_submit() {
    }
 
    if ( ! empty( $_POST['configuration'] ) ) {
-      $configuration[$step_id] = $_POST['configuration'][$step_id];
+
+      foreach ( $_POST['configuration'] as $step_id => $input ) {
+         if ( ! empty( $input ) )
+            $configuration[$step_id] = $input;
+      }
+
+      $response['config'] = $configuration;
+
       $configurator = gb_get_configurator( $configurator_id, false );
       $configurator->update( $configuration );
 

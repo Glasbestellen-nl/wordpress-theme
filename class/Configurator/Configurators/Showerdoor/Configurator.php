@@ -50,7 +50,6 @@ class Configurator extends \Configurator\Configurators\Using_Parts\Configurator 
             default :
                $price_table[$step_id] = $part_price;
          }
-         $price_table[$step_id] = $part_price;
 
       }
       return $price_table;

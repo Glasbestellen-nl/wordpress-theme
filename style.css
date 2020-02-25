@@ -3037,6 +3037,10 @@ Configurator
    flex: 0 0 100%;
 }
 
+.configurator__form-input--default {
+   padding: 0.3125em 0;
+}
+
 .configurator__form-control {
    padding: 0.5em 0.625em;
 }
