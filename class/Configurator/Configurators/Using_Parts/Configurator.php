@@ -35,4 +35,50 @@ abstract class Configurator extends \Configurator\Configurator {
       return $custom_price - $default_price;
    }
 
+   public function get_formatted_step_configuration( $step_id = null ) {
+
+      if ( empty( $step_id ) )
+         $step_id = $this->_current_step->get_id();
+
+      if ( empty( $this->_configuration[$step_id] ) ) return;
+
+      $configured = $this->_configuration[$step_id];
+
+      if ( $this->get_step_parts() ) {
+         return get_the_title( $configured );
+
+      } elseif ( is_array( $configured ) ) {
+         if ( $format = $this->get_step_field( 'format', $step_id ) ) {
+            foreach ( $configured as $field => $value ) {
+               $format = str_replace( '{' . $field . '}', $value, $format );
+            }
+            return $format;
+         }
+      }
+   }
+
+   public function get_summary( string $message = '' ) {
+
+      $summary = [];
+
+      if ( empty( $this->_configuration ) ) return;
+
+      foreach ( $this->_configuration as $step_id => $value ) {
+         $summary[] = [
+            'label' => $this->get_step_title( $step_id ),
+            'value' => $this->get_formatted_step_configuration( $step_id )
+         ];
+      }
+
+      if ( ! empty( $message ) ) {
+         $summary[] = [
+            'label' => __( 'Opmerking', 'glasbestellen' ),
+            'value' => sanitize_textarea_field( $message )
+         ];
+      }
+
+      return $summary;
+   }
+
+
 }

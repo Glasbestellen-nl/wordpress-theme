@@ -40,15 +40,7 @@ const Configurator = (function() {
 
             // Add configuration to cart
             if (e.target && e.target.closest('.js-configurator-to-cart')) {
-               let data = {
-                  action: 'handle_configurator_to_cart',
-                  configurator_id: gb.configuratorId
-               }
-               jQuery.post(gb.ajaxUrl, data, function(url) {
-                  // Redirect to cart page
-                  if (url)
-                     window.location.replace(url);
-               });
+               this.toCart();
             }
 
          });
@@ -78,20 +70,18 @@ const Configurator = (function() {
 
          });
 
+
          const self = this;
 
-         jQuery(this.element).on('change blur', '.js-configurator-blur-update .js-form-validate', function() {
+         jQuery(this.element).on('change', '.js-configurator-blur-update .js-form-validate', function() {
 
             if (self.validateInput(this)) {
 
                const form = jQuery(this).parents('.js-configurator-blur-update');
                if (form) {
-                  const formData        = new FormData(form[0]);
-                  const action          = jQuery('.js-form-action').val();
-                  const configuratorId  = jQuery('.js-configurator-id').val();
-
-                  formData.append('action', action);
-                  formData.append('configurator_id', configuratorId);
+                  const formData = new FormData(form[0]);
+                  formData.append('action', 'handle_configurator_form_submit');
+                  formData.append('configurator_id', gb.configuratorId);
 
                   jQuery.ajax({
                      url: gb.ajaxUrl,
@@ -106,6 +96,22 @@ const Configurator = (function() {
                      }
                   });
                }
+            }
+         }).on('click', '.js-configurator-cart-button', function(e) {
+
+            e.preventDefault();
+
+            const parentForm = jQuery(this).parents('form');
+            let toCart = true;
+            jQuery(':input', parentForm).each(function(index, element) {
+               if (!self.validateInput(element)) {
+                  toCart = false;
+               }
+            });
+            if (toCart) {
+               let quantity = jQuery('.js-configurator-quantity').val() || 1;
+               let message  = jQuery('.js-configurator-message').val() || "";
+               self.toCart(quantity, message);
             }
          });
 
@@ -216,12 +222,26 @@ const Configurator = (function() {
          }
       }
 
+      this.toCart = function(quantity = 1, message = '') {
+         let data = {
+            action: 'handle_configurator_to_cart',
+            configurator_id: gb.configuratorId,
+            quantity: quantity,
+            message: message
+         }
+         jQuery.post(gb.ajaxUrl, data, function(cartUrl) {
+            if (cartUrl)
+               window.location.replace(cartUrl);
+         });
+      }
+
       this.validateInput = function(element) {
 
          clearValidate(element);
 
          let valid = true;
          let msg = gb.msg.enterField;
+         let showFeedback = true;
 
          let value = element.value;
          let req = element.dataset.required;
@@ -230,6 +250,8 @@ const Configurator = (function() {
          if (!value) {
             if (req) {
                valid = false;
+            } else {
+               showFeedback = false;
             }
          } else {
             if (jsonRules) {
@@ -250,10 +272,12 @@ const Configurator = (function() {
             }
          }
 
-         if (valid) {
-            isValid(element);
-         } else {
-            isInvalid(element, msg);
+         if (showFeedback) {
+            if (valid) {
+               isValid(element);
+            } else {
+               isInvalid(element, msg);
+            }
          }
          return valid;
       }

@@ -101,10 +101,10 @@ get_header();
 
                                        <div class="space-below">
                                           <span class="h4 configurator__heading"><?php _e( 'Product configureren', 'glasbestellen' ); ?></span>
-                                          <p>Verdere informatie klik op het <i class="fas fa-info-circle configurator__info-icon"></i> symbool.</p>
+                                          <p><?php echo sprintf( __( 'Verdere informatie klik op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
                                        </div>
 
-                                       <form method="post" class="configurator__form space-below js-configurator-blur-update">
+                                       <form method="post" class="configurator__form js-configurator-blur-update">
 
                                           <?php
                                           while ( $configurator->have_steps() ) {
@@ -140,6 +140,7 @@ get_header();
                                                    <?php } else { ?>
                                                       <div class="configurator__form-col configurator__form-input configurator__form-input--default">
                                                          <span class=""><?php echo $options[0]['title']; ?></span>
+                                                         <input type="hidden" name="configuration[<?php echo $configurator->get_step_id(); ?>]" value="<?php echo $options[0]['title']; ?>">
                                                       </div>
                                                    <?php } ?>
 
@@ -153,12 +154,24 @@ get_header();
 
                                           <?php } ?>
 
+                                          <div class="configurator__form-row">
+
+                                             <div class="configurator__form-col configurator__form-label">
+                                                <label><?php _e( 'Opmerking', 'glasbestellen' ) ?></label>
+                                             </div>
+
+                                             <div class="configurator__form-col configurator__form-input">
+                                                <textarea class="form-control js-configurator-message" placeholder="<?php echo sprintf( __( 'Maximaal %d karakters', 'glasbestellen' ), 235 ); ?>" maxlength="235"></textarea>
+                                             </div>
+
+                                          </div>
+
                                           <div class="configurator__form-row space-below">
                                              <div class="configurator__form-col configurator__form-label">
                                                 <label><?php _e( 'Aantal', 'glasbestellen' ) ?></label>
                                              </div>
                                              <div class="configurator__form-col configurator__form-input">
-                                                <select class="dropdown configurator__form-control">
+                                                <select class="dropdown configurator__form-control js-configurator-quantity">
                                                    <?php for ( $i = 1; $i <= 10; $i ++ ) { ?>
                                                       <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                                                    <?php } ?>
@@ -167,15 +180,12 @@ get_header();
                                           </div>
 
                                           <div class="configurator__form-button space-below">
-                                             <button class="btn btn--primary btn--block btn--next"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
+                                             <button class="btn btn--primary btn--block btn--next js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
                                           </div>
 
                                           <ul class="configurator__checks">
                                              <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Bestel check', 'glasbestellen' ) . ':</strong> ' . __( 'Elke bestelling wordt gecontroleerd op volledigheid.', 'glasbestellen' ); ?></li>
                                           </ul>
-
-                                          <input type="hidden" name="configurator_id" class="js-configurator-id" value="<?php echo $configurator->get_id(); ?>">
-                                          <input type="hidden" name="action" class="js-form-action" value="handle_configurator_form_submit">
 
                                        </form>
 

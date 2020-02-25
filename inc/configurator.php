@@ -133,8 +133,7 @@ function gb_handle_configurator_form_submit() {
    if ( ! empty( $_POST['configuration'] ) ) {
 
       foreach ( $_POST['configuration'] as $step_id => $input ) {
-         if ( ! empty( $input ) )
-            $configuration[$step_id] = $input;
+         $configuration[$step_id] = $input;
       }
 
       $response['config'] = $configuration;
@@ -167,9 +166,9 @@ function gb_handle_configurator_to_cart() {
    $cart = gb_get_cart();
 
    $price         = $configurator->get_total_price();
-   $summary       = $configurator->get_summary();
+   $summary       = $configurator->get_summary( $_POST['message'] );
    $configuration = $configurator->get_configuration();
-   $cart->add_item( $configurator_id, $price, 1, $summary, $configuration );
+   $cart->add_item( $configurator_id, $price, $_POST['quantity'], $summary, $configuration );
 
    gb_update_cart_session_items( $cart->get_items() );
    gb_unset_configuration_session( $configurator_id );
