@@ -22,12 +22,12 @@ get_header(); ?>
                      }
                      ?>
 
-                     <section class="text">
+                     <section class="text large-space-below">
                         <h1><?php the_title(); ?></h1>
-                        <p>Exclusieve badkamerspiegel voor uw badkamer, individueel gemaakt volgens uw wensen. Koop gratis hoogwaardige badkamerspiegels rechtstreeks bij de fabrikant, op maat gemaakt en af fabriek. <a href="#">Meer &raquo;</a></p>
+                        <p><?php echo get_the_excerpt(); ?> <a href="#main_content" class="js-scroll-to" data-scroll-to="#main_content"><?php _e( 'Lees verder', 'glasbestellen' ); ?> &raquo;</a></p>
                      </section>
 
-                     <form class="filter-bar large-space-below">
+                     <!-- <form class="filter-bar large-space-below">
 
                         <div class="row">
 
@@ -44,17 +44,18 @@ get_header(); ?>
 
                         </div>
 
-                     </form>
+                     </form> -->
 
                      <?php
                      $configurators = gb_get_configurators_by_product_id( get_the_id() );
                      if ( $configurators->have_posts() ) { ?>
 
-                        <section class="row product-listings">
+                        <section class="row product-listings large-space-below">
 
                            <?php
                            while ( $configurators->have_posts() ) {
-                              $configurators->the_post(); ?>
+                              $configurators->the_post();
+                              $settings = gb_get_configurator_settings( get_the_id() )?>
 
                               <div class="col-12 col-md-4 col-lg-3">
 
@@ -65,7 +66,9 @@ get_header(); ?>
                                     <div class="product-listing__body">
                                        <h2 class="h5"><a href="<?php the_permalink(); ?>" class="product-listing__title"><?php the_title(); ?></a></h2>
                                        <div class="product-listing__info">
-                                          <span class="product-listing__price">&euro;96,98</span>
+                                          <?php if ( ! empty( $settings['display_price'] ) ) { ?>
+                                             <span class="product-listing__price"><?php echo Money::display( $settings['display_price'], false ); ?></span>
+                                          <?php } ?>
                                           <span class="product-listing__tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
                                           <span class="product-listing__shipping"><i class="fas fa-shipping-fast"></i> <?php _e( 'Gratis verzending', 'glasbestellen' ); ?></span>
                                        </div>
@@ -74,11 +77,15 @@ get_header(); ?>
 
                               </div>
 
-                           <?php } ?>
+                           <?php }  ?>
 
                         </section>
 
-                     <?php } ?>
+                     <?php } wp_reset_postdata(); ?>
+
+                     <article class="text" id="main_content">
+                        <?php the_content(); ?>
+                     </article>
 
                   </div>
 

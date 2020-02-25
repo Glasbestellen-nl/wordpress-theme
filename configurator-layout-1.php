@@ -86,7 +86,9 @@ get_header();
                                           <div class="configurator__details">
                                              <span class="configurator__detail--price js-config-total-price"><?php echo Money::display( $configurator->get_total_price() ); ?></span>
                                              <span class="configurator__detail--tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
-                                             <span class="configurator__detail--delivery">Levertijd 7-14 werkdagen</span>
+                                             <?php if ( $delivery_time = $configurator->get_setting( 'delivery_time' ) ) { ?>
+                                                <span class="configurator__detail--delivery"><?php echo sprintf( __( 'Levertijd %s', 'glasbestellen' ), $delivery_time ); ?></span>
+                                             <?php } ?>
                                              <span class="configurator__detail--shipping"><i class="fas fa-shipping-fast"></i> <?php _e( 'Gratis verzending', 'glasbestellen' ); ?></span>
                                           </div>
                                        </div>

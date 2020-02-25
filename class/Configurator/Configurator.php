@@ -148,6 +148,10 @@ abstract class Configurator {
       $this->_settings = get_post_meta( $this->_configurator_id, 'configurator_settings', true );
    }
 
+   public function get_setting( string $key = '' ) {
+      return isset( $this->_settings[$key] ) ? $this->_settings[$key] : false;
+   }
+
    public function is_configuration_done() {
       return count( $this->_configuration ) === $this->get_steps_count();
    }
