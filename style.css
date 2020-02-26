@@ -691,6 +691,40 @@ Fixed bottom wrapper
 }
 
 /*--------------------------------------------------------------
+Tables
+--------------------------------------------------------------*/
+
+.details-table {
+   width: 100%;
+}
+
+.details-table__row {
+   background-color: #ebebeb;
+}
+
+.details-table__row--even {
+   background-color: #fff;
+}
+
+.details-table__col {
+   padding: 0.625em;
+   font-size: 0.875em;
+}
+
+/*--------------------------------------------------------------
+Links list
+--------------------------------------------------------------*/
+
+.links-list__link {
+   text-decoration: underline;
+}
+
+.links-list__icon {
+   margin-right: 0.125em;
+}
+
+
+/*--------------------------------------------------------------
 Caption
 --------------------------------------------------------------*/
 
@@ -1584,6 +1618,7 @@ Image slider
    width: 20%;
    opacity: 0.7;
    cursor: pointer;
+   border: 1px solid #dbdbdb;
 }
 
 .image-slider__thumb--current,
@@ -2982,6 +3017,7 @@ Configurator
 
 .configurator__info-icon {
    color: #fcb136;
+   font-size: 1.125em;
 }
 
 .configurator__energy-label {
@@ -3046,6 +3082,7 @@ Configurator
 }
 
 .configurator__checks-item {
+   margin-bottom: 0.5em;
    font-size: 0.875em;
    line-height: 1.25em;
 }

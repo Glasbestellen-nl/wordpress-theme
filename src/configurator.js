@@ -103,15 +103,23 @@ const Configurator = (function() {
 
             const parentForm = jQuery(this).parents('form');
             let toCart = true;
+            let invalidInputs = [];
             jQuery(':input', parentForm).each(function(index, element) {
                if (!self.validateInput(element)) {
                   toCart = false;
+                  invalidInputs.push(element);
                }
             });
             if (toCart) {
                let quantity = jQuery('.js-configurator-quantity').val() || 1;
                let message  = jQuery('.js-configurator-message').val() || "";
                self.toCart(quantity, message);
+            } else {
+               // Scroll to first invalid field
+               const firstInput = jQuery(invalidInputs[0]);
+               if (!firstInput.isInViewport())
+                  firstInput.scrollTo(-200);
+
             }
          });
 

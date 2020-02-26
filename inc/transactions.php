@@ -58,7 +58,9 @@ add_action( 'manage_transactie_posts_custom_column', 'gb_transaction_table_conte
  */
 function gb_admin_transactions_order( $query ) {
 
-   if ( is_admin() ) {
+   global $pagenow, $typenow;
+
+   if ( 'transactie' === $typenow && 'edit.php' === $pagenow ) {
       $query->set( 'order', 'DESC' );
    }
    return $query;

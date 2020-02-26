@@ -26,13 +26,13 @@ get_header();
                            <h1><?php the_title(); ?></h1>
                         </section>
 
-                        <div class="row">
+                        <div class="row large-space-below">
 
                            <div class="col-12 col-lg-6">
 
                               <?php if ( $gallery_images = get_field( 'gallery_images' ) ) { ?>
 
-                                 <div class="image-slider space-below js-image-slider">
+                                 <div class="image-slider large-space-below js-image-slider">
                                     <div class="image-slider__container image-slider__main">
                                        <div class="image-slider__arrows">
                                           <div class="image-slider__arrow image-slider__arrow--prev js-prev">
@@ -62,6 +62,12 @@ get_header();
                                  </div>
 
                               <?php } ?>
+
+                              <ul class="links-list large-space-below">
+                                 <?php if ( $assembly_file_url = get_field( 'assembly_instruction' ) ) { ?>
+                                    <li class="links-list__item"><i class="fas fa-wrench links-list__icon"></i> <a href="<?php echo $assembly_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Montageinstructie', 'glasbestellen' ); ?></a></li>
+                                 <?php } ?>
+                              </ul>
 
                            </div>
 
@@ -103,7 +109,7 @@ get_header();
 
                                        <div class="space-below">
                                           <span class="h4 configurator__heading"><?php _e( 'Product configureren', 'glasbestellen' ); ?></span>
-                                          <p><?php echo sprintf( __( 'Verdere informatie klik op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
+                                          <p><?php echo sprintf( __( 'Voor meer informatie klik op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
                                        </div>
 
                                        <form method="post" class="configurator__form js-configurator-blur-update">
@@ -186,7 +192,8 @@ get_header();
                                           </div>
 
                                           <ul class="configurator__checks">
-                                             <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Bestel check', 'glasbestellen' ) . ':</strong> ' . __( 'Elke bestelling wordt gecontroleerd op volledigheid.', 'glasbestellen' ); ?></li>
+                                             <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Bestel check', 'glasbestellen' ) . ':</strong> ' . __( 'Uw bestelling wordt op juistheid en volledigheid gecontroleerd.', 'glasbestellen' ); ?></li>
+                                             <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Klanttevredenheid', 'glasbestellen' ) . ':</strong> ' . sprintf( __( 'Klanten beoordelen ons gemiddeld met een %s.', 'glasbestellen' ), '<a href="' . get_post_type_archive_link( 'review' ) . '" target="_blank" rel="nofollow">' . gb_get_review_average( true ) . '</a>' ); ?></li>
                                           </ul>
 
                                        </form>
@@ -200,6 +207,38 @@ get_header();
                            </div>
 
                         </div>
+
+                        <article class="text">
+
+                           <?php the_content(); ?>
+
+                           <?php if ( have_rows( 'technical_details' ) ) { ?>
+
+                              <h4><?php _e( 'Technische informatie', 'glasbestellen' ); ?></h4>
+
+                              <table class="details-table">
+                                 <tbody>
+
+                                    <?php
+                                    $rows_count = 0;
+                                    while ( have_rows( 'technical_details' ) ) {
+                                       the_row();
+                                       $rows_count ++;
+                                       $class = ( $rows_count % 2 ) ? 'details-table__row' : 'details-table__row details-table__row--even'; ?>
+
+                                       <tr class="<?php echo $class; ?>">
+                                          <td class="details-table__col"><?php the_sub_field( 'label' ); ?></td>
+                                          <td class="details-table__col"><?php the_sub_field( 'description' ); ?></td>
+                                       </tr>
+
+                                    <?php } ?>
+
+                                 </tbody>
+                              </table>
+
+                           <?php } ?>
+
+                        </article>
 
                      </div>
 
