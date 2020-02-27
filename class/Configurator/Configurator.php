@@ -228,15 +228,6 @@ abstract class Configurator {
       return $option->get_price();
    }
 
-   // public function get_option_plus_price( $step_id = null, $part_id = null ) {
-   //
-   //    if ( empty( $this->_default_configuration[$step_id] ) ) return 0;
-   //
-   //    $default_price = $this->get_option_price( $step_id, $this->_default_configuration[$step_id] );
-   //    $custom_price  = $this->get_option_price( $step_id, $part_id );
-   //    $plus_price = $custom_price - $default_price;
-   // }
-
    public function get_step_id() {
       return $this->_current_step->get_id();
    }

@@ -151,8 +151,8 @@ get_header();
 
                                                    <?php } else { ?>
                                                       <div class="configurator__form-col configurator__form-input configurator__form-input--default">
-                                                         <span><?php echo $options[0]['title']; ?></span>
-                                                         <input type="hidden" name="configuration[<?php echo $step_id; ?>]" value="<?php echo $options[0]['title']; ?>">
+                                                         <span><?php echo $options[0]->get_title(); ?></span>
+                                                         <input type="hidden" name="configuration[<?php echo $step_id; ?>]" value="<?php echo $options[0]->get_title(); ?>">
                                                       </div>
                                                    <?php } ?>
 
