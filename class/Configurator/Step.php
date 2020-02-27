@@ -5,8 +5,14 @@ class Step {
 
    protected $_data;
 
+   protected $_default;
+
    public function __construct( array $data = [] ) {
       $this->_data = $data;
+      $this->set_default();
+      // if ( is_a( $this->_default, 'Configurator\Option' ) ) {
+      //    echo $this->_default->get_price() . ' ';
+      // }
    }
 
    public function get_id() {
@@ -30,7 +36,11 @@ class Step {
    }
 
    public function get_options() {
-      return $this->get_field( 'options' );
+      $options = $this->get_field( 'options' );
+      if ( ! $options ) return;
+      return array_map( function( $option ) {
+         return new Option( $option, $this->_default->get_price() );
+      }, $options );
    }
 
    public function get_visual() {
@@ -58,36 +68,25 @@ class Step {
       return ! empty( $this->_data[$field] ) ? $this->_data[$field] : false;
    }
 
-   public function get_parts() {
-      $parts = $this->get_field( 'parts' );
-      if ( ! $parts ) return;
-      return array_map( function( $part ) {
-         return [
-            'id' => $part['id'],
-            'title' => get_the_title( $part['id'] ),
-            'description' => get_the_excerpt( $part['id'] ),
-            'price' => isset( $part['price'] ) ? $part['price'] : null,
-            'img' => get_the_post_thumbnail_url( $part['id'], 'medium' )
-         ];
-      }, $parts );
+   public function get_default() {
+      if ( is_a( $this->_default, 'Configurator\Option' ) ) {
+         return $this->_default->get_title();
+      }
+      return $this->_default;
    }
 
-   public function get_default() {
+   protected function set_default() {
 
       if ( ! empty( $this->_data['default'] ) ) {
-         return $this->_data['default'];
-
-      } elseif ( ! empty( $this->_data['parts'] ) ) {
-         foreach ( $this->_data['parts'] as $part ) {
-            if ( ! empty( $part['default'] ) ) return $part['id'];
-         }
-
-      } elseif ( $options = $this->get_options() ) {
-         foreach ( $options as $option ) {
-            if ( ! empty( $option['default'] ) ) return $option['title'];
+         $this->_default = $this->_data['default'];
+      } elseif ( ! empty( $this->_data['options'] ) ) {
+         foreach ( $this->_data['options'] as $option ) {
+            if ( ! empty( $option['default'] ) )
+               $this->_default = new Option( $option );
          }
       }
-      return false;
+
    }
+
 
 }

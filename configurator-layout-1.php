@@ -117,7 +117,8 @@ get_header();
                                           <?php
                                           while ( $configurator->have_steps() ) {
                                              $configurator->the_step();
-                                             $configured_value = $configurator->get_configured_value( $configurator->get_step_id() ); ?>
+                                             $configured_value = $configurator->get_configured_value( $configurator->get_step_id() );
+                                             $step_id = $configurator->get_step_id(); ?>
 
                                              <div class="configurator__form-row">
                                                 <div class="configurator__form-col configurator__form-info">
@@ -133,13 +134,16 @@ get_header();
                                                 if ( $options = $configurator->get_step_options() ) {
                                                    if ( count( $options ) > 1 ) { ?>
                                                       <div class="configurator__form-col configurator__form-input">
-                                                         <select name="configuration[<?php echo $configurator->get_step_id(); ?>]" class="dropdown configurator__form-control js-form-validate">
+                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate">
                                                             <?php if ( $configurator->is_step_required() ) { ?>
                                                                <option value="">---</option>
                                                             <?php }
                                                             foreach ( $options as $option ) {
-                                                               $selected = selected( $configured_value, $option['title'], false );
-                                                               echo '<option value="' . $option['title'] . '" ' . $selected . '>' . $option['title'] . '</option>';
+                                                               $option_title = $option->get_title();
+                                                               $selected = selected( $configured_value, $option_title, false );
+                                                               $plus_price = ( ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', Money::display( $option->get_plus_price() ), $step_id ) : '';
+                                                               echo '<option value="' . $option_title . '" ' . $selected . '>' . $option_title . ' ' . $plus_price . '</option>';
+
                                                             }
                                                             ?>
                                                          </select>
@@ -147,14 +151,14 @@ get_header();
 
                                                    <?php } else { ?>
                                                       <div class="configurator__form-col configurator__form-input configurator__form-input--default">
-                                                         <span class=""><?php echo $options[0]['title']; ?></span>
-                                                         <input type="hidden" name="configuration[<?php echo $configurator->get_step_id(); ?>]" value="<?php echo $options[0]['title']; ?>">
+                                                         <span><?php echo $options[0]['title']; ?></span>
+                                                         <input type="hidden" name="configuration[<?php echo $step_id; ?>]" value="<?php echo $options[0]['title']; ?>">
                                                       </div>
                                                    <?php } ?>
 
                                                 <?php } else { ?>
                                                    <div class="configurator__form-col configurator__form-input js-form-group">
-                                                      <input type="number" name="configuration[<?php echo $configurator->get_step_id(); ?>]" class="form-control configurator__form-control js-form-validate" placeholder="mm" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configured_value; ?>" />
+                                                      <input type="number" name="configuration[<?php echo $step_id; ?>]" class="form-control configurator__form-control js-form-validate" placeholder="mm" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configured_value; ?>" />
                                                       <div class="invalid-feedback js-invalid-feedback"></div>
                                                    </div>
                                                 <?php } ?>
