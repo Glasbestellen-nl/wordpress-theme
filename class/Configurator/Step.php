@@ -67,7 +67,7 @@ class Step {
 
    public function get_default() {
       if ( is_a( $this->_default, 'Configurator\Option' ) ) {
-         return $this->_default->get_title();
+         return $this->_default->get_id();
       }
       return $this->_default;
    }

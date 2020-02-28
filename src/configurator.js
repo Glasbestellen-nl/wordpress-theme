@@ -75,28 +75,32 @@ const Configurator = (function() {
 
          jQuery(this.element).on('change', '.js-configurator-blur-update .js-form-validate', function() {
 
-            if (self.validateInput(this)) {
+            const form = jQuery(this).parents('.js-configurator-blur-update');
 
-               const form = jQuery(this).parents('.js-configurator-blur-update');
-               if (form) {
-                  const formData = new FormData(form[0]);
-                  formData.append('action', 'handle_configurator_form_submit');
-                  formData.append('configurator_id', gb.configuratorId);
+            if (form) {
 
-                  jQuery.ajax({
-                     url: gb.ajaxUrl,
-                     type: 'POST',
-                     data: formData,
-                     processData: false,
-                     contentType: false,
-                     context: self,
-                     success: function(response) {
-                        console.log(response);
-                        this.updateTotalPrice();
-                     }
-                  });
-               }
+               const formData = new FormData(form[0]);
+               formData.append('action', 'handle_configurator_form_submit');
+               formData.append('configurator_id', gb.configuratorId);
+
+               jQuery(':input', form).each(function(index, element) {
+                  self.validateInput(element);
+               });
+
+               jQuery.ajax({
+                  url: gb.ajaxUrl,
+                  type: 'POST',
+                  data: formData,
+                  processData: false,
+                  contentType: false,
+                  context: self,
+                  success: function(response) {
+                     console.log(response);
+                     this.updateTotalPrice();
+                  }
+               });
             }
+
          }).on('click', '.js-configurator-cart-button', function(e) {
 
             e.preventDefault();
@@ -280,18 +284,18 @@ const Configurator = (function() {
          }
 
          if (jQuery(element).is('select')) {
-            console.log(jQuery(element));
             let selected = jQuery('option:selected', element);
             let rules = selected.data('validation-rules');
             if (rules) {
                if (rules.exclude !== undefined) {
                   let exclude = rules.exclude;
-                  let step = jQuery(`.js-step-${exclude.step}`);
-                  let option = step.find(`option[data-option-id="${exclude.option}"]:selected`);
-                  if (option.length > 0) {
-                     valid = false;
-                     msg = exclude.message;
-                     isInvalid(step);
+                  if (exclude.step && exclude.option) {
+                     let step    = jQuery(`.js-step-${exclude.step}`);
+                     let option  = step.find(`option[data-option-id="${exclude.option}"]:selected`);
+                     if (option.length > 0) {
+                        valid = false;
+                        msg = exclude.message;
+                     }
                   }
                }
             }

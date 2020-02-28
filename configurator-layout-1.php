@@ -118,7 +118,8 @@ get_header();
                                           while ( $configurator->have_steps() ) {
                                              $configurator->the_step();
                                              $configured_value = $configurator->get_configured_value( $configurator->get_step_id() );
-                                             $step_id = $configurator->get_step_id(); ?>
+                                             $step_id = $configurator->get_step_id();
+                                             //$is_child = $configurator->get_step_parent(); ?>
 
                                              <div class="configurator__form-row">
                                                 <div class="configurator__form-col configurator__form-info">
@@ -139,8 +140,9 @@ get_header();
                                                             foreach ( $options as $option ) {
                                                                $selected     = selected( $configured_value, $option->get_id(), false );
                                                                $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
+                                                               $child_step   = ( $option->get_child_step() ) ? 'data-child-step="' . $option->get_child_step() . '"' : '';
                                                                $plus_price   = ( ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', Money::display( $option->get_plus_price() ), $step_id ) : '';
-                                                               echo '<option value="' . $option->get_id() . '" data-option-id="' . $option->get_id() . '" data-option-title="' . $option->get_title() . '" ' . $rules . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
+                                                               echo '<option value="' . $option->get_id() . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_step . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
                                                             }
                                                             ?>
                                                          </select>

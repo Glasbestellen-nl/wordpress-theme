@@ -24,6 +24,14 @@ class Option {
       return $this->get_field( 'price' );
    }
 
+   public function get_validation_rules() {
+      return ( $this->get_field( 'rules' ) ) ? json_encode( $this->get_field( 'rules' ) ) : false;
+   }
+
+   public function get_child_step() {
+      return $this->get_field( 'child_step' );
+   }
+
    public function get_field( string $field = '' ) {
       return ! empty( $this->_data[$field] ) ? $this->_data[$field] : false;
    }
@@ -35,10 +43,6 @@ class Option {
 
    public function is_default() {
       return $this->get_field( 'default' );
-   }
-
-   public function get_validation_rules() {
-      return ( $this->get_field( 'rules' ) ) ? json_encode( $this->get_field( 'rules' ) ) : false;
    }
 
 }
