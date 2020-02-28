@@ -10,9 +10,6 @@ class Step {
    public function __construct( array $data = [] ) {
       $this->_data = $data;
       $this->set_default();
-      // if ( is_a( $this->_default, 'Configurator\Option' ) ) {
-      //    echo $this->_default->get_price() . ' ';
-      // }
    }
 
    public function get_id() {

@@ -12,6 +12,10 @@ class Option {
       $this->_default_price = $default_price;
    }
 
+   public function get_id() {
+      return $this->get_field( 'id' );
+   }
+
    public function get_title() {
       return $this->get_field( 'title' );
    }
@@ -21,15 +25,20 @@ class Option {
    }
 
    public function get_field( string $field = '' ) {
-      return isset( $this->_data[$field] ) ? $this->_data[$field] : false;
+      return ! empty( $this->_data[$field] ) ? $this->_data[$field] : false;
    }
 
-   public function get_plus_price( $price = 0 ) {
+   public function get_plus_price() {
+      if ( empty( $this->_data['price'] ) ) return 0;
       return $this->_data['price'] - $this->_default_price;
    }
 
    public function is_default() {
       return $this->get_field( 'default' );
+   }
+
+   public function get_validation_rules() {
+      return ( $this->get_field( 'rules' ) ) ? json_encode( $this->get_field( 'rules' ) ) : false;
    }
 
 }

@@ -123,27 +123,26 @@ get_header();
                                              <div class="configurator__form-row">
                                                 <div class="configurator__form-col configurator__form-info">
                                                    <?php if ( $explanation_id = $configurator->get_step_explanation_id() ) { ?>
-                                                      <i class="fas fa-info-circle configurator__info-icon js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"></i>
+                                                      <i class="fas fa-info-circle configurator__info-icon js-popup-explanation"></i>
                                                    <?php } ?>
                                                 </div>
-                                                <div class="configurator__form-col configurator__form-label">
-                                                   <label><?php echo $configurator->get_step_title(); ?></label>
+                                                <div class="configurator__form-col">
+                                                   <label class="configurator__form-label js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"><?php echo $configurator->get_step_title(); ?></label>
                                                 </div>
 
                                                 <?php
                                                 if ( $options = $configurator->get_step_options() ) {
                                                    if ( count( $options ) > 1 ) { ?>
                                                       <div class="configurator__form-col configurator__form-input">
-                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate">
-                                                            <?php if ( $configurator->is_step_required() ) { ?>
-                                                               <option value="">---</option>
-                                                            <?php }
+                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate" data-step-id="<?php echo $step_id; ?>">
+                                                            <?php
                                                             foreach ( $options as $option ) {
+                                                               $option_id    = $option->get_id();
                                                                $option_title = $option->get_title();
-                                                               $selected = selected( $configured_value, $option_title, false );
-                                                               $plus_price = ( ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', Money::display( $option->get_plus_price() ), $step_id ) : '';
-                                                               echo '<option value="' . $option_title . '" ' . $selected . '>' . $option_title . ' ' . $plus_price . '</option>';
-
+                                                               $selected     = selected( $configured_value, $option_id, false );
+                                                               $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
+                                                               $plus_price   = ( ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', Money::display( $option->get_plus_price() ), $step_id ) : '';
+                                                               echo '<option value="' . $option_id . '" data-option-id="' . $option_id . '" data-option-title="' . $option_title . '" ' . $rules . ' ' . $selected . '>' . $option_title . ' ' . $plus_price . '</option>';
                                                             }
                                                             ?>
                                                          </select>

@@ -217,7 +217,7 @@ abstract class Configurator {
       $options = $this->get_step_options( $step_id );
       if ( ! $options ) return;
       foreach ( $options as $option ) {
-         if ( $option->get_title() == $option_id ) return $option;
+         if ( $option->get_id() == $option_id ) return $option;
       }
       return false;
    }
@@ -226,6 +226,12 @@ abstract class Configurator {
       $option = $this->get_option( $step_id, $option_id );
       if ( ! $option ) return;
       return $option->get_price();
+   }
+
+   public function get_option_title( string $step_id = '', string $option_id ) {
+      $option = $this->get_option( $step_id, $option_id );
+      if ( ! $option ) return;
+      return $option->get_title();
    }
 
    public function get_step_id() {
@@ -292,9 +298,10 @@ abstract class Configurator {
       if ( empty( $this->_configuration ) ) return;
 
       foreach ( $this->_configuration as $step_id => $value ) {
+         $option_price = $this->get_option_title( $step_id, $value );
          $summary[] = [
             'label' => $this->get_step_title( $step_id ),
-            'value' => $value
+            'value' => ( $option_price ) ? $option_price : $value
          ];
       }
 

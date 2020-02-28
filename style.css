@@ -3035,6 +3035,11 @@ Configurator
 
 .configurator__form-label {
    font-size: 1.125em;
+   cursor: pointer;
+}
+
+.configurator__form-label:hover {
+   color: #007bff;
 }
 
 .configurator__energy-label {
