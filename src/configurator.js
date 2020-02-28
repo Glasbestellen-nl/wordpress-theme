@@ -253,7 +253,7 @@ const Configurator = (function() {
 
          let value = element.value;
          let req = element.dataset.required;
-         let jsonRules = element.dataset.validationRules;
+         let rules = jQuery(element).data('validation-rules');
 
          if (!value) {
             if (req) {
@@ -262,8 +262,7 @@ const Configurator = (function() {
                showFeedback = false;
             }
          } else {
-            if (jsonRules) {
-               const rules = JSON.parse(jsonRules);
+            if (rules) {
                if (rules.min !== undefined) {
                   if (value < parseInt(rules.min)) {
                      valid = false;
@@ -275,6 +274,24 @@ const Configurator = (function() {
                   if (value > parseInt(rules.max)) {
                      valid = false;
                      msg = gb.msg.dimensionValueTooLarge.replace('{0}', rules.max);
+                  }
+               }
+            }
+         }
+
+         if (jQuery(element).is('select')) {
+            console.log(jQuery(element));
+            let selected = jQuery('option:selected', element);
+            let rules = selected.data('validation-rules');
+            if (rules) {
+               if (rules.exclude !== undefined) {
+                  let exclude = rules.exclude;
+                  let step = jQuery(`.js-step-${exclude.step}`);
+                  let option = step.find(`option[data-option-id="${exclude.option}"]:selected`);
+                  if (option.length > 0) {
+                     valid = false;
+                     msg = exclude.message;
+                     isInvalid(step);
                   }
                }
             }

@@ -43,7 +43,7 @@ function gb_enqueue_scripts() {
             'dimensionValueTooLarge' => __( 'Voer een maat in kleiner of gelijk aan {0}.', 'glasbestellen' ),
             'enterValidEmail'        => __( 'Vul a.u.b. een geldig e-mail adres in.', 'glasbestellen' ),
             'filesSelected'          => __( 'bijlage(s) geselecteerd.', 'glasbestellen' ),
-            'inspiration'            => __( 'Inspiratie', 'glasbestellen' )
+            'inspiration'            => __( 'Inspiratie', 'glasbestellen' ),
          ],
          'configuratorId' => ( is_singular( 'configurator' ) ) ? $post->ID : false
       )

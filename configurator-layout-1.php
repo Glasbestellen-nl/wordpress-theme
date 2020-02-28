@@ -133,19 +133,18 @@ get_header();
                                                 <?php
                                                 if ( $options = $configurator->get_step_options() ) {
                                                    if ( count( $options ) > 1 ) { ?>
-                                                      <div class="configurator__form-col configurator__form-input">
-                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate" data-step-id="<?php echo $step_id; ?>">
+                                                      <div class="configurator__form-col configurator__form-input js-form-group">
+                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate js-step-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>">
                                                             <?php
                                                             foreach ( $options as $option ) {
-                                                               $option_id    = $option->get_id();
-                                                               $option_title = $option->get_title();
-                                                               $selected     = selected( $configured_value, $option_id, false );
+                                                               $selected     = selected( $configured_value, $option->get_id(), false );
                                                                $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
                                                                $plus_price   = ( ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', Money::display( $option->get_plus_price() ), $step_id ) : '';
-                                                               echo '<option value="' . $option_id . '" data-option-id="' . $option_id . '" data-option-title="' . $option_title . '" ' . $rules . ' ' . $selected . '>' . $option_title . ' ' . $plus_price . '</option>';
+                                                               echo '<option value="' . $option->get_id() . '" data-option-id="' . $option->get_id() . '" data-option-title="' . $option->get_title() . '" ' . $rules . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
                                                             }
                                                             ?>
                                                          </select>
+                                                         <div class="invalid-feedback js-invalid-feedback"></div>
                                                       </div>
 
                                                    <?php } else { ?>

@@ -956,6 +956,10 @@ Form
    outline: 0;
 }
 
+.dropdown.invalid {
+   border-color: #dc3545;
+}
+
 .additional-fields {
    padding: 1.75em 1em 1em;
    margin-bottom: 1.25em;
