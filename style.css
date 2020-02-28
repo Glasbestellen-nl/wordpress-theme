@@ -171,6 +171,15 @@ a, .link {
    float: left;
 }
 
+.text .blocks-gallery-grid {
+   padding-left: 0;
+}
+
+.text .wp-block-image figcaption {
+   text-align: center;
+   font-size: 0.875em;
+}
+
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 
@@ -3396,6 +3405,10 @@ Modal
 
 /* Extra large devices (desktops, 1200px and up) */
 @media (min-width: 1200px) {
+
+   .modal-medium .modal__inner {
+      width: 900px;
+   }
 
    .modal-large .modal__inner {
       max-width: 1200px;

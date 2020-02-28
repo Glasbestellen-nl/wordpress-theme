@@ -436,7 +436,7 @@
     */
    $(document).on('click', '.js-popup-explanation', function() {
 
-      showModal('', 'large');
+      showModal('', 'medium');
 
       let data = {
          action: 'get_explanation_content',

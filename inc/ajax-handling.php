@@ -34,14 +34,20 @@ function gb_handle_get_explanation_content() {
 
    if ( empty( $_GET['post_id'] ) ) wp_die();
 
-   $post = get_post( $_GET['post_id'] );
-
    $html .= '<div class="modal__column text">';
-      $html .= wpautop( $post->post_content );
+   ob_start();
+   $explanation = new WP_Query( 'post_type=uitleg&p=' . $_GET['post_id'] );
+   if ( $explanation->have_posts() ) {
+      while ( $explanation->have_posts() ) {
+         $explanation->the_post();
+         $html .= the_content();
+      }
+   }
+   $html .= ob_get_clean();
    $html .= '</div>';
 
-   $response['html'] = $html;
-   $response['title'] = $post->post_title;
+   $response['html']  = $html;
+   $response['title'] = get_the_title( $_GET['post_id'] );
 
    wp_send_json( $response );
 

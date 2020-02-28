@@ -332,6 +332,7 @@ function gb_register_post_types() {
 	$args = array(
 		'labels'              => $labels,
 		'supports'            => array( 'title', 'custom-fields', 'editor' ),
+		'show_in_rest' 		 => true,
 		'hierarchical'        => true,
 		'public'              => false,
 		'show_ui'             => true,
