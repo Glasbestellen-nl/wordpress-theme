@@ -84,7 +84,8 @@ const Configurator = (function() {
                formData.append('configurator_id', gb.configuratorId);
 
                jQuery(':input', form).each(function(index, element) {
-                  self.validateInput(element);
+                  if (jQuery(element).val())
+                     self.validateInput(element);
                });
 
                jQuery.ajax({
