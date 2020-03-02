@@ -4,6 +4,8 @@ const Configurator = (function() {
 
    function ConfiguratorObject(element) {
 
+      const $ = jQuery;
+
       this.element = element;
 
       this.init = function() {
@@ -73,9 +75,18 @@ const Configurator = (function() {
 
          const self = this;
 
-         jQuery(this.element).on('change', '.js-configurator-blur-update .js-form-validate', function() {
+         $(this.element).on('change', '.js-configurator-blur-update .js-form-validate', function() {
 
-            const form = jQuery(this).parents('.js-configurator-blur-update');
+            // Show and hide child step
+            const stepId = $(this).data('step-id');
+            const childStepId = $('option:selected', this).data('child-step');
+            if (childStepId) {
+               $('.js-step-' + childStepId).removeClass('d-none');
+            } else {
+               $('.js-step-parent-' + stepId).addClass('d-none');
+            }
+
+            const form = $(this).parents('.js-configurator-blur-update');
 
             if (form) {
 
@@ -83,12 +94,12 @@ const Configurator = (function() {
                formData.append('action', 'handle_configurator_form_submit');
                formData.append('configurator_id', gb.configuratorId);
 
-               jQuery(':input', form).each(function(index, element) {
-                  if (jQuery(element).val())
+               $(':input', form).each(function(index, element) {
+                  if ($(element).val())
                      self.validateInput(element);
                });
 
-               jQuery.ajax({
+               $.ajax({
                   url: gb.ajaxUrl,
                   type: 'POST',
                   data: formData,
@@ -96,7 +107,6 @@ const Configurator = (function() {
                   contentType: false,
                   context: self,
                   success: function(response) {
-                     console.log(response);
                      this.updateTotalPrice();
                   }
                });
@@ -106,22 +116,22 @@ const Configurator = (function() {
 
             e.preventDefault();
 
-            const parentForm = jQuery(this).parents('form');
+            const parentForm = $(this).parents('form');
             let toCart = true;
             let invalidInputs = [];
-            jQuery(':input', parentForm).each(function(index, element) {
+            $(':input', parentForm).each(function(index, element) {
                if (!self.validateInput(element)) {
                   toCart = false;
                   invalidInputs.push(element);
                }
             });
             if (toCart) {
-               let quantity = jQuery('.js-configurator-quantity').val() || 1;
-               let message  = jQuery('.js-configurator-message').val() || "";
+               let quantity = $('.js-configurator-quantity').val() || 1;
+               let message  = $('.js-configurator-message').val() || "";
                self.toCart(quantity, message);
             } else {
                // Scroll to first invalid field
-               const firstInput = jQuery(invalidInputs[0]);
+               const firstInput = $(invalidInputs[0]);
                if (!firstInput.isInViewport())
                   firstInput.scrollTo(-200);
 
@@ -160,7 +170,7 @@ const Configurator = (function() {
                action: 'get_configurator_choice_enlargement_html',
                part_id: partId
             }
-            jQuery.get(gb.ajaxUrl, data, function(html) {
+            $.get(gb.ajaxUrl, data, function(html) {
                container.innerHTML = html;
             });
          }
@@ -173,7 +183,7 @@ const Configurator = (function() {
             configurator_id: gb.configuratorId,
             step_id: stepId
          };
-         jQuery.get(gb.ajaxUrl, data, function(html) {
+         $.get(gb.ajaxUrl, data, function(html) {
             loadModalContent(html);
             callback(stepId);
          });
@@ -185,7 +195,7 @@ const Configurator = (function() {
             action: 'get_configurator_steps_html',
             configurator_id: gb.configuratorId
          };
-         jQuery.get(gb.ajaxUrl, data, function(html) {
+         $.get(gb.ajaxUrl, data, function(html) {
             stepsContainer.innerHTML = html;
          });
       }
@@ -196,7 +206,7 @@ const Configurator = (function() {
             action: 'get_configurator_total_price',
             configurator_id: gb.configuratorId
          }
-         jQuery.get(gb.ajaxUrl, data, function(price) {
+         $.get(gb.ajaxUrl, data, function(price) {
             totalPrice.innerHTML = price;
          });
       }
@@ -219,7 +229,7 @@ const Configurator = (function() {
             const action = form.querySelector('.js-form-action').value;
             formData.append('action', action);
 
-            jQuery.ajax({
+            $.ajax({
                url: gb.ajaxUrl,
                type: 'POST',
                data: formData,
@@ -242,7 +252,7 @@ const Configurator = (function() {
             quantity: quantity,
             message: message
          }
-         jQuery.post(gb.ajaxUrl, data, function(cartUrl) {
+         $.post(gb.ajaxUrl, data, function(cartUrl) {
             if (cartUrl)
                window.location.replace(cartUrl);
          });
@@ -258,7 +268,7 @@ const Configurator = (function() {
 
          let value = element.value;
          let req = element.dataset.required;
-         let rules = jQuery(element).data('validation-rules');
+         let rules = $(element).data('validation-rules');
 
          if (!value) {
             if (req) {
@@ -284,14 +294,14 @@ const Configurator = (function() {
             }
          }
 
-         if (jQuery(element).is('select')) {
-            let selected = jQuery('option:selected', element);
+         if ($(element).is('select')) {
+            let selected = $('option:selected', element);
             let rules = selected.data('validation-rules');
             if (rules) {
                if (rules.exclude !== undefined) {
                   let exclude = rules.exclude;
                   if (exclude.step && exclude.option) {
-                     let step    = jQuery(`.js-step-${exclude.step}`);
+                     let step    = $(`.js-step-input-${exclude.step}`);
                      let option  = step.find(`option[data-option-id="${exclude.option}"]:selected`);
                      if (option.length > 0) {
                         valid = false;

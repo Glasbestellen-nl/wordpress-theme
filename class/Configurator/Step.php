@@ -44,6 +44,10 @@ class Step {
       return $this->get_field( 'visual' );
    }
 
+   public function get_parent() {
+      return $this->get_field( 'parent_step' );
+   }
+
    public function get_explanation_id() {
       $field = $this->get_field( 'description' );
       return ! empty( $field['id'] ) ? $field['id'] : false;

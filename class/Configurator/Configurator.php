@@ -32,22 +32,6 @@ abstract class Configurator {
       return $this->_configuration;
    }
 
-   public function get_configured_value( string $field = '' ) {
-
-      if ( empty( $this->_configuration ) ) return;
-
-      foreach ( $this->_configuration as $step_id => $input ) {
-         if ( is_array( $input ) ) {
-            foreach ( $input as $key => $val ) {
-               if ( $key == $field )
-                  return $val;
-            }
-         }
-         if ( $step_id == $field )
-            return $input;
-      }
-   }
-
    public function get_total_price( bool $round = true ) {
 
       $total = $this->calculate_subtotal();
@@ -106,7 +90,22 @@ abstract class Configurator {
    }
 
    protected function update_configuration( array $configuration = [] ) {
+      $configuration = $this->filter_configuration( $configuration );
       $this->_configuration = $configuration;
+   }
+
+   /**
+    * Filters out child step configuration when parent step is not set
+    */
+   protected function filter_configuration( array $configuration = [] ) {
+      if ( empty( $configuration ) ) return [];
+      foreach ( $configuration as $step_id => $input ) {
+         if ( $parent_id = $this->get_step_parent( $step_id ) ) {
+            if ( $this->get_step_default( $parent_id ) == $configuration[$parent_id] )
+               unset( $configuration[$step_id] );
+         }
+      }
+      return $configuration;
    }
 
    protected function get_merged_configuration() {
@@ -238,6 +237,12 @@ abstract class Configurator {
       return $this->_current_step->get_id();
    }
 
+   public function get_step_configuration( string $step_id = '' ) {
+      $this->set_current_step( $step_id );
+      $step_id = $this->get_step_id();
+      return ! empty( $this->_configuration[$step_id] ) ? $this->_configuration[$step_id] : false;
+   }
+
    public function get_step_type( string $step_id = '' ) {
       $this->set_current_step( $step_id );
       return $this->_current_step->get_type();
@@ -266,6 +271,16 @@ abstract class Configurator {
    public function get_step_visual( string $step_id = '' ) {
       $this->set_current_step( $step_id );
       return $this->_current_step->get_visual();
+   }
+
+   public function get_step_parent( string $step_id = '' ) {
+      $this->set_current_step( $step_id );
+      return $this->_current_step->get_parent();
+   }
+
+   public function get_step_default( string $step_id = '' ) {
+      $this->set_current_step( $step_id );
+      return $this->_current_step->get_default();
    }
 
    public function get_step_field( string $field = '', string $step_id = '' ) {

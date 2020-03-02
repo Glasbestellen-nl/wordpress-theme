@@ -117,11 +117,18 @@ get_header();
                                           <?php
                                           while ( $configurator->have_steps() ) {
                                              $configurator->the_step();
-                                             $configured_value = $configurator->get_configured_value( $configurator->get_step_id() );
+                                             $configured_value = $configurator->get_step_configuration();
                                              $step_id = $configurator->get_step_id();
-                                             //$is_child = $configurator->get_step_parent(); ?>
+                                             $step_class = 'js-step-' . $step_id;
+                                             if ( $step_parent = $configurator->get_step_parent() ) {
+                                                $step_class .= ' js-step-parent-' . $step_parent;
+                                                if ( ! $configured_value ) {
+                                                   $step_class .= ' d-none';
+                                                }
+                                             }
+                                             ?>
 
-                                             <div class="configurator__form-row">
+                                             <div class="configurator__form-row <?php echo $step_class; ?>" data-step-id="<?php echo $step_id; ?>">
                                                 <div class="configurator__form-col configurator__form-info">
                                                    <?php if ( $explanation_id = $configurator->get_step_explanation_id() ) { ?>
                                                       <i class="fas fa-info-circle configurator__info-icon js-popup-explanation"></i>
@@ -135,7 +142,7 @@ get_header();
                                                 if ( $options = $configurator->get_step_options() ) {
                                                    if ( count( $options ) > 1 ) { ?>
                                                       <div class="configurator__form-col configurator__form-input js-form-group">
-                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate js-step-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>">
+                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate js-step-input-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>" data-step-id="<?php echo $step_id; ?>">
                                                             <?php
                                                             foreach ( $options as $option ) {
                                                                $selected     = selected( $configured_value, $option->get_id(), false );

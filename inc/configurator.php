@@ -136,8 +136,6 @@ function gb_handle_configurator_form_submit() {
          $configuration[$step_id] = $input;
       }
 
-      $response['config'] = $configuration;
-
       $configurator = gb_get_configurator( $configurator_id, false );
       $configurator->update( $configuration );
 
@@ -146,6 +144,9 @@ function gb_handle_configurator_form_submit() {
       if ( $configurator->is_configuration_done() ) {
          $response['done'] = true;
       }
+
+      // $response['config'] = $configurator->get_configuration();
+
    }
 
    wp_send_json( $response );
