@@ -74,17 +74,18 @@ class CRM {
 
       $leads = false;
 
-      $query = "SELECT * FROM " . self::$leads_table . "";
+      $query = "
+         SELECT l.lead_id, lead_content, lead_date, lead_relation, s.meta_value lead_status, u.display_name relation_name, u.user_email relation_email, o.meta_value lead_owner
+         FROM wp_leads l
+         JOIN wp_leadmeta s ON l.lead_id = s.lead_id AND s.meta_key = 'lead_status'
+         JOIN wp_leadmeta o ON l.lead_id = o.lead_id AND o.meta_key = 'lead_owner'
+         JOIN wp_users u ON l.lead_relation = u.ID"
+      ;
       if ( isset( $where ) ) {
          $query .= " " . $where;
       }
 
-      $rows = self::$wpdb->get_results( $query );
-      if ( ! empty( $rows ) ) {
-         foreach ( $rows as $lead_data ) {
-            $leads[] = new Lead( $lead_data, self::get_lead_custom( $lead_data->lead_id ) );
-         }
-      }
+      $leads = self::$wpdb->get_results( $query );
       return $leads;
    }
 
@@ -92,20 +93,7 @@ class CRM {
 
       self::init();
 
-      $leads = false;
-
-      $query = "
-         SELECT *
-         FROM " . self::$leads_table . " l
-         JOIN " . self::$leadmeta_table . " m ON m.lead_id = l.lead_id
-         WHERE m.meta_key = 'lead_status' AND m.meta_value = '$status';
-      ";
-      $rows = self::$wpdb->get_results( $query );
-      if ( ! empty( $rows ) ) {
-         foreach ( $rows as $lead_data ) {
-            $leads[] = new Lead( $lead_data, self::get_lead_custom( $lead_data->lead_id ) );
-         }
-      }
+      $leads = self::get_leads( "WHERE s.meta_key = 'lead_status' AND s.meta_value = '$status'" );
       return $leads;
    }
 

@@ -122,18 +122,18 @@ class Leads_Table extends WP_List_Table {
       if ( ! empty( $leads ) ) {
 
          foreach ( $leads as $lead ) {
-            $relation = $lead->get_relation();
-            $owner = get_user_by( 'id', $lead->get_owner() );
+            $owner = get_user_by( 'id', $lead->lead_owner );
+            $date = date_create( $lead->lead_date );
             $row = [
-               'lead_id'    => $lead->get_id(),
-               'name'       => $relation->get_name() ? $relation->get_name() : __( 'Onbekende relatie', 'glasbestellen' ),
+               'lead_id'    => $lead->lead_id,
+               'name'       => $lead->relation_name,
                'owner'      => isset( $owner->display_name ) ? $owner->display_name : '-',
-               'status'     => CRM::get_status_label( $lead->get_status() ),
-               'date'       => $lead->get_date( 'd M Y H:i' ),
-               'date_time'  => $lead->get_date( 'YmdHi' ),
-               'email'      => $relation->get_email(),
-               'phone'      => $relation->get_phone(),
-               'residence'  => $relation->get_residence()
+               'status'     => CRM::get_status_label( $lead->lead_status ),
+               'date'       => date_format( $date, 'd M Y H:i' ),
+               'date_time'  => date_format( $date, 'YmdHi' ),
+               'email'      => $lead->relation_email,
+               'phone'      => get_user_meta( $lead->lead_relation, 'user_phone', true ),
+               'residence'  => get_user_meta( $lead->lead_relation, 'user_residence', true )
             ];
             $data[] = $row;
          }

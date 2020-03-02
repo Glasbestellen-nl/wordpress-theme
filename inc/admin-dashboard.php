@@ -71,11 +71,10 @@ function gb_leads_dashboard_widget() {
                   </tr>
                </thead>
                <tbody>
-                  <?php foreach ( $open_leads as $lead ) {
-                     $relation = $lead->get_relation(); ?>
+                  <?php foreach ( $open_leads as $lead ) { ?>
                      <tr>
-                        <td><a href="<?php echo admin_url( 'admin.php?page=crm&lead_id=' . $lead->get_id() ); ?>"><?php echo $relation->get_name(); ?></a></td>
-                        <td><?php echo $lead->get_date(); ?></td>
+                        <td><a href="<?php echo admin_url( 'admin.php?page=crm&lead_id=' . $lead->lead_relation ); ?>"><?php echo $lead->relation_name; ?></a></td>
+                        <td><?php echo date_format( date_create( $lead->lead_date ), 'd M Y H:i' ); ?></td>
                      </tr>
                   <?php } ?>
                </tbody>
@@ -215,7 +214,7 @@ function gb_transactions_dashboard_widget() {
 function gb_filter_leads_by_date( $lead, $period = 'day' ) {
 
    $now = time();
-   $lead_time = strtotime( $lead->get_date() );
+   $lead_time = strtotime( $lead->lead_date );
 
    switch ( $period ) {
       case 'day' :
