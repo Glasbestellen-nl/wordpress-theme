@@ -109,7 +109,7 @@ get_header();
 
                                        <div class="space-below">
                                           <span class="h4 configurator__heading"><?php _e( 'Product configureren', 'glasbestellen' ); ?></span>
-                                          <p><?php echo sprintf( __( 'Voor meer informatie klik op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
+                                          <p><?php echo sprintf( __( 'Klik voor meer informatie op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
                                        </div>
 
                                        <form method="post" class="configurator__form js-configurator-blur-update">
