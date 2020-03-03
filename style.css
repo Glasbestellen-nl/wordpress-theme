@@ -175,6 +175,12 @@ a, .link {
    padding-left: 0;
 }
 
+.text .wp-block-image,
+.text .wp-block-embed {
+   margin: 0;
+   margin-bottom: 1.25em;
+}
+
 .text .wp-block-image figcaption {
    text-align: center;
    font-size: 0.875em;
