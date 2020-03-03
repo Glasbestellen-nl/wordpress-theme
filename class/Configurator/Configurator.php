@@ -39,6 +39,12 @@ abstract class Configurator {
       if ( ! empty( $this->_settings['shipping'] ) ) {
          $total += $this->_settings['shipping'];
       }
+
+      // Minimum price
+      if ( $min_price = $this->get_min_price() ) {
+         $total = ( $total < $min_price ) ? $min_price : $total;
+      }
+
       return ( $round ) ? \Money::round_including_vat( $total ) : $total;
    }
 
@@ -327,6 +333,10 @@ abstract class Configurator {
          ];
       }
       return $summary;
+   }
+
+   public function get_min_price() {
+      return ! empty( $this->_settings['price'] ) ? str_replace( ',', '.', $this->_settings['price'] ) : false;
    }
 
    abstract protected function calculate_price_table( array $configuration = [] );
