@@ -131,7 +131,7 @@ get_header();
                                              <div class="configurator__form-row <?php echo $step_class; ?>" data-step-id="<?php echo $step_id; ?>">
                                                 <div class="configurator__form-col configurator__form-info">
                                                    <?php if ( $explanation_id = $configurator->get_step_explanation_id() ) { ?>
-                                                      <i class="fas fa-info-circle configurator__info-icon js-popup-explanation"></i>
+                                                      <i class="fas fa-info-circle configurator__info-icon js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"></i>
                                                    <?php } ?>
                                                 </div>
                                                 <div class="configurator__form-col">
