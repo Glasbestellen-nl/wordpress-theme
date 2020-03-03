@@ -17,12 +17,11 @@ class Configurator extends \Configurator\Configurator {
       $m2s = 0;
 
       if ( ! empty( $configuration['width'] ) && ! empty( $configuration['height'] ) ) {
-
          $m2s = \Calculate::to_square_meters( $configuration['width'], $configuration['height'] );
+      }
 
-         if ( ! empty( $default['glasstype'] ) ) {
-            $price_table['glass'] = $m2s * $this->get_option_price( 'glasstype', $default['glasstype'] );
-         }
+      if ( ! empty( $default['glasstype'] ) ) {
+         $price_table['glass'] = $m2s * $this->get_option_price( 'glasstype', $default['glasstype'] );
       }
 
       foreach ( $configuration as $step_id => $input ) {

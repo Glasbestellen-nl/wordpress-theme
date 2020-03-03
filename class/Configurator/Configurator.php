@@ -218,7 +218,7 @@ abstract class Configurator {
       return false;
    }
 
-   public function get_option( string $step_id = '', string $option_id ) {
+   public function get_option( string $step_id = '', $option_id ) {
       $options = $this->get_step_options( $step_id );
       if ( ! $options ) return;
       foreach ( $options as $option ) {
@@ -227,13 +227,13 @@ abstract class Configurator {
       return false;
    }
 
-   public function get_option_price( string $step_id = '', string $option_id ) {
+   public function get_option_price( string $step_id = '', $option_id ) {
       $option = $this->get_option( $step_id, $option_id );
       if ( ! $option ) return;
       return $option->get_price();
    }
 
-   public function get_option_title( string $step_id = '', string $option_id ) {
+   public function get_option_title( string $step_id = '', $option_id ) {
       $option = $this->get_option( $step_id, $option_id );
       if ( ! $option ) return;
       return $option->get_title();
@@ -336,7 +336,7 @@ abstract class Configurator {
    }
 
    public function get_min_price() {
-      return ! empty( $this->_settings['price'] ) ? str_replace( ',', '.', $this->_settings['price'] ) : false;
+      return ! empty( $this->_settings['price'] ) ? str_replace( ',', '.', $this->_settings['price'] ) : 0;
    }
 
    abstract protected function calculate_price_table( array $configuration = [] );
