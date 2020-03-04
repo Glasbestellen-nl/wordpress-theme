@@ -77,9 +77,9 @@ class CRM {
       $query = "
          SELECT l.lead_id, lead_content, lead_date, lead_relation, s.meta_value lead_status, u.display_name relation_name, u.user_email relation_email, o.meta_value lead_owner
          FROM wp_leads l
-         JOIN wp_leadmeta s ON l.lead_id = s.lead_id AND s.meta_key = 'lead_status'
-         JOIN wp_leadmeta o ON l.lead_id = o.lead_id AND o.meta_key = 'lead_owner'
-         JOIN wp_users u ON l.lead_relation = u.ID"
+         LEFT JOIN wp_leadmeta s ON l.lead_id = s.lead_id AND s.meta_key = 'lead_status'
+         LEFT JOIN wp_leadmeta o ON l.lead_id = o.lead_id AND o.meta_key = 'lead_owner'
+         LEFT JOIN wp_users u ON l.lead_relation = u.ID"
       ;
       if ( isset( $where ) ) {
          $query .= " " . $where;
