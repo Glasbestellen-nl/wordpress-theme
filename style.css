@@ -1815,13 +1815,18 @@ Hero
    color: #fff;
 }
 
-.hero__button-group {
+.hero__buttons {
    display: flex;
+   flex-direction: column;
    justify-content: center;
 }
 
 .hero__button {
-   margin: 0 0.3125em;
+   margin: 0 1em 0.3125em 1em;
+}
+
+.hero__button-btn {
+   display: block;
 }
 
 .hero__button-cta {
@@ -1880,6 +1885,18 @@ Hero
 
    .hero__title {
       font-size: 2.5em;
+   }
+
+   .hero__buttons {
+      flex-direction: row;
+   }
+
+   .hero__button {
+      margin: 0 0.3125em 0.3125em 0.3125em;
+   }
+
+   .hero__button-btn {
+      display: inline-block;
    }
 
 }

@@ -3,7 +3,8 @@
    <?php
    if ( have_posts() ) {
       while ( have_posts() ) {
-         the_post(); ?>
+         the_post();
+         $configurator = get_field( 'configurator' ); ?>
 
          <div class="hero hero--shadow">
 
@@ -19,10 +20,18 @@
 
                      <div class="hero__buttons">
                         <div class="hero__button">
-                           <span class="btn btn--primary btn--large btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?>"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
+                           <?php if ( $configurator ) { ?>
+                              <a href="<?php echo get_term_link( $configurator, 'startopstelling' ); ?>" class="hero__button-btn btn btn--primary btn--large btn--next"><?php _e( 'Op maat samenstellen', 'glasbestellen' ); ?></a>
+                           <?php } ?>
                         </div>
-                        <span class="hero__button-cta space-above"><?php _e( 'Binnen 1 dag in je mail!', 'glasbestellen' ); ?></span>
+                        <div class="hero__button">
+                           <span class="hero__button-btn btn btn--<?php echo ( $configurator ) ? 'secondary' : 'primary'; ?> btn--large btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?>"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
+                        </div>
                      </div>
+
+                     <?php if ( ! $configurator ) { ?>
+                        <span class="hero__button-cta space-above"><?php _e( 'Binnen 1 dag in je mail!', 'glasbestellen' ); ?></span>
+                     <?php } ?>
 
                      <?php if ( get_field( 'show_sticker' ) ) { ?>
                         <div class="hero__sticker d-none d-lg-block">

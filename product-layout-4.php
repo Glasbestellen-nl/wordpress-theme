@@ -57,7 +57,7 @@ get_header(); ?>
                               $configurators->the_post();
                               $settings = gb_get_configurator_settings( get_the_id() )?>
 
-                              <div class="col-12 col-md-4 col-lg-3">
+                              <div class="col-12 col-md-6 col-lg-3">
 
                                  <div class="product-listing">
                                     <a href="<?php the_permalink(); ?>" class="product-listing__image">

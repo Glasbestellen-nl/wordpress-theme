@@ -33,6 +33,11 @@ class Configurator_Setup {
          case 'door' :
             return new Configurators\Door\Configurator( $configurator_id );
             break;
+         case 'tabletop' :
+            return new Configurators\Tabletop\Configurator( $configurator_id );
+         case 'tabletop-round' :
+            return new Configurators\Tabletop\Round( $configurator_id );
+            break;
       }
 
    }
