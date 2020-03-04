@@ -157,7 +157,7 @@
 										</tr>
 
 										<tr>
-											<td style="padding-bottom: 5px;"><?php echo $delivery_address['street'] . ' ' . $delivery_address['number'] . ' ' . $delivery_address['addition']; ?></td>
+											<td style="padding-bottom: 5px;"><?php echo $delivery_address['street'] . ' ' . $delivery_address['number'] . ' ' . ( isset( $delivery_address['addition'] ) ? $delivery_address['addition'] : '' ); ?></td>
 										</tr>
 										<tr>
 											<td style="padding-bottom: 5px;"><?php echo $delivery_address['zipcode'] . ' ' . $delivery_address['city'] . ', ' . $delivery_address['country']; ?></td>
