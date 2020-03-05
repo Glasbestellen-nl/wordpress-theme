@@ -34,14 +34,16 @@ get_header();
 
                                  <div class="image-slider large-space-below js-image-slider">
                                     <div class="image-slider__container image-slider__main">
-                                       <div class="image-slider__arrows">
-                                          <div class="image-slider__arrow image-slider__arrow--prev js-prev">
-                                             <i class="fas fa-chevron-left"></i>
+                                       <?php if ( count( $gallery_images ) > 1 ) { ?>
+                                          <div class="image-slider__arrows">
+                                             <div class="image-slider__arrow image-slider__arrow--prev js-prev">
+                                                <i class="fas fa-chevron-left"></i>
+                                             </div>
+                                             <div class="image-slider__arrow image-slider__arrow--next js-next">
+                                                <i class="fas fa-chevron-right"></i>
+                                             </div>
                                           </div>
-                                          <div class="image-slider__arrow image-slider__arrow--next js-next">
-                                             <i class="fas fa-chevron-right"></i>
-                                          </div>
-                                       </div>
+                                       <?php } ?>   
                                        <img data-src="<?php echo $gallery_images[0]['url']; ?>" class="lazyload image-slider__img image-slider__main-img js-main" alt="<?php echo $gallery_images[0]['alt']; ?>">
                                     </div>
 
