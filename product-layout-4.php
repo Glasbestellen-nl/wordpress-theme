@@ -83,6 +83,36 @@ get_header(); ?>
 
                      <?php } wp_reset_postdata(); ?>
 
+                     <div class="row">
+
+                        <div class="col-lg-8 offset-lg-2">
+
+                           <div class="card card--banner">
+                              <div class="card__body">
+
+                                 <div class="row">
+
+                                    <div class="col-lg-7 card__column">
+                                       <div class="card__text">
+                                          <span class="h2"><?php _e( 'Hulp nodig?', 'glasbestellen' ); ?></span>
+                                          <div class="text">
+                                             <p><?php _e( 'Heeft u hulp nodig of wilt u een offerte ontvangen? We helpen u graag!', 'glasbestellen' ); ?></p>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                    <div class="col-lg-5 d-flex align-items-center card__column card__column--last">
+                                       <span class="btn btn--large btn--secondary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?>"><?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?></span>
+                                    </div>
+
+                                 </div>
+                              </div>
+                           </div>
+
+                        </div>
+
+                     </div>
+
                      <article class="text" id="main_content">
                         <?php the_content(); ?>
                      </article>

@@ -1175,8 +1175,21 @@ Card
    background-color: #fff;
 }
 
+.card--banner {
+   background-color: #f3f3f3;
+   border: 1px solid #bbb;
+}
+
 .card__body {
    padding: 1.25em;
+}
+
+.card__column {
+   margin-bottom: 1.25em;
+}
+
+.card__column--last {
+   margin-bottom: 0;
 }
 
 .card__title {
@@ -1206,6 +1219,19 @@ Card
 
    .card__body {
       padding: 1.875em;
+   }
+
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+   .card--banner .card__text {
+      text-align: left;
+   }
+
+   .card__column {
+      margin-bottom: 0;
    }
 
 }
@@ -1692,11 +1718,6 @@ Gallery
    transform: scale(1.1);
 }
 
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-
-
-}
 
 /*--------------------------------------------------------------
 Pins
