@@ -67,7 +67,7 @@ get_header(); ?>
                                        <h2 class="h5"><a href="<?php the_permalink(); ?>" class="product-listing__title"><?php the_title(); ?></a></h2>
                                        <div class="product-listing__info">
                                           <?php if ( ! empty( $settings['price'] ) ) { ?>
-                                             <span class="product-listing__price"><?php echo sprintf( __( 'v.a. %s', 'glasbestellen' ), Money::display( $settings['price'], false ) ); ?></span>
+                                             <span class="product-listing__price"><?php echo sprintf( __( 'v.a. %s', 'glasbestellen' ), Money::display( $settings['price'] ) ); ?></span>
                                           <?php } ?>
                                           <span class="product-listing__tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
                                           <span class="product-listing__shipping"><i class="fas fa-shipping-fast"></i> <?php _e( 'Gratis verzending', 'glasbestellen' ); ?></span>
