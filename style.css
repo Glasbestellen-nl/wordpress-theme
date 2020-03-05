@@ -735,7 +735,9 @@ Links list
 }
 
 .links-list__icon {
+   min-width: 1.25em;
    margin-right: 0.125em;
+   margin-bottom: 0.625em;
 }
 
 

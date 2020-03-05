@@ -63,9 +63,17 @@ get_header();
 
                               <?php } ?>
 
+
                               <ul class="links-list large-space-below">
+
                                  <?php if ( $assembly_file_url = get_field( 'assembly_instruction' ) ) { ?>
                                     <li class="links-list__item"><i class="fas fa-wrench links-list__icon"></i> <a href="<?php echo $assembly_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Montageinstructie', 'glasbestellen' ); ?></a></li>
+                                 <?php } ?>
+                                 <?php if ( $assembly_video_url = get_field( 'assembly_video' ) ) { ?>
+                                    <li class="links-list__item"><i class="fab fa-youtube links-list__icon"></i> <a href="<?php echo $assembly_video_url; ?>" class="links-list__link fancybox-various fancybox.iframe"><?php _e( 'Montagevideo', 'glasbestellen' ); ?></a></li>
+                                 <?php } ?>
+                                 <?php if ( $fittings_file_url = get_field( 'fittings_info' ) ) { ?>
+                                    <li class="links-list__item"><i class="fas fa-info-circle links-list__icon"></i> <a href="<?php echo $fittings_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Beslag informatie', 'glasbestellen' ); ?></a></li>
                                  <?php } ?>
                               </ul>
 
