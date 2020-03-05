@@ -19,8 +19,11 @@ class Round extends \Configurator\Configurator {
          $m2s = \Calculate::to_square_meters( $configuration['diameter'], $configuration['diameter'] );
       }
 
-      $circumference = \Calculate::to_circumference( $configuration['diameter'], $configuration['diameter'] );
-      $price_table['edging'] = $circumference * 16;
+      if ( ! empty( $this->_settings['metadata']['edging_price'] ) ) {
+         $edging_price = $this->_settings['metadata']['edging_price'];
+         $circumference = \Calculate::to_circumference( $configuration['diameter'], $configuration['diameter'] );
+         $price_table['edging'] = $circumference * $edging_price;
+      }
 
       foreach ( $configuration as $step_id => $input ) {
 

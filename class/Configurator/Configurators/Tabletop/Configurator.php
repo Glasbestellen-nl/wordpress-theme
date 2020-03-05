@@ -19,8 +19,11 @@ class Configurator extends \Configurator\Configurator {
          $m2s = \Calculate::to_square_meters( $configuration['width'], $configuration['height'] );
       }
 
-      $circumference = \Calculate::to_circumference( $configuration['width'], $configuration['height'] );
-      $price_table['edging'] = $circumference * 3;
+      if ( ! empty( $this->_settings['metadata']['edging_price'] ) ) {
+         $edging_price = $this->_settings['metadata']['edging_price'];
+         $circumference = \Calculate::to_circumference( $configuration['width'], $configuration['height'] );
+         $price_table['edging'] = $circumference * $edging_price;
+      }
 
       foreach ( $configuration as $step_id => $input ) {
 
