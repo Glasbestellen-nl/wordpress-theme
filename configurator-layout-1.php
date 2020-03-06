@@ -43,8 +43,10 @@ get_header();
                                                 <i class="fas fa-chevron-right"></i>
                                              </div>
                                           </div>
-                                       <?php } ?>   
-                                       <img data-src="<?php echo $gallery_images[0]['url']; ?>" class="lazyload image-slider__img image-slider__main-img js-main" alt="<?php echo $gallery_images[0]['alt']; ?>">
+                                       <?php } ?>
+                                       <a href="<?php echo $gallery_images[0]['url']; ?>" class="fancybox">
+                                          <img data-src="<?php echo $gallery_images[0]['url']; ?>" class="lazyload image-slider__img image-slider__main-img js-main" alt="<?php echo $gallery_images[0]['alt']; ?>">
+                                       </a>
                                     </div>
 
                                     <div class="image-slider__thumbs">

@@ -212,7 +212,7 @@
          const url = current.data('image');
 
          // Change main image url
-         main.attr('src', url);
+         main.attr('src', url).parent('a').attr('href', url);
 
          // Change current index class
          const currentClass = 'current';

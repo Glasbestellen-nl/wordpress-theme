@@ -1613,13 +1613,6 @@ Image slider
    position: relative;
 }
 
-.image-slider__arrows {
-   width: 100%;
-   height: 100%;
-   position: absolute;
-   z-index: 1;
-}
-
 .image-slider__arrow {
    margin-top: -1.25em;
    padding: 0.5em 0.625em;
