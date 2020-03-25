@@ -62,13 +62,13 @@ class Data_Pusher {
 
       foreach ( $leads as $lead ) {
 
-         if ( ! \CRM::get_lead_meta( $lead->get_id(), 'conversion_data_pushed', true ) ) {
+         if ( ! \CRM::get_lead_meta( $lead->lead_id, 'conversion_data_pushed', true ) ) {
 
-            $conversion_data = \CRM::get_lead_meta( $lead->get_id(), 'conversion_data', true );
-            $client_id = \CRM::get_lead_meta( $lead->get_id(), 'gclid', 'true' );
+            $conversion_data = \CRM::get_lead_meta( $lead->lead_id, 'conversion_data', true );
+            $client_id = \CRM::get_lead_meta( $lead->lead_id, 'gclid', 'true' );
 
             $conversion = [
-               'lead_id' => $lead->get_id(),
+               'lead_id' => $lead->lead_id,
                'revenue' => $conversion_data['revenue'],
                'shipping_price' => $conversion_data['shipping_price'],
                'items' => $conversion_data['items'],
