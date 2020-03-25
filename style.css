@@ -2521,7 +2521,6 @@ Product listing
 
 .product-listing {
    margin-bottom: 1.25em;
-   padding: 0.9375em;
    -moz-border-radius: 4px;
    -webkit-border-radius: 4px;
    border-radius: 4px;
@@ -2539,14 +2538,11 @@ Product listing
 
 .product-listing__image {
    display: block;
-   -moz-border-radius: 4px;
-   -webkit-border-radius: 4px;
-   border-radius: 4px;
    overflow: hidden;
 }
 
 .product-listing__body {
-   padding-top: 0.9375em;
+   padding: 0.9375em;
 }
 
 .product-listing__title {
