@@ -148,7 +148,7 @@ get_header();
                                              ?>
 
                                              <div class="configurator__form-row <?php echo $step_class; ?>" data-step-id="<?php echo $step_id; ?>">
-                                                <div class="configurator__form-col configurator__form-info">
+                                                <div class="configurator__form-col configurator__form-info <?php echo ( ! $explanation_id ) ? 'd-none d-md-block' : ''; ?>">
                                                    <?php if ( $explanation_id ) { ?>
                                                       <i class="fas fa-info-circle configurator__info-icon js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"></i>
                                                    <?php } ?>
