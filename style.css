@@ -3078,11 +3078,11 @@ Configurator
 
 .configurator__form-label {
    font-size: 1.125em;
-   cursor: pointer;
 }
 
-.configurator__form-label:hover {
+.configurator__form-label--link:hover {
    color: #007bff;
+   cursor: pointer;
 }
 
 .configurator__energy-label {

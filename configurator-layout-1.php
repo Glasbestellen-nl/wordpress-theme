@@ -138,16 +138,23 @@ get_header();
                                                    $step_class .= ' d-none';
                                                 }
                                              }
+                                             if ( $configurator->get_step_explanation_id() ) {
+                                                $explanation_id = $configurator->get_step_explanation_id();
+                                                $label_class = 'configurator__form-label--link js-popup-explanation';
+                                             } else {
+                                                $explanation_id = false;
+                                                $label_class = '';
+                                             }
                                              ?>
 
                                              <div class="configurator__form-row <?php echo $step_class; ?>" data-step-id="<?php echo $step_id; ?>">
                                                 <div class="configurator__form-col configurator__form-info">
-                                                   <?php if ( $explanation_id = $configurator->get_step_explanation_id() ) { ?>
+                                                   <?php if ( $explanation_id ) { ?>
                                                       <i class="fas fa-info-circle configurator__info-icon js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"></i>
                                                    <?php } ?>
                                                 </div>
                                                 <div class="configurator__form-col">
-                                                   <label class="configurator__form-label js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"><?php echo $configurator->get_step_title(); ?></label>
+                                                   <label class="configurator__form-label <?php echo $label_class; ?>" data-explanation-id="<?php echo $explanation_id; ?>"><?php echo $configurator->get_step_title(); ?></label>
                                                 </div>
 
                                                 <?php
