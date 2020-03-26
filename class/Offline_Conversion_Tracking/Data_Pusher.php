@@ -58,8 +58,8 @@ class Data_Pusher {
             $conversion = [
                'lead_id' => $lead->lead_id,
                'revenue' => $conversion_data['revenue'],
-               'shipping_price' => $conversion_data['shipping_price'],
-               'items' => $conversion_data['items'],
+               'shipping_price' => ! empty( $conversion_data['shipping_price'] ) ? $conversion_data['shipping_price'] : 0,
+               'items' => ! empty( $conversion_data['shipping_price'] ) ? $conversion_data['shipping_price'] : [],
                'client_id' => $client_id
             ];
 
