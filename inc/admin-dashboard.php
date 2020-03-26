@@ -218,7 +218,7 @@ function gb_filter_leads_by_date( $lead, $period = 'day' ) {
 
    switch ( $period ) {
       case 'day' :
-         $period_time = strtotime( '-1 day', $now );
+         $period_time = strtotime( 'today' );
          break;
       case 'week' :
          $period_time = strtotime( '-1 week', $now );
