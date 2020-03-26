@@ -5,18 +5,6 @@ use TheIconic\Tracking\GoogleAnalytics\Analytics;
 
 class Data_Pusher {
 
-   public function __construct() {
-      add_action( 'wp', array( $this, 'schedule_tasks' ) );
-      add_action( 'upload_offline_conversions', array( $this, 'upload_offline_conversions' ) );
-   }
-
-   public function schedule_tasks() {
-      $timestamp = wp_next_scheduled( 'upload_hourly_offline_conversions' );
-   	if ( $timestamp == false ) {
-   		wp_schedule_event( time(), 'hourly', 'upload_hourly_offline_conversions' );
-   	}
-   }
-
    public function upload_offline_conversions() {
 
       if ( ! $this->get_conversions() ) return;
