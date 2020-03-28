@@ -46,30 +46,28 @@ function gb_filter_configurator_post_link( $permalink, $post ) {
 add_filter( 'post_type_link', 'gb_filter_configurator_post_link', 10, 2 );
 
 /**
- * Returns configurators connected to product
- *
- * @param int product_id the parent product id
+ * Handles submit of filters on configurator archive
  */
-function gb_get_configurators_by_product_id( int $product_id ) {
+function gb_handle_configurator_filter_submit() {
 
-   if ( empty( $product_id ) ) return;
+   $empty_filters = [];
+   $args = [];
 
-   $term_id = get_post_meta( $product_id, 'configurator', true );
+   if ( ! empty( $_POST['filter'] ) ) {
 
-   if ( ! $term_id ) return;
+      foreach ( $_POST['filter'] as $parent_filter => $child_filter ) {
+         if ( ! empty( $child_filter ) )
+            $args[$parent_filter] = $child_filter;
+         else
+            $empty_filters[] = $parent_filter;
+      }
+      $filter_url = add_query_arg( $args, remove_query_arg( $empty_filters ) );
+      wp_redirect( $filter_url );
+      exit;
+   }
 
-   $args = [
-      'post_type' => 'configurator',
-      'post_per_page' => -1,
-      'tax_query' => [
-         [
-            'taxonomy' => 'startopstelling',
-            'terms' => $term_id
-         ]
-      ]
-   ];
-   return new WP_Query( $args );
 }
+add_action( 'init', 'gb_handle_configurator_filter_submit' );
 
 /**
  * Returns the product connected to configurator

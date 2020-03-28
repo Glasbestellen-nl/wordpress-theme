@@ -6,7 +6,8 @@ get_header(); ?>
    <?php
    if ( have_posts() ) {
       while ( have_posts() ) {
-         the_post(); ?>
+         the_post();
+         $archive = new Configurator\Archive( get_the_id(), $_GET ); ?>
 
          <main class="main-section main-section--space-around main-section--grey">
 
@@ -27,34 +28,50 @@ get_header(); ?>
                         <p><?php echo get_the_excerpt(); ?> <a href="#main_content" class="js-scroll-to" data-scroll-to="#main_content"><?php _e( 'Lees verder', 'glasbestellen' ); ?> &raquo;</a></p>
                      </section>
 
-                     <!-- <form class="filter-bar large-space-below">
+                     <?php if ( $filters = $archive->get_filters() ) { ?>
 
-                        <div class="row">
+                        <form method="post" class="filter-bar large-space-below">
 
-                           <div class="col-md-4 col-lg-3 filter-bar__col">
-                              <select class="dropdown filter-bar__dropdown">
-                                 <option>Filter op type</option>
-                              </select>
+                           <div class="row">
+
+                              <?php
+                              foreach ( $filters as $filter ) {
+                                 $filter_parent = $filter['value']; ?>
+
+                                 <div class="col-md-4 col-lg-3 filter-bar__col">
+                                    <select class="dropdown filter-bar__dropdown" name="filter[<?php echo $filter['value']; ?>]" onchange="this.form.submit()">
+                                       <option value="">-- <?php echo $filter['title']; ?> --</option>
+                                       <?php
+                                       if ( ! empty( $filter['options'] ) ) {
+                                          foreach ( $filter['options'] as $option ) {
+                                             $selected = '';
+                                             if ( ! empty( $_GET[$filter_parent] ) ) {
+                                                $selected = selected( $option['value'], $_GET[$filter_parent] );
+                                             }
+                                             echo '<option value="' . $option['value'] . '" ' . $selected . '>' . $option['title'] . '</option>';
+                                          }
+                                       }
+                                       ?>
+                                    </select>
+                                 </div>
+
+                              <?php } ?>
+
                            </div>
-                           <div class="col-md-4 col-lg-3">
-                              <select class="dropdown filter-bar__dropdown">
-                                 <option>Filter op verlichting</option>
-                              </select>
-                           </div>
 
-                        </div>
+                        </form>
 
-                     </form> -->
+                     <?php } ?>
 
                      <?php
-                     $configurators = gb_get_configurators_by_product_id( get_the_id() );
-                     if ( $configurators->have_posts() ) { ?>
+                     $items = $archive->get_items_query_object();
+                     if ( $items->have_posts() ) { ?>
 
                         <section class="row product-listings large-space-below">
 
                            <?php
-                           while ( $configurators->have_posts() ) {
-                              $configurators->the_post();
+                           while ( $items->have_posts() ) {
+                              $items->the_post();
                               $settings = gb_get_configurator_settings( get_the_id() )?>
 
                               <div class="col-12 col-md-6 col-lg-3">
