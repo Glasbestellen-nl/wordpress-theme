@@ -32,27 +32,32 @@ get_header(); ?>
 
                         <form method="post" class="filter-bar large-space-below">
 
-                           <div class="row">
+                           <div class="row filter-bar__row">
 
                               <?php
                               foreach ( $filters as $filter ) {
                                  $filter_parent = $filter['value']; ?>
 
-                                 <div class="col-md-4 col-lg-3 filter-bar__col">
-                                    <select class="dropdown filter-bar__dropdown" name="filter[<?php echo $filter['value']; ?>]" onchange="this.form.submit()">
-                                       <option value="">-- <?php echo $filter['title']; ?> --</option>
-                                       <?php
-                                       if ( ! empty( $filter['options'] ) ) {
-                                          foreach ( $filter['options'] as $option ) {
-                                             $selected = '';
-                                             if ( ! empty( $_GET[$filter_parent] ) ) {
-                                                $selected = selected( $option['value'], $_GET[$filter_parent] );
+                                 <div class="col-lg-3 filter-bar__col">
+                                    <div class="dropdown-group js-dropdown-group">
+                                       <select class="dropdown dropdown--addon filter-bar__dropdown js-dropdown" name="filter[<?php echo $filter['value']; ?>]" onchange="this.form.submit()">
+                                          <option value="">-- <?php echo $filter['title']; ?> --</option>
+                                          <?php
+                                          if ( ! empty( $filter['options'] ) ) {
+                                             foreach ( $filter['options'] as $option ) {
+                                                $selected = '';
+                                                if ( ! empty( $_GET[$filter_parent] ) ) {
+                                                   $selected = selected( $option['value'], $_GET[$filter_parent] );
+                                                }
+                                                echo '<option value="' . $option['value'] . '" ' . $selected . '>' . $option['title'] . '</option>';
                                              }
-                                             echo '<option value="' . $option['value'] . '" ' . $selected . '>' . $option['title'] . '</option>';
                                           }
-                                       }
-                                       ?>
-                                    </select>
+                                          ?>
+                                       </select>
+                                       <div class="dropdown-group-addon dropdown-group-addon--remove js-empty-dropdown" data-submit="true">
+                                          <i class="fas fa-times"></i>
+                                       </div>
+                                    </div>
                                  </div>
 
                               <?php } ?>

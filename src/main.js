@@ -290,6 +290,18 @@
    });
 
    /**
+   * Empty dropdown and submit form
+   */
+   $('.js-empty-dropdown').click(function() {
+      let dropdownGroup = $(this).parents('.js-dropdown-group');
+      let dropdown = dropdownGroup.find('.js-dropdown');
+      dropdown.val('');
+      let submitAfter = $(this).data('submit');
+      if (submitAfter)
+         dropdown.parents('form').submit();
+   });
+
+   /**
     * Delegate change events
     */
    document.addEventListener('change', e => {
