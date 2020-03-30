@@ -157,6 +157,12 @@ abstract class Configurator {
       return isset( $this->_settings[$key] ) ? $this->_settings[$key] : false;
    }
 
+   public function get_metadata( string $key = '' ) {
+      $metadata = $this->get_setting( 'metadata' );
+      if ( ! $metadata ) return;
+      return ! empty( $metadata[$key] ) ? $metadata[$key] : false;
+   }
+
    public function is_configuration_done() {
       return count( $this->_configuration ) === $this->get_steps_count();
    }
