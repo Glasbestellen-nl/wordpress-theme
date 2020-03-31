@@ -45,59 +45,6 @@ function gb_filter_part_price_difference( $value, $step_id ) {
 add_filter( 'gb_step_part_price_difference', 'gb_filter_part_price_difference', 10, 2 );
 
 /**
- * AJAX handles get single step html
- */
-function gb_get_configurator_step_html() {
-
-   if ( ! empty( $_GET['step_id'] ) && ! empty( $_GET['configurator_id'] ) ) {
-
-      $step_id = $_GET['step_id'];
-      $configurator_id = $_GET['configurator_id'];
-
-      $file = TEMPLATEPATH . '/template-parts/configurator/step.php';
-
-      if ( file_exists( $file ) ) {
-
-         $configurator = gb_get_configurator( $configurator_id );
-         ob_start();
-         require_once( $file );
-         $html = ob_get_clean();
-         echo $html;
-      }
-   }
-
-   wp_die();
-}
-add_action( 'wp_ajax_get_configurator_step_html', 'gb_get_configurator_step_html' );
-add_action( 'wp_ajax_nopriv_get_configurator_step_html', 'gb_get_configurator_step_html' );
-
-/**
- * AJAX handles get steps html
- */
-function gb_get_configurator_steps_html() {
-
-   if ( ! empty( $_GET['configurator_id'] ) ) {
-
-      $configurator_id = $_GET['configurator_id'];
-
-      $file = TEMPLATEPATH . '/template-parts/configurator/steps.php';
-
-      if ( file_exists( $file ) ) {
-
-         $configurator = gb_get_configurator( $configurator_id );
-         ob_start();
-         require_once( $file );
-         $html = ob_get_clean();
-         echo $html;
-      }
-   }
-   wp_die();
-
-}
-add_action( 'wp_ajax_get_configurator_steps_html', 'gb_get_configurator_steps_html' );
-add_action( 'wp_ajax_nopriv_get_configurator_steps_html', 'gb_get_configurator_steps_html' );
-
-/**
  * AJAX handles get total configuration price
  */
 function gb_get_configurator_total_price() {
@@ -180,26 +127,6 @@ function gb_handle_configurator_to_cart() {
 }
 add_action( 'wp_ajax_handle_configurator_to_cart', 'gb_handle_configurator_to_cart' );
 add_action( 'wp_ajax_nopriv_handle_configurator_to_cart', 'gb_handle_configurator_to_cart' );
-
-
-function gb_get_configurator_choice_enlargement_html() {
-
-   $html = '';
-
-   if ( ! empty( $_GET['part_id'] ) ) {
-      ob_start();
-      $file = TEMPLATEPATH . '/template-parts/configurator/choice-enlargement.php';
-      if ( file_exists( $file ) ) {
-         require_once( $file );
-      }
-      $html = ob_get_clean();
-   }
-   echo $html;
-   wp_die();
-
-}
-add_action( 'wp_ajax_get_configurator_choice_enlargement_html', 'gb_get_configurator_choice_enlargement_html' );
-add_action( 'wp_ajax_nopriv_get_configurator_choice_enlargement_html', 'gb_get_configurator_choice_enlargement_html' );
 
 function gb_get_configurator( $configurator_id = 0, $auto_set = true ) {
 
