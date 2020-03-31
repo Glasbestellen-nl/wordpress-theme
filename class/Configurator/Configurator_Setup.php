@@ -38,9 +38,12 @@ class Configurator_Setup {
             break;
          case 'tabletop' :
             return new Configurators\Tabletop\Configurator( $configurator_id );
+            break;
          case 'tabletop-round' :
             return new Configurators\Tabletop\Round( $configurator_id );
             break;
+         default :
+            return new Configurator( $configurator_id );
       }
 
    }
