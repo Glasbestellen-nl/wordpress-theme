@@ -19,7 +19,6 @@ const Configurator = (function() {
             if (e.target && e.target.closest('.js-configurator-to-cart')) {
                this.toCart();
             }
-
          });
 
          /**
@@ -56,25 +55,15 @@ const Configurator = (function() {
 
             if (form) {
 
-               const formData = new FormData(form[0]);
-               formData.append('action', 'handle_configurator_form_submit');
-               formData.append('configurator_id', gb.configuratorId);
+               const formData = self.initFormData(form[0]);
 
                $(':input', form).each(function(index, element) {
                   if ($(element).val())
                      self.validateInput(element);
                });
 
-               $.ajax({
-                  url: gb.ajaxUrl,
-                  type: 'POST',
-                  data: formData,
-                  processData: false,
-                  contentType: false,
-                  context: self,
-                  success: function(response) {
-                     this.updateTotalPrice();
-                  }
+               self.submitFormData(formData, function() {
+                  self.updateTotalPrice();
                });
             }
 
@@ -83,6 +72,8 @@ const Configurator = (function() {
             e.preventDefault();
 
             const parentForm = $(this).parents('form');
+            const formData = self.initFormData(parentForm[0]);
+
             let toCart = true;
             let invalidInputs = [];
             $(':input', parentForm).each(function(index, element) {
@@ -94,7 +85,9 @@ const Configurator = (function() {
             if (toCart) {
                let quantity = $('.js-configurator-quantity').val() || 1;
                let message  = $('.js-configurator-message').val() || "";
-               self.toCart(quantity, message);
+               self.submitFormData(formData, function() {
+                  self.toCart(quantity, message);
+               });
             } else {
                // Scroll to first invalid field
                const firstInput = $(invalidInputs[0]);
@@ -127,6 +120,29 @@ const Configurator = (function() {
          $.post(gb.ajaxUrl, data, function(cartUrl) {
             if (cartUrl)
                window.location.replace(cartUrl);
+         });
+      }
+
+      this.initFormData = function(form) {
+         const formData = new FormData(form);
+         formData.append('action', 'handle_configurator_form_submit');
+         formData.append('configurator_id', gb.configuratorId);
+         return formData;
+      }
+
+      this.submitFormData = function(formData, callback) {
+
+         $.ajax({
+            url: gb.ajaxUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            context: this,
+            success: function(response) {
+               if (typeof callback === 'function' && callback())
+                  callback();
+            }
          });
       }
 

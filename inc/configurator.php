@@ -92,7 +92,7 @@ function gb_handle_configurator_form_submit() {
          $response['done'] = true;
       }
 
-      // $response['config'] = $configurator->get_configuration();
+      $response['config'] = $configurator->get_configuration();
 
    }
 
