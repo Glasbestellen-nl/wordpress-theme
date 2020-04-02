@@ -77,7 +77,7 @@ get_header(); ?>
                            <?php
                            while ( $items->have_posts() ) {
                               $items->the_post();
-                              $settings = gb_get_configurator_settings( get_the_id() )?>
+                              $configurator = gb_get_configurator( get_the_id() ); ?>
 
                               <div class="col-12 col-md-6 col-lg-3">
 
@@ -88,9 +88,7 @@ get_header(); ?>
                                     <div class="product-listing__body">
                                        <h2 class="h5"><a href="<?php the_permalink(); ?>" class="product-listing__title" data-mh="product-listing-title"><?php the_title(); ?></a></h2>
                                        <div class="product-listing__info">
-                                          <?php if ( ! empty( $settings['price'] ) ) { ?>
-                                             <span class="product-listing__price"><?php echo sprintf( __( 'v.a. %s', 'glasbestellen' ), Money::display( Money::round_including_vat( $settings['price'] ) ) ); ?></span>
-                                          <?php } ?>
+                                          <span class="product-listing__price"><?php echo sprintf( __( 'v.a. %s', 'glasbestellen' ), Money::display( $configurator->get_total_price() ) ); ?></span>
                                           <span class="product-listing__tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
                                           <span class="product-listing__shipping"><i class="fas fa-shipping-fast"></i> <?php _e( 'Gratis verzending', 'glasbestellen' ); ?></span>
                                        </div>

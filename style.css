@@ -1688,10 +1688,10 @@ Image slider
 }
 
 .image-slider__thumb {
-   width: 20%;
+   width: 100%;
+   border: 1px solid #dbdbdb;
    opacity: 0.7;
    cursor: pointer;
-   border: 1px solid #dbdbdb;
 }
 
 .image-slider__thumb--current,

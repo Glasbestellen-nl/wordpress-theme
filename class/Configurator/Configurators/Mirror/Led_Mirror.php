@@ -20,6 +20,10 @@ class Led_Mirror extends \Configurator\Configurator {
          $m2s = \Calculate::to_square_meters( $configuration['width'], $configuration['height'] );
       }
 
+      if ( $min_surface = $this->get_metadata( 'min_surface' ) ) {
+         $m2s = ( $m2s < $min_surface ) ? $min_surface : $m2s;
+      }
+
       if ( ! empty( $default['glasstype'] ) ) {
          $price_table['glass'] = $m2s * $this->get_option_price( 'glasstype', $default['glasstype'] );
       }

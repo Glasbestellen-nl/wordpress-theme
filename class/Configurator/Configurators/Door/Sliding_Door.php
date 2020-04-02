@@ -17,7 +17,9 @@ class Sliding_Door extends Configurator {
       $m2s = 0;
 
       if ( ! empty( $configuration['width'] ) && ! empty( $configuration['height'] ) ) {
+
          $m2s = \Calculate::to_square_meters( $configuration['width'], $configuration['height'] );
+
          $width = $configuration['width'];
 
          // Rail price
@@ -28,6 +30,10 @@ class Sliding_Door extends Configurator {
          } else {
             $price_table['rail_width'] = $this->get_metadata( 'rail_1000' );
          }
+      }
+
+      if ( $min_surface = $this->get_metadata( 'min_surface' ) ) {
+         $m2s = ( $m2s < $min_surface ) ? $min_surface : $m2s;
       }
 
       if ( ! empty( $default['glasstype'] ) ) {
