@@ -1,7 +1,7 @@
 /*
 Theme Name: Glasbestellen.nl Theme
 Author: Robbert Vermeulen
-Version: 4.1.1
+Version: 4.1.3
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: glasbestellen
@@ -1690,7 +1690,7 @@ Image slider
 
 .image-slider__thumb {
    width: 100%;
-   flex: 0 1 calc(16.66% - 8px); 
+   flex: 0 1 calc(16.66% - 8px);
    border: 1px solid #dbdbdb;
    opacity: 0.7;
    cursor: pointer;
