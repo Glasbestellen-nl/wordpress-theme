@@ -268,7 +268,7 @@ get_header();
 
                         </article>
 
-                        <?php if ( have_rows( 'related_configurators' ) ) { ?>
+                        <?php if ( get_field( 'related_configurators' ) ) { ?>
 
                            <div class="related-configurators large-space-above">
 
