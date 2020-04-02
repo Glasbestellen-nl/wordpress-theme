@@ -210,9 +210,13 @@
          // Get current element
          const current = $('[data-index="' + currentIndex + '"]', container);
          const url = current.data('image');
+         const title = current.attr('title');
 
          // Change main image url
          main.attr('src', url).parent('a').attr('href', url);
+
+         // Change main image title
+         main.parent('a').attr('title', title);
 
          // Change current index class
          const currentClass = 'current';

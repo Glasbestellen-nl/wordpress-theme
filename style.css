@@ -1685,10 +1685,12 @@ Image slider
 
 .image-slider__thumbs {
    display: flex;
+   flex-flow: row wrap;
 }
 
 .image-slider__thumb {
    width: 100%;
+   flex: 0 1 calc(20% - 8px); 
    border: 1px solid #dbdbdb;
    opacity: 0.7;
    cursor: pointer;

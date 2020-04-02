@@ -44,7 +44,7 @@ get_header();
                                              </div>
                                           </div>
                                        <?php } ?>
-                                       <a href="<?php echo $gallery_images[0]['url']; ?>" class="fancybox">
+                                       <a href="<?php echo $gallery_images[0]['url']; ?>" class="fancybox" title="<?php echo $gallery_images[0]['title']; ?>">
                                           <img data-src="<?php echo $gallery_images[0]['url']; ?>" class="lazyload image-slider__img image-slider__main-img js-main" alt="<?php echo $gallery_images[0]['alt']; ?>">
                                        </a>
                                     </div>
@@ -57,7 +57,7 @@ get_header();
                                           $index ++; ?>
 
                                           <div class="image-slider__container image-slider__thumb js-thumb <?php echo ( $index == 1 ) ? 'current' : ''; ?>">
-                                             <img data-src="<?php echo $image['url']; ?>" class="lazyload image-slider__img image-slider__thumb-img" alt="<?php echo $image['alt']; ?>" data-index="<?php echo $index; ?>" data-image="<?php echo $image['url']; ?>">
+                                             <img data-src="<?php echo $image['url']; ?>" class="lazyload image-slider__img image-slider__thumb-img" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" data-index="<?php echo $index; ?>" data-image="<?php echo $image['url']; ?>">
                                           </div>
 
                                        <?php } ?>
