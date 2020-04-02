@@ -268,6 +268,37 @@ get_header();
 
                         </article>
 
+                        <?php if ( have_rows( 'related_configurators' ) ) { ?>
+
+                           <div class="related-configurators">
+
+                              <h4 class="h2 space-below"><?php _e( 'Andere bekeken ook:', 'glasbestellen' ); ?></h4>
+
+                              <div class="row">
+
+                                 <?php
+                                 while ( have_rows( 'related_configurators' ) ) {
+                                    the_row();
+                                    if ( $post = get_sub_field( 'configurator' ) ) {
+                                       setup_postdata( $post );
+                                       $configurator = gb_get_configurator( get_the_id() ); ?>
+
+                                       <div class="col-md-6 col-lg-3">
+                                          <?php require( get_template_directory() . '/template-parts/product-listing.php' ); ?>
+                                       </div>
+
+                                       <?php
+                                       wp_reset_postdata();
+                                    }
+                                 }
+                                 ?>
+
+                              </div>
+
+                           </div>
+
+                        <?php } ?>
+
                      </div>
 
                   </div>
