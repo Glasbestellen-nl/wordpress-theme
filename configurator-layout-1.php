@@ -236,7 +236,7 @@ get_header();
 
                         </div>
 
-                        <article class="text">
+                        <article class="text space-below">
 
                            <?php the_content(); ?>
 
@@ -270,7 +270,7 @@ get_header();
 
                         <?php if ( have_rows( 'related_configurators' ) ) { ?>
 
-                           <div class="related-configurators">
+                           <div class="related-configurators large-space-above">
 
                               <h4 class="h2 space-below"><?php _e( 'Andere bekeken ook:', 'glasbestellen' ); ?></h4>
 
