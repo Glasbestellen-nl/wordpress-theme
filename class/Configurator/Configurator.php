@@ -32,9 +32,9 @@ class Configurator {
       return $this->_configuration;
    }
 
-   public function get_total_price( bool $round = true ) {
+   public function get_total_price( bool $round = true, $default_only = false ) {
 
-      $total = $this->calculate_subtotal();
+      $total = $this->calculate_subtotal( $default_only );
 
       if ( ! empty( $this->_settings['shipping'] ) ) {
          $total += $this->_settings['shipping'];
@@ -48,7 +48,7 @@ class Configurator {
       return ( $round ) ? \Money::round_including_vat( $total ) : $total;
    }
 
-   protected function calculate_subtotal() {
+   protected function calculate_subtotal( $default_only = false ) {
 
       $subtotal = 0;
       $d = $this->_default_price_table;
@@ -57,7 +57,7 @@ class Configurator {
       if ( empty( $d ) ) return $subtotal;
 
       foreach ( $d as $step_id => $price ) {
-         if ( ! empty( $c[$step_id] ) ) {
+         if ( ! empty( $c[$step_id] ) && ! $default_only ) {
             $subtotal += $c[$step_id];
          } else {
             $subtotal += $price;
