@@ -1690,7 +1690,7 @@ Image slider
 
 .image-slider__thumb {
    width: 100%;
-   flex: 0 1 calc(20% - 8px); 
+   flex: 0 1 calc(16.66% - 8px); 
    border: 1px solid #dbdbdb;
    opacity: 0.7;
    cursor: pointer;
