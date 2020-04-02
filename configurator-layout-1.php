@@ -55,9 +55,8 @@ get_header();
                                        $index = 0;
                                        foreach ( $gallery_images as $image ) {
                                           $index ++; ?>
-
                                           <div class="image-slider__container image-slider__thumb js-thumb <?php echo ( $index == 1 ) ? 'current' : ''; ?>">
-                                             <img data-src="<?php echo $image['url']; ?>" class="lazyload image-slider__img image-slider__thumb-img" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" data-index="<?php echo $index; ?>" data-image="<?php echo $image['url']; ?>">
+                                             <img data-src="<?php echo $image['sizes']['medium']; ?>" class="lazyload image-slider__img image-slider__thumb-img" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" data-index="<?php echo $index; ?>" data-image="<?php echo $image['url']; ?>">
                                           </div>
 
                                        <?php } ?>
@@ -66,7 +65,6 @@ get_header();
                                  </div>
 
                               <?php } ?>
-
 
                               <ul class="links-list large-space-below">
 
