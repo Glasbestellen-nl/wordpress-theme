@@ -8,11 +8,11 @@ get_header();
          the_post();
          if ( $configurator = gb_get_configurator( get_the_id() ) ) { ?>
 
-            <main class="main-section main-section--space-around main-section--grey">
+            <main class="main-section main-section--space-around main-section-sm-without-space main-section--grey">
 
-               <div class="container">
+               <div class="container container--sm-without-space">
 
-                  <div class="layout">
+                  <div class="layout layout--sm-full-width">
 
                      <div class="layout__column box-shadow">
 

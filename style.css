@@ -525,6 +525,10 @@ Layout
    border: none;
 }
 
+.layout--sm-full-width {
+   border: none;
+}
+
 .layout__column {
    padding: 1.875em;
 }
@@ -545,6 +549,10 @@ Layout
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
+
+   .layout--sm-full-width {
+      border: 1px solid #dbdad7;
+   }
 
    .layout--save-space {
       border: 1px solid #dbdad7;
@@ -2490,11 +2498,8 @@ Main section
    padding: 1.25em 0;
 }
 
-.main-section--space-around {
-   padding: 1.25em 0;
-}
-
-.main-section--no-space {
+.main-section-sm-without-space,
+.main-section--without-space {
    padding: 0;
 }
 
@@ -2505,9 +2510,15 @@ Main section
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 
+   .main-section-sm-no-space,
    .main-section--space-around {
-      padding: 2.5em 0;
+      padding: 2em 0;
    }
+
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
 
 }
 

@@ -27,10 +27,21 @@ html {
    margin-left: auto;
 }
 
+.container--sm-without-space {
+   padding: 0;
+}
+
 @media (min-width: 576px) {
+
    .container {
       max-width: 540px;
    }
+
+   .container--sm-without-space {
+      padding-right: 15px;
+      padding-left: 15px;
+   }
+
 }
 
 @media (min-width: 768px) {

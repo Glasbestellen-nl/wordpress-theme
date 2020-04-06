@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-   <main class="main-section main-section--no-space">
+   <main class="main-section main-section--without-space">
 
       <div class="container">
 
