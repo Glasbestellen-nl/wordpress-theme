@@ -11,21 +11,22 @@ class Led_Mirror extends \Configurator\Configurator {
 
       if ( empty( $configuration ) ) return;
 
-      $price_table = [];
-      $default = $this->_default_configuration;
-
+      $price_table = ['size' => 0];
       $m2s = 0;
 
+      // Calculate square meters
       if ( ! empty( $configuration['width'] ) && ! empty( $configuration['height'] ) ) {
          $m2s = \Calculate::to_square_meters( $configuration['width'], $configuration['height'] );
+         if ( $price_matrix = $this->get_price_matrix() ) {
+            $price_table['size'] = $price_matrix->get_price( $configuration['width'], $configuration['height'] );
+         }
       }
 
+      print_r( $price_table );
+
+      // Set minimum surface in square meters
       if ( $min_surface = $this->get_metadata( 'min_surface' ) ) {
          $m2s = ( $m2s < $min_surface ) ? $min_surface : $m2s;
-      }
-
-      if ( ! empty( $default['glasstype'] ) ) {
-         $price_table['glass'] = $m2s * $this->get_option_price( 'glasstype', $default['glasstype'] );
       }
 
       foreach ( $configuration as $step_id => $input ) {
@@ -34,19 +35,7 @@ class Led_Mirror extends \Configurator\Configurator {
 
          if ( $this->get_option_price( $step_id, $input ) ) {
             $option_price = $this->get_option_price( $step_id, $input );
-         }
-
-         switch ( $step_id ) {
-
-            case 'glasstype' :
-               if ( ! empty( $default['glasstype'] ) ) {
-                  $price_default         = $this->get_option_price( 'glasstype', $default['glasstype'] );
-                  $price_table[$step_id] = $m2s * ( $option_price - $price_default );
-               }
-               break;
-
-            default :
-               $price_table[$step_id] = $option_price;
+            $price_table[$step_id] = $option_price;
          }
 
       }

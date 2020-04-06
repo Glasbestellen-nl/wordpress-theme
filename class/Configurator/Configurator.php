@@ -163,6 +163,13 @@ class Configurator {
       return ! empty( $metadata[$key] ) ? $metadata[$key] : false;
    }
 
+   protected function get_price_matrix() {
+      if ( $attachment_id = $this->get_metadata( 'price_matrix_csv' ) ) {
+         return new \Price_Matrix( get_attached_file( $attachment_id ) );
+      }
+      return false;
+   }
+
    public function is_configuration_done() {
       return count( $this->_configuration ) === $this->get_steps_count();
    }
