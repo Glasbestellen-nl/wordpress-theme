@@ -33,7 +33,7 @@ class Option {
    }
 
    public function get_field( string $field = '' ) {
-      return ! empty( $this->_data[$field] ) ? $this->_data[$field] : false;
+      return isset( $this->_data[$field] ) ? $this->_data[$field] : 0;
    }
 
    public function get_plus_price() {
