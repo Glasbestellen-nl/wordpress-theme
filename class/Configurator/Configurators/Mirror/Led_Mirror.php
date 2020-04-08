@@ -22,7 +22,7 @@ class Led_Mirror extends \Configurator\Configurator {
          }
       }
 
-      print_r( $price_table );
+      // print_r( $price_table );
 
       // Set minimum surface in square meters
       if ( $min_surface = $this->get_metadata( 'min_surface' ) ) {
