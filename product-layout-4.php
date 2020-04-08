@@ -23,10 +23,10 @@ get_header(); ?>
                      }
                      ?>
 
-                     <section class="text large-space-below">
+                     <article class="text large-space-below">
                         <h1><?php the_title(); ?></h1>
                         <p><?php echo get_the_excerpt(); ?> <a href="#main_content" class="js-scroll-to" data-scroll-to="#main_content"><?php _e( 'Lees verder', 'glasbestellen' ); ?> &raquo;</a></p>
-                     </section>
+                     </article>
 
                      <?php if ( $filters = $archive->get_filters() ) { ?>
 
@@ -89,11 +89,12 @@ get_header(); ?>
 
                      <?php } wp_reset_postdata(); ?>
 
-                     <div class="row">
+                     <div class="row large-space-below">
 
-                        <div class="col-lg-8 offset-lg-2">
+                        <div class="col-12">
 
                            <div class="card card--banner">
+
                               <div class="card__body">
 
                                  <div class="row">
@@ -119,9 +120,147 @@ get_header(); ?>
 
                      </div>
 
-                     <article class="text" id="main_content">
+                     <section class="text" id="main_content">
+
                         <?php the_content(); ?>
-                     </article>
+
+                        <?php if ( get_field( 'usps' ) ) { ?>
+
+                           <strong class="h2 space-above space-below"><?php _e( 'Redenen om voor ons te kiezen', 'glasbestellen' ); ?></strong>
+
+                           <div class="row space-below">
+
+                              <?php
+                              while ( have_rows( 'usps' ) ) {
+                                 the_row(); ?>
+
+                                 <div class="col-12 col-lg-6">
+                                    <article class="large-space-below">
+                                       <strong class="h4"><i class="fas fa-check heading-icon"></i> <?php the_sub_field( 'title' ); ?></strong>
+                                       <?php echo wpautop( get_sub_field( 'description' ) ); ?>
+                                    </article>
+                                 </div>
+
+                              <?php } ?>
+
+                           </div>
+
+                        <?php } ?>
+
+                        <?php if ( $gallery_images = get_field( 'gallery_images' ) ) { ?>
+
+                           <div class="row gallery js-bricks">
+
+                              <?php foreach ( $gallery_images as $image ) { ?>
+
+                                 <div class="col-6 col-md-4 col-lg-3 js-brick">
+
+                                    <a href="<?php echo $image['url']; ?>" class="gallery__item fancybox" rel="product-images" title="<?php echo $image['caption']; ?>">
+                                       <img data-src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" class="lazyload gallery__image" />
+                                    </a>
+
+                                 </div>
+
+                              <?php } ?>
+
+                           </div>
+
+                        <?php } ?>
+
+                        <?php
+                        if ( $seo_content = get_post_meta( get_the_id(), 'seo_content', true ) ) {
+                           echo wpautop( $seo_content );
+                        }
+                        ?>
+
+                        <?php if ( get_field( 'faq' ) ) { ?>
+
+                           <strong class="h2 space-below"><?php _e( 'Veelgestelde vragen', 'glasbestellen' ); ?></strong>
+
+                           <div class="row large-space-below">
+
+                              <?php
+                              while ( have_rows( 'faq' ) ) {
+                                 the_row(); ?>
+
+                                 <div class="col-12">
+
+                                    <article class="collapse-box js-collapse-box">
+
+                                       <header class="collapse-box__header">
+                                          <strong class="collapse-box__title"><?php the_sub_field( 'question' ); ?></strong>
+                                       </header>
+                                       <div class="collapse-box__body text">
+                                          <?php echo wpautop( get_sub_field( 'answer' ) ); ?>
+                                       </div>
+
+                                    </article>
+
+                                 </div>
+
+                              <?php } ?>
+
+                           </div>
+
+                        <?php } ?>
+
+                        <?php
+                        if ( $reviews = gb_get_reviews( $number = 6, get_field( 'review_category' ) ) ) { ?>
+
+                           <strong class="h2 space-below"><?php _e( 'Wat onze klanten zeggen..', 'glasbestellen' ); ?></strong>
+
+                           <div class="row">
+
+                              <?php foreach ( $reviews as $review ) { ?>
+
+                                 <div class="col-12 col-md-6">
+                                    <div class="card">
+                                       <div class="review" data-mh="review">
+                                          <div class="review__header">
+
+                                             <div class="review__title">
+                                                <strong class="h5 h-default"><?php echo $review->post_title; ?></strong>
+                                             </div>
+
+                                             <?php if ( $rating = get_field( 'rating', $review->ID ) ) { ?>
+
+                                                <div class="review__rating rating">
+                                                   <div class="stars rating__stars">
+                                                      <?php
+                                                      for ( $i = 1; $i <= 5; $i ++ ) {
+                                                         $class = 'star';
+                                                         if ( $i <= $rating ) {
+                                                            $class .= ' star--checked';
+                                                         }
+                                                         echo '<div class="fas fa-star ' . $class . '"></div> ';
+                                                      }
+                                                      ?>
+                                                   </div>
+                                                </div>
+
+                                             <?php } ?>
+
+                                          </div>
+
+                                          <div class="review__body">
+                                             <div class="text text--small review__text">
+                                                <?php echo wpautop( get_the_excerpt( $review->ID ) ); ?>
+                                             </div>
+                                          </div>
+
+                                       </div>
+
+                                    </div>
+
+                                 </div>
+
+                              <?php } ?>
+
+                           </div>
+
+                        <?php } ?>
+
+                     </section>
 
                   </div>
 

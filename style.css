@@ -42,7 +42,6 @@ body {
 
 .body--grey {
    background: #f4f4f4;
-
 }
 
 /*--------------------------------------------------------------
@@ -117,6 +116,10 @@ h3, .h3 {
    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 
+.heading-icon {
+   margin-right: 0.25em;
+}
+
 a, .link {
    text-decoration: none;
    color: #007bff;
@@ -156,18 +159,17 @@ a, .link {
 }
 
 .text img {
-   width: 100%;
    height: auto;
    display: inline-block;
 }
 
 .text .alignright {
-   margin: .9375em 0 .9375em 1.25em;
+   margin: 0.9375em 0 0.9375em 1.25em;
    float: right;
 }
 
 .text .alignleft {
-   margin: .9375em 1.25em .9375em 0;
+   margin: 0.9375em 1.25em 0.9375em 0;
    float: left;
 }
 
@@ -184,6 +186,15 @@ a, .link {
 .text .wp-block-image figcaption {
    text-align: center;
    font-size: 0.875em;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (max-width: 767px) {
+
+   .text img {
+      width: 100%;
+   }
+
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -238,7 +249,6 @@ a, .link {
    }
 
    .text img {
-      width: auto;
       height: auto;
       display: inline-block;
    }
