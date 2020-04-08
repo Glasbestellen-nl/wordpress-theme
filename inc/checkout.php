@@ -28,6 +28,8 @@ function gb_handle_checkout_form() {
    // Format the total value right (1000.00) including vat
    $value = number_format( Money::including_vat( $cart->get_total_price() ), 2, '.', '' );
 
+   $order_id = $transaction->get_post_id();
+
    // Initialize mollie client
    $mollie = gb_get_mollie_client();
 
@@ -38,10 +40,10 @@ function gb_handle_checkout_form() {
          "value"    => $value
       ],
       "description" => sprintf( __( 'Bestelling #%s', 'glasbestellen' ), $transaction->get_transaction_id() ),
-      "redirectUrl" => gb_get_payment_redirect_url(),
+      "redirectUrl" => gb_get_payment_redirect_url( $order_id ),
       "webhookUrl"  => gb_get_payment_webhook_url(),
       "metadata" => [
-         "order_id" => $transaction->get_post_id(),
+         "order_id" => $order_id,
       ],
    ]);
 
@@ -99,8 +101,8 @@ function gb_get_checkout_url() {
 /**
  * Returns payment redirect url from options table
  */
-function gb_get_payment_redirect_url() {
-   return get_permalink( get_option( 'payment_redirect_url' ) );
+function gb_get_payment_redirect_url( $order_id = 0 ) {
+   return get_permalink( get_option( 'payment_redirect_url' ) ) . '?order_id=' . $order_id;
 }
 
 /**
