@@ -277,8 +277,10 @@ get_header();
                               <div class="row">
 
                                  <?php
+                                 $product_count = 0;
                                  while ( have_rows( 'related_configurators' ) ) {
                                     the_row();
+                                    $product_count ++;
                                     if ( $post = get_sub_field( 'configurator' ) ) {
                                        setup_postdata( $post );
                                        $configurator = gb_get_configurator( get_the_id() ); ?>

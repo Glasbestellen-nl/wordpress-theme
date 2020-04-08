@@ -2590,6 +2590,11 @@ Product listing
    border-bottom: 1px solid #dbdbdb;
 }
 
+.product-listing--first {
+   padding-top: 1.25em;
+   border-top: 1px solid #dbdbdb;
+}
+
 .product-listing__image {
    width: 30%;
    display: block;
@@ -2655,6 +2660,11 @@ Product listing
       -moz-box-shadow: 0 1px 8px rgba(0,0,0,0.2);
       -webkit-box-shadow: 0 1px 8px rgba(0,0,0,0.2);
       box-shadow: 0 1px 8px rgba(0,0,0,0.2);
+   }
+
+   .product-listing--first {
+      padding-top: 0;
+      border-top: 1px solid rgba(0,0,0,0.15);
    }
 
    .product-listing__image,

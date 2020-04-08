@@ -75,9 +75,11 @@ get_header(); ?>
                         <section class="row product-listings large-space-below">
 
                            <?php
+                           $product_count = 0;
                            while ( $items->have_posts() ) {
                               $items->the_post();
-                              $configurator = gb_get_configurator( get_the_id() ); ?>
+                              $configurator = gb_get_configurator( get_the_id() );
+                              $product_count ++; ?>
 
                               <div class="col-12 col-md-6 col-lg-3">
                                  <?php require( get_template_directory() . '/template-parts/product-listing.php' ); ?>
