@@ -352,6 +352,10 @@ class Configurator {
       return ! empty( $this->_settings['price'] ) ? str_replace( ',', '.', $this->_settings['price'] ) : 0;
    }
 
+   public function get_price_table() {
+      return $this->_price_table;
+   }
+
    protected function calculate_price_table( array $configuration = [] ) {
 
       if ( empty( $configuration ) ) return;

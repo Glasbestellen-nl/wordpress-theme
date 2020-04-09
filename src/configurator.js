@@ -140,6 +140,10 @@ const Configurator = (function() {
             contentType: false,
             context: this,
             success: function(response) {
+
+               if (response.price_table)
+                  console.log(response.price_table);
+
                if (typeof callback === 'function' && callback())
                   callback();
             }
