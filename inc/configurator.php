@@ -71,29 +71,12 @@ function gb_handle_configurator_form_submit() {
 
    $configurator_id = $_POST['configurator_id'];
 
-   if ( ! empty( $_SESSION['configuration'][$configurator_id] ) ) {
-      $configuration = $_SESSION['configuration'][$configurator_id];
-   } else {
-      $configuration = [];
-   }
-
    if ( ! empty( $_POST['configuration'] ) ) {
 
-      foreach ( $_POST['configuration'] as $step_id => $input ) {
-         $configuration[$step_id] = $input;
-      }
-
-      $configurator = gb_get_configurator( $configurator_id, false );
-      $configurator->update( $configuration );
+      $configurator = gb_get_configurator( $configurator_id );
+      $configurator->update( $_POST['configuration'] );
 
       $_SESSION['configuration'][$configurator_id] = $configurator->get_configuration();
-
-      if ( $configurator->is_configuration_done() ) {
-         $response['done'] = true;
-      }
-
-      $response['price_table'] = $configurator->get_price_table();
-
    }
 
    wp_send_json( $response );
@@ -103,6 +86,8 @@ add_action( 'wp_ajax_handle_configurator_form_submit', 'gb_handle_configurator_f
 add_action( 'wp_ajax_nopriv_handle_configurator_form_submit', 'gb_handle_configurator_form_submit' );
 
 function gb_handle_configurator_to_cart() {
+
+   $response = [];
 
    if ( empty( $_POST['configurator_id'] ) ) wp_die();
 
@@ -121,7 +106,9 @@ function gb_handle_configurator_to_cart() {
    gb_update_cart_session_items( $cart->get_items() );
    gb_unset_configuration_session( $configurator_id );
 
-   echo gb_get_cart_url();
+   $response['url'] = gb_get_cart_url();
+
+   wp_send_json( $response );
 
    wp_die();
 }

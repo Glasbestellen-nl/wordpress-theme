@@ -40,15 +40,13 @@ class Configurator {
          $total += $this->_settings['shipping'];
       }
 
-      // Minimum price
       if ( $min_price = $this->get_min_price() ) {
          $total = ( $total < $min_price ) ? $min_price : $total;
       }
-
       return ( $round ) ? \Money::round_including_vat( $total ) : $total;
    }
 
-   protected function calculate_subtotal( $default_only = false ) {
+   public function calculate_subtotal( $default_only = false ) {
 
       $subtotal = 0;
       $d = $this->_default_price_table;
@@ -91,30 +89,29 @@ class Configurator {
    }
 
    protected function update_price_table() {
-      $configuration = $this->get_merged_configuration();
-      $this->_price_table = $this->calculate_price_table( $configuration );
+      $merged_configuration = $this->get_merged_configuration();
+      $this->_price_table = $this->calculate_price_table( $merged_configuration );
    }
 
    protected function update_configuration( array $configuration = [] ) {
-      $configuration = $this->filter_configuration( $configuration );
       $this->_configuration = $configuration;
+      $this->filter_configuration();
    }
 
    /**
     * Filters out child step configuration when parent step is not set
     */
-   protected function filter_configuration( array $configuration = [] ) {
-      if ( empty( $configuration ) ) return [];
-      foreach ( $configuration as $step_id => $input ) {
+   protected function filter_configuration() {
+      foreach ( $this->_configuration as $step_id => $input ) {
          if ( $parent_id = $this->get_step_parent( $step_id ) ) {
-            if ( $this->get_step_default( $parent_id ) == $configuration[$parent_id] )
-               unset( $configuration[$step_id] );
+            if ( $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id] ) {
+               unset( $this->_configuration[$step_id] );
+            }
          }
       }
-      return $configuration;
    }
 
-   protected function get_merged_configuration() {
+   public function get_merged_configuration() {
       $configuration = $this->_configuration;
       if ( empty( $this->_default_configuration ) ) return;
       foreach ( $this->_default_configuration as $step_id => $input ) {
@@ -163,15 +160,30 @@ class Configurator {
       return ! empty( $metadata[$key] ) ? $metadata[$key] : false;
    }
 
-   protected function get_price_matrix() {
+   public function get_price_matrix() {
       if ( $attachment_id = $this->get_metadata( 'price_matrix_csv' ) ) {
          return new \Price_Matrix( get_attached_file( $attachment_id ) );
       }
       return false;
    }
 
+   public function get_skipped_child_steps_count() {
+      if ( empty( $this->_steps ) ) return;
+      $skipped = array_filter( $this->_steps, function( $step ) {
+         $parent_id = $this->get_step_parent( $step->get_id() );
+         if ( $parent_id && isset( $this->_configuration[$parent_id] ) ) {
+            return $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id];
+         }
+         return false;
+      });
+      return ! empty( $skipped ) ? count( $skipped ) : 0;
+   }
+
+   /**
+    * @uses get_skipped_child_steps_count() to get the right comparison with the configuration
+    */
    public function is_configuration_done() {
-      return count( $this->_configuration ) === $this->get_steps_count();
+      return count( $this->_configuration ) === ( $this->get_steps_count() - $this->get_skipped_child_steps_count() );
    }
 
    public function is_step_done( string $step_id = '' ) {

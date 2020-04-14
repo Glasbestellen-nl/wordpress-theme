@@ -117,9 +117,10 @@ const Configurator = (function() {
             quantity: quantity,
             message: message
          }
-         $.post(gb.ajaxUrl, data, function(cartUrl) {
-            if (cartUrl)
-               window.location.replace(cartUrl);
+         $.post(gb.ajaxUrl, data, function(response) {
+            console.log(response);
+            if (response.url)
+               window.location.replace(response.url);
          });
       }
 
@@ -141,8 +142,10 @@ const Configurator = (function() {
             context: this,
             success: function(response) {
 
-               if (response.price_table)
-                  console.log(response.price_table);
+               console.log(response);
+
+               // if (response.price_table)
+               //    console.log(response.price_table);
 
                if (typeof callback === 'function' && callback())
                   callback();
