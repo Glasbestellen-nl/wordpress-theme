@@ -594,6 +594,7 @@ Button
    -moz-border-radius: 3px;
    -webkit-border-radius: 3px;
    border-radius: 3px;
+   border: 1px solid #aaa;
    -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,0.2);
    -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,0.2);
    box-shadow: 0 2px 1px 0 rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,0.2);
@@ -601,6 +602,7 @@ Button
    font-size: 1.25em;
    text-align: center;
    color: #fff;
+   background-color: lightgrey;
    cursor: pointer;
 }
 
@@ -682,6 +684,21 @@ Button
    position: absolute;
    font-family: "Font Awesome 5 Free";
    line-height: 1.35em;
+}
+
+.btn--aside {
+   border: 1px solid #155f994f;
+   -moz-box-shadow: none;
+   -webkit-box-shadow: none;
+   box-shadow: none;
+   font-size: 0.9375em;
+   font-weight: 500;
+   color: #155f99;
+   background-color: #155f9914;
+}
+
+.btn--aside:hover {
+   border-color: #155f99;
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -1224,6 +1241,7 @@ Card
 
 .card {
    margin-bottom: 1.25em;
+   display: block;
    -webkit-border-radius: 3px;
    -moz-border-radius: 3px;
    border-radius: 3px;
@@ -1238,6 +1256,10 @@ Card
 
 .card__body {
    padding: 1.25em;
+}
+
+.card__body--small {
+   padding: 0.625em;
 }
 
 .card__column {
@@ -1275,6 +1297,10 @@ Card
 
    .card__body {
       padding: 1.875em;
+   }
+
+   .card__body--small {
+      padding: 0.625em;
    }
 
 }

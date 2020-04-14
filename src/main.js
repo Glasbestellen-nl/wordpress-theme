@@ -424,7 +424,8 @@
 
       let data = {
          action: 'get_form_modal_input',
-         formtype: $(this).data('formtype')
+         formtype: $(this).data('formtype'),
+         metadata: $(this).data('meta')
       }
       $.get(gb.ajaxUrl, data, function(html) {
          loadModalContent(html);

@@ -15,6 +15,65 @@ use Offline_Conversion_Tracking\Dashboard_UI;
 
             <div id="postbox-container-2" class="postbox-container">
 
+               <?php
+               $configurator_id  = CRM::get_lead_meta( $_GET['lead_id'], 'saved_configurator', true );
+               $configuration    = CRM::get_lead_meta( $_GET['lead_id'], 'saved_configuration', true );
+               if ( $configurator_id && $configuration ) { ?>
+
+                  <div class="postbox postbox-space-large">
+
+                     <h2 class="hndle"><?php _e( 'Opgeslagen configuratie', 'glasbestellen' ); ?></h2>
+
+                     <div class="inside">
+
+                        <?php
+                        $configuration = json_decode( stripslashes( $configuration ), true );
+                        $configurator  = gb_get_configurator( $configurator_id, false );
+                        $configurator->update( $configuration ); ?>
+
+                        <table width="100%" class="items-table wp-list-table widefat fixed posts">
+
+                           <thead>
+                              <tr>
+                                 <th><?php _e( 'Product', 'gtp_translate' ); ?></th>
+                                 <th><?php _e( 'Totaal', 'gtp_translate' ); ?></th>
+                              </tr>
+                           </thead>
+
+                           <tbody>
+                              <tr>
+                                 <td>
+                                    <span class="item-title"><?php echo get_the_title( $configurator_id ); ?> <a href="#" class="js-toggle-target" data-toggle-target="#item_summary_1">(<?php _e( 'Details', 'glasbestellen' ); ?>)</a></span>
+
+                                    <?php if ( $configurator->get_summary() ) { ?>
+
+                                       <div class="item-summary" id="item_summary_1" style="display: none;">
+
+                                          <?php foreach ( $configurator->get_summary() as $row ) { ?>
+
+                                             <div class="item-summary-row">
+                                                <div class="item-summary-col item-summary-col-title"><?php echo $row['label']; ?>:</div>
+                                                <div class="item-summary-col"><?php echo $row['value']; ?></div>
+                                             </div>
+
+                                          <?php } ?>
+
+                                       </div>
+
+                                    <?php } ?>
+
+                                 </td>
+                                 <td><?php echo Money::display( $configurator->get_total_price() ) . ' ' . __( 'incl. BTW.', 'glasbestellen' ); ?></td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+
+                  <?php echo $configurator->get_configuration_url(); ?>
+
+               <?php } ?>
+
                <div class="postbox postbox-space-large">
 
                   <h2 class="hndle"><?php _e( 'Lead informatie', 'glasbestellen' ); ?></h2>

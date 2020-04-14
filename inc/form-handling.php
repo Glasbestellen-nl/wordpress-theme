@@ -79,8 +79,10 @@ function gb_handle_lead_form_submit() {
             }
          }
 
+         do_action( 'gb_lead_form_submit_before_redirect', $lead_id, $_POST );
+
          // Set redirect url on success
-         $response['redirect'] = get_permalink( get_option( 'page_lead_success' ) );
+         $response['redirect'] = apply_filters( 'gb_lead_form_submit_redirect_url', get_permalink( get_option( 'page_lead_success' ) ) );
 
       } else {
          $response['error'] = $error;
@@ -95,6 +97,17 @@ function gb_handle_lead_form_submit() {
 }
 add_action( 'wp_ajax_handle_lead_form_submit', 'gb_handle_lead_form_submit' );
 add_action( 'wp_ajax_nopriv_handle_lead_form_submit', 'gb_handle_lead_form_submit' );
+
+function gb_handle_save_configuration_form_submit() {
+
+   $response = [];
+
+   echo json_encode( $response );
+
+   wp_die();
+}
+add_action( 'wp_ajax_handle_save_configuration_form_submit', 'gb_handle_save_configuration_form_submit' );
+add_action( 'wp_ajax_nopriv_handle_save_configuration_form_submit', 'gb_handle_save_configuration_form_submit' );
 
 /**
  * Handles review form submit

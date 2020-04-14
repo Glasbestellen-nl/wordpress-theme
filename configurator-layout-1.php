@@ -219,10 +219,14 @@ get_header();
                                              <button class="btn btn--primary btn--block btn--next js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
                                           </div>
 
-                                          <ul class="configurator__checks">
+                                          <ul class="configurator__checks space-below">
                                              <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Bestel check', 'glasbestellen' ) . ':</strong> ' . __( 'Uw bestelling wordt op juistheid en volledigheid gecontroleerd.', 'glasbestellen' ); ?></li>
                                              <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Klanttevredenheid', 'glasbestellen' ) . ':</strong> ' . sprintf( __( 'Klanten beoordelen ons gemiddeld met een %s.', 'glasbestellen' ), '<a href="' . get_post_type_archive_link( 'review' ) . '" target="_blank" rel="nofollow">' . gb_get_review_average( true ) . '</a>' ); ?></li>
                                           </ul>
+
+                                          <div class="configurator__form-button space-below">
+                                             <span class="btn btn--block btn--aside js-popup-form" data-popup-title="<?php _e( 'Samenstelling opslaan voor later' ); ?>" data-formtype="save-configuration" data-meta="<?php the_id(); ?>"><i class="fas fa-heart"></i> &nbsp;&nbsp;<?php _e( 'Samenstelling opslaan voor later', 'glasbestellen' ); ?></span>
+                                          </div>
 
                                        </form>
 

@@ -1,0 +1,24 @@
+<?php
+/**
+ * Hooks into lead form handling to save configuration data
+ */
+function gb_lead_form_submit_save_configuration( $lead_id, $post_data ) {
+
+   if ( ! empty( $post_data['configurator_id'] ) ) {
+      CRM::update_lead_meta( $lead_id, 'saved_configurator', $post_data['configurator_id'] );
+   }
+
+   if ( ! empty( $post_data['configuration'] ) ) {
+      CRM::update_lead_meta( $lead_id, 'saved_configuration', $post_data['configuration'] );
+   }
+
+}
+add_action( 'gb_lead_form_submit_before_redirect', 'gb_lead_form_submit_save_configuration', 10, 2 );
+
+/**
+ * Changes lead submit redirect url when lead contains saved configuration
+ */
+function gb_save_configuration_redirect_url( $redirect_url ) {
+   return $redirect_url;
+}
+add_filter( 'gb_lead_form_submit_redirect_url', 'gb_save_configuration_redirect_url' );
