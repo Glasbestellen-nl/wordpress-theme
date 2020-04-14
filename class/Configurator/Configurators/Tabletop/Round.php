@@ -40,17 +40,11 @@ class Round extends \Configurator\Configurator {
          switch ( $step_id ) {
 
             case 'glasstype' :
-               $price_table[$step_id] = $m2s * $option_price;
+               $price_table[$step_id] = ( $m2s * $option_price ) * 1.8;
                break;
 
             default :
                $price_table[$step_id] = $option_price;
-         }
-      }
-
-      if ( ! empty( $price_table ) ) {
-         foreach ( $price_table as $step_id => $price ) {
-            $price_table[$step_id] = $price * 2;
          }
       }
 
