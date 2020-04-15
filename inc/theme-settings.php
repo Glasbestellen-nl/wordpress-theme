@@ -115,6 +115,12 @@ function gb_init_theme_options() {
 	add_settings_field( $id, __( 'Review success', 'glasbestellen' ), 'gb_settings_select_pages', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
 	register_setting( 'theme-settings', $id );
 
+	// Add and register review page redirect setting
+	$id = 'page_save_configuration_success';
+	add_settings_field( $id, __( 'Save configuration success', 'glasbestellen' ), 'gb_settings_select_pages', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
+	register_setting( 'theme-settings', $id );
+
+
 	/**
 	 * Tracking settings
 	 */

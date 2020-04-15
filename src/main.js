@@ -419,17 +419,11 @@
     */
    $(document).on('click', '.js-popup-form', function() {
 
-      let modalTitle = $(this).data('popup-title');
-      showModal(modalTitle);
+      let title    = $(this).data('popup-title');
+      let formtype = $(this).data('formtype');
+      let metadata = $(this).data('meta');
 
-      let data = {
-         action: 'get_form_modal_input',
-         formtype: $(this).data('formtype'),
-         metadata: $(this).data('meta')
-      }
-      $.get(gb.ajaxUrl, data, function(html) {
-         loadModalContent(html);
-      });
+      showModalForm(title, formtype, metadata);
    });
 
    /**
@@ -467,6 +461,23 @@
 })(jQuery);
 
 /**
+* Shows modal form
+*/
+function showModalForm(title, formtype, metadata) {
+
+   showModal(title);
+
+   let data = {
+      action: 'get_form_modal_input',
+      formtype: formtype,
+      metadata: metadata
+   }
+   jQuery.get(gb.ajaxUrl, data, function(html) {
+      loadModalContent(html);
+   });
+}
+
+/**
 * Hides modal
 */
 function hideModal() {
@@ -486,6 +497,8 @@ function showModal(title, size = 'small') {
    jQuery('.js-modal').removeClass(function (index, className) {
       return (className.match (/(^|\s)modal-\S+/g) || []).join(' ');
    });
+   jQuery('.js-modal-loader').show();
+   jQuery('.js-modal-inner').hide();
    jQuery('.js-modal').addClass('show modal-' + size);
 }
 
@@ -497,6 +510,8 @@ function loadModalContent(html, title = '') {
    if (title) {
       jQuery('.js-modal-title').html(title);
    }
+   jQuery('.js-modal-loader').hide();
+   jQuery('.js-modal-inner').fadeIn(300);
 }
 
 /**

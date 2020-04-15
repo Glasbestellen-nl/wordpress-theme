@@ -115,6 +115,25 @@ function gb_handle_configurator_to_cart() {
 add_action( 'wp_ajax_handle_configurator_to_cart', 'gb_handle_configurator_to_cart' );
 add_action( 'wp_ajax_nopriv_handle_configurator_to_cart', 'gb_handle_configurator_to_cart' );
 
+/**
+ * Load configuration by url
+ */
+function gb_handle_configuration_load() {
+
+   if ( ! empty( $_GET['configurator_id'] ) && ! empty( $_GET['configuration'] ) ) {
+
+      // Store configuration in session
+      $configuration = json_decode( stripslashes( $_GET['configuration'] ), true );
+      gb_set_configuration_session( $_GET['configurator_id'], $configuration );
+
+      // Redirect to url without parameters so the paramters could not be set again
+      $redirect_url = remove_query_arg( ['configurator_id', 'configuration'] );
+      wp_redirect( $redirect_url );
+      exit;
+   }
+}
+add_action( 'init', 'gb_handle_configuration_load' );
+
 function gb_get_configurator( $configurator_id = 0, $auto_set = true ) {
 
    $type = gb_get_configurator_type( $configurator_id );
@@ -122,15 +141,24 @@ function gb_get_configurator( $configurator_id = 0, $auto_set = true ) {
    $configurator = Configurator_Setup::get_instance( $type, $configurator_id );
 
    // If there is already something configured
-   if ( ! empty( $_SESSION['configuration'][$configurator_id] ) && $auto_set ) {
-      $configurator->update( $_SESSION['configuration'][$configurator_id] );
+   if ( gb_get_configuration_session( $configurator_id ) && $auto_set ) {
+      $configurator->update( gb_get_configuration_session( $configurator_id ) );
    }
    return $configurator;
+}
+
+function gb_set_configuration_session( int $configurator_id, array $configuration = [] ) {
+   if ( empty( $configurator_id ) || empty( $configuration ) ) return;
+   $_SESSION['configuration'][$configurator_id] = $configuration;
 }
 
 function gb_unset_configuration_session( int $configurator_id ) {
    if ( empty( $configurator_id ) ) return;
    unset( $_SESSION['configuration'][$configurator_id] );
+}
+
+function gb_get_configuration_session( int $configurator_id ) {
+   return ! empty( $_SESSION['configuration'][$configurator_id] ) ? $_SESSION['configuration'][$configurator_id] : false;
 }
 
 function gb_get_configurator_type( int $configurator_id ) {

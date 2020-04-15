@@ -36,7 +36,8 @@ use Offline_Conversion_Tracking\Dashboard_UI;
                            <thead>
                               <tr>
                                  <th><?php _e( 'Product', 'gtp_translate' ); ?></th>
-                                 <th><?php _e( 'Totaal', 'gtp_translate' ); ?></th>
+                                 <th><?php _e( 'Totaal ex. BTW.', 'gtp_translate' ); ?></th>
+                                 <th><?php _e( 'Totaal incl. BTW.', 'gtp_translate' ); ?></th>
                               </tr>
                            </thead>
 
@@ -63,14 +64,16 @@ use Offline_Conversion_Tracking\Dashboard_UI;
                                     <?php } ?>
 
                                  </td>
-                                 <td><?php echo Money::display( $configurator->get_total_price() ) . ' ' . __( 'incl. BTW.', 'glasbestellen' ); ?></td>
+                                 <td><?php echo Money::display( $configurator->get_total_price(), false ); ?></td>
+                                 <td><?php echo Money::display( $configurator->get_total_price() ); ?></td>
                               </tr>
                            </tbody>
                         </table>
+
+                        <p><a href="<?php echo $configurator->get_configuration_url(); ?>" target="_blank"><?php _e( 'Open configuratie in tablad', 'glasbestellen' ); ?> &raquo;</a></p>
+
                      </div>
                   </div>
-
-                  <?php echo $configurator->get_configuration_url(); ?>
 
                <?php } ?>
 

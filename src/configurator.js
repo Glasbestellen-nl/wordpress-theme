@@ -71,30 +71,30 @@ const Configurator = (function() {
 
             e.preventDefault();
 
-            const parentForm = $(this).parents('form');
-            const formData = self.initFormData(parentForm[0]);
+            const form = $(this).parents('form');
 
-            let toCart = true;
-            let invalidInputs = [];
-            $(':input', parentForm).each(function(index, element) {
-               if (!self.validateInput(element)) {
-                  toCart = false;
-                  invalidInputs.push(element);
-               }
-            });
-            if (toCart) {
+            self.validateForm(form, function(formData) {
                let quantity = $('.js-configurator-quantity').val() || 1;
                let message  = $('.js-configurator-message').val() || "";
                self.submitFormData(formData, function() {
                   self.toCart(quantity, message);
                });
-            } else {
-               // Scroll to first invalid field
-               const firstInput = $(invalidInputs[0]);
-               if (!firstInput.isInViewport())
-                  firstInput.scrollTo(-200);
+            });
 
-            }
+         }).on('click', '.js-configurator-save-button', function(e) {
+
+            const form = $(this).parents('form');
+
+            self.validateForm(form, function() {
+
+               let title    = $(this).data('popup-title');
+               let formtype = $(this).data('formtype');
+               let metadata = $(this).data('meta');
+
+               showModalForm(title, formtype, metadata);
+
+            }.bind(this));
+
          });
 
       }
@@ -131,6 +131,32 @@ const Configurator = (function() {
          return formData;
       }
 
+      this.validateForm = function(form, callback) {
+
+         const self = this;
+
+         const formData = this.initFormData(form[0]);
+
+         let valid = true;
+         let invalidInputs = [];
+         $(':input', form).each(function(index, element) {
+            if (!self.validateInput(element)) {
+               valid = false;
+               invalidInputs.push(element);
+            }
+         });
+         if (valid) {
+            if (typeof callback === 'function' && callback(formData))
+               callback(formData);
+         } else {
+            // Scroll to first invalid field
+            const firstInput = $(invalidInputs[0]);
+            if (!firstInput.isInViewport())
+               firstInput.scrollTo(-200);
+         }
+
+      }
+
       this.submitFormData = function(formData, callback) {
 
          $.ajax({
@@ -141,8 +167,6 @@ const Configurator = (function() {
             contentType: false,
             context: this,
             success: function(response) {
-
-               console.log(response);
 
                // if (response.price_table)
                //    console.log(response.price_table);

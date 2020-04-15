@@ -6,7 +6,7 @@ if ( ! empty( $_GET['metadata'] ) ) {
    <form method="post" class="js-form-validation" novalidate>
 
       <div class="text text--small">
-         <p><?php _e( 'Wilt u nog even nadenken voor u besteld? Geen probleem! Laat uw naam en e-mailadres achter en ontvang uw samenstelling per e-mail. Zo kunt u gemakkelijk later beslissen.', 'glasbestellen' ); ?></p>
+         <p><?php _e( 'Wilt u nog even nadenken voor u besteld? Geen probleem! Vul uw naam en email in en ontvang uw samenstelling in de mail. Zo kunt u eenvoudig later beslissen.', 'glasbestellen' ); ?></p>
       </div>
 
       <div class="row">

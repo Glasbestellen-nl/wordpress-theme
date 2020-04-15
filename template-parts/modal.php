@@ -14,4 +14,6 @@
 
    </div>
 
+   <div class="modal__loader js-modal-loader"></div>
+
 </div>

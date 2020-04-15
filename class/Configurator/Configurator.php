@@ -370,8 +370,11 @@ class Configurator {
 
    public function get_configuration_url() {
       if ( empty( $this->_configuration ) ) return;
-      $md5 = md5( json_encode( $this->_configuration ) );
-      return add_query_arg( 'configuration', $md5, get_permalink( $this->_configurator_id ) );
+      $data = [
+         'configurator_id' => $this->_configurator_id,
+         'configuration'   => urlencode( json_encode( $this->_configuration ) )
+      ];
+      return add_query_arg( $data, get_permalink( $this->_configurator_id ) );
    }
 
    protected function calculate_price_table( array $configuration = [] ) {
