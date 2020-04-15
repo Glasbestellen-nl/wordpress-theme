@@ -1,6 +1,6 @@
 <?php get_template_part( 'template-parts/head' ); ?>
 
-   <header class="main-header">
+   <!-- <header class="main-header">
 
       <div class="header-top">
 
@@ -26,7 +26,7 @@
 
          </div>
 
-      </div>
+      </div> -->
 
       <div class="header-inner">
 
