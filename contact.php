@@ -112,9 +112,7 @@ get_header();
                            </ul>
                            <strong class="h3 h-orange"><?php _e( 'Openingstijden', 'glasbestellen' ); ?></strong>
                            <ul class="contact-details--dark-bg">
-                              <li class="contact-details__item"><?php echo __( 'Maandag', 'glasbestellen' ) . ' - ' . __( 'vrijdag', 'glasbestellen' ) . ': 08:30 - 17:00'; ?></li>
-                              <li class="contact-details__item"><?php echo __( 'Zaterdag', 'glasbestellen' ) . ': ' . __( 'Op afspraak', 'glasbestellen' ); ?></li>
-                              <li class="contact-details__item"><?php echo __( 'Zondag', 'glasbestellen' ) . ': ' . __( 'Gesloten', 'glasbestellen' ); ?></li>
+                              <li class="contact-details__item"><?php echo __( 'Maandag', 'glasbestellen' ) . ' - ' . __( 'vrijdag', 'glasbestellen' ) . ': 09:00 - 17:00'; ?></li>
                            </ul>
                         </div>
 
