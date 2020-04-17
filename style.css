@@ -2280,7 +2280,6 @@ Main nav
 }
 
 .main-nav__toggler-button {
-   margin-left: auto;
    padding: 0.75em 1em;
    display: inline-block;
    font-weight: 600;
@@ -2309,7 +2308,6 @@ Main nav
 }
 
 .main-nav__items {
-   margin: -1.875em 0 0 0;
    padding: 0.625em 0;
    display: none;
 }

@@ -34,7 +34,7 @@
 
             <div class="row">
 
-               <div class="col-md-4 col-lg-6">
+               <div class="col-md-4 col-lg-4">
 
                   <a href="<?php echo home_url(); ?>" class="site-logo header-inner__logo">
                      <img data-src="<?php echo get_template_directory_uri() . '/assets/images/logo.png'; ?>" class="lazyload site-logo__image" alt="Logo">
@@ -43,7 +43,7 @@
 
                </div>
 
-               <div class="col-md-8 col-lg-6 d-none d-md-block">
+               <div class="col-md-8 col-lg-8 d-none d-md-block">
 
                   <div class="header-inner__contact-options">
 
@@ -86,6 +86,10 @@
             </div>
 
             <?php gb_render_main_nav(); ?>
+
+            <div class="main-nav__cart">
+               <i class="fas fa-shopping-cart main-nav__cart-icon"></i>
+            </div>
 
          </div>
 
