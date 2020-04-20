@@ -91,36 +91,41 @@ get_header(); ?>
 
                      <?php } wp_reset_postdata(); ?>
 
-                     <div class="row large-space-below">
 
-                        <div class="col-12">
+                     <?php if ( get_field( 'show_contact_box' ) ) { ?>
 
-                           <div class="card card--banner">
+                        <div class="row large-space-below">
 
-                              <div class="card__body">
+                           <div class="col-12">
 
-                                 <div class="row">
+                              <div class="card card--banner">
 
-                                    <div class="col-lg-7 card__column">
-                                       <div class="card__text">
-                                          <span class="h2"><?php _e( 'Laat ons meedenken', 'glasbestellen' ); ?></span>
-                                          <div class="text">
-                                             <p><?php _e( 'Heeft u hulp nodig bij het kiezen van de juiste douche? Wij helpen u graag met het kiezen van het juiste product. We denken graag met u mee!', 'glasbestellen' ); ?></p>
+                                 <div class="card__body">
+
+                                    <div class="row">
+
+                                       <div class="col-lg-7 card__column">
+                                          <div class="card__text">
+                                             <span class="h2"><?php echo get_field( 'contact_box_title' ) ?></span>
+                                             <div class="text">
+                                                <p><?php echo get_field( 'contact_box_message' ); ?></p>
+                                             </div>
                                           </div>
                                        </div>
-                                    </div>
 
-                                    <div class="col-lg-5 d-flex align-items-center card__column card__column--last">
-                                       <span class="btn btn--large btn--primary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php _e( 'Advies over douche', 'glasbestellen' ); ?>"><?php _e( 'Advies over douche', 'glasbestellen' ); ?></span>
-                                    </div>
+                                       <div class="col-lg-5 d-flex align-items-center card__column card__column--last">
+                                          <span class="btn btn--large btn--primary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php echo get_field( 'contact_box_btn' ); ?>"><?php echo get_field( 'contact_box_btn' ); ?></span>
+                                       </div>
 
+                                    </div>
                                  </div>
                               </div>
+
                            </div>
 
                         </div>
 
-                     </div>
+                     <?php } ?>
 
                      <section class="text" id="main_content">
 
