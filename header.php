@@ -34,7 +34,7 @@
 
             <div class="row">
 
-               <div class="col-md-4 col-lg-4">
+               <div class="col-8 col-md-4 col-lg-3">
 
                   <a href="<?php echo home_url(); ?>" class="site-logo header-inner__logo">
                      <img data-src="<?php echo get_template_directory_uri() . '/assets/images/logo.png'; ?>" class="lazyload site-logo__image" alt="Logo">
@@ -43,7 +43,7 @@
 
                </div>
 
-               <div class="col-md-8 col-lg-8 d-none d-md-block">
+               <div class="col-12 col-lg-5 offset-lg-3 d-none d-lg-block">
 
                   <div class="header-inner__contact-options">
 
@@ -67,6 +67,15 @@
 
                </div>
 
+               <div class="col-4 col-lg-1 offset-md-4 offset-lg-0 d-flex">
+                  <div class="header-inner__cart">
+                     <a href="<?php echo gb_get_cart_url(); ?>" class="cart-button btn--aside">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-button__quantity js-total-cart-quantity">0</span>
+                     </a>
+                  </div>
+               </div>
+
             </div>
 
          </div>
@@ -79,7 +88,7 @@
 
       <nav class="main-nav">
 
-         <div class="container">
+         <div class="container main-nav__container">
 
             <div class="main-nav__toggler main-nav__toggler js-nav-toggler">
                <span class="main-nav__toggler-button"><?php _e( 'Menu', 'glasbestellen' ); ?></span>
@@ -87,9 +96,10 @@
 
             <?php gb_render_main_nav(); ?>
 
-            <div class="main-nav__cart">
-               <i class="fas fa-shopping-cart main-nav__cart-icon"></i>
-            </div>
+            <a href="tel:<?php echo str_replace( ' ', '', get_option( 'company_phone_number' ) ); ?>" class="main-nav__phone d-lg-none">
+               <i class="fas fa-phone-alt main-nav__cart-icon"></i>
+               <?php echo get_option( 'company_phone_number' ); ?>
+            </a>
 
          </div>
 
