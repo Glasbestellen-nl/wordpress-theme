@@ -2168,12 +2168,16 @@ Header
 }
 
 .header-inner {
-   padding: 1.25em;
+   padding: 1.25em 0;
 }
 
 .header-inner__logo {
-   margin: 0 auto;
    display: block;
+}
+
+.header-inner__cart {
+   margin-left: auto;
+   padding-right: 0.25em;
 }
 
 .header-inner__contact-options {
@@ -2275,12 +2279,15 @@ Main nav
    background-color: #fcb136;
 }
 
+.main-nav__container {
+   position: relative;
+}
+
 .main-nav__toggler {
    display: flex;
 }
 
 .main-nav__toggler-button {
-   margin-left: auto;
    padding: 0.75em 1em;
    display: inline-block;
    font-weight: 600;
@@ -2308,8 +2315,16 @@ Main nav
    content: "\f057";
 }
 
+.main-nav__phone {
+   padding: 0.75em;
+   position: absolute;
+   top: 0;
+   right: 0.75em;
+   font-weight: 600;
+   color: #fff;
+}
+
 .main-nav__items {
-   margin: -1.875em 0 0 0;
    padding: 0.625em 0;
    display: none;
 }
@@ -2723,6 +2738,37 @@ Product listing
 /*--------------------------------------------------------------
 Cart
 --------------------------------------------------------------*/
+
+.cart-button {
+   width: 2.5em;
+   height: 2.5em;
+   padding-right: 0.15em;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: relative;
+   border-radius: 3px;
+   border: 1px solid rgba(0,0,0,0.1);
+   font-size: 1.125em;
+   color: #0d5994;
+   cursor: pointer;
+}
+
+.cart-button__quantity {
+   width: 1.5em;
+   height: 1.5em;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: absolute;
+   top: -0.5em;
+   right: -0.875em;
+   border-radius: 100%;
+   background-color: #f6a41d;
+   font-size: 0.75em;
+   line-height: 0.75em;
+   color: #fff;
+}
 
 .cart-table {
    border-top: 1px dotted #dbdbdb;
