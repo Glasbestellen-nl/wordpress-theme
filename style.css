@@ -1,7 +1,7 @@
 /*
 Theme Name: Glasbestellen.nl Theme
 Author: Robbert Vermeulen
-Version: 4.1.8
+Version: 4.1.9
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: glasbestellen
@@ -3099,6 +3099,70 @@ Configurator
 
    }
 
+}
+
+/*--------------------------------------------------------------
+Lazy responsive video
+--------------------------------------------------------------*/
+
+.lr-video {
+   width: 100%;
+   display: block;
+   position: relative;
+   background-color: #000;
+   -moz-border-radius: 2px;
+   -webkit-border-radius: 2px;
+   border-radius: 2px;
+   overflow: hidden;
+}
+
+.lr-video::after {
+   content: "";
+   display: block;
+   padding-bottom: 60%;
+}
+
+.lr-video__play {
+   width: 100%;
+   height: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   position: absolute;
+   z-index: 1;
+   text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+   background-color: rgba(0,0,0,0.4);
+}
+
+.lr-video__play::after {
+   content: "\f144";
+   font-family: "Font Awesome 5 Free";
+   font-size: 2em;
+   text-align: center;
+   color: #fff;
+}
+
+.lr-video__img {
+   width: 100%;
+   height: 100%;
+   position: absolute;
+   top: 0;
+   object-fit: cover;
+}
+
+/*--------------------------------------------------------------
+Video list
+--------------------------------------------------------------*/
+
+.video-list__item {
+   margin-bottom: 1.25em;
+}
+
+.video-list__item-caption {
+   padding: 0.625em 0;
+   display: block;
+   text-align: center;
+   font-size: 0.875em;
 }
 
 /*--------------------------------------------------------------

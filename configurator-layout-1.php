@@ -68,16 +68,60 @@ get_header();
 
                               <ul class="links-list large-space-below">
 
+                                 <?php if ( $corrections_file_url = get_field( 'corrections_instruction' ) ) { ?>
+                                    <li class="links-list__item"><i class="fas fa-arrows-alt-h links-list__icon"></i> <a href="<?php echo $corrections_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Glascorrecties (speling)', 'glasbestellen' ); ?></a></li>
+                                 <?php } ?>
+                                 <?php if ( $measure_file_url = get_field( 'measure_instruction' ) ) { ?>
+                                    <li class="links-list__item"><i class="fas fa-ruler-combined links-list__icon"></i> <a href="<?php echo $measure_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Meetinstructie', 'glasbestellen' ); ?></a></li>
+                                 <?php } ?>
                                  <?php if ( $assembly_file_url = get_field( 'assembly_instruction' ) ) { ?>
                                     <li class="links-list__item"><i class="fas fa-wrench links-list__icon"></i> <a href="<?php echo $assembly_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Montageinstructie', 'glasbestellen' ); ?></a></li>
-                                 <?php } ?>
-                                 <?php if ( $assembly_video_url = get_field( 'assembly_video' ) ) { ?>
-                                    <li class="links-list__item"><i class="fab fa-youtube links-list__icon"></i> <a href="<?php echo $assembly_video_url; ?>" class="links-list__link fancybox-various fancybox.iframe"><?php _e( 'Montagevideo', 'glasbestellen' ); ?></a></li>
                                  <?php } ?>
                                  <?php if ( $fittings_file_url = get_field( 'fittings_info' ) ) { ?>
                                     <li class="links-list__item"><i class="fas fa-info-circle links-list__icon"></i> <a href="<?php echo $fittings_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Beslag informatie', 'glasbestellen' ); ?></a></li>
                                  <?php } ?>
                               </ul>
+
+                              <?php
+                              if ( get_field( 'measure_video_youtube_id' ) || get_field( 'assembly_video_youtube_id' ) ) {
+                                 $video_args = ['autoplay' => 1, 'rel' => 0];
+                                 ?>
+
+                                 <div class="video-list">
+
+                                    <div class="row">
+
+                                       <?php
+                                       if ( $youtube_id = get_field( 'measure_video_youtube_id' ) ) {
+                                          $url = add_query_arg( $video_args, 'https://www.youtube.com/embed/' . $youtube_id ); ?>
+                                          <div class="col-4 col-md-4">
+                                             <div class="video-list__item">
+                                                <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
+                                                   <div class="lr-video__play"></div>
+                                                   <img data-src="http://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
+                                                </a>
+                                                <span class="video-list__item-caption"><?php _e( 'Hoe meten?', 'glasbestellen' ); ?></span>
+                                             </div>
+                                          </div>
+                                       <?php } ?>
+
+                                       <?php if ( $youtube_id = get_field( 'assembly_video_youtube_id' ) ) {
+                                          $url = add_query_arg( $video_args, 'https://www.youtube.com/embed/' . $youtube_id ); ?>
+                                          <div class="col-4 col-md-4">
+                                             <div class="video-list__item">
+                                                <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
+                                                   <div class="lr-video__play"></div>
+                                                   <img data-src="http://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
+                                                </a>
+                                                <span class="video-list__item-caption"><?php _e( 'Hoe monteren?', 'glasbestellen' ); ?></span>
+                                             </div>
+                                          </div>
+                                       <?php } ?>
+                                    </div>
+
+                                 </div>
+
+                              <?php } ?>
 
                            </div>
 
