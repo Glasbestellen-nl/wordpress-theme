@@ -81,7 +81,7 @@ get_header(); ?>
                               $configurator = gb_get_configurator( get_the_id() );
                               $product_count ++; ?>
 
-                              <div class="col-12 col-md-6 col-lg-3">
+                              <div class="col-12 col-md-6 col-lg-4">
                                  <?php require( get_template_directory() . '/template-parts/product-listing.php' ); ?>
                               </div>
 
@@ -103,15 +103,15 @@ get_header(); ?>
 
                                     <div class="col-lg-7 card__column">
                                        <div class="card__text">
-                                          <span class="h2"><?php _e( 'Hulp nodig?', 'glasbestellen' ); ?></span>
+                                          <span class="h2"><?php _e( 'Laat ons meedenken', 'glasbestellen' ); ?></span>
                                           <div class="text">
-                                             <p><?php _e( 'Heeft u hulp nodig of wilt u een offerte ontvangen? We helpen u graag!', 'glasbestellen' ); ?></p>
+                                             <p><?php _e( 'Heeft u hulp nodig bij het kiezen van de juiste douche? Wij helpen u graag met het kiezen van het juiste product. We denken graag met u mee!', 'glasbestellen' ); ?></p>
                                           </div>
                                        </div>
                                     </div>
 
                                     <div class="col-lg-5 d-flex align-items-center card__column card__column--last">
-                                       <span class="btn btn--large btn--secondary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?>"><?php _e( 'Offerte aanvragen', 'glasbestellen' ); ?></span>
+                                       <span class="btn btn--large btn--primary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php _e( 'Advies over douche', 'glasbestellen' ); ?>"><?php _e( 'Advies over douche', 'glasbestellen' ); ?></span>
                                     </div>
 
                                  </div>
