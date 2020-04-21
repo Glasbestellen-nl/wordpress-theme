@@ -1,32 +1,6 @@
 <?php get_template_part( 'template-parts/head' ); ?>
 
-   <!-- <header class="main-header">
-
-      <div class="header-top">
-
-         <div class="container">
-
-            <div class="header-top__inner">
-
-               <div class="header-top__inline d-md-none">
-                  <a href="tel:<?php echo get_option( 'company_phone_number' ); ?>" class="header-top__inline-item header-top__inline-item--first">
-                     <div class="header-top__inline-item-icon"><i class="fas fa-phone-alt"></i></div> <?php echo get_option( 'company_phone_number' ); ?>
-                  </a>
-                  <a href="mailto:<?php echo get_option( 'company_email' ); ?>" class="header-top__inline-item">
-                     <div class="header-top__inline-item-icon"><i class="fas fa-envelope"></i></div> <?php echo get_option( 'company_email' ); ?>
-                  </a>
-               </div>
-
-               <a href="<?php echo gb_get_cart_url(); ?>" class="header-top__cart">
-                  <i class="fas fa-shopping-cart header-top__cart-icon"></i>
-                  <span class="header-top__cart-number js-total-cart-quantity">0</span>
-               </a>
-
-            </div>
-
-         </div>
-
-      </div> -->
+   <header class="main-header">
 
       <div class="header-inner">
 
