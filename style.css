@@ -1,7 +1,7 @@
 /*
 Theme Name: Glasbestellen.nl Theme
 Author: Robbert Vermeulen
-Version: 4.2.2
+Version: 4.2.3
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: glasbestellen
@@ -2660,6 +2660,7 @@ Product listing
    margin-bottom: 1.25em;
    padding-bottom: 1.25em;
    display: flex;
+   position: relative;
    border-bottom: 1px solid #dbdbdb;
 }
 
@@ -2712,6 +2713,11 @@ Product listing
 
 .product-listing__shipping {
    font-size: 0.75em;
+}
+
+.product-listing__link-cover {
+   position: absolute;
+   top: 0; right: 0; bottom: 0; left: 0;
 }
 
 /* Medium devices (tablets, 768px and up) */

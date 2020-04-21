@@ -12,4 +12,5 @@
          <span class="product-listing__shipping"><i class="fas fa-shipping-fast"></i> <?php _e( 'Gratis verzending', 'glasbestellen' ); ?></span>
       </div>
    </div>
+   <a href="<?php the_permalink(); ?>" class="product-listing__link-cover"></a>
 </div>
