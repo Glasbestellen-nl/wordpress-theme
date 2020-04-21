@@ -22,9 +22,33 @@ get_header();
                         }
                         ?>
 
-                        <section class="text">
-                           <h1><?php the_title(); ?></h1>
-                        </section>
+                        <div class="d-block d-md-flex align-items-center space-below">
+
+                           <section class="text space-right">
+                              <h1 class="h-default tiny-space-sm-below"><?php the_title(); ?></h1>
+                           </section>
+
+                           <?php
+                           if ( $review_category = get_field( 'review_category' ) ) {
+                              if ( $review_avarge = gb_get_review_average( true, $review_category, 1 ) ) { ?>
+
+                                 <div class="rating justify-content-start scroll-to js-scroll-to" data-scroll-to="#reviews">
+                                    <div class="stars rating__stars" title="<?php _e( 'Ervaringen', 'glasbestellen' ); ?>">
+                                       <?php
+                                       for ( $i = 1; $i <= 5; $i ++ ) {
+                                          $checked_class = ( $i <= $review_avarge ) ? 'star--checked' : '';
+                                          echo '<div class="fas fa-star star ' . $checked_class . '"></div>';
+                                       }
+                                       ?>
+                                    </div>
+                                    <span class="rating__number rating__number--light-bg"><?php echo $review_avarge; ?></span>
+                                 </div>
+
+                              <?php } ?>
+
+                           <?php } ?>
+
+                        </div>
 
                         <div class="row large-space-below">
 
@@ -315,6 +339,68 @@ get_header();
                            <?php } ?>
 
                         </article>
+
+                        <?php
+                        if ( $review_category = get_field( 'review_category' ) ) {
+                           $reviews = gb_get_reviews( $number = 6, $review_category ); ?>
+
+                           <div id="reviews">
+
+                              <strong class="h2 space-below"><?php _e( 'Wat onze klanten zeggen..', 'glasbestellen' ); ?></strong>
+
+                              <div class="row">
+
+                                 <?php foreach ( $reviews as $review ) { ?>
+
+                                    <div class="col-12 col-md-6">
+                                       <div class="card">
+                                          <div class="review" data-mh="review">
+                                             <div class="review__header">
+
+                                                <div class="review__title">
+                                                   <strong class="h5 h-default"><?php echo $review->post_title; ?></strong>
+                                                </div>
+
+                                                <?php if ( $rating = get_field( 'rating', $review->ID ) ) { ?>
+
+                                                   <div class="review__rating rating">
+                                                      <div class="stars rating__stars">
+                                                         <?php
+                                                         for ( $i = 1; $i <= 5; $i ++ ) {
+                                                            $class = 'star';
+                                                            if ( $i <= $rating ) {
+                                                               $class .= ' star--checked';
+                                                            }
+                                                            echo '<div class="fas fa-star ' . $class . '"></div>';
+                                                         }
+                                                         ?>
+                                                      </div>
+                                                   </div>
+
+                                                <?php } ?>
+
+                                             </div>
+
+                                             <div class="review__body">
+                                                <div class="text text--small review__text">
+                                                   <?php echo wpautop( $review->post_content ); ?>
+                                                   <p><?php echo '- ' . get_post_meta( $review->ID, 'name', true ); ?></p>
+                                                </div>
+                                             </div>
+
+                                          </div>
+
+                                       </div>
+
+                                    </div>
+
+                                 <?php } ?>
+
+                              </div>
+
+                           </div>
+
+                        <?php } ?>
 
                         <?php if ( get_field( 'related_configurators' ) ) { ?>
 
