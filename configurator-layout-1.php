@@ -69,7 +69,7 @@ get_header();
                               <ul class="links-list large-space-below">
 
                                  <?php if ( $corrections_file_url = get_field( 'corrections_instruction' ) ) { ?>
-                                    <li class="links-list__item"><i class="fas fa-arrows-alt-h links-list__icon"></i> <a href="<?php echo $corrections_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Glascorrecties (speling)', 'glasbestellen' ); ?></a></li>
+                                    <li class="links-list__item"><i class="fas fa-arrows-alt-h links-list__icon"></i> <a href="<?php echo $corrections_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Glascorrecties', 'glasbestellen' ); ?></a></li>
                                  <?php } ?>
                                  <?php if ( $measure_file_url = get_field( 'measure_instruction' ) ) { ?>
                                     <li class="links-list__item"><i class="fas fa-ruler-combined links-list__icon"></i> <a href="<?php echo $measure_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Meetinstructie', 'glasbestellen' ); ?></a></li>
