@@ -1021,6 +1021,7 @@ Form
    -moz-appearance: none;
    -webkit-appearance: none;
    appearance: none;
+   border: 1px solid #a6a6a6;
    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAAAl0lEQVRoge3RMQrCQBBG4adXUPCYYmW08cypDWiT6USyMZPdyPtgui3ez4IkSZIkaRsuQA+8kq4HzlnxJ2BIjI8bgOPUqH3hiF3h++bcyf+BW/aIa2L8Izs+c8Rq8WHJEavHhyVGVIsPv4yoHh/mjGgmPpSMaC4+TBnRbHz4NqL5+PBpxGbiQwc8x+sqt8x2GE+SJEn6Q2+A4tm8r9W5iQAAAABJRU5ErkJggg=='),
    -webkit-linear-gradient(#ffffff 0%, #e5e5e5 100%);
    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAAAl0lEQVRoge3RMQrCQBBG4adXUPCYYmW08cypDWiT6USyMZPdyPtgui3ez4IkSZIkaRsuQA+8kq4HzlnxJ2BIjI8bgOPUqH3hiF3h++bcyf+BW/aIa2L8Izs+c8Rq8WHJEavHhyVGVIsPv4yoHh/mjGgmPpSMaC4+TBnRbHz4NqL5+PBpxGbiQwc8x+sqt8x2GE+SJEn6Q2+A4tm8r9W5iQAAAABJRU5ErkJggg=='),
