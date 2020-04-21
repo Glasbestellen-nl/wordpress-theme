@@ -84,8 +84,8 @@ get_header();
 
                               <?php
                               if ( get_field( 'measure_video_youtube_id' ) || get_field( 'assembly_video_youtube_id' ) ) {
-                                 $video_args = ['autoplay' => 1, 'rel' => 0];
-                                 ?>
+
+                                 $video_args = ['autoplay' => 1, 'rel' => 0]; ?>
 
                                  <div class="video-list">
 
@@ -162,7 +162,7 @@ get_header();
                                     <div class="configurator__body">
 
                                        <div class="space-below">
-                                          <span class="h4 configurator__heading"><?php _e( 'Product configureren', 'glasbestellen' ); ?></span>
+                                          <span class="h4 configurator__heading"><?php echo sprintf( __( '%s configureren', 'glasbestellen' ), get_first_term_by_id( get_the_id(), 'startopstelling', 'name' ) ); ?></span>
                                           <p><?php echo sprintf( __( 'Klik voor meer informatie op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
                                        </div>
 

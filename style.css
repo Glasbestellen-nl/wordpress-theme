@@ -3019,6 +3019,7 @@ Configurator
 }
 
 .configurator__heading {
+   font-size: 1.125em;
    color: #000;
 }
 
@@ -3032,7 +3033,7 @@ Configurator
 }
 
 .configurator__form-label {
-   font-size: 1.125em;
+   font-size: 1em;
 }
 
 .configurator__form-label--link:hover {
@@ -3137,10 +3138,6 @@ Configurator
 
       .configurator__info-icon {
          font-size: 1.125em;
-      }
-
-      .configurator__form-label {
-         font-size: 1em;
       }
 
    }
