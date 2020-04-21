@@ -291,6 +291,38 @@ Mobile more text
 }
 
 /*--------------------------------------------------------------
+Arrow down bar
+--------------------------------------------------------------*/
+
+.arrow-down-bar {
+   margin-bottom: 2.5em;
+   padding: 1em 1.25em;
+   display: block;
+   position: relative;
+   -moz-border-radius: 3px;
+   -webkit-border-radius: 3px;
+   border-radius: 3px;
+   background-color: rgba(0,0,0,0.05);
+   font-size: 1em;
+   font-weight: 500;
+   line-height: 1em;
+   text-align: center;
+}
+
+.arrow-down-bar::after {
+   content: "";
+   margin-left: -0.625em;
+   position: absolute;
+   left: 50%;
+   top: 100%;
+   width: 0;
+   height: 0;
+   border-left: 1.25em solid transparent;
+   border-right: 1.25em solid transparent;
+   border-top: 1.25em solid rgba(0,0,0,0.05);
+}
+
+/*--------------------------------------------------------------
 Iconic link
 --------------------------------------------------------------*/
 

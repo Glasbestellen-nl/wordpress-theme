@@ -72,7 +72,9 @@ get_header(); ?>
                      $items = $archive->get_items_query_object();
                      if ( $items->have_posts() ) { ?>
 
-                        <span class="h2 space-below"><?php echo sprintf( __( 'Kies en stel uw %s samen', 'glasbestellen' ), strtolower( get_the_title() ) ); ?>:</span>
+                        <?php if ( ! $archive->get_filters() ) { ?>
+                           <span class="arrow-down-bar"><?php echo sprintf( __( 'Kies en stel uw %s samen', 'glasbestellen' ), strtolower( get_the_title() ) ); ?>:</span>
+                        <?php } ?>
 
                         <section class="row product-listings large-space-below">
 
