@@ -162,7 +162,7 @@ get_header();
                                     <div class="configurator__body">
 
                                        <div class="space-below">
-                                          <span class="h4 configurator__heading"><?php echo sprintf( __( '%s configureren', 'glasbestellen' ), get_first_term_by_id( get_the_id(), 'startopstelling', 'name' ) ); ?></span>
+                                          <span class="h4 configurator__heading"><?php echo sprintf( __( '%s samenstellen', 'glasbestellen' ), get_first_term_by_id( get_the_id(), 'startopstelling', 'name' ) ); ?></span>
                                           <p><?php echo sprintf( __( 'Klik voor meer informatie op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
                                        </div>
 
