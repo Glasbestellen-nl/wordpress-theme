@@ -14,11 +14,12 @@
          <tr>
             <td style="padding-top: 15px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22px;">
                <?php
-               $html = sprintf( __( 'U heeft onderstaande <strong>%s</strong> op onze website samengesteld. U kunt uw samenstelling weer bekijken en doorgaan met bestellen door op de groene knop te klikken.', 'glasbestellen' ), $configurator_name );
+               $html = sprintf( __( 'U heeft een offerte aangevraagd voor een <strong>%s</strong>. Hieronder vindt u uw samenstelling en prijs.', 'glasbestellen' ), $configurator_name );
                echo $html;
                ?>
             </td>
          </tr>
+
 
       </table>
 
@@ -26,14 +27,24 @@
 </tr>
 
 <tr>
-	<td style="padding: 10px 0 20px 0;">
+	<td style="padding: 10px 40px 20px 40px;">
 
       <table style="border-collapse: collapse; font-family: Arial, sans-serif; font-size: 12px;" border="0" cellpadding="0" cellspacing="0" width="100%">
+
          <tr>
-            <td style="padding: 0 40px;">
-               <a href="<?php echo $configuration_url; ?>" style="padding: 0.875em 1.25em; display: block; text-align: center; border: 1px solid #368e19; font-weight: 600; text-decoration: none; font-size: 18px; line-height: 18px; border-radius: 4px; background: #399c1a; color: #fff;">Naar mijn samenstelling &raquo;</a>
+            <td style="font-family: Arial, sans-serif; font-size: 16px; color: #0c5994;">
+               <b><?php echo __( 'Uw aanvraag', 'glasbestellen' ) . ':'; ?></b>
             </td>
          </tr>
+
+         <?php if ( $message ) { ?>
+            <tr>
+               <td style="padding-top: 15px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22px;">
+                  <?php echo $message; ?>
+               </td>
+            </tr>
+         <?php } ?>
+
       </table>
 
    </td>
@@ -80,6 +91,29 @@
 					</td>
 					<td align="right" style="padding: 10px 40px 10px 0;"><?php echo Money::display( $configuration_price ); ?></td>
 				</tr>
+
+            <tr>
+               <td style="padding: 30px 40px 10px 40px; font-family: Arial, sans-serif; font-size: 14px; line-height: 22px;">
+                  <?php
+                  $html = __( 'Om uw samenstelling online te bekijken en doorgaan met bestellen door op de groene knop te klikken.', 'glasbestellen' );
+                  echo $html;
+                  ?>
+               </td>
+            </tr>
+
+            <tr>
+            	<td style="padding: 10px 0 20px 0;">
+
+                  <table style="border-collapse: collapse; font-family: Arial, sans-serif; font-size: 12px;" border="0" cellpadding="0" cellspacing="0" width="100%">
+                     <tr>
+                        <td style="padding: 0 40px;">
+                           <a href="<?php echo $configuration_url; ?>" style="padding: 0.875em 1.25em; display: block; text-align: center; border: 1px solid #368e19; font-weight: 600; text-decoration: none; font-size: 18px; line-height: 18px; border-radius: 4px; background: #399c1a; color: #fff;">Naar mijn samenstelling &raquo;</a>
+                        </td>
+                     </tr>
+                  </table>
+
+               </td>
+            </tr>
 
 			</tbody>
 

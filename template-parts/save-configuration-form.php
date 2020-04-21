@@ -6,7 +6,7 @@ if ( ! empty( $_GET['metadata'] ) ) {
    <form method="post" class="js-form-validation" novalidate>
 
       <div class="text text--small">
-         <p><?php _e( 'Wilt u nog even nadenken voor u besteld? Geen probleem! Vul uw naam en email in en ontvang uw samenstelling in de mail. Zo kunt u eenvoudig later beslissen.', 'glasbestellen' ); ?></p>
+         <p><?php _e( 'Wilt u uw samenstelling als offerte ontvangen? Vul dan uw naam, e-mail en eventuele specifieke wensen in.', 'glasbestellen' ); ?></p>
       </div>
 
       <div class="row">
@@ -25,7 +25,15 @@ if ( ! empty( $_GET['metadata'] ) ) {
 
       </div>
 
-      <button class="btn btn--primary btn--block btn--next" type="submit"><?php _e( 'Opslaan voor later', 'glasbestellen' ); ?></button>
+      <div class="form-group js-form-group">
+         <label class="form-label"><?php _e( 'Heeft u specifieke wensen? (optioneel)', 'glasbestellen' ); ?></label>
+         <textarea name="lead[content]" class="form-control js-form-validate" rows="6" placeholder="<?php _e( 'Denk bijvoorbeeld aan montage of afwijkende maten..', 'glasbestellen' ); ?>"></textarea>
+         <div class="invalid-feedback js-invalid-feedback"></div>
+      </div>
+
+      <button class="btn btn--primary btn--block btn--next space-below" type="submit"><?php _e( 'Mail mij een offerte', 'glasbestellen' ); ?></button>
+
+      <span class="caption"><i class="fas fa-check"></i>&nbsp;&nbsp;<?php _e( 'Deze aanvraag is geheel vrijblijvend.', 'glasbestellen' ); ?></span>
 
       <input type="hidden" name="configurator_id" value="<?php echo $configurator->get_id(); ?>">
       <input type="hidden" name="configuration" value='<?php echo json_encode( $configurator->get_configuration() ); ?>'>

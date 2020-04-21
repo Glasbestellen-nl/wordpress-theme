@@ -264,7 +264,7 @@ get_header();
                                           </div>
 
                                           <div class="configurator__form-button space-below">
-                                             <span class="btn btn--block btn--aside js-configurator-save-button" data-popup-title="<?php _e( 'Samenstelling opslaan voor later' ); ?>" data-formtype="save-configuration" data-meta="<?php the_id(); ?>"><i class="fas fa-heart"></i> &nbsp;&nbsp;<?php _e( 'Samenstelling opslaan voor later', 'glasbestellen' ); ?></span>
+                                             <span class="btn btn--block btn--aside js-configurator-save-button" data-popup-title="<?php _e( 'Samenstelling als offerte ontvangen', 'glasbestellen' ); ?>" data-formtype="save-configuration" data-meta="<?php the_id(); ?>"><i class="fas fa-file-import"></i> &nbsp;&nbsp;<?php _e( 'Mail mij een offerte', 'glasbestellen' ); ?></span>
                                           </div>
 
                                           <ul class="configurator__checks space-below">

@@ -68,7 +68,8 @@ function gb_get_saved_configuration_email_html( $lead_id ) {
       'configurator_name'   => get_the_title( $configurator_id ),
       'configuration_url'   => $configurator->get_configuration_url(),
       'configuration_price' => $configurator->get_total_price(),
-      'summary' => $configurator->get_summary()
+      'summary' => $configurator->get_summary(),
+      'message' => $lead->get_content()
    ];
 
    $builder = new Email_Template_Builder( $template_path, $data );

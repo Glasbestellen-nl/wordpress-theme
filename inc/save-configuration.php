@@ -12,11 +12,11 @@ function gb_lead_form_submit_save_configuration( $lead_id, $post_data ) {
       CRM::update_lead_meta( $lead_id, 'saved_configuration', $post_data['configuration'] );
    }
 
-   $email_template = gb_get_saved_configuration_email_html( $lead_id );
-   $email = new Email( __( 'Uw opgeslagen samenstelling', 'glasbestellen' ) );
-   $email->set_template( $email_template );
-   $email->add_receiver_email( $post_data['lead']['email'] );
-   $email->send();
+   // $email_template = gb_get_saved_configuration_email_html( $lead_id );
+   // $email = new Email( __( 'Uw samenstelling als offerte', 'glasbestellen' ) );
+   // $email->set_template( $email_template );
+   // $email->add_receiver_email( $post_data['lead']['email'] );
+   // $email->send();
 
 }
 add_action( 'gb_lead_form_submit_before_redirect', 'gb_lead_form_submit_save_configuration', 10, 2 );
