@@ -108,7 +108,7 @@
                <a href="<?php echo get_post_type_archive_link( 'review' ); ?>" class="teaser space-below">
 
                   <div class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/glasbestellen-kantoor.jpeg'; ?>" alt="Glasbestellen kantoor" class="lazyload teaser__image-img">
+                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/glasbestellen-kantoor.jpg'; ?>" alt="Glasbestellen kantoor" class="lazyload teaser__image-img">
                   </div>
 
                   <div class="teaser__body teaser__body--full">
