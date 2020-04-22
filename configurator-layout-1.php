@@ -6,7 +6,14 @@ get_header();
    if ( have_posts() ) {
       while ( have_posts() ) {
          the_post();
-         if ( $configurator = gb_get_configurator( get_the_id() ) ) { ?>
+         if ( $configurator = gb_get_configurator( get_the_id() ) ) {
+            $review_category = get_field( 'review_category' );
+            if ( $review_category ) {
+               $reviews = gb_get_reviews( -1, $review_category );
+            } else {
+               $reviews = false;
+            }
+            ?>
 
             <main class="main-section main-section--space-around main-section-sm-without-space main-section--grey">
 
@@ -29,22 +36,20 @@ get_header();
                            </section>
 
                            <?php
-                           if ( $review_category = get_field( 'review_category' ) ) {
-                              if ( $review_avarge = gb_get_review_average( true, $review_category, 1 ) ) { ?>
+                           if ( $review_category && ( $review_avarage = gb_get_review_average( true, $review_category, 1 ) ) ) { ?>
 
-                                 <div class="rating justify-content-start scroll-to js-scroll-to" data-scroll-to="#reviews">
-                                    <div class="stars rating__stars" title="<?php _e( 'Ervaringen', 'glasbestellen' ); ?>">
-                                       <?php
-                                       for ( $i = 1; $i <= 5; $i ++ ) {
-                                          $checked_class = ( $i <= $review_avarge ) ? 'star--checked' : '';
-                                          echo '<div class="fas fa-star star ' . $checked_class . '"></div>';
-                                       }
-                                       ?>
-                                    </div>
-                                    <span class="rating__number rating__number--light-bg"><?php echo $review_avarge; ?></span>
+                              <div class="rating justify-content-start scroll-to js-scroll-to" data-scroll-to="#reviews">
+                                 <div class="stars rating__stars" title="<?php _e( 'Ervaringen', 'glasbestellen' ); ?>">
+                                    <?php
+                                    for ( $i = 1; $i <= 5; $i ++ ) {
+                                       $checked_class = ( $i <= $review_avarage ) ? 'star--checked' : '';
+                                       echo '<div class="fas fa-star star ' . $checked_class . '"></div>';
+                                    }
+                                    ?>
                                  </div>
-
-                              <?php } ?>
+                                 <span class="rating__number rating__number--light-bg">9.8</span>
+                                 <span class="link rating__count">(<?php echo count( $reviews ); ?>)</span>
+                              </div>
 
                            <?php } ?>
 
@@ -341,28 +346,32 @@ get_header();
                         </article>
 
                         <?php
-                        if ( $review_category = get_field( 'review_category' ) ) {
-                           $reviews = gb_get_reviews( $number = 6, $review_category ); ?>
+                        if ( $reviews ) { ?>
 
-                           <div id="reviews">
+                           <div class="large-space-above" id="reviews">
 
-                              <strong class="h2 space-below"><?php _e( 'Wat onze klanten zeggen..', 'glasbestellen' ); ?></strong>
+                              <header class="large-space-below">
+                                 <strong class="h2"><?php _e( 'Wat onze klanten zeggen..', 'glasbestellen' ); ?></strong>
+                              </header>
 
-                              <div class="row">
+                              <div class="row space-below">
 
-                                 <?php foreach ( $reviews as $review ) { ?>
+                                 <?php
+                                 $reviews_count = 0;
+                                 $reviews_show = isset( $_GET['show_all_reviews'] ) ? count( $reviews ) : 6;
+                                 foreach ( $reviews as $review ) {
+                                    $reviews_count ++;
+                                    if ( $reviews_count > $reviews_show ) break; ?>
 
                                     <div class="col-12 col-md-6">
                                        <div class="card">
                                           <div class="review" data-mh="review">
                                              <div class="review__header">
-
                                                 <div class="review__title">
                                                    <strong class="h5 h-default"><?php echo $review->post_title; ?></strong>
                                                 </div>
 
                                                 <?php if ( $rating = get_field( 'rating', $review->ID ) ) { ?>
-
                                                    <div class="review__rating rating">
                                                       <div class="stars rating__stars">
                                                          <?php
@@ -376,7 +385,6 @@ get_header();
                                                          ?>
                                                       </div>
                                                    </div>
-
                                                 <?php } ?>
 
                                              </div>
@@ -397,6 +405,12 @@ get_header();
                                  <?php } ?>
 
                               </div>
+
+                              <?php if ( ! isset( $_GET['show_all_reviews'] ) ) { ?>
+                                 <div class="text-center">
+                                    <a href="<?php echo add_query_arg( 'show_all_reviews', 'true' ); ?>#reviews"><?php printf( __( 'Alle %s ervaringen bekijken', 'glasbestellen' ), count( $reviews ) ); ?> &raquo;</a>
+                                 </div>
+                              <?php } ?>
 
                            </div>
 
