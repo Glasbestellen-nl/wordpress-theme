@@ -291,6 +291,14 @@ Mobile more text
 }
 
 /*--------------------------------------------------------------
+Scroll to
+--------------------------------------------------------------*/
+
+.scroll-to {
+   cursor: pointer;
+}
+
+/*--------------------------------------------------------------
 Arrow down bar
 --------------------------------------------------------------*/
 
@@ -404,6 +412,10 @@ Spacing
    display: block;
 }
 
+.tiny-space-sm-below {
+   margin-bottom: 0.3125em;
+}
+
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 
@@ -420,6 +432,10 @@ Spacing
    .space-md-left {
       margin-left: 1.25em;
       display: block;
+   }
+
+   .tiny-space-sm-below {
+      margin-bottom: 0;
    }
 
 }
@@ -1580,6 +1596,11 @@ Stars & rating
 
 .rating__number--light-bg {
    color: #0c5994;
+}
+
+.rating__count {
+   margin-left: 0.5em;
+   font-size: 0.875em;
 }
 
 .star {

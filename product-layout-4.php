@@ -216,7 +216,8 @@ get_header(); ?>
                         <?php } ?>
 
                         <?php
-                        if ( $reviews = gb_get_reviews( $number = 6, get_field( 'review_category' ) ) ) { ?>
+                        if ( get_field( 'review_category' ) ) {
+                           $reviews = gb_get_reviews( $number = 6, get_field( 'review_category' ) ); ?>
 
                            <strong class="h2 space-below"><?php _e( 'Wat onze klanten zeggen..', 'glasbestellen' ); ?></strong>
 
@@ -243,7 +244,7 @@ get_header(); ?>
                                                          if ( $i <= $rating ) {
                                                             $class .= ' star--checked';
                                                          }
-                                                         echo '<div class="fas fa-star ' . $class . '"></div> ';
+                                                         echo '<div class="fas fa-star ' . $class . '"></div>';
                                                       }
                                                       ?>
                                                    </div>
@@ -255,7 +256,8 @@ get_header(); ?>
 
                                           <div class="review__body">
                                              <div class="text text--small review__text">
-                                                <?php echo wpautop( get_the_excerpt( $review->ID ) ); ?>
+                                                <?php echo wpautop( $review->post_content ); ?>
+                                                <p><?php echo '- ' . get_post_meta( $review->ID, 'name', true ); ?></p>
                                              </div>
                                           </div>
 
