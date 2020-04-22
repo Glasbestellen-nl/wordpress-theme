@@ -127,7 +127,7 @@ get_header();
                                              <div class="video-list__item">
                                                 <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
                                                    <div class="lr-video__play"></div>
-                                                   <img data-src="http://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
+                                                   <img data-src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
                                                 </a>
                                                 <span class="video-list__item-caption"><?php _e( 'Hoe meten?', 'glasbestellen' ); ?></span>
                                              </div>
@@ -140,7 +140,7 @@ get_header();
                                              <div class="video-list__item">
                                                 <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
                                                    <div class="lr-video__play"></div>
-                                                   <img data-src="http://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
+                                                   <img data-src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
                                                 </a>
                                                 <span class="video-list__item-caption"><?php _e( 'Hoe monteren?', 'glasbestellen' ); ?></span>
                                              </div>
