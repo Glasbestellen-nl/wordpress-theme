@@ -3430,19 +3430,26 @@ Modal
    display: flex;
    align-items: center;
    justify-content: space-between;
-   border-bottom: 1px solid #dbdbdb;
-   background-color: #f8f8f8;
+   position: relative;
+   border-bottom: 1px solid rgba(0,0,0,0.1);
+   background-color: rgba(0,0,0,0.05);
 }
 
 .modal__header-title,
 .modal__header-close {
-   color: #aaa;
+   color: rgba(0,0,0,0.3);
 }
 
 .modal__header-close {
-   margin-left: auto;
-   padding-right: 0.25em;
-   font-size: 1.25em;
+   width: 2.5em;
+   height: 2.5em;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   position: absolute;
+   top: 0;
+   right: 0;
+   font-size: 1.5em;
    cursor: pointer;
 }
 
@@ -3484,6 +3491,12 @@ Modal
       width: 95%;
       margin: 3% 0 5% 0;
    }
+
+   .modal__header-close {
+      top: 0.15em;
+      right: 0.15em;
+   }
+
 
 }
 
