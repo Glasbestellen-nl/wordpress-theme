@@ -384,7 +384,7 @@
                   contentType: false,
                   beforeSend: function() {
                      // Disable submit button
-                     form.querySelector('button[type=submit]').disabled = true;
+                     jQuery('button[type=submit]', form).attr('disabled', true);
                   },
                   success: function(response) {
                      console.log(response);
@@ -394,7 +394,7 @@
                            showErrorAlert(parsed.error, form);
                         } else {
                            hideErrorAlert(form);
-                           form.querySelector('button[type=submit]').disabled = false;
+                           jQuery('button[type=submit]', form).attr('disabled', false);
                            if (parsed.redirect) {
                               window.location.href = parsed.redirect;
                            }

@@ -2,7 +2,7 @@
 
    <p class="js-error-alert alert alert--danger" style="display: none;"></p>
 
-   <div class="form-group">
+   <div class="form-group js-form-group">
       <label class="form-label"><?php _e( 'Beoordeling', 'glasbestellen' ); ?>: <span class="req">*</span></label>
       <select name="review[rating]" class="dropdown js-form-validate">
          <?php for ( $i = 1; $i <= 5; $i ++ ) {
@@ -13,13 +13,13 @@
       </select>
    </div>
 
-   <div class="form-group">
+   <div class="form-group js-form-group">
       <label class="form-label"><?php _e( 'Ervaring titel', 'glasbestellen' ); ?>: <span class="req">*</span></label>
       <input type="text" name="review[title]" class="form-control js-form-validate" data-required="required" />
       <div class="invalid-feedback js-invalid-feedback"></div>
    </div>
 
-   <div class="form-group">
+   <div class="form-group js-form-group">
       <label class="form-label"><?php _e( 'Beschrijf uw ervaring', 'glasbestellen' ); ?>: <span class="req">*</span></label>
       <textarea name="review[message]" class="form-control js-form-validate" rows="6" placeholder="<?php _e( 'Uw ervaring..', 'glasbestellen' ); ?>" data-required="required"></textarea>
       <div class="invalid-feedback js-invalid-feedback"></div>
@@ -27,13 +27,13 @@
 
    <div class="row">
 
-      <div class="form-group col-12 col-md-6">
+      <div class="form-group js-form-group col-12 col-md-6">
          <label class="form-label"><?php _e( 'Naam', 'glasbestellen' ); ?>: <span class="req">*</span></label>
          <input type="text" name="review[name]" class="form-control js-form-validate" placeholder="Naam" data-required="required" />
          <div class="invalid-feedback js-invalid-feedback"></div>
       </div>
 
-      <div class="form-group col-12 col-md-6">
+      <div class="form-group js-form-group col-12 col-md-6">
          <label class="form-label"><?php _e( 'E-mail', 'glasbestellen' ); ?>: <span class="req">*</span></label>
          <input type="email" name="review[email]" class="form-control js-form-validate" placeholder="E-mail" data-required="required" />
          <div class="invalid-feedback js-invalid-feedback"></div>
