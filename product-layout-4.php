@@ -95,20 +95,52 @@ get_header(); ?>
 
                      <?php } wp_reset_postdata(); ?>
 
-
                      <?php if ( get_field( 'show_contact_box' ) ) { ?>
 
-                        <div class="row large-space-below">
+                        <div class="card card--banner large-space-below">
+
+                           <div class="card__body">
+
+                              <div class="space-lg-around">
+
+                                 <div class="row">
+                                    <div class="col-6 offset-3 col-md-4 offset-md-4 col-lg-2 offset-lg-5">
+                                       <div class="avatar box-shadow space-below">
+                                          <img data-src="<?php echo get_template_directory_uri() . '/assets/images/sales-medewerker.jpg'; ?>" class="lazyload avatar__image" />
+                                       </div>
+                                    </div>
+
+                                    <div class="col-12 col-lg-4 offset-lg-4">
+                                       <div class="card__text text text--small text--center space-below">
+                                          <span class="h2"><?php echo get_field( 'contact_box_title' ) ?></span>
+                                          <p><?php echo get_field( 'contact_box_message' ); ?></p>
+                                       </div>
+                                       <span class="btn btn--large btn--primary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php echo get_field( 'contact_box_btn' ); ?>"><?php echo get_field( 'contact_box_btn' ); ?></span>
+                                    </div>
+
+                                 </div>
+
+                              </div>
+
+                           </div>
+
+                        </div>
+
+                        <!-- <div class="row large-space-below">
 
                            <div class="col-12">
 
-                              <div class="card card--banner">
+                              <div class="card banner">
+
+                                 <div class="banner__background">
+                                    <img data-src="<?php echo get_template_directory_uri() . '/assets/images/sales-medewerker.jpg'; ?>" class="lazyload banner__background-img" />
+                                 </div>
 
                                  <div class="card__body">
 
                                     <div class="row">
 
-                                       <div class="col-lg-7 card__column">
+                                       <div class="col-lg-6 offset-lg-2 card__column">
                                           <div class="card__text">
                                              <span class="h2"><?php echo get_field( 'contact_box_title' ) ?></span>
                                              <div class="text">
@@ -117,7 +149,7 @@ get_header(); ?>
                                           </div>
                                        </div>
 
-                                       <div class="col-lg-5 d-flex align-items-center card__column card__column--last">
+                                       <div class="col-lg-4 d-flex align-items-center card__column card__column--last">
                                           <span class="btn btn--large btn--primary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php echo get_field( 'contact_box_btn' ); ?>"><?php echo get_field( 'contact_box_btn' ); ?></span>
                                        </div>
 
@@ -127,7 +159,7 @@ get_header(); ?>
 
                            </div>
 
-                        </div>
+                        </div> -->
 
                      <?php } ?>
 

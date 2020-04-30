@@ -1,7 +1,7 @@
 /*
 Theme Name: Glasbestellen.nl Theme
 Author: Robbert Vermeulen
-Version: 4.2.5
+Version: 4.2.6
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: glasbestellen
@@ -161,6 +161,10 @@ a, .link {
 .text img {
    height: auto;
    display: inline-block;
+}
+
+.text--center {
+   text-align: center !important;
 }
 
 .text .alignright {
@@ -358,62 +362,62 @@ Spacing
 --------------------------------------------------------------*/
 
 .space-around {
-   margin: 1.25em;
+   margin: 1.25em !important;
    display: block;
 }
 
 .space-above {
-   margin-top: 1.25em;
+   margin-top: 1.25em !important;
    display: block;
 }
 
 .space-below {
-   margin-bottom: 1.25em;
+   margin-bottom: 1.25em !important;
    display: block;
 }
 
 .space-left {
-   margin-left: 1.25em;
+   margin-left: 1.25em !important;
    display: block;
 }
 
 .space-right {
-   margin-right: 1.25em;
+   margin-right: 1.25em !important;
    display: block;
 }
 
 .small-space-around {
-   margin: 0.625em;
+   margin: 0.625em !important;
    display: block;
 }
 
 .small-space-above {
-   margin-top: 0.625em;
+   margin-top: 0.625em !important;
    display: block;
 }
 
 .small-space-below {
-   margin-bottom: 0.625em;
+   margin-bottom: 0.625em !important;
    display: block;
 }
 
 .large-space-around {
-   margin: 1.875em;
+   margin: 1.875em !important;
    display: block;
 }
 
 .large-space-above {
-   margin-top: 1.875em;
+   margin-top: 1.875em !important;
    display: block;
 }
 
 .large-space-below {
-   margin-bottom: 1.875em;
+   margin-bottom: 1.875em !important;
    display: block;
 }
 
 .tiny-space-sm-below {
-   margin-bottom: 0.3125em;
+   margin-bottom: 0.3125em !important;
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -1299,8 +1303,11 @@ Card
 }
 
 .card--banner {
+   border: 2px solid #dbdbdb;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border-radius: 5px;
    background-color: #f3f3f3;
-   border: 1px solid #bbb;
 }
 
 .card__body {
@@ -1365,6 +1372,61 @@ Card
       margin-bottom: 0;
    }
 
+}
+
+/*--------------------------------------------------------------
+Banner
+--------------------------------------------------------------*/
+
+.banner {
+   position: relative;
+}
+
+.banner__background {
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   opacity: 0.3;
+}
+
+.banner__background-img {
+   height: 100%;
+   object-fit: contain;
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+
+   .banner__background {
+      opacity: 1;
+   }
+
+}
+
+/*--------------------------------------------------------------
+Avatar
+--------------------------------------------------------------*/
+
+.avatar {
+   width: 100%;
+   position: relative;
+   border: 2px solid #ccc;
+   border-radius: 100%;
+   overflow: hidden;
+}
+
+.avatar::after {
+   content: "";
+   display: block;
+   padding-bottom: 100%;
+}
+
+.avatar__image {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   position: absolute;
 }
 
 /*--------------------------------------------------------------
