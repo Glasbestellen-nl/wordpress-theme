@@ -1,7 +1,7 @@
 /*
 Theme Name: Glasbestellen.nl Theme
 Author: Robbert Vermeulen
-Version: 4.2.6
+Version: 4.2.7
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: glasbestellen
@@ -1303,11 +1303,11 @@ Card
 }
 
 .card--banner {
-   border: 2px solid #dbdbdb;
+   border: 2px solid #155f994f;
    -webkit-border-radius: 5px;
    -moz-border-radius: 5px;
    border-radius: 5px;
-   background-color: #f3f3f3;
+   background-color: #155f9914;
 }
 
 .card__body {
@@ -1427,6 +1427,10 @@ Avatar
    height: 100%;
    object-fit: cover;
    position: absolute;
+}
+
+.avatar--banner {
+   border-color: #155f994f;
 }
 
 /*--------------------------------------------------------------

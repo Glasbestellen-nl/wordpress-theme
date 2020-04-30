@@ -105,7 +105,7 @@ get_header(); ?>
 
                                  <div class="row">
                                     <div class="col-6 offset-3 col-md-4 offset-md-4 col-lg-2 offset-lg-5">
-                                       <div class="avatar box-shadow space-below">
+                                       <div class="avatar avatar--banner box-shadow space-below">
                                           <img data-src="<?php echo get_template_directory_uri() . '/assets/images/sales-medewerker.jpg'; ?>" class="lazyload avatar__image" />
                                        </div>
                                     </div>
