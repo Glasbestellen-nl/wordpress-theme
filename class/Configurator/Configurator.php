@@ -36,8 +36,12 @@ class Configurator {
 
       $total = $this->calculate_subtotal( $default_only );
 
-      if ( ! empty( $this->_settings['shipping'] ) ) {
-         $total += $this->_settings['shipping'];
+      if ( $shipping_price = $this->get_shipping_price() ) {
+         $total += $shipping_price;
+      }
+
+      if ( $price_addition = $this->get_price_addition() ) {
+         $total += $price_addition;
       }
 
       if ( $min_price = $this->get_min_price() ) {
@@ -152,6 +156,14 @@ class Configurator {
 
    public function get_setting( string $key = '' ) {
       return isset( $this->_settings[$key] ) ? $this->_settings[$key] : false;
+   }
+
+   public function get_shipping_price() {
+      return $this->get_setting( 'shipping' );
+   }
+
+   public function get_price_addition() {
+      return $this->get_setting( 'price_addition' );
    }
 
    public function get_metadata( string $key = '' ) {
