@@ -40,6 +40,27 @@ class Step {
       }, $options );
    }
 
+   public function get_options_html( $value = null ) {
+      $options = $this->get_options();
+      if ( $options ) {
+         $html = '';
+         $hide_price = $this->get_field( 'hide_price' );
+         foreach ( $options as $option ) {
+            $selected     = selected( $value, $option->get_id(), false );
+            $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
+            $child_step   = ( $option->get_child_step() ) ? 'data-child-step="' . $option->get_child_step() . '"' : '';
+            $plus_price   = ( ! $hide_price  && ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', \Money::display( $option->get_plus_price() ), $this->get_id() ) : '';
+            $html .= '<option value="' . $option->get_id() . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_step . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
+         }
+         return $html;
+      }
+      return false;
+   }
+
+   public function render_options( $value = null ) {
+      echo $this->get_options_html( $value );
+   }
+
    public function get_visual() {
       return $this->get_field( 'visual' );
    }

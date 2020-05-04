@@ -589,6 +589,17 @@ class Configurator {
    }
 
    /**
+    * Renders the step options html
+    *
+    * @param string $step_id for a specific step
+    */
+   public function render_step_options( string $step_id = '' ) {
+      $this->set_current_step( $step_id );
+      $this->_current_step->render_options( $this->get_step_configuration() );
+      return true;
+   }
+
+   /**
     * Returns the current step explanation (post) id
     *
     * An id of a post in the database with post type 'explanation'

@@ -5,6 +5,7 @@ class Option {
 
    protected $_data;
 
+
    protected $_default_price;
 
    public function __construct( array $data = [], float $default_price = 0 ) {
