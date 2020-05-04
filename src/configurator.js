@@ -42,11 +42,16 @@ const Configurator = (function() {
 
          $(this.element).on('change', '.js-configurator-blur-update .js-form-validate', function() {
 
-            // Show and hide child step
-            const stepId = $(this).data('step-id');
-            const childStepId = $('option:selected', this).data('child-step');
-            if (childStepId) {
-               $('.js-step-' + childStepId).removeClass('d-none');
+            // Show and hide child steps
+            const stepId       = $(this).data('step-id');
+            const childStepIds = $('option:selected', this).data('child-steps');
+
+            if (childStepIds && $.isArray(childStepIds)) {
+               childStepIds.forEach(function(childStepId) {
+                  $('.js-step-' + childStepId).removeClass('d-none');
+               });
+            } else if (childStepIds) {
+               $('.js-step-' + childStepIds).removeClass('d-none');
             } else {
                $('.js-step-parent-' + stepId).addClass('d-none');
             }
