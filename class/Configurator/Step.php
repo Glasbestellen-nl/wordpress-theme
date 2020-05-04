@@ -48,6 +48,24 @@ class Step {
       return $this->get_field( 'parent_step' );
    }
 
+   public function get_class( array $additional_classes = [] ) {
+
+      $classes = [
+         'js-step-' . $this->get_id()
+      ];
+
+      if ( $parent = $this->get_parent() )
+         $classes[] = 'js-step-' . $parent;
+
+      if ( ! empty( $additional_classes ) ) {
+         foreach ( $additional_classes as $class ) {
+            $classes[] = $class;
+         }
+      }
+
+      return implode( ' ', $classes );
+   }
+
    public function get_explanation_id() {
       $field = $this->get_field( 'description' );
       return ! empty( $field['id'] ) ? $field['id'] : false;
@@ -88,6 +106,5 @@ class Step {
       }
 
    }
-
 
 }

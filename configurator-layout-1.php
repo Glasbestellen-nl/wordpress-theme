@@ -202,13 +202,7 @@ get_header();
                                              $configurator->the_step();
                                              $configured_value = $configurator->get_step_configuration();
                                              $step_id = $configurator->get_step_id();
-                                             $step_class = 'js-step-' . $step_id;
-                                             if ( $step_parent = $configurator->get_step_parent() ) {
-                                                $step_class .= ' js-step-parent-' . $step_parent;
-                                                if ( ! $configured_value ) {
-                                                   $step_class .= ' d-none';
-                                                }
-                                             }
+
                                              if ( $configurator->get_step_explanation_id() ) {
                                                 $explanation_id = $configurator->get_step_explanation_id();
                                                 $label_class = 'configurator__form-label--link js-popup-explanation';
@@ -218,7 +212,7 @@ get_header();
                                              }
                                              ?>
 
-                                             <div class="configurator__form-row <?php echo $step_class; ?>" data-step-id="<?php echo $step_id; ?>">
+                                             <div class="configurator__form-row <?php echo $configurator->get_step_class(); ?>" data-step-id="<?php echo $step_id; ?>">
                                                 <div class="configurator__form-col configurator__form-info <?php echo ( ! $explanation_id ) ? 'd-none d-md-block' : ''; ?>">
                                                    <?php if ( $explanation_id ) { ?>
                                                       <i class="fas fa-info-circle configurator__info-icon js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"></i>

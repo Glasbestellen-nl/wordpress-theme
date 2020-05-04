@@ -539,6 +539,21 @@ class Configurator {
    }
 
    /**
+    * Returns the current step css classes
+    *
+    * Adds display none class when step has parent and does not exist in configuration
+    *
+    * @param string $step_id for a specific step
+    */
+   public function get_step_class( string $step_id = '' ) {
+      $this->set_current_step( $step_id );
+      if ( $this->get_step_parent() && ! $this->get_step_configuration() ) {
+         return $this->_current_step->get_class( ['d-none'] );
+      }
+      return $this->_current_step->get_class();
+   }
+
+   /**
     * Returns the current step default value
     *
     * @param string $step_id for a specific step
