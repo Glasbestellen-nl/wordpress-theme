@@ -169,7 +169,7 @@ get_header();
                                              <div class="configurator__energy-label">
                                                 <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload">
                                              </div>
-                                          <?php } ?>   
+                                          <?php } ?>
 
                                        </div>
 
@@ -202,7 +202,6 @@ get_header();
                                           <?php
                                           while ( $configurator->have_steps() ) {
                                              $configurator->the_step();
-                                             $configured_value = $configurator->get_step_configuration();
                                              $step_id = $configurator->get_step_id();
 
                                              if ( $configurator->get_step_explanation_id() ) {
@@ -232,7 +231,7 @@ get_header();
                                                          <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate js-step-input-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>" data-step-id="<?php echo $step_id; ?>">
                                                             <?php
                                                             foreach ( $options as $option ) {
-                                                               $selected     = selected( $configured_value, $option->get_id(), false );
+                                                               $selected     = selected( $configurator->get_step_value(), $option->get_id(), false );
                                                                $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
                                                                $child_step   = ( $option->get_child_step() ) ? 'data-child-step="' . $option->get_child_step() . '"' : '';
                                                                $plus_price   = ( ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', Money::display( $option->get_plus_price() ), $step_id ) : '';
@@ -252,7 +251,7 @@ get_header();
 
                                                 <?php } else { ?>
                                                    <div class="configurator__form-col configurator__form-input js-form-group">
-                                                      <input type="number" name="configuration[<?php echo $step_id; ?>]" class="form-control configurator__form-control js-form-validate" placeholder="mm" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configured_value; ?>" />
+                                                      <input type="number" name="configuration[<?php echo $step_id; ?>]" class="form-control configurator__form-control js-form-validate" placeholder="mm" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configurator->get_step_value( $step_id, true ); ?>" />
                                                       <div class="invalid-feedback js-invalid-feedback"></div>
                                                    </div>
                                                 <?php } ?>

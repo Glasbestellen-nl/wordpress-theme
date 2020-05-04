@@ -55,7 +55,7 @@ class Step {
       ];
 
       if ( $parent = $this->get_parent() )
-         $classes[] = 'js-step-' . $parent;
+         $classes[] = 'js-step-parent-' . $parent;
 
       if ( ! empty( $additional_classes ) ) {
          foreach ( $additional_classes as $class ) {

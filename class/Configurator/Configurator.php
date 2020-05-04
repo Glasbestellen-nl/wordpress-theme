@@ -468,6 +468,14 @@ class Configurator {
       return ! empty( $this->_configuration[$step_id] ) ? $this->_configuration[$step_id] : false;
    }
 
+   public function get_step_value( string $step_id = '' ) {
+      $value = $this->get_step_configuration( $step_id );
+      if ( ! $value && $this->_current_step->get_field( 'show_default' ) ) {
+         return ! empty( $this->_default_configuration[$step_id] ) ? $this->_default_configuration[$step_id] : false;
+      }
+      return $value;
+   }
+
    /**
     * Returns the current step type
     *
