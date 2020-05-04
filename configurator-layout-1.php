@@ -193,7 +193,10 @@ get_header();
                                     <div class="configurator__body">
 
                                        <div class="space-below">
-                                          <span class="h4 configurator__heading"><?php echo sprintf( __( '%s samenstellen', 'glasbestellen' ), get_first_term_by_id( get_the_id(), 'startopstelling', 'name' ) ); ?></span>
+                                          <span class="h4 configurator__heading">
+                                             <?php echo sprintf( __( '%s samenstellen', 'glasbestellen' ), get_first_term_by_id( get_the_id(), 'startopstelling', 'name' ) ); ?>
+                                             <span class="configurator__heading-addition">(* <?php _e( 'Verplicht', 'glasbestellen' ); ?>)</span>
+                                          </span>
                                           <p><?php echo sprintf( __( 'Klik voor meer informatie op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
                                        </div>
 
@@ -204,23 +207,27 @@ get_header();
                                              $configurator->the_step();
                                              $step_id = $configurator->get_step_id();
 
+                                             $label_class = '';
+                                             $explanation_id = false;
                                              if ( $configurator->get_step_explanation_id() ) {
-                                                $explanation_id = $configurator->get_step_explanation_id();
                                                 $label_class    = 'configurator__form-label--link js-popup-explanation';
-                                             } else {
-                                                $explanation_id = false;
-                                                $label_class    = '';
+                                                $explanation_id = $configurator->get_step_explanation_id();
                                              }
                                              ?>
 
                                              <div class="configurator__form-row <?php echo $configurator->get_step_class(); ?>" data-step-id="<?php echo $step_id; ?>">
+
                                                 <div class="configurator__form-col configurator__form-info <?php echo ( ! $explanation_id ) ? 'd-none d-md-block' : ''; ?>">
                                                    <?php if ( $explanation_id ) { ?>
                                                       <i class="fas fa-info-circle configurator__info-icon js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"></i>
                                                    <?php } ?>
                                                 </div>
+
                                                 <div class="configurator__form-col">
                                                    <label class="configurator__form-label <?php echo $label_class; ?>" data-explanation-id="<?php echo $explanation_id; ?>"><?php echo $configurator->get_step_title(); ?></label>
+                                                   <?php if ( $configurator->is_step_required() ) { ?>
+                                                      <span>*</span>
+                                                   <?php } ?>
                                                 </div>
 
                                                 <?php
