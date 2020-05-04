@@ -234,7 +234,7 @@ get_header();
                                                                $selected     = selected( $configurator->get_step_value(), $option->get_id(), false );
                                                                $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
                                                                $child_step   = ( $option->get_child_step() ) ? 'data-child-step="' . $option->get_child_step() . '"' : '';
-                                                               $plus_price   = ( ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', Money::display( $option->get_plus_price() ), $step_id ) : '';
+                                                               $plus_price   = ( ! $configurator->get_step_field( 'hide_price' ) && ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', Money::display( $option->get_plus_price() ), $step_id ) : '';
                                                                echo '<option value="' . $option->get_id() . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_step . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
                                                             }
                                                             ?>

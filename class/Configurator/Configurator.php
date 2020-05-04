@@ -468,6 +468,13 @@ class Configurator {
       return ! empty( $this->_configuration[$step_id] ) ? $this->_configuration[$step_id] : false;
    }
 
+   /**
+    * Return the step value
+    *
+    * Makes it possible to choose to show the default value
+    *
+    * @param string $step_id for a specific step
+    */
    public function get_step_value( string $step_id = '' ) {
       $value = $this->get_step_configuration( $step_id );
       if ( ! $value && $this->_current_step->get_field( 'show_default' ) ) {
