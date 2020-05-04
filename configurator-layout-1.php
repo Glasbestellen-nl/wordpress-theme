@@ -165,9 +165,11 @@ get_header();
                                        <div class="col-12 col-md-6">
                                           <span class="h4 configurator__heading"><?php _e( 'Onze aanbieding voor u', 'glasbestellen' ); ?></span>
 
-                                          <!-- <div class="configurator__energy-label">
-                                             <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload">
-                                          </div> -->
+                                          <?php if ( get_field( 'show_energy_label' ) ) { ?>
+                                             <div class="configurator__energy-label">
+                                                <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload">
+                                             </div>
+                                          <?php } ?>   
 
                                        </div>
 
@@ -225,6 +227,7 @@ get_header();
                                                 <?php
                                                 if ( $options = $configurator->get_step_options() ) {
                                                    if ( count( $options ) > 1 ) { ?>
+
                                                       <div class="configurator__form-col configurator__form-input js-form-group">
                                                          <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate js-step-input-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>" data-step-id="<?php echo $step_id; ?>">
                                                             <?php
@@ -361,6 +364,7 @@ get_header();
 
                                     <div class="col-12 col-md-6">
                                        <div class="card">
+
                                           <div class="review" data-mh="review">
                                              <div class="review__header">
                                                 <div class="review__title">
