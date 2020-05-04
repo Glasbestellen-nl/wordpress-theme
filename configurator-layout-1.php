@@ -167,7 +167,7 @@ get_header();
 
                                           <?php if ( get_field( 'show_energy_label' ) ) { ?>
                                              <div class="configurator__energy-label">
-                                                <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload">
+                                                <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload" title="<?php _e( 'Energielabel', 'glasbestellen' ); ?>">
                                              </div>
                                           <?php } ?>
 
