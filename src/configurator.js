@@ -210,9 +210,33 @@ const Configurator = (function() {
                }
 
                if (rules.max !== undefined) {
-                  if (value > parseInt(rules.max)) {
+
+                  let max;
+
+                  if (rules.max.dependence !== undefined) {
+
+                     let dependentStepId = rules.max.dependence;
+                     let dependentValue  = $('.js-step-' + dependentStepId).find('.js-form-validate').val();
+
+                     if (dependentValue) {
+                        if (rules.max.greater && rules.max.less) {
+                           if (value > parseInt(dependentValue)) {
+                              max = parseInt(rules.max.greater);
+                           } else {
+                              max = parseInt(rules.max.less);
+                           }
+                        } else {
+                           max = parseInt(dependentValue);
+                        }
+                     }
+
+                  } else {
+                     max = parseInt(rules.max);
+                  }
+
+                  if (value > max) {
                      valid = false;
-                     msg = gb.msg.dimensionValueTooLarge.replace('{0}', rules.max);
+                     msg = gb.msg.dimensionValueTooLarge.replace('{0}', max);
                   }
                }
             }
