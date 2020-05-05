@@ -220,11 +220,7 @@ const Configurator = (function() {
 
                      if (dependentValue) {
                         if (rules.max.greater && rules.max.less) {
-                           if (value > parseInt(dependentValue)) {
-                              max = parseInt(rules.max.greater);
-                           } else {
-                              max = parseInt(rules.max.less);
-                           }
+                           max = (value > parseInt(dependentValue)) ? parseInt(rules.max.greater) : parseInt(rules.max.less);
                         } else {
                            max = parseInt(dependentValue);
                         }
