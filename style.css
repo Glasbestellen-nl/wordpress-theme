@@ -3149,6 +3149,11 @@ Configurator
    color: #000;
 }
 
+.configurator__heading-addition {
+   font-size: 0.75em;
+   font-weight: 500;
+}
+
 .configurator__form-info {
    margin-right: 0.25em;
 }

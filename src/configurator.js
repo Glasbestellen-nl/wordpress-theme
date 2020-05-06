@@ -42,13 +42,33 @@ const Configurator = (function() {
 
          $(this.element).on('change', '.js-configurator-blur-update .js-form-validate', function() {
 
-            // Show and hide child step
-            const stepId = $(this).data('step-id');
-            const childStepId = $('option:selected', this).data('child-step');
-            if (childStepId) {
-               $('.js-step-' + childStepId).removeClass('d-none');
-            } else {
-               $('.js-step-parent-' + stepId).addClass('d-none');
+            // Show and hide child steps
+            const stepId       = $(this).data('step-id');
+            const childStepIds = $('option:selected', this).data('child-steps');
+
+            const showChildStep = function(stepId) {
+               $('.js-step-' + stepId).removeClass('d-none').find('.js-form-validate').attr('data-required', 'true');
+            };
+
+            const hideChildStep = function(stepId) {
+               const step  = $('.js-step-parent-' + stepId);
+               const input = step.find('.js-form-validate');
+               step.addClass('d-none');
+               input.removeAttr('data-required');
+               clearValidate(input);
+            };
+
+            hideChildStep(stepId);
+
+            if (childStepIds) {
+
+               if ($.isArray(childStepIds)) {
+                  childStepIds.forEach(function(childStepId) {
+                     showChildStep(childStepId);
+                  });
+               } else {
+                  showChildStep(childStepIds);
+               }
             }
 
             const form = $(this).parents('.js-configurator-blur-update');
@@ -205,9 +225,29 @@ const Configurator = (function() {
                }
 
                if (rules.max !== undefined) {
-                  if (value > parseInt(rules.max)) {
+
+                  let max;
+
+                  if (rules.max.dependence !== undefined) {
+
+                     let dependentStepId = rules.max.dependence;
+                     let dependentValue  = $('.js-step-' + dependentStepId).find('.js-form-validate').val();
+
+                     if (dependentValue) {
+                        if (rules.max.greater && rules.max.less) {
+                           max = (value > parseInt(dependentValue)) ? parseInt(rules.max.greater) : parseInt(rules.max.less);
+                        } else {
+                           max = parseInt(dependentValue);
+                        }
+                     }
+
+                  } else {
+                     max = parseInt(rules.max);
+                  }
+
+                  if (value > max) {
                      valid = false;
-                     msg = gb.msg.dimensionValueTooLarge.replace('{0}', rules.max);
+                     msg = gb.msg.dimensionValueTooLarge.replace('{0}', max);
                   }
                }
             }
@@ -216,17 +256,21 @@ const Configurator = (function() {
          if ($(element).is('select')) {
             let selected = $('option:selected', element);
             let rules = selected.data('validation-rules');
-            if (rules) {
-               if (rules.exclude !== undefined) {
-                  let exclude = rules.exclude;
-                  if (exclude.step && exclude.option) {
-                     let step    = $(`.js-step-input-${exclude.step}`);
-                     let option  = step.find(`option[data-option-id="${exclude.option}"]:selected`);
-                     if (option.length > 0) {
-                        valid = false;
-                        msg = exclude.message;
+            if (rules && rules.exclude !== undefined) {
+               let excludeRules = rules.exclude;
+               if ($.isArray(excludeRules)) {
+                  excludeRules.forEach((excludeRule) => {
+                     if (excludeRule.step && excludeRule.options) {
+                        let step    = $(`.js-step-input-${excludeRule.step}`);
+                        excludeRule.options.forEach((optionId) => {
+                           let option  = step.find(`option[data-option-id="${optionId}"]:selected`);
+                           if (option.length > 0) {
+                              valid = false;
+                              msg = excludeRule.message;
+                           }
+                        });
                      }
-                  }
+                  });
                }
             }
          }

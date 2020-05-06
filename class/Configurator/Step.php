@@ -40,12 +40,60 @@ class Step {
       }, $options );
    }
 
+   public function get_option_by_id( int $option_id = 0 ) {
+      if ( empty( $option_id ) ) return;
+      $options = $this->get_options();
+      if ( ! $options ) return;
+      foreach ( $options as $option ) {
+         if ( $option->get_id() == $option_id ) return $option;
+      }
+      return false;
+   }
+
+   public function get_options_html( $value = null ) {
+      $options = $this->get_options();
+      if ( $options ) {
+         $html = '';
+         $hide_price = $this->get_field( 'hide_price' );
+         foreach ( $options as $option ) {
+            $selected     = selected( $value, $option->get_id(), false );
+            $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
+            $child_steps  = ( $option->get_child_steps() ) ? 'data-child-steps=\'' . $option->get_child_steps_attr() . '\'' : '';
+            $plus_price   = ( ! $hide_price  && ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', \Money::display( $option->get_plus_price() ), $this->get_id() ) : '';
+            $html .= '<option value="' . $option->get_id() . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_steps . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
+         }
+         return $html;
+      }
+      return false;
+   }
+
+   public function render_options( $value = null ) {
+      echo $this->get_options_html( $value );
+   }
+
    public function get_visual() {
       return $this->get_field( 'visual' );
    }
 
    public function get_parent() {
       return $this->get_field( 'parent_step' );
+   }
+
+   public function get_class( array $additional_classes = [] ) {
+
+      $classes = [
+         'js-step-' . $this->get_id()
+      ];
+
+      if ( $parent = $this->get_parent() )
+         $classes[] = 'js-step-parent-' . $parent;
+
+      if ( ! empty( $additional_classes ) ) {
+         foreach ( $additional_classes as $class ) {
+            $classes[] = $class;
+         }
+      }
+      return implode( ' ', $classes );
    }
 
    public function get_explanation_id() {
@@ -88,6 +136,5 @@ class Step {
       }
 
    }
-
 
 }
