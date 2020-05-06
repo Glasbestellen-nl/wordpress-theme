@@ -349,7 +349,6 @@ class Configurator {
     */
    public function is_step_required( string $step_id = '' ) {
       $this->set_current_step( $step_id );
-      if ( $this->is_child_of_configured_option( $step_id ) ) return true;
       return $this->_current_step->is_required();
    }
 
