@@ -46,14 +46,29 @@ const Configurator = (function() {
             const stepId       = $(this).data('step-id');
             const childStepIds = $('option:selected', this).data('child-steps');
 
-            if (childStepIds && $.isArray(childStepIds)) {
-               childStepIds.forEach(function(childStepId) {
-                  $('.js-step-' + childStepId).removeClass('d-none');
-               });
-            } else if (childStepIds) {
-               $('.js-step-' + childStepIds).removeClass('d-none');
-            } else {
-               $('.js-step-parent-' + stepId).addClass('d-none');
+            const showChildStep = function(stepId) {
+               $('.js-step-' + stepId).removeClass('d-none').find('.js-form-validate').attr('data-required', 'true');
+            };
+
+            const hideChildStep = function(stepId) {
+               const step  = $('.js-step-parent-' + stepId);
+               const input = step.find('.js-form-validate');
+               step.addClass('d-none');
+               input.removeAttr('data-required');
+               clearValidate(input);
+            };
+
+            hideChildStep(stepId);
+
+            if (childStepIds) {
+
+               if ($.isArray(childStepIds)) {
+                  childStepIds.forEach(function(childStepId) {
+                     showChildStep(childStepId);
+                  });
+               } else {
+                  showChildStep(childStepIds);
+               }
             }
 
             const form = $(this).parents('.js-configurator-blur-update');
@@ -241,17 +256,21 @@ const Configurator = (function() {
          if ($(element).is('select')) {
             let selected = $('option:selected', element);
             let rules = selected.data('validation-rules');
-            if (rules) {
-               if (rules.exclude !== undefined) {
-                  let exclude = rules.exclude;
-                  if (exclude.step && exclude.option) {
-                     let step    = $(`.js-step-input-${exclude.step}`);
-                     let option  = step.find(`option[data-option-id="${exclude.option}"]:selected`);
-                     if (option.length > 0) {
-                        valid = false;
-                        msg = exclude.message;
+            if (rules && rules.exclude !== undefined) {
+               let excludeRules = rules.exclude;
+               if ($.isArray(excludeRules)) {
+                  excludeRules.forEach((excludeRule) => {
+                     if (excludeRule.step && excludeRule.options) {
+                        let step    = $(`.js-step-input-${excludeRule.step}`);
+                        excludeRule.options.forEach((optionId) => {
+                           let option  = step.find(`option[data-option-id="${optionId}"]:selected`);
+                           if (option.length > 0) {
+                              valid = false;
+                              msg = excludeRule.message;
+                           }
+                        });
                      }
-                  }
+                  });
                }
             }
          }

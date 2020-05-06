@@ -32,6 +32,13 @@ class Option {
       return $this->get_field( 'child_steps' );
    }
 
+   public function is_child_step( string $step_id = '' ) {
+      $child_steps = $this->get_child_steps();
+      if ( ! $child_steps ) return;
+      if ( is_array( $child_steps ) ) return in_array( $step_id, $child_steps );
+      else return ( $step_id == $child_steps );
+   }
+
    public function get_child_steps_attr() {
       $child_steps = $this->get_child_steps();
       if ( ! $child_steps ) return;

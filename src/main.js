@@ -588,7 +588,7 @@ function validateInput(element) {
 function clearValidate(element) {
    const parent = jQuery(element).parents('.js-form-group');
    const feedback = parent.find('.js-invalid-feedback');
-   element.classList.remove('valid', 'invalid');
+   jQuery(element).removeClass('valid invalid');
    feedback.text('');
 }
 

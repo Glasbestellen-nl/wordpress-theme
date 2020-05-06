@@ -40,6 +40,16 @@ class Step {
       }, $options );
    }
 
+   public function get_option_by_id( int $option_id = 0 ) {
+      if ( empty( $option_id ) ) return;
+      $options = $this->get_options();
+      if ( ! $options ) return;
+      foreach ( $options as $option ) {
+         if ( $option->get_id() == $option_id ) return $option;
+      }
+      return false;
+   }
+
    public function get_options_html( $value = null ) {
       $options = $this->get_options();
       if ( $options ) {
@@ -83,7 +93,6 @@ class Step {
             $classes[] = $class;
          }
       }
-
       return implode( ' ', $classes );
    }
 

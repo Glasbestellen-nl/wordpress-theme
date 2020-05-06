@@ -553,6 +553,35 @@ class Configurator {
       return $this->_current_step->get_parent();
    }
 
+   public function is_child_of_configured_option( string $step_id = '' ) {
+
+      $parent_step_id = $this->get_step_parent( $step_id );
+      if ( $parent_step_id && ! empty( $this->_configuration[$parent_step_id] ) ) {
+
+         $parent_step  = $this->get_step_by_id( $parent_step_id );
+         $option_id    = $this->_configuration[$parent_step_id];
+
+         $option = $parent_step->get_option_by_id( $option_id );
+         if ( ! $option ) return;
+
+         return $option->is_child_step( $this->_current_step->get_id() );
+      }
+      return false;
+   }
+
+   public function test( $step_id = '' ) {
+      $parent_step_id = $this->get_step_parent( $step_id );
+      if ( $parent_step_id && ! empty( $this->_configuration[$parent_step_id] ) ) {
+
+         $parent_step  = $this->get_step_by_id( $parent_step_id );
+         $option_id    = $this->_configuration[$parent_step_id];
+
+         $option = $parent_step->get_option_by_id( $option_id );
+
+         return $option->is_child_step( $this->_current_step->get_id() );
+      }
+   }
+
    /**
     * Returns the current step css classes
     *
@@ -562,9 +591,11 @@ class Configurator {
     */
    public function get_step_class( string $step_id = '' ) {
       $this->set_current_step( $step_id );
-      if ( $this->get_step_parent() && ! $this->get_step_configuration() ) {
+
+      if ( $this->get_step_parent() && ! $this->is_child_of_configured_option() ) {
          return $this->_current_step->get_class( ['d-none'] );
       }
+
       return $this->_current_step->get_class();
    }
 
