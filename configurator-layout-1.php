@@ -235,7 +235,7 @@ get_header();
                                                    if ( count( $options ) > 1 ) { ?>
 
                                                       <div class="configurator__form-col configurator__form-input js-form-group">
-                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate js-step-input-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>" data-step-id="<?php echo $step_id; ?>">
+                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__dropdown configurator__form-control js-form-validate js-step-input-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>" data-step-id="<?php echo $step_id; ?>">
                                                             <?php $configurator->render_step_options(); ?>
                                                          </select>
                                                          <div class="invalid-feedback js-invalid-feedback"></div>

@@ -1,7 +1,7 @@
 /*
 Theme Name: Glasbestellen.nl Theme
 Author: Robbert Vermeulen
-Version: 4.2.8
+Version: 4.2.9
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: glasbestellen
@@ -3164,7 +3164,7 @@ Configurator
 }
 
 .configurator__form-label {
-   font-size: 1em;
+   font-size: 0.875em;
 }
 
 .configurator__form-label--link:hover {
@@ -3231,6 +3231,7 @@ Configurator
 
 .configurator__form-control {
    padding: 0.5em 0.625em;
+   font-size: 0.875em;
 }
 
 .configurator__checks-item {

@@ -182,30 +182,9 @@ class Configurator {
             if ( ( ! $this->is_child_of_configured_option( $step_id ) || ( $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id] ) ) ) {
                unset( $this->_configuration[$step_id] );
             }
-            // if ( $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id] ) {
-            //    unset( $this->_configuration[$step_id] );
-            // }
-
          }
       }
    }
-
-   // public function is_child_of_configured_option( string $step_id = '' ) {
-   //
-   //    $parent_step_id = $this->get_step_parent( $step_id );
-   //    if ( $parent_step_id && ! empty( $this->_configuration[$parent_step_id] ) ) {
-   //
-   //       $parent_step  = $this->get_step_by_id( $parent_step_id );
-   //       $option_id    = $this->_configuration[$parent_step_id];
-   //
-   //       $option = $parent_step->get_option_by_id( $option_id );
-   //       if ( ! $option ) return;
-   //
-   //       return $option->is_child_step( $this->_current_step->get_id() );
-   //    }
-   //    return false;
-   // }
-
 
    /**
     * Merges the configuration for steps that are not completed yet with input from default configuration
