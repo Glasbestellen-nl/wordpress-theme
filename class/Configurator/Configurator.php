@@ -179,12 +179,33 @@ class Configurator {
    protected function filter_configuration() {
       foreach ( $this->_configuration as $step_id => $input ) {
          if ( $parent_id = $this->get_step_parent( $step_id ) ) {
-            if ( $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id] ) {
+            if ( ( ! $this->is_child_of_configured_option( $step_id ) || ( $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id] ) ) ) {
                unset( $this->_configuration[$step_id] );
             }
+            // if ( $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id] ) {
+            //    unset( $this->_configuration[$step_id] );
+            // }
+
          }
       }
    }
+
+   // public function is_child_of_configured_option( string $step_id = '' ) {
+   //
+   //    $parent_step_id = $this->get_step_parent( $step_id );
+   //    if ( $parent_step_id && ! empty( $this->_configuration[$parent_step_id] ) ) {
+   //
+   //       $parent_step  = $this->get_step_by_id( $parent_step_id );
+   //       $option_id    = $this->_configuration[$parent_step_id];
+   //
+   //       $option = $parent_step->get_option_by_id( $option_id );
+   //       if ( ! $option ) return;
+   //
+   //       return $option->is_child_step( $this->_current_step->get_id() );
+   //    }
+   //    return false;
+   // }
+
 
    /**
     * Merges the configuration for steps that are not completed yet with input from default configuration
@@ -311,7 +332,8 @@ class Configurator {
       $skipped = array_filter( $this->_steps, function( $step ) {
          $parent_id = $this->get_step_parent( $step->get_id() );
          if ( $parent_id && isset( $this->_configuration[$parent_id] ) ) {
-            return $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id];
+            return ( ! $this->is_child_of_configured_option( $step->get_id() ) )
+               || ( $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id] );
          }
          return false;
       });
@@ -567,19 +589,6 @@ class Configurator {
          return $option->is_child_step( $this->_current_step->get_id() );
       }
       return false;
-   }
-
-   public function test( $step_id = '' ) {
-      $parent_step_id = $this->get_step_parent( $step_id );
-      if ( $parent_step_id && ! empty( $this->_configuration[$parent_step_id] ) ) {
-
-         $parent_step  = $this->get_step_by_id( $parent_step_id );
-         $option_id    = $this->_configuration[$parent_step_id];
-
-         $option = $parent_step->get_option_by_id( $option_id );
-
-         return $option->is_child_step( $this->_current_step->get_id() );
-      }
    }
 
    /**
