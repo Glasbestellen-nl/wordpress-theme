@@ -151,35 +151,52 @@ class Configurator {
    /**
     * Updates the current configured price table
     *
+    * @uses get_merged_configuration() to merge the configuration input from steps that are not completed
+    * yet with the input from default configuration
     * @uses calculate_price_table() to update the current price table
     */
    protected function update_price_table() {
-      $this->_price_table = $this->calculate_price_table( $this->_configuration );
+      $merged_configuration = $this->get_merged_configuration();
+      $this->_price_table = $this->calculate_price_table( $merged_configuration );
    }
 
    /**
     * Updates the current configuration
     *
     * @param array $configuration the updated configuration
+    * @uses filter_configuration() to filter out input from child steps when input
+    * from their parent step does not exist in configuration
     */
    protected function update_configuration( array $configuration = [] ) {
-      if ( empty( $configuration ) ) return;
-      $this->_configuration = $this->filter_configuration( $configuration );
+      $this->_configuration = $configuration;
+      $this->filter_configuration();
    }
 
    /**
-    * Filters configuration
-    *
-    * @param array $configuration the updated configuration
+    * Filters out configuration input from child steps when input from their parent step does
+    * not exist in configuration
     */
-   protected function filter_configuration( array $configuration = [] ) {
-      if ( empty( $configuration ) ) return;
-      $filtered = [];
-      foreach ( $configuration as $step_id => $input ) {
-         if ( ! empty( $input ) )
-            $filtered[$step_id] = $input;
+   protected function filter_configuration() {
+      foreach ( $this->_configuration as $step_id => $input ) {
+         if ( $parent_id = $this->get_step_parent( $step_id ) ) {
+            if ( ( ! $this->is_child_of_configured_option( $step_id ) || ( $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id] ) ) ) {
+               unset( $this->_configuration[$step_id] );
+            }
+         }
       }
-      return $filtered;
+   }
+
+   /**
+    * Merges the configuration for steps that are not completed yet with input from default configuration
+    */
+   public function get_merged_configuration() {
+      $configuration = $this->_configuration;
+      if ( empty( $this->_default_configuration ) ) return;
+      foreach ( $this->_default_configuration as $step_id => $input ) {
+         if ( empty( $configuration[$step_id] ) )
+            $configuration[$step_id] = $this->_default_configuration[$step_id];
+      }
+      return $configuration;
    }
 
    /**
@@ -284,6 +301,35 @@ class Configurator {
    }
 
    /**
+    * Returns the number of skipped child steps
+    *
+    * Counts the number of input from child steps in the current configuration
+    * without a the input from a parent step
+    */
+   public function get_skipped_child_steps_count() {
+      if ( empty( $this->_steps ) ) return;
+      $skipped = array_filter( $this->_steps, function( $step ) {
+         $parent_id = $this->get_step_parent( $step->get_id() );
+         if ( $parent_id && isset( $this->_configuration[$parent_id] ) ) {
+            return ( ! $this->is_child_of_configured_option( $step->get_id() ) )
+               || ( $this->get_step_default( $parent_id ) == $this->_configuration[$parent_id] );
+         }
+         return false;
+      });
+      return ! empty( $skipped ) ? count( $skipped ) : 0;
+   }
+
+   /**
+    * Checks whether the configuration is done
+    *
+    * @uses get_skipped_child_steps_count() to check whether there are input from
+    * child steps inside the current configuration without input from their parent step
+    */
+   public function is_configuration_done() {
+      return count( $this->_configuration ) === ( $this->get_steps_count() - $this->get_skipped_child_steps_count() );
+   }
+
+   /**
     * Checks whether a step is done
     *
     * @param string $step_id the id of the step to check
@@ -340,6 +386,16 @@ class Configurator {
          $price = $c_price - $d_price;
       }
       return $price;
+   }
+
+   /**
+    * Returns the image of the steps's chosen value
+    */
+   public function get_step_image( string $step_id = '' ) {
+      $this->set_current_step( $step_id );
+      $choice = $this->get_step_choice( $this->get_step_id(), false );
+      if ( ! $choice ) return;
+      return get_the_post_thumbnail_url( $choice, 'medium' );
    }
 
    /**
@@ -495,26 +551,23 @@ class Configurator {
     */
    public function get_step_parent( string $step_id = '' ) {
       $this->set_current_step( $step_id );
-      return $this->_current_step->get_parent();
-   }
-
-   public function get_step_parents( string $step_id = '' ) {
-      $this->set_current_step( $step_id );
-      $parent_step_ids = [];
-      $parent_step_id = $this->_current_step->get_parent();
-      if ( ! $parent_step_id ) return;
-      $parent_step_ids[] = $parent_step_id;
-      $parent_step = $this->get_step_by_id( $parent_step_id );
-      if ( $parent_step->get_parent() ) {
-         $parent_step_ids[] = $parent_step->get_parent();
+      $parent_ids = false;
+      foreach ( $this->_steps as $step ) {
+         if ( $options = $step->get_options() ) {
+            foreach ( $options as $option ) {
+               if ( $option->is_child_step( $step_id ) ) {
+                  $parent_ids[] = $step->get_id();
+               }
+            }
+         }
       }
-      return $parent_step_ids;
+      return $parent_ids;
    }
 
    public function is_child_of_configured_option( string $step_id = '' ) {
 
       $parent_step_id = $this->get_step_parent( $step_id );
-      if ( $parent_step_id && ! empty( $this->_configuration[$parent_step_id] ) ) {
+      if ( $parent_step_id && ! empty( $this->_configuration ) && in_array( $parent_step_id, $this->_configuration ) ) {
 
          $parent_step  = $this->get_step_by_id( $parent_step_id );
          $option_id    = $this->_configuration[$parent_step_id];
@@ -535,16 +588,10 @@ class Configurator {
     * @param string $step_id for a specific step
     */
    public function get_step_class( string $step_id = '' ) {
-
       $this->set_current_step( $step_id );
 
-      $parents_steps_ids = $this->get_step_parents();
-      if ( $parents_steps_ids && ! $this->is_child_of_configured_option() ) {
-         $additional_classes = ['d-none'];
-         foreach ( $parents_steps_ids as $parent_step_id ) {
-            $additional_classes[] = 'js-parent-step-' . $parent_step_id;
-         }
-         return $this->_current_step->get_class( $additional_classes );
+      if ( $this->get_step_parent() && ! $this->is_child_of_configured_option() ) {
+         return $this->_current_step->get_class( ['d-none'] );
       }
       return $this->_current_step->get_class();
    }
@@ -628,18 +675,11 @@ class Configurator {
 
       if ( empty( $this->_configuration ) ) return;
 
-      foreach ( $this->_configuration as $step_id => $input ) {
-
-         if ( ! empty( $input ) ) {
-            $option_title = $this->get_option_title( $step_id, $input );
-            $value = $option_title ? $option_title : $input;
-         } else {
-            $value = '---';
-         }
-
+      foreach ( $this->_configuration as $step_id => $value ) {
+         $option_price = $this->get_option_title( $step_id, $value );
          $summary[] = [
             'label' => $this->get_step_title( $step_id ),
-            'value' => $value
+            'value' => ( $option_price ) ? $option_price : $value
          ];
       }
 

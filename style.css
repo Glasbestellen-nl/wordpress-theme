@@ -3227,6 +3227,7 @@ Configurator
 
 .configurator__form-input--default {
    padding: 0.3125em 0;
+   font-size: 0.9375em;
 }
 
 .configurator__form-control {
