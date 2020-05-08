@@ -10,7 +10,6 @@ const Configurator = (function() {
 
       this.init = function() {
 
-
          /**
          * Delegate configurator keyup events
          */
@@ -97,9 +96,7 @@ const Configurator = (function() {
                showModalForm(title, formtype, metadata);
 
             }.bind(this));
-
          });
-
       }
 
       this.updateTotalPrice = function() {

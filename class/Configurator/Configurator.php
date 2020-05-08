@@ -498,19 +498,34 @@ class Configurator {
       return $this->_current_step->get_parent();
    }
 
+   /**
+    * Returns a step's parent and the parents of their parents
+    *
+    * @param string $step_id for a specific step
+    */
    public function get_step_parents( string $step_id = '' ) {
-      $this->set_current_step( $step_id );
-      $parent_step_ids = [];
-      $parent_step_id = $this->_current_step->get_parent();
-      if ( ! $parent_step_id ) return;
-      $parent_step_ids[] = $parent_step_id;
-      $parent_step = $this->get_step_by_id( $parent_step_id );
-      if ( $parent_step->get_parent() ) {
-         $parent_step_ids[] = $parent_step->get_parent();
+
+      $parent_ids = false;
+
+      $step = $this->get_step_by_id( $step_id );
+      if ( ! $step ) return $parent_ids;
+
+      $parent_id = $step->get_parent();
+      if ( ! $parent_id ) return $parent_ids;
+
+      $parent_ids[] = $parent_id;
+
+      if ( $grand_parent_ids = $this->get_step_parents( $parent_id ) ) {
+         $parent_ids = array_merge( $parent_ids, $grand_parent_ids );
       }
-      return $parent_step_ids;
+      return $parent_ids;
    }
 
+   /**
+    * Checks whether step is child of an option of a configured step
+    *
+    * @param string $step_id for a specific step
+    */
    public function is_child_of_configured_option( string $step_id = '' ) {
 
       $parent_step_id = $this->get_step_parent( $step_id );
@@ -538,11 +553,14 @@ class Configurator {
 
       $this->set_current_step( $step_id );
 
-      $parents_steps_ids = $this->get_step_parents();
-      if ( $parents_steps_ids && ! $this->is_child_of_configured_option() ) {
-         $additional_classes = ['d-none'];
+      $parents_steps_ids = $this->get_step_parents( $step_id );
+      if ( $parents_steps_ids ) {
+         $additional_classes = [];
          foreach ( $parents_steps_ids as $parent_step_id ) {
             $additional_classes[] = 'js-parent-step-' . $parent_step_id;
+         }
+         if ( ! $this->is_child_of_configured_option() ) {
+            $additional_classes[] = 'd-none';
          }
          return $this->_current_step->get_class( $additional_classes );
       }
