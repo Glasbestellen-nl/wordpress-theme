@@ -215,7 +215,7 @@ get_header();
                                              }
                                              ?>
 
-                                             <div class="configurator__form-row <?php echo $configurator->get_step_class(); ?>" data-step-id="<?php echo $step_id; ?>">
+                                             <div class="configurator__form-row <?php echo $configurator->get_step_class( $step_id ); ?>" data-step-id="<?php echo $step_id; ?>">
 
                                                 <div class="configurator__form-col configurator__form-info <?php echo ( ! $explanation_id ) ? 'd-none d-md-block' : ''; ?>">
                                                    <?php if ( $explanation_id ) { ?>
@@ -232,7 +232,7 @@ get_header();
 
                                                 <?php
                                                 if ( $options = $configurator->get_step_options() ) {
-                                                   if ( count( $options ) > 1 ) { ?>
+                                                   if ( count( $options ) > 1 || ( count( $options ) == 1 && ! $configurator->is_step_required() )  ) { ?>
 
                                                       <div class="configurator__form-col configurator__form-input js-form-group">
                                                          <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__dropdown configurator__form-control js-form-validate js-step-input-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>" data-step-id="<?php echo $step_id; ?>">
