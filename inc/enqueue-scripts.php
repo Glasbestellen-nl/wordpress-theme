@@ -44,7 +44,7 @@ function gb_enqueue_scripts() {
             'enterValidEmail'        => __( 'Vul a.u.b. een geldig e-mail adres in.', 'glasbestellen' ),
             'filesSelected'          => __( 'bijlage(s) geselecteerd.', 'glasbestellen' ),
             'inspiration'            => __( 'Inspiratie', 'glasbestellen' ),
-            'please_wait'            => __( 'Een moment geduld..', 'glasbestellen' ),
+            'pleaseWait'             => __( 'Een moment geduld..', 'glasbestellen' ),
             'sent'                   => __( 'Verstuurd!', 'glasbestellen' )
          ],
          'configuratorId' => ( is_singular( 'configurator' ) ) ? $post->ID : false

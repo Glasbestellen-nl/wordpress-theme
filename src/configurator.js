@@ -109,15 +109,28 @@ const Configurator = (function() {
       }
 
       this.toCart = function(quantity = 1, message = '') {
+
+         const cartButton = $('.js-configurator-cart-button');
+
          let data = {
             action: 'handle_configurator_to_cart',
             configurator_id: gb.configuratorId,
             quantity: quantity,
             message: message
          }
-         $.post(gb.ajaxUrl, data, function(response) {
-            if (response.url)
-               window.location.replace(response.url);
+
+         $.ajax({
+            url: gb.ajaxUrl,
+            data: data,
+            method: 'POST',
+            beforeSend: function() {
+               cartButton.attr('disabled', true).text(gb.msg.pleaseWait);
+            },
+            success: function(response) {
+               cartButton.attr('disabled', false);
+               if (response.url)
+                  window.location.replace(response.url);
+            }
          });
       }
 

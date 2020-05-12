@@ -388,7 +388,6 @@
                      submitButton.attr('disabled', true).text(gb.msg.pleaseWait);
                   },
                   success: function(response) {
-                     console.log(response);
                      if (response) {
                         let parsed = JSON.parse(response);
                         if (parsed.error) {
