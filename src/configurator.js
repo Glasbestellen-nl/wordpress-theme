@@ -25,8 +25,6 @@ const Configurator = (function() {
 
          $(this.element).on('change', '.js-configurator-blur-update .js-form-validate', function() {
 
-            console.log('triggered');
-
             // Show and hide child steps
             const stepId       = $(this).data('step-id');
             const childStepIds = $('option:selected', this).data('child-steps');
