@@ -80,12 +80,13 @@ get_header(); ?>
 
                            <?php
                            $product_count = 0;
+                           $column_width = get_field( 'number_of_columns' ) ? 12 / get_field( 'number_of_columns' ) : 3;
                            while ( $items->have_posts() ) {
                               $items->the_post();
                               $configurator = gb_get_configurator( get_the_id() );
                               $product_count ++; ?>
 
-                              <div class="col-12 col-md-6 col-lg-4">
+                              <div class="col-12 col-md-6 col-lg-<?php echo $column_width; ?>">
                                  <?php require( get_template_directory() . '/template-parts/product-listing.php' ); ?>
                               </div>
 
@@ -125,41 +126,6 @@ get_header(); ?>
                            </div>
 
                         </div>
-
-                        <!-- <div class="row large-space-below">
-
-                           <div class="col-12">
-
-                              <div class="card banner">
-
-                                 <div class="banner__background">
-                                    <img data-src="<?php echo get_template_directory_uri() . '/assets/images/sales-medewerker.jpg'; ?>" class="lazyload banner__background-img" />
-                                 </div>
-
-                                 <div class="card__body">
-
-                                    <div class="row">
-
-                                       <div class="col-lg-6 offset-lg-2 card__column">
-                                          <div class="card__text">
-                                             <span class="h2"><?php echo get_field( 'contact_box_title' ) ?></span>
-                                             <div class="text">
-                                                <p><?php echo get_field( 'contact_box_message' ); ?></p>
-                                             </div>
-                                          </div>
-                                       </div>
-
-                                       <div class="col-lg-4 d-flex align-items-center card__column card__column--last">
-                                          <span class="btn btn--large btn--primary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php echo get_field( 'contact_box_btn' ); ?>"><?php echo get_field( 'contact_box_btn' ); ?></span>
-                                       </div>
-
-                                    </div>
-                                 </div>
-                              </div>
-
-                           </div>
-
-                        </div> -->
 
                      <?php } ?>
 

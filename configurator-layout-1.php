@@ -165,9 +165,11 @@ get_header();
                                        <div class="col-12 col-md-6">
                                           <span class="h4 configurator__heading"><?php _e( 'Onze aanbieding voor u', 'glasbestellen' ); ?></span>
 
-                                          <!-- <div class="configurator__energy-label">
-                                             <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload">
-                                          </div> -->
+                                          <?php if ( get_field( 'show_energy_label' ) ) { ?>
+                                             <div class="configurator__energy-label">
+                                                <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload" title="<?php _e( 'Energielabel', 'glasbestellen' ); ?>">
+                                             </div>
+                                          <?php } ?>
 
                                        </div>
 
@@ -191,7 +193,10 @@ get_header();
                                     <div class="configurator__body">
 
                                        <div class="space-below">
-                                          <span class="h4 configurator__heading"><?php echo sprintf( __( '%s samenstellen', 'glasbestellen' ), get_first_term_by_id( get_the_id(), 'startopstelling', 'name' ) ); ?></span>
+                                          <span class="h4 configurator__heading">
+                                             <?php echo sprintf( __( '%s samenstellen', 'glasbestellen' ), get_first_term_by_id( get_the_id(), 'startopstelling', 'name' ) ); ?>
+                                             <span class="configurator__heading-addition">(* <?php _e( 'Verplicht', 'glasbestellen' ); ?>)</span>
+                                          </span>
                                           <p><?php echo sprintf( __( 'Klik voor meer informatie op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
                                        </div>
 
@@ -200,48 +205,38 @@ get_header();
                                           <?php
                                           while ( $configurator->have_steps() ) {
                                              $configurator->the_step();
-                                             $configured_value = $configurator->get_step_configuration();
                                              $step_id = $configurator->get_step_id();
-                                             $step_class = 'js-step-' . $step_id;
-                                             if ( $step_parent = $configurator->get_step_parent() ) {
-                                                $step_class .= ' js-step-parent-' . $step_parent;
-                                                if ( ! $configured_value ) {
-                                                   $step_class .= ' d-none';
-                                                }
-                                             }
+
+                                             $label_class = '';
+                                             $explanation_id = false;
                                              if ( $configurator->get_step_explanation_id() ) {
+                                                $label_class    = 'configurator__form-label--link js-popup-explanation';
                                                 $explanation_id = $configurator->get_step_explanation_id();
-                                                $label_class = 'configurator__form-label--link js-popup-explanation';
-                                             } else {
-                                                $explanation_id = false;
-                                                $label_class = '';
                                              }
                                              ?>
 
-                                             <div class="configurator__form-row <?php echo $step_class; ?>" data-step-id="<?php echo $step_id; ?>">
+                                             <div class="configurator__form-row <?php echo $configurator->get_step_class( $step_id ); ?>" data-step-id="<?php echo $step_id; ?>">
+
                                                 <div class="configurator__form-col configurator__form-info <?php echo ( ! $explanation_id ) ? 'd-none d-md-block' : ''; ?>">
                                                    <?php if ( $explanation_id ) { ?>
                                                       <i class="fas fa-info-circle configurator__info-icon js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"></i>
                                                    <?php } ?>
                                                 </div>
+
                                                 <div class="configurator__form-col">
                                                    <label class="configurator__form-label <?php echo $label_class; ?>" data-explanation-id="<?php echo $explanation_id; ?>"><?php echo $configurator->get_step_title(); ?></label>
+                                                   <?php if ( $configurator->is_step_required() ) { ?>
+                                                      <span>*</span>
+                                                   <?php } ?>
                                                 </div>
 
                                                 <?php
                                                 if ( $options = $configurator->get_step_options() ) {
-                                                   if ( count( $options ) > 1 ) { ?>
+                                                   if ( count( $options ) > 1 || ( count( $options ) == 1 && ! $configurator->is_step_required() )  ) { ?>
+
                                                       <div class="configurator__form-col configurator__form-input js-form-group">
-                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__form-control js-form-validate js-step-input-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>" data-step-id="<?php echo $step_id; ?>">
-                                                            <?php
-                                                            foreach ( $options as $option ) {
-                                                               $selected     = selected( $configured_value, $option->get_id(), false );
-                                                               $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
-                                                               $child_step   = ( $option->get_child_step() ) ? 'data-child-step="' . $option->get_child_step() . '"' : '';
-                                                               $plus_price   = ( ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', Money::display( $option->get_plus_price() ), $step_id ) : '';
-                                                               echo '<option value="' . $option->get_id() . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_step . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
-                                                            }
-                                                            ?>
+                                                         <select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__dropdown configurator__form-control js-form-validate js-step-input-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>" data-step-id="<?php echo $step_id; ?>">
+                                                            <?php $configurator->render_step_options(); ?>
                                                          </select>
                                                          <div class="invalid-feedback js-invalid-feedback"></div>
                                                       </div>
@@ -255,7 +250,7 @@ get_header();
 
                                                 <?php } else { ?>
                                                    <div class="configurator__form-col configurator__form-input js-form-group">
-                                                      <input type="number" name="configuration[<?php echo $step_id; ?>]" class="form-control configurator__form-control js-form-validate" placeholder="mm" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configured_value; ?>" />
+                                                      <input type="number" name="configuration[<?php echo $step_id; ?>]" class="form-control configurator__form-control js-form-validate" placeholder="mm" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configurator->get_step_value( $step_id, true ); ?>" />
                                                       <div class="invalid-feedback js-invalid-feedback"></div>
                                                    </div>
                                                 <?php } ?>
@@ -367,6 +362,7 @@ get_header();
 
                                     <div class="col-12 col-md-6">
                                        <div class="card">
+
                                           <div class="review" data-mh="review">
                                              <div class="review__header">
                                                 <div class="review__title">

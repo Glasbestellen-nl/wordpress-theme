@@ -55,15 +55,19 @@ class Data_Pusher {
             $conversion_data = \CRM::get_lead_meta( $lead->lead_id, 'conversion_data', true );
             $client_id = \CRM::get_lead_meta( $lead->lead_id, 'gclid', 'true' );
 
-            $conversion = [
-               'lead_id' => $lead->lead_id,
-               'revenue' => $conversion_data['revenue'],
-               'shipping_price' => ! empty( $conversion_data['shipping_price'] ) ? $conversion_data['shipping_price'] : 0,
-               'items' => ! empty( $conversion_data['items'] ) ? $conversion_data['items'] : [],
-               'client_id' => $client_id
-            ];
+            if ( $conversion_data && $client_id ) {
 
-            $conversions[] = $conversion;
+               $conversion = [
+                  'lead_id' => $lead->lead_id,
+                  'revenue' => $conversion_data['revenue'],
+                  'shipping_price' => ! empty( $conversion_data['shipping_price'] ) ? $conversion_data['shipping_price'] : 0,
+                  'items' => ! empty( $conversion_data['items'] ) ? $conversion_data['items'] : [],
+                  'client_id' => $client_id
+               ];
+
+               $conversions[] = $conversion;
+
+            }
 
          }
       }

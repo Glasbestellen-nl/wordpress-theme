@@ -5,7 +5,7 @@ class Step {
 
    protected $_data;
 
-   protected $_default = false;
+   protected $_default;
 
    public function __construct( array $data = [] ) {
       $this->_data = $data;
@@ -36,8 +36,7 @@ class Step {
       $options = $this->get_field( 'options' );
       if ( ! $options ) return;
       return array_map( function( $option ) {
-         $default_price = ( $this->_default ) ? $this->_default->get_price() : 0;
-         return new Option( $option, $default_price );
+         return new Option( $option, $this->_default->get_price() );
       }, $options );
    }
 
@@ -53,23 +52,19 @@ class Step {
 
    public function get_options_html( $value = null ) {
       $options = $this->get_options();
-      if ( ! $options ) return;
-
-      $html = '';
-      $hide_price = $this->get_field( 'hide_price' );
-
-      if ( ! $this->get_default() ) {
-         $html .= '<option value="">---</option>';
+      if ( $options ) {
+         $html = '';
+         $hide_price = $this->get_field( 'hide_price' );
+         foreach ( $options as $option ) {
+            $selected     = selected( $value, $option->get_id(), false );
+            $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
+            $child_steps  = ( $option->get_child_steps() ) ? 'data-child-steps=\'' . $option->get_child_steps_attr() . '\'' : '';
+            $plus_price   = ( ! $hide_price  && ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', \Money::display( $option->get_plus_price() ), $this->get_id() ) : '';
+            $html .= '<option value="' . $option->get_id() . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_steps . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
+         }
+         return $html;
       }
-
-      foreach ( $options as $option ) {
-         $selected     = selected( $value, $option->get_id(), false );
-         $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
-         $child_steps  = ( $option->get_child_steps() ) ? 'data-child-steps=\'' . $option->get_child_steps_attr() . '\'' : '';
-         $plus_price   = ( ! $hide_price  && ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', \Money::display( $option->get_plus_price() ), $this->get_id() ) : '';
-         $html .= '<option value="' . $option->get_id() . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_steps . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
-      }
-      return $html;
+      return false;
    }
 
    public function render_options( $value = null ) {
@@ -89,6 +84,9 @@ class Step {
       $classes = [
          'js-step-' . $this->get_id()
       ];
+
+      if ( $parent = $this->get_parent() )
+         $classes[] = 'js-step-parent-' . $parent;
 
       if ( ! empty( $additional_classes ) ) {
          foreach ( $additional_classes as $class ) {
@@ -120,8 +118,10 @@ class Step {
    }
 
    public function get_default() {
-      if ( ! $this->_default ) return;
-      return is_a( $this->_default, 'Configurator\Option' ) ? $this->_default->get_id() : $this->_default;
+      if ( is_a( $this->_default, 'Configurator\Option' ) ) {
+         return $this->_default->get_id();
+      }
+      return $this->_default;
    }
 
    protected function set_default() {
@@ -130,9 +130,8 @@ class Step {
          $this->_default = $this->_data['default'];
       } elseif ( ! empty( $this->_data['options'] ) ) {
          foreach ( $this->_data['options'] as $option ) {
-            if ( ! empty( $option['default'] ) ) {
+            if ( ! empty( $option['default'] ) )
                $this->_default = new Option( $option );
-            }
          }
       }
 

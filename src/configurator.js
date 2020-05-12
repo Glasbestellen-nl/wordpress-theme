@@ -11,23 +11,6 @@ const Configurator = (function() {
       this.init = function() {
 
          /**
-         * Delegate configurator click events
-         */
-         this.element.addEventListener('click', e => {
-
-            // Add configuration to cart
-            if (e.target && e.target.closest('.js-configurator-to-cart')) {
-               this.toCart();
-            }
-         });
-
-         /**
-         * Delegate configurator submit events
-         */
-         this.element.addEventListener('submit', e => {
-         });
-
-         /**
          * Delegate configurator keyup events
          */
          this.element.addEventListener('keyup', e => {
@@ -42,24 +25,41 @@ const Configurator = (function() {
 
          $(this.element).on('change', '.js-configurator-blur-update .js-form-validate', function() {
 
-            // Show and hide child step
-            const stepId = $(this).data('step-id');
-            const childStepId = $('option:selected', this).data('child-step');
-            if (childStepId) {
-               $('.js-step-' + childStepId).removeClass('d-none');
-            } else {
-               $('.js-step-parent-' + stepId).addClass('d-none');
+            // Show and hide child steps
+            const stepId       = $(this).data('step-id');
+            const childStepIds = $('option:selected', this).data('child-steps');
+
+            const showChildStep = function(stepId) {
+               $('.js-step-' + stepId).removeClass('d-none').find('.js-form-validate').trigger('change');
+            };
+
+            const hideChildStep = function(stepId) {
+               const step  = $('.js-parent-step-' + stepId);
+               const input = step.find('.js-form-validate');
+               step.addClass('d-none');
+               clearValidate(input);
+            };
+
+            hideChildStep(stepId);
+
+            if (childStepIds) {
+               if ($.isArray(childStepIds)) {
+                  childStepIds.forEach(function(childStepId) {
+                     showChildStep(childStepId);
+                  });
+               } else {
+                  showChildStep(childStepIds);
+               }
             }
 
             const form = $(this).parents('.js-configurator-blur-update');
 
             if (form) {
+               const formData = self.initFormData();
 
-               const formData = self.initFormData(form[0]);
-
-               $(':input', form).each(function(index, element) {
-                  if ($(element).val())
-                     self.validateInput(element);
+               $(':input:visible', form).each(function(index, element) {
+                  self.validateInput(element);
+                  formData.append($(element).attr('name'), $(element).val());
                });
 
                self.submitFormData(formData, function() {
@@ -94,9 +94,7 @@ const Configurator = (function() {
                showModalForm(title, formtype, metadata);
 
             }.bind(this));
-
          });
-
       }
 
       this.updateTotalPrice = function() {
@@ -118,14 +116,13 @@ const Configurator = (function() {
             message: message
          }
          $.post(gb.ajaxUrl, data, function(response) {
-            console.log(response);
             if (response.url)
                window.location.replace(response.url);
          });
       }
 
-      this.initFormData = function(form) {
-         const formData = new FormData(form);
+      this.initFormData = function() {
+         const formData = new FormData();
          formData.append('action', 'handle_configurator_form_submit');
          formData.append('configurator_id', gb.configuratorId);
          return formData;
@@ -135,14 +132,16 @@ const Configurator = (function() {
 
          const self = this;
 
-         const formData = this.initFormData(form[0]);
+         const formData = this.initFormData();
 
          let valid = true;
          let invalidInputs = [];
-         $(':input', form).each(function(index, element) {
+         $(':input:visible', form).each(function(index, element) {
             if (!self.validateInput(element)) {
                valid = false;
                invalidInputs.push(element);
+            } else {
+               formData.append($(element).attr('name'), $(element).val());
             }
          });
          if (valid) {
@@ -167,9 +166,6 @@ const Configurator = (function() {
             contentType: false,
             context: this,
             success: function(response) {
-
-               // if (response.price_table)
-               //    console.log(response.price_table);
 
                if (typeof callback === 'function' && callback())
                   callback();
@@ -205,9 +201,29 @@ const Configurator = (function() {
                }
 
                if (rules.max !== undefined) {
-                  if (value > parseInt(rules.max)) {
+
+                  let max;
+
+                  if (rules.max.dependence !== undefined) {
+
+                     let dependentStepId = rules.max.dependence;
+                     let dependentValue  = $('.js-step-' + dependentStepId).find('.js-form-validate').val();
+
+                     if (dependentValue) {
+                        if (rules.max.greater && rules.max.less) {
+                           max = (value > parseInt(dependentValue)) ? parseInt(rules.max.greater) : parseInt(rules.max.less);
+                        } else {
+                           max = parseInt(dependentValue);
+                        }
+                     }
+
+                  } else {
+                     max = parseInt(rules.max);
+                  }
+
+                  if (value > max) {
                      valid = false;
-                     msg = gb.msg.dimensionValueTooLarge.replace('{0}', rules.max);
+                     msg = gb.msg.dimensionValueTooLarge.replace('{0}', max);
                   }
                }
             }
@@ -216,17 +232,21 @@ const Configurator = (function() {
          if ($(element).is('select')) {
             let selected = $('option:selected', element);
             let rules = selected.data('validation-rules');
-            if (rules) {
-               if (rules.exclude !== undefined) {
-                  let exclude = rules.exclude;
-                  if (exclude.step && exclude.option) {
-                     let step    = $(`.js-step-input-${exclude.step}`);
-                     let option  = step.find(`option[data-option-id="${exclude.option}"]:selected`);
-                     if (option.length > 0) {
-                        valid = false;
-                        msg = exclude.message;
+            if (rules && rules.exclude !== undefined) {
+               let excludeRules = rules.exclude;
+               if ($.isArray(excludeRules)) {
+                  excludeRules.forEach((excludeRule) => {
+                     if (excludeRule.step && excludeRule.options) {
+                        let step    = $(`.js-step-input-${excludeRule.step}`);
+                        excludeRule.options.forEach((optionId) => {
+                           let option  = step.find(`option[data-option-id="${optionId}"]:selected`);
+                           if (option.length > 0) {
+                              valid = false;
+                              msg = excludeRule.message;
+                           }
+                        });
                      }
-                  }
+                  });
                }
             }
          }
