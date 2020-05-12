@@ -2,26 +2,50 @@
 /**
  * Renders order confirmation email html
  */
-function gb_render_order_confirmation_email( $template ) {
+function gb_render_email_template( $template ) {
 
-   if ( ! empty( $_GET['order_email'] ) ) {
+   if ( current_user_can( 'administrator' ) ) {
 
-      $transaction_id = $_GET['order_email'];
-      $transaction = new Transaction( $transaction_id );
+      if ( ! empty( $_GET['order_email'] ) ) {
 
-      $html = gb_get_order_confirmation_email_html( $transaction );
-      echo $html;
-      return;
-   }
-   elseif ( ! empty( $_GET['configuration_email'] ) ) {
+         $transaction_id = $_GET['order_email'];
+         $transaction = new Transaction( $transaction_id );
 
-      $html = gb_get_saved_configuration_email_html( $_GET['configuration_email'] );
-      echo $html;
-      return;
+         $html = gb_get_order_confirmation_email_html( $transaction );
+         echo $html;
+         return;
+      }
+
+      else if ( ! empty( $_GET['lead_email'] ) ) {
+         $html = gb_get_lead_request_email_html( $_GET['lead_email'] );
+         echo $html;
+         return;
+      }
+
+      elseif ( ! empty( $_GET['configuration_email'] ) ) {
+
+         $html = gb_get_saved_configuration_email_html( $_GET['configuration_email'] );
+         echo $html;
+         return;
+      }
    }
    return $template;
 }
-add_action( 'template_include', 'gb_render_order_confirmation_email' );
+add_action( 'template_include', 'gb_render_email_template' );
+
+/**
+ * Sends email when lead form is submitted correctly
+ */
+function gb_send_lead_request_email( $lead_id, $post_data ) {
+
+   $email_template = gb_get_lead_request_email_html( $lead_id );
+   $email = new Email( __( 'We gaan voor u aan de slag!', 'glasbestellen' ) );
+   $email->set_template( $email_template );
+   $email->add_receiver_email( $post_data['lead']['email'] );
+   $email->send();
+
+}
+add_action( 'gb_lead_form_submit_before_redirect', 'gb_send_lead_request_email', 0, 2 );
 
 /**
  * Returns order confirmation email html by transaction input
@@ -42,9 +66,32 @@ function gb_get_order_confirmation_email_html( Transaction $transaction ) {
    $builder = new Email_Template_Builder( $template_path, $data );
 
    return $builder->get_html();
-
 }
 
+/**
+ * Returns lead request email html
+ */
+function gb_get_lead_request_email_html( $lead_id ) {
+
+   if ( empty( $lead_id ) ) return;
+
+   $lead = CRM::get_lead( $lead_id );
+   $relation = $lead->get_relation();
+
+   $template_path = TEMPLATEPATH . '/email-templates/lead-request.php';
+
+   $data = [
+      'relation_name'   => $relation->get_name(),
+      'message'         => $lead->get_content()
+   ];
+
+   $builder = new Email_Template_Builder( $template_path, $data );
+   return $builder->get_html();
+}
+
+/**
+ * Returns saved configuration email html
+ */
 function gb_get_saved_configuration_email_html( $lead_id ) {
 
    if ( empty( $lead_id ) ) return;
@@ -73,9 +120,7 @@ function gb_get_saved_configuration_email_html( $lead_id ) {
    ];
 
    $builder = new Email_Template_Builder( $template_path, $data );
-
    return $builder->get_html();
-
 }
 
 /**

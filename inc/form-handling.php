@@ -78,7 +78,6 @@ function gb_handle_lead_form_submit() {
 
             }
          }
-
          do_action( 'gb_lead_form_submit_before_redirect', $lead_id, $_POST );
 
          // Set redirect url on success
