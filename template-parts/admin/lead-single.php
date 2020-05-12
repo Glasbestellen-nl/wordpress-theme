@@ -22,7 +22,7 @@ use Offline_Conversion_Tracking\Dashboard_UI;
 
                   <div class="postbox postbox-space-large">
 
-                     <h2 class="hndle"><?php _e( 'Opgeslagen configuratie', 'glasbestellen' ); ?></h2>
+                     <h2 class="hndle"><?php _e( 'Configuratie', 'glasbestellen' ); ?></h2>
 
                      <div class="inside">
 

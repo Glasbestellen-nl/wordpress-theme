@@ -66,14 +66,15 @@ class Leads_Table extends WP_List_Table {
    public function get_columns() {
 
       $columns = array(
-         'cb'          => __( 'Selecteer alles', 'glasbestellen' ),
-         'name'        => __( 'Naam', 'glasbestellen' ),
-         'owner'       => __( 'Beheerder', 'glasbestellen' ),
-         'status'      => __( 'Status', 'glasbestellen' ),
-         'date'        => __( 'Datum', 'glasbestellen' ),
-         'email'       => __( 'Email', 'glasbestellen' ),
-         'phone'       => __( 'Telefoonnummer', 'glasbestellen' ),
-         'residence'   => __( 'Woonplaats', 'glasbestellen' ),
+         'cb'           => __( 'Selecteer alles', 'glasbestellen' ),
+         'name'         => __( 'Naam', 'glasbestellen' ),
+         'owner'        => __( 'Beheerder', 'glasbestellen' ),
+         'status'       => __( 'Status', 'glasbestellen' ),
+         'date'         => __( 'Datum', 'glasbestellen' ),
+         'email'        => __( 'Email', 'glasbestellen' ),
+         'phone'        => __( 'Telefoonnummer', 'glasbestellen' ),
+         'residence'    => __( 'Woonplaats', 'glasbestellen' ),
+         'configuration'=> __( 'Configuratie', 'glasbestellen' ),
      );
      return $columns;
 
@@ -101,6 +102,12 @@ class Leads_Table extends WP_List_Table {
          case 'residence' :
             if ( isset( $item[$column_name] ) ) {
                return $item[$column_name];
+            }
+            break;
+         case 'configuration' :
+            $configurator = CRM::get_lead_meta( $item['lead_id'], 'saved_configurator', true );
+            if ( $configurator ) {
+               return '<span class="dashicons dashicons-yes-alt" style="color: green;"></span>';
             }
             break;
          default :
