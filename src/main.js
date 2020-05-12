@@ -357,7 +357,8 @@
             //Create formdata object
             const formData = new FormData(form);
             const action = form.querySelector('.js-form-action').value;
-            const submitButton = form.querySelector('button[type="submit"]');
+            const submitButton = jQuery('button[type="submit"]', form);
+            const submitButtonText = submitButton.text();
 
             if (action !== undefined) {
 
@@ -384,7 +385,7 @@
                   contentType: false,
                   beforeSend: function() {
                      // Disable submit button
-                     jQuery('button[type=submit]', form).attr('disabled', true);
+                     submitButton.attr('disabled', true).text(gb.msg.pleaseWait);
                   },
                   success: function(response) {
                      console.log(response);
@@ -394,7 +395,7 @@
                            showErrorAlert(parsed.error, form);
                         } else {
                            hideErrorAlert(form);
-                           jQuery('button[type=submit]', form).attr('disabled', false);
+                           submitButton.attr('disabled', false).text(gb.msg.sent);
                            if (parsed.redirect) {
                               window.location.href = parsed.redirect;
                            }
