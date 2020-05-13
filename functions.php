@@ -37,3 +37,38 @@ foreach ( $files as $file ) {
 }
 
 $offline_conversion_tracking = new Offline_Conversion_Tracking\Core;
+
+
+function test_form_builder( $template ) {
+
+	$form_settings = [
+		'form_action' => 'test',
+		'submit_button_class' => ['btn--block'],
+		'fields' => [
+			[
+				'type'  => 'dropdown',
+				'field_name'  => 'width',
+				'label' => 'E-mail',
+				'options' => [
+					[
+						'label' => '500 mm',
+						'value' => '500'
+					]
+				]
+			],
+			[
+				'type'  => 'text',
+				'field_name'  => 'first_name',
+				'label' => 'Voornaam',
+				'required' => 'true'
+			]
+		]
+	];
+
+	$form = new Form_Builder\Form_Builder( $form_settings );
+	// print_r( $form );
+
+	$form->render();
+
+}
+add_action( 'template_include', 'test_form_builder' );
