@@ -44,11 +44,14 @@ class Form_Builder {
    }
 
    public function get_fields_html() {
-      return implode( '', $this->_fields_html );
+      $html  = '<div class="row">';
+      $html .= implode( '', $this->_fields_html );
+      $html .= '</div>';
+      return $html;
    }
 
    public function get_form_opening_html() {
-      return '<form method="' . $this->get_form_method() . '" action="' . $this->get_form_action() . '" class="' . $this->get_form_class() . '">';
+      return '<form method="' . $this->get_form_method() . '" action="' . $this->get_form_action() . '" class="' . $this->get_form_class() . '" novalidate>';
    }
 
    public function get_submit_button_html() {

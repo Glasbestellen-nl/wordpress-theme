@@ -47,7 +47,7 @@ function gb_enqueue_scripts() {
             'pleaseWait'             => __( 'Een moment geduld..', 'glasbestellen' ),
             'sent'                   => __( 'Verstuurd!', 'glasbestellen' )
          ],
-         'configuratorId' => ( is_singular( 'configurator' ) ) ? $post->ID : false
+         'postId' => ( is_singular() ) ? $post->ID : false
       )
    );
 

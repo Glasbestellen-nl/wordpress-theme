@@ -11,7 +11,7 @@ function gb_handle_get_form_modal_input() {
       // Create form html by form type
       $html .= '<div class="modal__column">';
          ob_start();
-         get_template_part( 'template-parts/' . $_GET['formtype'] . '-form' );
+         require_once( TEMPLATEPATH . '/template-parts/' . $_GET['formtype'] . '-form.php' );
          $html .= ob_get_clean();
       $html .= '</div>';
 

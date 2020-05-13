@@ -11,6 +11,10 @@ abstract class Field {
 
    protected $_field_value;
 
+   protected $_field_placeholder;
+
+   protected $_col_span = 1;
+
    protected $_col_class = [];
 
    protected $_label;
@@ -24,6 +28,9 @@ abstract class Field {
       $this->set_col_class( ['form-group', 'js-form-group'] );
       $this->set_label_class( ['form-label'] );
       $this->set_field_class( ['form-control', 'js-form-validate'] );
+
+      if ( ! empty( $field_settings['col_span'] ) )
+         $this->set_col_span( $field_settings['col_span'] );
 
       if ( ! empty( $field_settings['field_name'] ) )
          $this->set_field_name( $field_settings['field_name'] );
@@ -95,6 +102,12 @@ abstract class Field {
       return $this->_required;
    }
 
+   public function set_field_class( array $additional_classes = [] ) {
+      if ( empty( $additional_classes ) ) return;
+      $this->_field_class = array_merge( $this->_field_class, $additional_classes );
+      return true;
+   }
+
    public function set_field_name( string $name = '' ) {
       $this->_field_name = $name;
       return true;
@@ -105,15 +118,20 @@ abstract class Field {
       return true;
    }
 
-   public function set_col_class( array $additional_classes = [] ) {
-      if ( empty( $additional_classes ) ) return;
-      $this->_col_class = array_merge( $this->_col_class, $additional_classes );
+   public function set_col_span( int $col_span = 1 ) {
+      $col_width = 12 / $col_span;
+      $this->set_col_class( ['col-12', 'col-md-' . $col_width] );
       return true;
    }
 
-   public function set_field_class( array $additional_classes = [] ) {
+   public function set_field_placeholder( string $placeholder = '' ) {
+      $this->_field_placeholder = $placeholder;
+      return true;
+   }
+
+   public function set_col_class( array $additional_classes = [] ) {
       if ( empty( $additional_classes ) ) return;
-      $this->_field_class = array_merge( $this->_field_class, $additional_classes );
+      $this->_col_class = array_merge( $this->_col_class, $additional_classes );
       return true;
    }
 

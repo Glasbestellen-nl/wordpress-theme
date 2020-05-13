@@ -470,6 +470,7 @@ function showModalForm(title, formtype, metadata) {
 
    let data = {
       action: 'get_form_modal_input',
+      post_id: gb.postId,
       formtype: formtype,
       metadata: metadata
    }
