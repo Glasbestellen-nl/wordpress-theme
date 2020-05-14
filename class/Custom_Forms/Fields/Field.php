@@ -1,7 +1,15 @@
 <?php
-namespace Form_Builder\Fields;
+namespace Custom_Forms\Fields;
 
 abstract class Field {
+
+   const LEAD_FIELD_NAMES = [
+      'name',
+      'email',
+      'phone',
+      'city',
+      'message'
+   ];
 
    protected $_field_name;
 
@@ -13,7 +21,7 @@ abstract class Field {
 
    protected $_field_placeholder;
 
-   protected $_col_span = 1;
+   protected $_col_span;
 
    protected $_col_class = [];
 
@@ -21,22 +29,26 @@ abstract class Field {
 
    protected $_label_class = [];
 
-   protected $_required = true;
+   protected $_required = false;
 
    public function __construct( array $field_settings = [] ) {
 
-      $this->set_col_class( ['form-group', 'js-form-group'] );
-      $this->set_label_class( ['form-label'] );
-      $this->set_field_class( ['form-control', 'js-form-validate'] );
+      $this->set_field_defaults();
 
-      if ( ! empty( $field_settings['col_span'] ) )
+      if ( ! empty( $field_settings['col_span'] ) ) {
          $this->set_col_span( $field_settings['col_span'] );
+      } else {
+         $this->set_col_span(1);
+      }
 
       if ( ! empty( $field_settings['field_name'] ) )
          $this->set_field_name( $field_settings['field_name'] );
 
       if ( ! empty( $field_settings['field_id'] ) )
          $this->set_field_id( $field_settings['id'] );
+
+      if ( ! empty( $field_settings['field_placeholder'] ) )
+         $this->set_field_placeholder( $field_settings['field_placeholder'] );
 
       if ( ! empty( $field_settings['field_class'] ) )
          $this->set_field_id( $field_settings['field_class'] );
@@ -54,16 +66,24 @@ abstract class Field {
 
    abstract public function get_field_html();
 
+   protected function set_field_defaults() {
+      $this->set_col_class( ['form-group', 'js-form-group'] );
+      $this->set_label_class( ['form-label'] );
+      $this->set_field_class( ['js-form-validate'] );
+      return true;
+   }
+
    public function get_html() {
       $html  = $this->get_col_opening_html();
       $html .= $this->get_label_html();
       $html .= $this->get_field_html();
+      $html .= $this->get_field_feedback_html();
       $html .= $this->get_col_closing_html();
       return $html;
    }
 
    protected function get_label_html() {
-      return '<label class="' . $this->get_label_class() . '">' . $this->get_label() . '</label>';
+      return '<label class="' . $this->get_label_class() . '">' . $this->get_label() . ':' . ( ( $this->is_required() ) ? ' <span class="req">*</span>' : '' ) . '</label>';
    }
 
    protected function get_col_opening_html() {
@@ -74,12 +94,21 @@ abstract class Field {
       return '</div>';
    }
 
+   protected function get_field_feedback_html() {
+      return '<div class="invalid-feedback js-invalid-feedback"></div>';
+   }
+
    public function get_field_name() {
-      return $this->_field_name;
+      $field_name = in_array( $this->_field_name, self::LEAD_FIELD_NAMES ) ? 'lead[' . $this->_field_name . ']' : 'custom_form[' . $this->_field_name . ']';
+      return $field_name;
    }
 
    public function get_field_id() {
       return $this->_field_id;
+   }
+
+   public function get_field_placeholder() {
+      return $this->_field_placeholder;
    }
 
    public function get_field_class() {
@@ -146,7 +175,7 @@ abstract class Field {
       return true;
    }
 
-   public function set_required( bool $required = true ) {
+   public function set_required( bool $required = false ) {
       $this->_required = $required;
       return true;
    }

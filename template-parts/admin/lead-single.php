@@ -123,6 +123,8 @@ use Offline_Conversion_Tracking\Dashboard_UI;
                         </div>
                      <?php } ?>
 
+                     <?php do_action( 'gb_admin_lead_single_summary', $_GET['lead_id'] ); ?>
+
                      <div class="form-row">
                         <label for="lead_note_field" class="form-row-label"><?php _e( 'Notities', 'glasbestellen' ); ?>:</label>
                         <textarea name="lead_note" id="lead_note_field" class="regular-text textarea-large js-blur-update-lead" rows="7" placeholder="<?php _e( 'Notities', 'glasbestellen' ); ?>"><?php echo $lead->get_note(); ?></textarea>

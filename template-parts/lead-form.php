@@ -1,7 +1,7 @@
 <?php
 if ( ! empty( $_GET['post_id'] ) && $custom_form_id = get_field( 'custom_form_id', $_GET['post_id'] ) ) {
 
-   $form = new Form_Builder\Form_Builder( gb_get_form_settings( $custom_form_id ) );
+   $form = gb_get_form_by_id( $custom_form_id );
    $form->render();
 
 } else { ?>

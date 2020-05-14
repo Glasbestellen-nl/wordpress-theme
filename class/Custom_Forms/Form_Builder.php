@@ -1,11 +1,14 @@
 <?php
-namespace Form_Builder;
+use Custom_Forms\Form_Settings;
+namespace Custom_Forms;
 
 class Form_Builder {
 
+   protected $_form_id;
+
    protected $_form_action;
 
-   protected $_form_method = 'post';
+   protected $_form_method;
 
    protected $_form_class = [];
 
@@ -15,27 +18,36 @@ class Form_Builder {
 
    protected $_submit_button_class = [];
 
-   public function __construct( array $form_settings = [] ) {
+   public function __construct( Form_Settings $form_settings, int $form_id = 0 ) {
 
+      $this->_form_id = $form_id;
+
+      $this->set_form_defaults();
+
+      if ( $form_settings->get_action() )
+         $this->set_form_action( $form_settings->get_action() );
+
+      if ( $form_settings->get_method() )
+         $this->set_form_method( $form_settings->get_method() );
+
+      if ( $form_settings->get_class() )
+         $this->set_form_class( $form_settings->get_class() );
+
+      if ( $form_settings->get_submit_button_class() )
+         $this->set_submit_button_class( $form_settings->get_submit_button_class() );
+
+      if ( $form_settings->get_fields() )
+         $this->build_fields_html( $form_settings->get_fields() );
+
+   }
+
+   protected function set_form_defaults() {
+      $this->set_form_action( 'handle_lead_form_submit' );
+      $this->set_form_method( 'post' );
       $this->set_form_class( ['js-form-validation'] );
       $this->set_submit_button_text( __( 'Verstuur', 'glasbestellen' ) );
-      $this->set_submit_button_class( ['btn btn--primary'] );
-
-      if ( ! empty( $form_settings['form_action'] ) )
-         $this->set_form_action( $form_settings['form_action'] );
-
-      if ( ! empty( $form_settings['form_method'] ) )
-         $this->set_form_method( $form_settings['form_method'] );
-
-      if ( ! empty( $form_settings['form_class'] ) )
-         $this->set_form_class( $form_settings['form_class'] );
-
-      if ( ! empty( $form_settings['submit_button_class'] ) )
-         $this->set_submit_button_class( $form_settings['submit_button_class'] );
-
-      if ( ! empty( $form_settings['fields'] ) )
-         $this->build_fields_html( $form_settings['fields'] );
-
+      $this->set_submit_button_class( ['btn btn--next btn--primary'] );
+      return true;
    }
 
    public function get_field_html( array $field_settings = [] ) {
@@ -51,15 +63,28 @@ class Form_Builder {
    }
 
    public function get_form_opening_html() {
-      return '<form method="' . $this->get_form_method() . '" action="' . $this->get_form_action() . '" class="' . $this->get_form_class() . '" novalidate>';
+      return '<form method="' . $this->get_form_method() . '" class="' . $this->get_form_class() . '" enctype="multipart/form-data" novalidate>';
    }
 
    public function get_submit_button_html() {
-      return '<button type="submit" class="' . $this->get_submit_button_class() . '">' . $this->get_submit_button_text() . '</button>';
+      $html  = '<div class="d-flex">';
+      $html .= '<button type="submit" class="' . $this->get_submit_button_class() . '">' . $this->get_submit_button_text() . '</button>';
+      $html .= '</div>';
+      return $html;
+   }
+
+   public function get_form_hidden_fields_html() {
+      $html  = '<input type="hidden" name="client[remote_address]" value="' . $_SERVER['REMOTE_ADDR'] . '">';
+      $html .= '<input type="hidden" name="client[gclid]" class="gclid_field" value="">';
+      $html .= '<input type="hidden" name="action" class="js-form-action" value="' . $this->get_form_action() . '" />';
+      $html .= '<input type="hidden" name="form_id" value="' . $this->_form_id . '">';
+      return $html;
    }
 
    public function get_form_closing_html() {
-      return '</form>';
+      $html  = $this->get_form_hidden_fields_html();
+      $html .= '</form>';
+      return $html;
    }
 
    public function get_form_html() {
