@@ -350,6 +350,42 @@ function gb_register_post_types() {
 	);
 	register_post_type( 'uitleg', $args );
 
+	// Forms
+	$labels = array(
+		'name'                => _x( 'Formulier', 'Post Type General Name', 'glasbestellen' ),
+		'singular_name'       => _x( 'Formulier', 'Post Type Singular Name', 'glasbestellen' ),
+		'menu_name'           => __( 'Formulieren', 'glasbestellen' ),
+		'parent_item_colon'   => __( 'Parent Formulier:', 'glasbestellen' ),
+		'all_items'           => __( 'Alle Formulieren', 'glasbestellen' ),
+		'view_item'           => __( 'Bekijk Formulieren', 'glasbestellen' ),
+		'add_new_item'        => __( 'Voeg nieuwe Formulier toe', 'glasbestellen' ),
+		'add_new'             => __( 'Voeg nieuwe toe', 'glasbestellen' ),
+		'edit_item'           => __( 'Bewerk Formulier', 'glasbestellen' ),
+		'update_item'         => __( 'Update Formulier', 'glasbestellen' ),
+		'search_items'        => __( 'Zoek Formuliers', 'glasbestellen' ),
+		'not_found'           => __( 'Niet gevonden', 'glasbestellen' ),
+		'not_found_in_trash'  => __( 'Niet gevonden in prullenbak', 'glasbestellen' ),
+	);
+	$args = array(
+		'labels'              => $labels,
+		'supports'            => array( 'title', 'custom-fields' ),
+		'show_in_rest' 		 => true,
+		'hierarchical'        => true,
+		'public'              => false,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'show_in_nav_menus'   => true,
+		'show_in_admin_bar'   => true,
+		'menu_position'       => 100,
+		'menu_icon'           => 'dashicons-editor-table',
+		'can_export'          => true,
+		'exclude_from_search' => false,
+		'publicly_queryable'  => true,
+		'capability_type'     => 'post',
+		'has_archive'         => false,
+		'map_meta_cap'        => true,
+	);
+	register_post_type( 'form', $args );
 
 }
 add_action( 'init', 'gb_register_post_types', 0 );

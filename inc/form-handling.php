@@ -28,7 +28,7 @@ function gb_handle_lead_form_submit() {
             }
 
             // Check file type
-            if ( ! in_array( $_FILES['attachment']['type'][$i], get_allowed_mime_types() ) ) {
+            if ( ! empty( $_FILES['attachment']['type'][$i] ) && ! in_array( $_FILES['attachment']['type'][$i], get_allowed_mime_types() ) ) {
                $error  = sprintf( __( 'Er kunnen helaas geen bijlages van het type "%s" verstuurd worden.', 'glasbestellen' ), $_FILES['attachment']['type'][$i] );
                $error .= ' ' . $additional_message;
                break;

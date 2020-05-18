@@ -101,7 +101,7 @@ const Configurator = (function() {
          let totalPrice = this.element.querySelector('.js-config-total-price');
          let data = {
             action: 'get_configurator_total_price',
-            configurator_id: gb.configuratorId
+            configurator_id: gb.postId
          }
          $.get(gb.ajaxUrl, data, function(price) {
             totalPrice.innerHTML = price;
@@ -114,7 +114,7 @@ const Configurator = (function() {
 
          let data = {
             action: 'handle_configurator_to_cart',
-            configurator_id: gb.configuratorId,
+            configurator_id: gb.postId,
             quantity: quantity,
             message: message
          }
@@ -137,7 +137,7 @@ const Configurator = (function() {
       this.initFormData = function() {
          const formData = new FormData();
          formData.append('action', 'handle_configurator_form_submit');
-         formData.append('configurator_id', gb.configuratorId);
+         formData.append('configurator_id', gb.postId);
          return formData;
       }
 
