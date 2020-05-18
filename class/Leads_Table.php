@@ -112,7 +112,11 @@ class Leads_Table extends WP_List_Table {
             }
             break;
          case 'request_uri' :
-            return CRM::get_lead_meta( $item['lead_id'], 'request_uri', true );
+            $request_uri = CRM::get_lead_meta( $item['lead_id'], 'request_uri', true );
+            if ( $request_uri ) {
+               $parsed = parse_url( $request_uri );
+               if ( ! empty( $parsed['path'] ) ) return $parsed['path'];
+            }
             break;
          default :
             return print_r( $item, true ) ;
