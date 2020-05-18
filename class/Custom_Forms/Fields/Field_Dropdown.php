@@ -1,18 +1,13 @@
 <?php
 namespace Custom_Forms\Fields;
 
-class Field_Dropdown extends Field {
+class Field_Dropdown extends Field_With_Options {
 
    protected $_options = [];
 
    public function __construct( array $field_settings = [] ) {
       parent::__construct( $field_settings );
-
       $this->set_field_class( ['dropdown'] );
-
-      if ( ! empty( $field_settings['options'] ) )
-         $this->set_options( $field_settings['options'] );
-
    }
 
    public function get_field_html() {
@@ -27,10 +22,5 @@ class Field_Dropdown extends Field {
       $html .= '</select>';
       return $html;
    }
-
-   public function set_options( array $options = [] ) {
-      $this->_options = $options;
-   }
-
 
 }

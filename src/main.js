@@ -389,12 +389,12 @@
                   },
                   success: function(response) {
                      if (response) {
+                        submitButton.attr('disabled', false).text(gb.msg.sent);
                         let parsed = JSON.parse(response);
                         if (parsed.error) {
                            showErrorAlert(parsed.error, form);
                         } else {
                            hideErrorAlert(form);
-                           submitButton.attr('disabled', false).text(gb.msg.sent);
                            if (parsed.redirect) {
                               window.location.href = parsed.redirect;
                            }

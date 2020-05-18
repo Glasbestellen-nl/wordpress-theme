@@ -87,8 +87,13 @@ class Form_Builder {
       return $html;
    }
 
+   public function get_form_messages_html() {
+      return '<p class="alert alert--danger js-error-alert" style="display: none;"></p>';
+   }
+
    public function get_form_html() {
       $html  = $this->get_form_opening_html();
+      $html .= $this->get_form_messages_html();
       $html .= $this->get_fields_html();
       $html .= $this->get_submit_button_html();
       $html .= $this->get_form_closing_html();

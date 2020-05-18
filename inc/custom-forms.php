@@ -47,7 +47,7 @@ function gb_submit_form_to_lead( $lead_id, $postdata ) {
       $custom_form_data[$name] = [
          'name'  => $name,
          'label' => $form_settings->get_field_label_by_name( $name ),
-         'value' => sanitize_text_field( $value )
+         'value' => ! is_array( $value ) ? sanitize_text_field( $value ) : $value
       ];
    }
 
@@ -67,14 +67,19 @@ function gb_custom_form_data_admin_lead_single_summary( $lead_id ) {
 
    if ( ! $custom_form_data || ! $custom_form_id ) return;
 
-   foreach ( $custom_form_data as $data ) { ?>
+   foreach ( $custom_form_data as $data ) {
 
-      <div class="form-row">
-         <label class="form-row-label"><?php echo $data['label']; ?>:</label>
-         <div class="form-row-text"><?php echo $data['value']; ?></div>
-      </div>
-      
+      if ( ! empty( $data['value'] ) ) {
+
+         $value = is_array( $data['value'] ) ? implode( ', ', $data['value'] ) : $data['value']; ?>
+
+         <div class="form-row">
+            <label class="form-row-label"><?php echo $data['label']; ?>:</label>
+            <div class="form-row-text"><?php echo $value; ?></div>
+         </div>
+
       <?php
+      }
    }
 
 }

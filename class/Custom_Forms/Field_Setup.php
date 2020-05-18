@@ -23,6 +23,15 @@ class Field_Setup {
          case 'phone' :
             return new Fields\Field_Phone( $field_settings );
             break;
+         case 'radio' :
+            return new Fields\Field_Radio( $field_settings );
+            break;
+         case 'checkbox' :
+            return new Fields\Field_Checkbox( $field_settings );
+            break;
+         case 'file' :
+            return new Fields\Field_File( $field_settings );
+            break;
          default :
             return new Fields\Field_Text( $field_settings );
       }
