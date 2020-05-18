@@ -75,6 +75,7 @@ class Leads_Table extends WP_List_Table {
          'phone'        => __( 'Telefoonnummer', 'glasbestellen' ),
          'residence'    => __( 'Woonplaats', 'glasbestellen' ),
          'configuration'=> __( 'Configuratie', 'glasbestellen' ),
+         'request_uri'  => __( 'URL', 'glasbestellen' )
      );
      return $columns;
 
@@ -109,6 +110,9 @@ class Leads_Table extends WP_List_Table {
             if ( $configurator ) {
                return '<span class="dashicons dashicons-yes-alt" style="color: green;"></span>';
             }
+            break;
+         case 'request_uri' :
+            return CRM::get_lead_meta( $item['lead_id'], 'request_uri', true );
             break;
          default :
             return print_r( $item, true ) ;
