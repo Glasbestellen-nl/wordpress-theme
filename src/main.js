@@ -98,7 +98,7 @@
    // Scroll to specific element
    $('.js-scroll-to').click(function() {
       const target = $(this).data('scroll-to');
-      $(target).scrollTo(20);
+      $(target).scrollTo(-10);
    });
 
    // Load cart quantity dynamically

@@ -1,7 +1,7 @@
 /*
 Theme Name: Glasbestellen.nl Theme
 Author: Robbert Vermeulen
-Version: 4.3.1
+Version: 4.3.2
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: glasbestellen
@@ -112,6 +112,10 @@ h3, .h3 {
    color: #fff;
 }
 
+.h-black {
+   color: #000;
+}
+
 .h-shadow {
    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
@@ -123,9 +127,11 @@ h3, .h3 {
 a, .link {
    text-decoration: none;
    color: #007bff;
+   cursor: pointer;
 }
 
-.text a:hover {
+.text a:hover,
+.text .link:hover {
    text-decoration: underline;
 }
 
@@ -2055,23 +2061,46 @@ Pins
 Tags
 --------------------------------------------------------------*/
 
-.taggers {
-   display: flex;
-}
-
 .tagger {
-   margin-right: 0.5em;
-   padding: 0.625em 0.9375em;
-   display: block;
+   margin: 0 0.5em 0.75em 0;
+   padding: 0.75em 0.9375em;
+   display: inline-block;
    border-radius: 4px;
    border: 1px solid #ababab;
    line-height: 1em;
+   font-size: 0.875em;
    color: #909090;
+   cursor: pointer;
 }
 
 .tagger:hover {
    border-color: #808080;
    color: #707070;
+}
+
+.tagger--alt {
+   border: 1px solid #155f994f;
+   -moz-box-shadow: none;
+   -webkit-box-shadow: none;
+   box-shadow: none;
+   font-weight: 500;
+   color: #155f99;
+   background-color: #155f9914;
+}
+
+.tagger--alt:hover {
+   border-color: #155f99;
+   color: #155f99;
+   text-decoration: none;
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+   .tagger {
+      font-size: 1em;
+   }
+
 }
 
 /*--------------------------------------------------------------

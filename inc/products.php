@@ -91,6 +91,12 @@ function gb_get_product_by_configurator_id( int $configurator_id ) {
    return ! empty( $products[0] ) ? $products[0] : false;
 }
 
+function gb_get_configurator_faq_page_id( int $configurator_id = 0 ) {
+   $parent_product = gb_get_product_by_configurator_id( $configurator_id );
+   if ( ! $parent_product ) return;
+   return get_field( 'faq_post_id', $parent_product->ID );
+}
+
 /**
  * Pre get products hook
  */

@@ -387,5 +387,43 @@ function gb_register_post_types() {
 	);
 	register_post_type( 'form', $args );
 
+	// FAQ
+	$labels = array(
+		'name'                => _x( 'Onderwerpen', 'Post Type General Name', 'glasbestellen' ),
+		'singular_name'       => _x( 'Onderwerp', 'Post Type Singular Name', 'glasbestellen' ),
+		'menu_name'           => __( 'FAQ', 'glasbestellen' ),
+		'parent_item_colon'   => __( 'Parent onderwerp:', 'glasbestellen' ),
+		'all_items'           => __( 'Alle onderwerpen', 'glasbestellen' ),
+		'view_item'           => __( 'Bekijk onderwerp', 'glasbestellen' ),
+		'add_new_item'        => __( 'Voeg nieuw onderwerp toe', 'glasbestellen' ),
+		'add_new'             => __( 'Voeg nieuwe toe', 'glasbestellen' ),
+		'edit_item'           => __( 'Bewerk onderwerp', 'glasbestellen' ),
+		'update_item'         => __( 'Update onderwerp', 'glasbestellen' ),
+		'search_items'        => __( 'Zoek onderwerpen', 'glasbestellen' ),
+		'not_found'           => __( 'Niet gevonden', 'glasbestellen' ),
+		'not_found_in_trash'  => __( 'Niet gevonden in prullenbak', 'glasbestellen' ),
+	);
+	$args = array(
+		'labels'              => $labels,
+		'supports'            => array( 'title', 'custom-fields' ),
+		'show_in_rest' 		 => true,
+		'hierarchical'        => true,
+		'public'              => true,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'show_in_nav_menus'   => true,
+		'show_in_admin_bar'   => true,
+		'menu_position'       => 100,
+		'menu_icon'           => 'dashicons-editor-help',
+		'can_export'          => true,
+		'exclude_from_search' => false,
+		'publicly_queryable'  => true,
+		'capability_type'     => 'post',
+		'has_archive'         => false,
+		'map_meta_cap'        => true,
+		'rewrite'				 => array( 'slug' => _x( 'veelgestelde-vragen', 'FAQ rewrite slug', 'glasbestellen' ) )
+	);
+	register_post_type( 'faq', $args );
+
 }
 add_action( 'init', 'gb_register_post_types', 0 );
