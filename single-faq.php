@@ -15,19 +15,18 @@
                   <div class="layout__column box-shadow text">
 
                      <header class="large-space-below">
-                        <?php the_title( '<h1>', '</h1>' ); ?>
-                        <span class="h4"><?php _e( 'Veelgestelde vragen & antwoorden', 'glasbestellen' ); ?></span>
+                        <h1><?php printf( __( '%s veelgestelde vragen' ), get_the_title() ); ?></h1>
                      </header>
 
                      <?php
                      if ( get_field( 'faq_sections' ) ) {
                         $question_count = 0; ?>
 
-                        <nav class="taggers large-space-below">
+                        <!-- <nav class="taggers large-space-below">
                            <?php while ( the_repeater_field( 'faq_sections' ) ) { ?>
                               <span class="tagger tagger--alt js-scroll-to" data-scroll-to="#section_<?php echo get_row_index(); ?>"><?php echo get_sub_field( 'faq_section_title' ); ?></span>
                            <?php } ?>
-                        </nav>
+                        </nav> -->
 
                         <div class="large-space-below">
 
