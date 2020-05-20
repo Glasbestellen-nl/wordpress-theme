@@ -217,6 +217,7 @@ get_header();
                                                 $label_class    = 'configurator__form-label--link js-popup-explanation';
                                                 $explanation_id = $configurator->get_step_explanation_id();
                                              }
+                                             $options = $configurator->get_step_options();
                                              ?>
 
                                              <div class="configurator__form-row <?php echo $configurator->get_step_class( $step_id ); ?>" data-step-id="<?php echo $step_id; ?>">
@@ -229,13 +230,13 @@ get_header();
 
                                                 <div class="configurator__form-col">
                                                    <label class="configurator__form-label <?php echo $label_class; ?>" data-explanation-id="<?php echo $explanation_id; ?>"><?php echo $configurator->get_step_title(); ?></label>
-                                                   <?php if ( $configurator->is_step_required() ) { ?>
+                                                   <?php if ( ( $configurator->is_step_required() && ! $options ) || ( $configurator->is_step_required() && $options && count( $options ) > 1 ) ) { ?>
                                                       <span>*</span>
                                                    <?php } ?>
                                                 </div>
 
                                                 <?php
-                                                if ( $options = $configurator->get_step_options() ) {
+                                                if ( $options ) {
                                                    if ( count( $options ) > 1 || ( count( $options ) == 1 && ! $configurator->is_step_required() )  ) { ?>
 
                                                       <div class="configurator__form-col configurator__form-input js-form-group">
