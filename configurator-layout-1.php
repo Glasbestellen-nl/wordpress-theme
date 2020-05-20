@@ -436,7 +436,7 @@ get_header();
                                        setup_postdata( $post );
                                        $configurator = gb_get_configurator( get_the_id() ); ?>
 
-                                       <div class="col-md-6 col-lg-3">
+                                       <div class="col-6 col-lg-3">
                                           <?php require( get_template_directory() . '/template-parts/product-listing.php' ); ?>
                                        </div>
 

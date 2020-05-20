@@ -86,7 +86,7 @@ get_header(); ?>
                               $configurator = gb_get_configurator( get_the_id() );
                               $product_count ++; ?>
 
-                              <div class="col-12 col-md-6 col-lg-<?php echo $column_width; ?>">
+                              <div class="col-6 col-md-6 col-lg-<?php echo $column_width; ?>">
                                  <?php require( get_template_directory() . '/template-parts/product-listing.php' ); ?>
                               </div>
 
