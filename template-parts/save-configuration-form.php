@@ -23,6 +23,17 @@ if ( ! empty( $_GET['metadata'] ) ) {
             <div class="invalid-feedback js-invalid-feedback"></div>
          </div>
 
+         <div class="form-group js-form-group col-12 col-md-6">
+            <label class="form-label"><?php _e( 'Woonplaats', 'glasbestellen' ); ?>: <span class="req">*</span></label>
+            <input type="text" name="lead[residence]" class="form-control js-form-validate" data-required="required" placeholder="<?php _e( 'Woonplaats', 'glasbestellen' ); ?>" />
+            <div class="invalid-feedback js-invalid-feedback"></div>
+         </div>
+
+         <div class="form-group js-form-group col-12 col-md-6">
+            <label class="form-label"><?php _e( 'Telefoonnummer', 'glasbestellen' ); ?>:</label>
+            <input type="phone" name="lead[phone]" class="form-control js-form-validate" placeholder="<?php _e( 'Telefoonnummer', 'glasbestellen' ); ?>" />
+         </div>
+
       </div>
 
       <div class="form-group js-form-group">
