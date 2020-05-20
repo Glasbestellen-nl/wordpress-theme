@@ -998,7 +998,8 @@ Form
 
 .form-check--inline {
    margin-bottom: 0.3125em;
-   display: flex;
+   margin-right: 0.625em;
+   display: inline-flex;
    align-items: center;
    font-size: 0.875em;
 }
