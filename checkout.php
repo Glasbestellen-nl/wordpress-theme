@@ -133,7 +133,7 @@ $cart = gb_get_cart(); ?>
                                  </div>
 
                                  <div class="form-group col-12">
-                                    <label class="form-check">
+                                    <label class="form-check form-check--inline">
                                        <input type="checkbox" class="form-check__input js-toggle-target-trigger" data-toggle-target="#delivery_address_fields">
                                        <span class="form-check__label"><?php _e( 'Wijzig het afleveradres', 'glasbestellen' ); ?></span>
                                     </label>
