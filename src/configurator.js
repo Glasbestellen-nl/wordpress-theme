@@ -57,7 +57,7 @@ const Configurator = (function() {
             if (form) {
                const formData = self.initFormData();
 
-               $(':input:visible', form).each(function(index, element) {
+               $(':input:visible, .js-input-hidden', form).each(function(index, element) {
                   self.validateInput(element);
                   formData.append($(element).attr('name'), $(element).val());
                });
@@ -149,7 +149,7 @@ const Configurator = (function() {
 
          let valid = true;
          let invalidInputs = [];
-         $(':input:visible', form).each(function(index, element) {
+         $(':input:visible, .js-input-hidden', form).each(function(index, element) {
             if (!self.validateInput(element)) {
                valid = false;
                invalidInputs.push(element);
