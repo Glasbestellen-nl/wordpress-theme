@@ -22,12 +22,18 @@
    /**
     * Foreach polyfil
     */
+   if (window.NodeList && !NodeList.prototype.forEach) {
+      NodeList.prototype.forEach = Array.prototype.forEach;
+   }
+
    if (!Array.prototype.forEach) {
-      Array.prototype.forEach = function(fn, scope) {
-         for(var i = 0, len = this.length; i < len; ++i) {
-            fn.call(scope, this[i], i, this);
+      Array.prototype.forEach = function (callback, thisArg) {
+         thisArg = thisArg || window;
+
+         for (var i = 0; i < this.length; i++) {
+            callback.call(thisArg, this[i], i, this);
          }
-      }
+      };
    }
 
    /**
