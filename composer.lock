@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2cddc33bca9edc1a259b71366bde7dc",
+    "content-hash": "847638ae2e48984c3bb6d9e5f611758a",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -428,6 +428,121 @@
             "time": "2019-03-08T08:55:37+00:00"
         },
         {
+            "name": "sabre/uri",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sabre-io/uri.git",
+                "reference": "059d11012603be2e32ddb7543602965563ddbb09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sabre-io/uri/zipball/059d11012603be2e32ddb7543602965563ddbb09",
+                "reference": "059d11012603be2e32ddb7543602965563ddbb09",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.16.1",
+                "phpunit/phpunit": "^7 || ^8"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/functions.php"
+                ],
+                "psr-4": {
+                    "Sabre\\Uri\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Evert Pot",
+                    "email": "me@evertpot.com",
+                    "homepage": "http://evertpot.com/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Functions for making sense out of URIs.",
+            "homepage": "http://sabre.io/uri/",
+            "keywords": [
+                "rfc3986",
+                "uri",
+                "url"
+            ],
+            "time": "2020-01-31T18:53:43+00:00"
+        },
+        {
+            "name": "sabre/xml",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sabre-io/xml.git",
+                "reference": "41c6ba148966b10cafd31d1a4e5feb1e2138d95c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sabre-io/xml/zipball/41c6ba148966b10cafd31d1a4e5feb1e2138d95c",
+                "reference": "41c6ba148966b10cafd31d1a4e5feb1e2138d95c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-xmlreader": "*",
+                "ext-xmlwriter": "*",
+                "lib-libxml": ">=2.6.20",
+                "php": "^7.1",
+                "sabre/uri": ">=1.0,<3.0.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.16.1",
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sabre\\Xml\\": "lib/"
+                },
+                "files": [
+                    "lib/Deserializer/functions.php",
+                    "lib/Serializer/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Evert Pot",
+                    "email": "me@evertpot.com",
+                    "homepage": "http://evertpot.com/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Markus Staab",
+                    "email": "markus.staab@redaxo.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "sabre/xml is an XML library that you may not hate.",
+            "homepage": "https://sabre.io/xml/",
+            "keywords": [
+                "XMLReader",
+                "XMLWriter",
+                "dom",
+                "xml"
+            ],
+            "time": "2020-05-11T09:44:55+00:00"
+        },
+        {
             "name": "theiconic/php-ga-measurement-protocol",
             "version": "v2.7.1",
             "source": {
@@ -467,6 +582,48 @@
             ],
             "description": "Send data to Google Analytics from the server using PHP. This library fully implements GA measurement protocol.",
             "time": "2017-06-30T02:41:52+00:00"
+        },
+        {
+            "name": "vitalybaev/google-merchant-feed",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vitalybaev/php-google-merchant-feed.git",
+                "reference": "80c8a51b526e429fffc6e089e77f082ffb9bdd09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vitalybaev/php-google-merchant-feed/zipball/80c8a51b526e429fffc6e089e77f082ffb9bdd09",
+                "reference": "80c8a51b526e429fffc6e089e77f082ffb9bdd09",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5",
+                "sabre/xml": "^1.5 || ^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Vitalybaev\\GoogleMerchant\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vitaly Baev",
+                    "email": "dj@vitalybaev.ru"
+                }
+            ],
+            "description": "PHP package for creating Google Merchant products feed",
+            "keywords": [
+                "feed",
+                "google",
+                "merchant"
+            ],
+            "time": "2019-07-27T07:05:47+00:00"
         }
     ],
     "packages-dev": [],
