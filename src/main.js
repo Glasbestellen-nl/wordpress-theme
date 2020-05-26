@@ -431,6 +431,8 @@
     */
    $(document).on('click', '.js-popup-form', function() {
 
+      console.log('test1');
+
       let title    = $(this).data('popup-title');
       let formtype = $(this).data('formtype');
       let metadata = $(this).data('meta');
@@ -476,6 +478,8 @@
 * Shows modal form
 */
 function showModalForm(title, formtype, metadata) {
+
+   console.log('test2');
 
    showModal(title);
 
