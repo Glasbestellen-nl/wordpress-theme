@@ -61,7 +61,7 @@ function gb_product_feed_template_include( $template ) {
 
          $shipping = new Shipping();
          $shipping->setCountry('NL');
-         $shipping->setPrice('0.00');
+         $shipping->setPrice('0,00 EUR');
          $item->setShipping($shipping);
 
          $feed->addProduct( $item );
