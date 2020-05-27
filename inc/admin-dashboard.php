@@ -96,7 +96,7 @@ function gb_transactions_dashboard_widget() {
 
    $args = [
       'post_type' => 'transactie',
-      'post_per_page' => -1,
+      'posts_per_page' => -1,
       'post_status' => 'publish',
       'meta_query' => [
          [
