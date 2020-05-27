@@ -171,12 +171,15 @@ class Configurator {
     * Filters configuration
     *
     * @param array $configuration the updated configuration
+    *
+    * @uses get_step_by_id() to check whether step in configuration still exists as step
+    * (when removing steps from configurator)
     */
    protected function filter_configuration( array $configuration = [] ) {
       if ( empty( $configuration ) ) return;
       $filtered = [];
       foreach ( $configuration as $step_id => $input ) {
-         if ( ! empty( $input ) )
+         if ( ! empty( $input ) && $this->get_step_by_id( $step_id ) )
             $filtered[$step_id] = $input;
       }
       return $filtered;
