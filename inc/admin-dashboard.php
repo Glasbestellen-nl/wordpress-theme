@@ -71,7 +71,7 @@ function gb_leads_dashboard_widget() {
                   </tr>
                </thead>
                <tbody>
-                  <?php foreach ( $open_leads as $lead ) { ?>
+                  <?php foreach ( array_reverse( $open_leads ) as $lead ) { ?>
                      <tr>
                         <td><a href="<?php echo admin_url( 'admin.php?page=crm&lead_id=' . $lead->lead_id ); ?>"><?php echo $lead->relation_name; ?></a></td>
                         <td><?php echo date_format( date_create( $lead->lead_date ), 'd M Y H:i' ); ?></td>
