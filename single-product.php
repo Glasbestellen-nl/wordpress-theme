@@ -180,6 +180,39 @@
 
             <?php } ?>
 
+            <?php if ( get_field( 'youtube_videos' ) ) { ?>
+
+               <div class="area">
+
+                  <div class="container">
+
+                     <header class="divider divider--line-behind divider--centered">
+                        <strong class="divider__content h2"><?php _e( 'Informatie video\'s', 'glasbestellen' ); ?></strong>
+                     </header>
+
+                     <div class="row">
+
+                        <?php
+                        while ( have_rows( 'youtube_videos' ) ) {
+                           the_row(); ?>
+
+                           <div class="space-below col-12 col-md-6">
+                              <div class="embed-container space-below">
+                                 <iframe width="560" height="315" src="https://www.youtube.com/embed/<?php the_sub_field( 'youtube_video_id' ); ?>?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                              </div>
+                              <span class="h5 text-center"><?php the_sub_field( 'video_caption' ); ?></span>
+                           </div>
+
+                        <?php } ?>
+
+                     </div>
+
+                  </div>
+
+               </div>
+
+            <?php } ?>
+
             <div class="area">
 
                <div class="container">
