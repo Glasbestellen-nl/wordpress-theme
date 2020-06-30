@@ -7,8 +7,8 @@ abstract class Field {
       'name',
       'email',
       'phone',
-      'city',
-      'message'
+      'residence',
+      'content'
    ];
 
    protected $_field_name;
