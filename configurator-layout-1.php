@@ -116,7 +116,9 @@ get_header();
                               </ul>
 
                               <?php
-                              if ( get_field( 'measure_video_youtube_id' ) || get_field( 'assembly_video_youtube_id' ) ) {
+                              if ( get_field( 'measure_video_youtube_id' )
+                              || get_field( 'assembly_video_youtube_id' )
+                              || get_field( 'explainer_video_youtube_id' )) {
 
                                  $video_args = ['autoplay' => 1, 'rel' => 0]; ?>
 
@@ -147,6 +149,19 @@ get_header();
                                                    <img data-src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
                                                 </a>
                                                 <span class="video-list__item-caption"><?php _e( 'Hoe monteren?', 'glasbestellen' ); ?></span>
+                                             </div>
+                                          </div>
+                                       <?php } ?>
+
+                                       <?php if ( $youtube_id = get_field( 'explainer_video_youtube_id' ) ) {
+                                          $url = add_query_arg( $video_args, 'https://www.youtube.com/embed/' . $youtube_id ); ?>
+                                          <div class="col-4 col-md-4">
+                                             <div class="video-list__item">
+                                                <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
+                                                   <div class="lr-video__play"></div>
+                                                   <img data-src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
+                                                </a>
+                                                <span class="video-list__item-caption"><?php _e( 'Uitleg configurator', 'glasbestellen' ); ?></span>
                                              </div>
                                           </div>
                                        <?php } ?>
