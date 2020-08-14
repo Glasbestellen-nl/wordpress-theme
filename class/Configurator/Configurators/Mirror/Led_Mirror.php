@@ -11,12 +11,20 @@ class Led_Mirror extends \Configurator\Configurator {
 
       if ( empty( $configuration ) ) return;
 
-      $price_table = ['size' => 0];
+      $price_table = [
+         'size' => 0,
+         'large_shipping' => 0
+      ];
 
       // Calculate square meters
       if ( ! empty( $configuration['width'] ) && ! empty( $configuration['height'] ) ) {
          if ( $price_matrix = $this->get_price_matrix() ) {
             $price_table['size'] = $price_matrix->get_price( $configuration['width'], $configuration['height'] );
+         }
+
+         // Extra shipping large products
+         if ( ( $configuration['width'] > 1200 ) || ( $configuration['height'] > 1200 ) ) {
+            $price_table['large_shipping'] = $this->get_metadata( 'large_shipping' );
          }
       }
 
