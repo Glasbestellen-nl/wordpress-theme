@@ -2709,7 +2709,7 @@ Main nav
 
    .main-nav__sub {
       width: auto;
-      min-width: 15em;
+      min-width: 18em;
       padding: 0.625em 1.25em;
       position: absolute;
       left: 0;
