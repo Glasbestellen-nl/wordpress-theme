@@ -166,6 +166,19 @@
 
       const parentSelector = '.js-nav-item-parent';
 
+      function showSublevel(element) {
+         $(element).addClass('open');
+      }
+
+      function hideSublevel(element) {
+         $(element).removeClass('open');
+      }
+
+      function toggleSublevel(element) {
+         $(element).toggleClass('open');
+         $(parentSelector).not(element).removeClass('open');
+      }
+
       // Stops bubbling up in the DOM by click a menu subitem link
       $(document).on('click', parentSelector + ', .js-nav-subitem-link', function(e) {
          e.stopPropagation();
@@ -177,10 +190,24 @@
       })
 
       // Opens sublevel and closes siblings
+      .on('mouseenter', parentSelector, function(e) {
+         if ($(window).width() > 768) {
+            e.preventDefault();
+            showSublevel(this);
+         }
+      })
+      .on('mouseleave', parentSelector, function(e) {
+         if ($(window).width() > 768) {
+            e.preventDefault();
+            hideSublevel(this);
+         }
+      })
+
       .on('click', parentSelector, function(e) {
-         e.preventDefault();
-         $(this).toggleClass('open');
-         $(parentSelector).not(this).removeClass('open');
+         if ($(window).width() <= 768) {
+            e.preventDefault();
+            toggleSublevel(this);
+         }
       })
 
       // Toggles nav menu on mobile menu
@@ -188,6 +215,7 @@
          $(this).toggleClass('open');
          $('.js-nav-items').toggleClass('open');
       });
+
 
    })();
 

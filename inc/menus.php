@@ -108,25 +108,17 @@ function gb_render_main_nav() {
 
                $html .= '<div class="main-nav__sub">';
 
-               foreach ( $menu_item['children'] as $submenu_item ) {
+                  $html .= '<ul class="main-nav__sub-items">';
 
-                  $html .= '<div class="main-nav__sub-section">';
-                     $html .= '<span class="main-nav__sub-heading">' . $submenu_item['title'] . '</span>';
+                  foreach ( $menu_item['children'] as $submenu_item ) {
 
-                     if ( ! empty( $submenu_item['children'] ) ) {
+                     $html .= '<li class="main-nav__sub-item">';
+                        $html .= '<a href="' . $submenu_item['url'] . '" class="main-nav__sub-link js-nav-subitem-link">' . $submenu_item['title'] . '</a>';
+                     $html .= '</li>';
+                  }
 
-                        $html .= '<ul class="main-nav__sub-items">';
+                  $html .= '</ul>';
 
-                        foreach ( $submenu_item['children'] as $subsubmenu_item ) {
-
-                           $html .= '<li class="main-nav__sub-item">';
-                              $html .= '<a href="' . $subsubmenu_item['url'] . '" class="main-nav__sub-link js-nav-subitem-link">' . $subsubmenu_item['title'] . '</a>';
-                           $html .= '</li>';
-                        }
-                        $html .= '</ul>';
-                     }
-                  $html .= '</div>';
-               }
                $html .= '</div>';
             }
          $html .= '</li>';

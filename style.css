@@ -2531,7 +2531,7 @@ Main nav
 --------------------------------------------------------------*/
 
 .main-nav {
-   background-color: #fcb136;
+   background-color: #0e5a94;
 }
 
 .main-nav__container {
@@ -2557,7 +2557,7 @@ Main nav
 }
 
 .main-nav__toggler.open .main-nav__toggler-button {
-   background-color: #e29f32;
+   background-color: #0a4b7b;
    -webkit-border-bottom-right-radius: 6px;
    -webkit-border-bottom-left-radius: 6px;
    -moz-border-radius-bottomright: 6px;
@@ -2631,12 +2631,12 @@ Main nav
 }
 
 .main-nav__sub {
-   padding: 1.25em 0 1.875em 0;
+   padding: 0.625em 1.25em 0.625em 1.25em;
    display: none;
-   -moz-box-shadow: -300px 0 0 #e29f32, 300px 0 0 #e29f32;
-   -webkit-box-shadow: -300px 0 0 #e29f32, 300px 0 0 #e29f32;
-   box-shadow: -300px 0 0 #e29f32, 300px 0 0 #e29f32;
-   background-color: #e29f32;
+   -moz-box-shadow: -300px 0 0 #0a4b7b, 300px 0 0 #0a4b7b;
+   -webkit-box-shadow: -300px 0 0 #0a4b7b, 300px 0 0 #0a4b7b;
+   box-shadow: -300px 0 0 #0a4b7b, 300px 0 0 #0a4b7b;
+   background-color: #0a4b7b;
 }
 
 .main-nav__item.open .main-nav__sub {
@@ -2655,11 +2655,20 @@ Main nav
 }
 
 .main-nav__sub-items {
+   width: 100%;
    padding: 0.25em 0 0 0;
+}
+
+.main-nav__sub-item {
+   width: 100%;
 }
 
 .main-nav__sub-link {
    padding-left: 0;
+}
+
+.main-nav__sub-items .main-nav__sub-item:last-child .main-nav__sub-link {
+   border-bottom: none;
 }
 
 /* Large devices (desktops, 992px and up) */
@@ -2685,6 +2694,10 @@ Main nav
       border-left: 1px solid rgba(0,0,0,0.1);
    }
 
+   .main-nav__item--parent {
+      position: relative;
+   }
+
    .main-nav__link:hover,
    .main-nav__item.open .main-nav__link {
       background-color: rgba(0,0,0,0.05);
@@ -2695,15 +2708,22 @@ Main nav
    }
 
    .main-nav__sub {
-      width: 100%;
-      padding: 3.5em 0 3.5em 0;
+      width: auto;
+      min-width: 15em;
+      padding: 0.625em 1.25em;
       position: absolute;
       left: 0;
+      -webkit-border-bottom-right-radius: 6px;
+      -webkit-border-bottom-left-radius: 6px;
+      -moz-border-radius-bottomright: 6px;
+      -moz-border-radius-bottomleft: 6px;
+      border-bottom-right-radius: 6px;
+      border-bottom-left-radius: 6px;
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+      box-shadow: none;
       z-index: 10;
-      background-color: #e29f32;
-      -moz-box-shadow: -300px 0 0 #e29f32, 300px 0 0 #e29f32;
-      -webkit-box-shadow: -300px 0 0 #e29f32, 300px 0 0 #e29f32;
-      box-shadow: -300px 0 0 #e29f32, 300px 0 0 #e29f32;
+      background-color: #10568d;
    }
 
    .main-nav__item.open .main-nav__sub {
