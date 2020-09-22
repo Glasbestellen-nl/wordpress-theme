@@ -422,6 +422,10 @@ Spacing
    display: block;
 }
 
+.space-sm-below {
+   margin-bottom: 1.25em !important;
+}
+
 .tiny-space-sm-below {
    margin-bottom: 0.3125em !important;
 }
@@ -444,8 +448,12 @@ Spacing
       display: block;
    }
 
+   .space-sm-below {
+      margin-bottom: 0 !important;
+   }
+
    .tiny-space-sm-below {
-      margin-bottom: 0;
+      margin-bottom: 0 !important;
    }
 
 }
@@ -490,6 +498,10 @@ Helpers
    text-align: center;
 }
 
+.text-sm-center {
+   text-align: center;
+}
+
 .rounded-corners {
    -moz-border-radius: 3px;
    -webkit-border-radius: 3px;
@@ -511,6 +523,15 @@ Helpers
 .sticky {
    top: 1.875em;
    position: sticky;
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+
+   .text-sm-center {
+      text-align: left;
+   }
+
 }
 
 /*--------------------------------------------------------------

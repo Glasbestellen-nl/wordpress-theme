@@ -102,23 +102,19 @@ get_header(); ?>
 
                            <div class="card__body">
 
-                              <div class="space-lg-around">
-
-                                 <div class="row">
-                                    <div class="col-6 offset-3 col-md-4 offset-md-4 col-lg-2 offset-lg-5">
-                                       <div class="avatar avatar--banner box-shadow space-below">
-                                          <img data-src="<?php echo get_template_directory_uri() . '/assets/images/sales-medewerker.jpg'; ?>" class="lazyload avatar__image" />
-                                       </div>
+                              <div class="row">
+                                 <div class="col-6 offset-3 col-md-3 offset-md-0 col-lg-2">
+                                    <div class="avatar avatar--banner box-shadow space-sm-below">
+                                       <img data-src="<?php echo get_template_directory_uri() . '/assets/images/sales-medewerker.jpg'; ?>" class="lazyload avatar__image" />
                                     </div>
+                                 </div>
 
-                                    <div class="col-12 col-lg-4 offset-lg-4">
-                                       <div class="card__text text text--small text--center space-below">
-                                          <span class="h2"><?php echo get_field( 'contact_box_title' ) ?></span>
-                                          <p><?php echo get_field( 'contact_box_message' ); ?></p>
-                                       </div>
-                                       <span class="btn btn--large btn--primary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php echo get_field( 'contact_box_btn' ); ?>"><?php echo get_field( 'contact_box_btn' ); ?></span>
+                                 <div class="col-md-9 col-lg-10">
+                                    <div class="card__text text text-sm-center space-below">
+                                       <span class="h2"><?php echo get_field( 'contact_box_title' ) ?></span>
+                                       <p><?php echo get_field( 'contact_box_message' ); ?></p>
                                     </div>
-
+                                    <span class="btn btn--large btn--primary btn--block btn--next js-popup-form" data-formtype="lead" data-popup-title="<?php echo get_field( 'contact_box_btn' ); ?>"><?php echo get_field( 'contact_box_btn' ); ?></span>
                                  </div>
 
                               </div>
