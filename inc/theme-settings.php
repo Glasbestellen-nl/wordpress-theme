@@ -77,6 +77,14 @@ function gb_init_theme_options() {
    add_settings_field( $id, __( 'E-mail', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
    register_setting( 'theme-settings', $id );
 
+	$id = 'company_coc_number';
+	add_settings_field( $id, __( 'KVK nummer', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
+	register_setting( 'theme-settings', $id );
+
+	$id = 'company_vat_number';
+	add_settings_field( $id, __( 'BTW nummber', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
+	register_setting( 'theme-settings', $id );
+
 	// Add and register facebook url setting
 	$id = 'company_facebook_url';
 	add_settings_field( $id, __( 'Facebook URL', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
