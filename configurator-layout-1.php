@@ -103,7 +103,6 @@ get_header();
                                  <?php if ( $explanation_page_id = gb_get_configurator_explanation_page_id( get_the_id() ) ) { ?>
                                     <li class="links-list__item"><i class="fas fa-cog links-list__icon"></i> <a href="<?php echo get_permalink( $explanation_page_id ); ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Uitleg stappen', 'glasbestellen' ); ?></a></li>
                                  <?php } ?>
-
                                  <?php if ( $corrections_file_url = get_field( 'corrections_instruction' ) ) { ?>
                                     <li class="links-list__item"><i class="fas fa-arrows-alt-h links-list__icon"></i> <a href="<?php echo $corrections_file_url; ?>" class="links-list__link" rel="nofollow" target="_blank"><?php _e( 'Glascorrecties', 'glasbestellen' ); ?></a></li>
                                  <?php } ?>
