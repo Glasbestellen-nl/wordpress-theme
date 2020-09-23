@@ -170,3 +170,7 @@ function gb_get_configurator_settings( int $configurator_id ) {
    }
    return false;
 }
+
+function gb_get_configurator_explanation_page_id( int $configurator_id = 0 ) {
+   return get_field( 'explanation_page_id', $configurator_id );
+}
