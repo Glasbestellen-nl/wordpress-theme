@@ -222,7 +222,8 @@ function gb_transaction_items_meta_box( $post ) {
                $count = 0;
                while ( $cart->have_items() ) {
                   $cart->the_item();
-                  $count ++; ?>
+                  $count ++;
+                  ?>
 
                   <tr class="<?php echo ( $count % 2 ) ? 'alternate' : ''; ?>">
                      <td>
@@ -231,6 +232,13 @@ function gb_transaction_items_meta_box( $post ) {
                         <?php if ( $cart->get_item_summary() ) { ?>
 
                            <div class="item-summary" id="<?php echo 'item_summary_' . $count; ?>" style="display: none;">
+
+                              <?php if ( $configurator_reference = get_post_meta( $cart->get_item_post_id(), 'configurator_reference', true ) ) { ?>
+                                 <div class="item-summary-row">
+                                    <div class="item-summary-col item-summary-col-title"><?php _e( 'Referentie', 'glasbestellen' ); ?>:</div>
+                                    <div class="item-summary-col"><?php echo $configurator_reference; ?></div>
+                                 </div>
+                              <?php } ?>
 
                               <?php foreach ( $cart->get_item_summary() as $row ) { ?>
 
