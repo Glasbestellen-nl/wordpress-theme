@@ -57,7 +57,7 @@ function gb_get_selectable_products() {
 	if ( $option = get_option( 'conversion_selectable_products' ) ) {
 		$products_names = explode( ',', $option );
 		$products_names = array_map( 'trim', $products_names );
-		rsort( $products_names );
+		sort( $products_names );
 		return $products_names;
 	}
 	return false;
