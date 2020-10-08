@@ -22,9 +22,8 @@ function gb_handle_lead_form_submit() {
          for ( $i = 0; $i < $count; $i ++ ) {
 
             // Check file size
-            if ( $_FILES['attachment']['size'][$i] > 3000000 ) {
-               $error = __( 'Uw bijlage(s) overschrijden het maximale upload limiet van 3MB.', 'glasbestellen' );
-               break;
+            if ( $_FILES['attachment']['size'][$i] > 15000000 ) {
+               $error = __( 'Uw bijlage(s) overschrijden het maximale upload limiet van 15MB.', 'glasbestellen' );
             }
 
             // Check file type
@@ -34,12 +33,14 @@ function gb_handle_lead_form_submit() {
                break;
             }
 
-            $attachments[$i] = [
-               'tmp_name' => $_FILES['attachment']['tmp_name'][$i],
-               'name'     => $_FILES['attachment']['name'][$i],
-               'size'     => $_FILES['attachment']['size'][$i],
-               'type'     => $_FILES['attachment']['type'][$i]
-            ];
+            if ( ! $error ) {
+               $attachments[$i] = [
+                  'tmp_name' => $_FILES['attachment']['tmp_name'][$i],
+                  'name'     => $_FILES['attachment']['name'][$i],
+                  'size'     => $_FILES['attachment']['size'][$i],
+                  'type'     => $_FILES['attachment']['type'][$i]
+               ];
+            }
 
          }
       }

@@ -378,73 +378,73 @@
    });
 
    /**
-    * Delegate form events
+    * Full form validation on submit
     */
-   document.addEventListener('submit', e => {
+   $(document).on('submit', '.js-form-validation', function(e) {
 
-      /**
-       * Full form validation on submit
-       */
-      if (e.target && e.target.matches('.js-form-validation')) {
+      e.preventDefault();
 
-         e.preventDefault();
+      console.log('test');
 
-         const form = e.target;
+      const form = this;
 
-         validateForm(form, function(form) {
+      validateForm(form, function(form) {
 
-            //Create formdata object
-            const formData = new FormData(form);
-            const action = form.querySelector('.js-form-action').value;
-            const submitButton = jQuery('button[type="submit"]', form);
-            const submitButtonText = submitButton.text();
+         //Create formdata object
+         const formData = new FormData(form);
+         const action = form.querySelector('.js-form-action').value;
+         const submitButton = jQuery('button[type="submit"]', form);
+         const submitButtonText = submitButton.text();
 
-            if (action !== undefined) {
+         if (action !== undefined) {
 
-               // Append action, nonce and request uri
-               formData.append('action', action);
-               formData.append('nonce', gb.ajaxNonce);
-               formData.append('request_uri', gb.requestURI);
+            // Append action, nonce and request uri
+            formData.append('action', action);
+            formData.append('nonce', gb.ajaxNonce);
+            formData.append('request_uri', gb.requestURI);
 
-               // Handle files
-               let fileField = form.querySelector('.js-file-input-field');
-               if (fileField !== null) {
-                  let files = fileField.files;
-                  if (files.length > 0) {
-                     for (let i = 0; i < files.length; i ++) {
-                        formData.append('attachment[]', files[i]);
-                     }
+            // Handle files
+            let fileField = form.querySelector('.js-file-input-field');
+            if (fileField !== null) {
+               let files = fileField.files;
+               console.log(files);
+               if (files.length > 0) {
+                  for (let i = 0; i < files.length; i ++) {
+                     formData.append('attachment[]', files[i]);
                   }
                }
-               $.ajax({
-                  url: gb.ajaxUrl,
-                  data: formData,
-                  method: 'POST',
-                  processData: false,
-                  contentType: false,
-                  beforeSend: function() {
-                     // Disable submit button
-                     submitButton.attr('disabled', true).text(gb.msg.pleaseWait);
-                  },
-                  success: function(response) {
-                     if (response) {
-                        submitButton.attr('disabled', false).text(gb.msg.sent);
-                        let parsed = JSON.parse(response);
-                        if (parsed.error) {
-                           showErrorAlert(parsed.error, form);
-                        } else {
-                           hideErrorAlert(form);
-                           if (parsed.redirect) {
-                              window.location.href = parsed.redirect;
-                           }
+            }
+            $.ajax({
+               url: gb.ajaxUrl,
+               data: formData,
+               method: 'POST',
+               processData: false,
+               contentType: false,
+               beforeSend: function() {
+                  // Disable submit button
+                  submitButton.attr('disabled', true).text(gb.msg.pleaseWait);
+               },
+               success: function(response) {
+                  if (response) {
+                     submitButton.attr('disabled', false).text(gb.msg.sent);
+                     let parsed = JSON.parse(response);
+                     if (parsed.error) {
+                        showErrorAlert(parsed.error, form);
+                     } else {
+                        hideErrorAlert(form);
+                        if (parsed.redirect) {
+                           window.location.href = parsed.redirect;
                         }
                      }
                   }
-               });
-            }
-         });
-         return;
-      }
+               },
+               error: function (xhr, ajaxOptions, thrownError) {
+                  console.log(xhr.status);
+                  console.log(thrownError);
+               }
+            });
+         }
+      });
    });
 
    /**
