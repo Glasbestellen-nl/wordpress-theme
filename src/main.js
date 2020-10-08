@@ -414,7 +414,7 @@
                   }
 
                   // Check combined file size does not exceed max file size
-                  const maxCombinedFileSize = 5000000;
+                  const maxCombinedFileSize = 8000000;
                   if (combinedFilesize > maxCombinedFileSize) {
                      showErrorAlert(gb.msg.fileUploadLimit.replace('{0}', maxCombinedFileSize / 1000000), form);
                      return;
