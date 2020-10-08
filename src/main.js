@@ -407,7 +407,6 @@
             let fileField = form.querySelector('.js-file-input-field');
             if (fileField !== null) {
                let files = fileField.files;
-               console.log(files);
                if (files.length > 0) {
                   for (let i = 0; i < files.length; i ++) {
                      formData.append('attachment[]', files[i]);

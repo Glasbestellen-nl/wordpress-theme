@@ -22,8 +22,8 @@ function gb_handle_lead_form_submit() {
          for ( $i = 0; $i < $count; $i ++ ) {
 
             // Check file size
-            if ( $_FILES['attachment']['size'][$i] > 15000000 ) {
-               $error = __( 'Uw bijlage(s) overschrijden het maximale upload limiet van 15MB.', 'glasbestellen' );
+            if ( $_FILES['attachment']['size'][$i] > 5000000 ) {
+               $error = __( 'Uw bijlage(s) overschrijden het maximale upload limiet van 5MB.', 'glasbestellen' );
             }
 
             // Check file type
