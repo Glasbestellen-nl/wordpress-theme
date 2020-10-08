@@ -45,7 +45,8 @@ function gb_enqueue_scripts() {
             'filesSelected'          => __( 'bijlage(s) geselecteerd.', 'glasbestellen' ),
             'inspiration'            => __( 'Inspiratie', 'glasbestellen' ),
             'pleaseWait'             => __( 'Een moment geduld..', 'glasbestellen' ),
-            'sent'                   => __( 'Verstuurd!', 'glasbestellen' )
+            'sent'                   => __( 'Verstuurd!', 'glasbestellen' ),
+            'fileUploadLimit'        => __( 'Uw bijlages overschrijden het maximale upload limiet van {0}MB. Stuur a.u.b. grotere bijlages naar ' . get_bloginfo( 'admin_email' ) . '.', 'glasbestellen' )
          ],
          'postId' => ( is_singular() ) ? $post->ID : false
       )

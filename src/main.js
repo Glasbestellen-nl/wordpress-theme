@@ -384,8 +384,6 @@
 
       e.preventDefault();
 
-      console.log('test');
-
       const form = this;
 
       validateForm(form, function(form) {
@@ -408,8 +406,18 @@
             if (fileField !== null) {
                let files = fileField.files;
                if (files.length > 0) {
+                  let combinedFilesize = 0;
                   for (let i = 0; i < files.length; i ++) {
-                     formData.append('attachment[]', files[i]);
+                     let file = files[i];
+                     combinedFilesize += file.size;
+                     formData.append('attachment[]', file);
+                  }
+
+                  // Check combined file size does not exceed max file size
+                  const maxCombinedFileSize = 5000000;
+                  if (combinedFilesize > maxCombinedFileSize) {
+                     showErrorAlert(gb.msg.fileUploadLimit.replace('{0}', maxCombinedFileSize / 1000000), form);
+                     return;
                   }
                }
             }

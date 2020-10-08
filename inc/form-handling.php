@@ -21,11 +21,6 @@ function gb_handle_lead_form_submit() {
          // Error checking and prepare files for upload
          for ( $i = 0; $i < $count; $i ++ ) {
 
-            // Check file size
-            if ( $_FILES['attachment']['size'][$i] > 5000000 ) {
-               $error = __( 'Uw bijlage(s) overschrijden het maximale upload limiet van 5MB.', 'glasbestellen' );
-            }
-
             // Check file type
             if ( ! empty( $_FILES['attachment']['type'][$i] ) && ! in_array( $_FILES['attachment']['type'][$i], get_allowed_mime_types() ) ) {
                $error  = sprintf( __( 'Er kunnen helaas geen bijlages van het type "%s" verstuurd worden.', 'glasbestellen' ), $_FILES['attachment']['type'][$i] );
@@ -33,14 +28,12 @@ function gb_handle_lead_form_submit() {
                break;
             }
 
-            if ( ! $error ) {
-               $attachments[$i] = [
-                  'tmp_name' => $_FILES['attachment']['tmp_name'][$i],
-                  'name'     => $_FILES['attachment']['name'][$i],
-                  'size'     => $_FILES['attachment']['size'][$i],
-                  'type'     => $_FILES['attachment']['type'][$i]
-               ];
-            }
+            $attachments[$i] = [
+               'tmp_name' => $_FILES['attachment']['tmp_name'][$i],
+               'name'     => $_FILES['attachment']['name'][$i],
+               'size'     => $_FILES['attachment']['size'][$i],
+               'type'     => $_FILES['attachment']['type'][$i]
+            ];
 
          }
       }
