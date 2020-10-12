@@ -115,3 +115,54 @@ function gb_delete_relation( $user_id ) {
 
 }
 add_action( 'delete_user', 'gb_delete_relation' );
+
+/**
+ * Handles ajax request to update current lead editor
+ */
+function gb_ajax_update_lead_current_editor() {
+
+	$response = [
+		'other_editor' => false
+	];
+
+	if ( ! empty( $_POST['lead_id'] ) ) {
+
+		$lead_id = $_POST['lead_id'];
+		$current_user_id = get_current_user_id();
+		$crm = new CRM();
+
+		$current_editor = $crm->get_lead_meta( $lead_id, 'current_editor', true );
+
+		$response['current_user'] = $current_user_id;
+
+		if ( $current_editor ) {
+			if ( $current_editor != $current_user_id ) {
+				$response['other_editor'] = $current_editor;
+				$response['message'] = __( 'Iemand anders is deze lead aan het bewerken.' );
+			}
+		} else {
+			$crm->update_lead_meta( $lead_id, 'current_editor', $current_user_id );
+		}
+	}
+
+	wp_send_json( $response );
+	wp_die();
+}
+add_action( 'wp_ajax_update_lead_current_editor', 'gb_ajax_update_lead_current_editor' );
+
+/**
+ * Handles ajax request to unset current lead editor
+ */
+function gb_ajax_unset_lead_current_editor() {
+
+	$response = [];
+
+	if ( ! empty( $_POST['lead_id'] ) ) {
+		$crm = new CRM();
+		$crm->delete_lead_meta( $_POST['lead_id'], 'current_editor' );
+		$response['done'] = true;
+	}
+	wp_send_json( $response );
+	wp_die();
+}
+add_action( 'wp_ajax_unset_lead_current_editor', 'gb_ajax_unset_lead_current_editor' );

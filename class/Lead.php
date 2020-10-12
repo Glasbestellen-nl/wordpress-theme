@@ -70,5 +70,4 @@ class Lead {
       }
       return false;
    }
-
 }

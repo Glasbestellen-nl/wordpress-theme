@@ -3,6 +3,10 @@ use Offline_Conversion_Tracking\Conversion_Data;
 use Offline_Conversion_Tracking\Dashboard_UI;
 ?>
 
+<div class="notice notice-error js-current-editor-notice" style="display: none;">
+   <p><?php _e( 'Iemand anders is deze lead momenteel aan het bewerken.', 'glasbestellen' ); ?></p>
+</div>
+
 <div class="wrap">
 
    <h2><?php echo __( 'Lead', 'glasbestellen' ) . ' #' . $_GET['lead_id']; ?></h2>

@@ -78,7 +78,6 @@ class Leads_Table extends WP_List_Table {
          'request_uri'  => __( 'URL', 'glasbestellen' )
      );
      return $columns;
-
    }
 
    /**
@@ -237,13 +236,19 @@ class Leads_Table extends WP_List_Table {
 
       if ( empty( $item ) || empty( $column_name ) ) return;
 
+      $crm = new CRM();
+
       $edit_link   = admin_url( 'admin.php?page=crm&lead_id=' . $item['lead_id'] );
       $delete_link = admin_url( 'admin.php?page=crm&lead_id=' . $item['lead_id'] . '&action=delete' );
       $actions = [
          'edit'    => '<a href="' . $edit_link . '">' . __( 'Bewerken', 'glasbestellen' ) . '</a>',
          'delete'  => '<a href="' . $delete_link . '" class="js-lead-row-delete-link">' . __( 'Verwijderen', 'glasbestellen' ) . '</a>'
       ];
-      $html  = '<strong><a href="' . $edit_link . '">' . $item[$column_name] . '</a></strong>';
+      $html = '';
+      if ( $crm->get_lead_meta( $item['lead_id'], 'current_editor', true ) ) {
+         $html .= '<div><span class="dashicons dashicons-warning"></span> ' . __( 'Iemand anders is aan het bewerken.', 'glasbestellen' ) . '</div>';
+      }
+      $html .= '<strong><a href="' . $edit_link . '">' . $item[$column_name] . '</a></strong>';
       $html .= $this->row_actions( $actions );
 
       return $html;

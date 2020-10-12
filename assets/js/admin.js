@@ -1,6 +1,48 @@
 jQuery(document).ready(function($) {
 
    /**
+    * Change current lead editor 
+    */
+   $(window).on('load', function() {
+
+      if (undefined == window.location.search)
+         return;
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const page = urlParams.get('page');
+
+      if ('crm' == page) {
+         const leadID = urlParams.get('lead_id');
+         if (leadID) {
+            const data = {
+               action: 'update_lead_current_editor',
+               lead_id: leadID
+            };
+            $.post(ajaxurl, data, function(response) {
+               if (response.other_editor) {
+                  $('.js-current-editor-notice').show();
+               }
+            });
+         }
+      }
+   }).unload(function() {
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const page = urlParams.get('page');
+
+      if ('crm' == page) {
+         const leadID = urlParams.get('lead_id');
+         if (leadID) {
+            const data = new FormData();
+            data.append('action', 'unset_lead_current_editor');
+            data.append('lead_id', leadID);
+            navigator.sendBeacon(ajaxurl, data);
+         }
+      }
+
+   });
+
+   /**
     * Confirmation when clicking delete link
     */
    $('.js-lead-row-delete-link').click(function() {
