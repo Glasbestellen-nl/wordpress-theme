@@ -1,9 +1,32 @@
 jQuery(document).ready(function($) {
 
    /**
-    * Change current lead editor 
+    * Change current lead editor
     */
    $(window).on('load', function() {
+
+      function checkCurrentEditedLeads() {
+         const selector = '.js-someone-editing';
+         const leadIDs  = [];
+         $(selector).each(function(index, element) {
+            leadIDs.push($(element).data('lead-id'));
+         });
+         const data = {
+            action: 'check_leads_current_editor',
+            lead_ids: leadIDs
+         };
+         $.get(ajaxurl, data, function(leads) {
+            if (leads) {
+               for (const [id, editing] of Object.entries(leads)) {
+                  if (editing) {
+                     $(selector + '-' + id).fadeIn();
+                  } else {
+                     $(selector + '-' + id).fadeOut();
+                  }
+               }
+            }
+         });
+      }
 
       if (undefined == window.location.search)
          return;
@@ -13,6 +36,8 @@ jQuery(document).ready(function($) {
 
       if ('crm' == page) {
          const leadID = urlParams.get('lead_id');
+
+         // Lead single screen
          if (leadID) {
             const data = {
                action: 'update_lead_current_editor',
@@ -23,6 +48,11 @@ jQuery(document).ready(function($) {
                   $('.js-current-editor-notice').show();
                }
             });
+
+         // CRM table screen
+         } else {
+            checkCurrentEditedLeads();
+            setInterval(checkCurrentEditedLeads, 5000);
          }
       }
    }).unload(function() {
@@ -39,7 +69,6 @@ jQuery(document).ready(function($) {
             navigator.sendBeacon(ajaxurl, data);
          }
       }
-
    });
 
    /**

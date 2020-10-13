@@ -245,9 +245,7 @@ class Leads_Table extends WP_List_Table {
          'delete'  => '<a href="' . $delete_link . '" class="js-lead-row-delete-link">' . __( 'Verwijderen', 'glasbestellen' ) . '</a>'
       ];
       $html = '';
-      if ( $crm->get_lead_meta( $item['lead_id'], 'current_editor', true ) ) {
-         $html .= '<div><span class="dashicons dashicons-warning"></span> ' . __( 'Iemand anders is aan het bewerken.', 'glasbestellen' ) . '</div>';
-      }
+      $html .= '<div class="js-someone-editing js-someone-editing-' . $item['lead_id'] . '" data-lead-id="' . $item['lead_id'] . '" style="display: none;"><span class="dashicons dashicons-warning"></span> ' . __( 'Iemand anders is aan het bewerken.', 'glasbestellen' ) . '</div>';
       $html .= '<strong><a href="' . $edit_link . '">' . $item[$column_name] . '</a></strong>';
       $html .= $this->row_actions( $actions );
 

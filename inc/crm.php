@@ -133,11 +133,9 @@ function gb_ajax_update_lead_current_editor() {
 
 		$current_editor = $crm->get_lead_meta( $lead_id, 'current_editor', true );
 
-		$response['current_user'] = $current_user_id;
-
 		if ( $current_editor ) {
 			if ( $current_editor != $current_user_id ) {
-				$response['other_editor'] = $current_editor;
+				$response['other_editor'] = true;
 				$response['message'] = __( 'Iemand anders is deze lead aan het bewerken.' );
 			}
 		} else {
@@ -158,11 +156,39 @@ function gb_ajax_unset_lead_current_editor() {
 	$response = [];
 
 	if ( ! empty( $_POST['lead_id'] ) ) {
+
+		$lead_id = $_POST['lead_id'];
+		$current_user_id = get_current_user_id();
 		$crm = new CRM();
-		$crm->delete_lead_meta( $_POST['lead_id'], 'current_editor' );
-		$response['done'] = true;
+
+		$current_editor = $crm->get_lead_meta( $lead_id, 'current_editor', true );
+
+		if ( $current_editor ) {
+			if ( $current_editor == $current_user_id ) {
+				$crm->delete_lead_meta( $lead_id, 'current_editor' );
+			}
+		}
 	}
 	wp_send_json( $response );
 	wp_die();
 }
 add_action( 'wp_ajax_unset_lead_current_editor', 'gb_ajax_unset_lead_current_editor' );
+
+/**
+ * Handles ajax request check which leads are currently edited 
+ */
+function gb_ajax_check_leads_current_editor() {
+
+	$edited_leads = [];
+
+	if ( ! empty( $_GET['lead_ids'] ) ) {
+		$crm = new CRM();
+
+		foreach ( $_GET['lead_ids'] as $lead_id ) {
+			$edited_leads[$lead_id] = $crm->get_lead_meta( $lead_id, 'current_editor', true );
+		}
+		wp_send_json( $edited_leads );
+	}
+	wp_die();
+}
+add_action( 'wp_ajax_check_leads_current_editor', 'gb_ajax_check_leads_current_editor' );
