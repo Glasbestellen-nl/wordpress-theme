@@ -4,12 +4,14 @@
  */
 function gtp_insert_action_boxes( $content ) {
 
+	global $post;
+
    ob_start();
    get_template_part( 'template-parts/contact-box' );
    $insertation = ob_get_contents();
    ob_end_clean();
 
-	if ( is_singular( 'artikel' ) && ! is_admin() ) {
+	if ( is_singular( 'artikel' ) && ! is_admin() && ! get_post_meta( $post->ID, 'hide_contact_box', true ) ) {
 		return gb_insert_after_paragraph( $insertation, 2, $content, 6 );
 	}
 
