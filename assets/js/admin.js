@@ -6,6 +6,7 @@ jQuery(document).ready(function($) {
    $(window).on('load', function() {
 
       function checkCurrentEditedLeads() {
+
          const selector = '.js-someone-editing';
          const leadIDs  = [];
          $(selector).each(function(index, element) {

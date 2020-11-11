@@ -198,6 +198,11 @@ a, .link {
    font-size: 0.875em;
 }
 
+.text--marked-red {
+   display: inline-block;
+   background-color: #f8d7da;
+}
+
 /* Small devices (tablets, 768px and up) */
 @media (max-width: 767px) {
 
