@@ -29,7 +29,7 @@
                         </div>
                      </div>
 
-                     <?php if ( ! $configurator ) { ?>
+                     <?php if ( ( ! $configurator ) && ( ! get_field( 'hide_hero_button_cta' ) ) ) { ?>
                         <span class="hero__button-cta space-above"><?php _e( 'Binnen 1 dag in je mail!', 'glasbestellen' ); ?></span>
                      <?php } ?>
 
