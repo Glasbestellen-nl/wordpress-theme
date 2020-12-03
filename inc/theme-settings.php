@@ -39,6 +39,18 @@ function gb_init_theme_options() {
 
    $page = 'theme-settings-page';
 
+	/**
+	 * Page settings
+	 */
+	$section = 'site_settings_section';
+
+	// Add redirect settings section
+	add_settings_section( $section, __( 'Site', 'glasbestellen' ), 'gb_display_site_settings_section', $page );
+
+	$id = 'site_message';
+	add_settings_field( $id, __( 'Site bericht', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
+	register_setting( 'theme-settings', $id );
+
    /**
     * Company settings sections and fields
     */
@@ -187,6 +199,13 @@ function gb_init_theme_options() {
 
 }
 add_action( 'admin_init', 'gb_init_theme_options' );
+
+/**
+ * Displays the desired site settings section content
+ */
+function gb_display_site_settings_section() {
+	echo '<p>' . __( 'Stel hieronder de site instellingen in', 'glasbestellen' ) . '.</p>';
+}
 
 /**
  * Displays the desired company settings section content

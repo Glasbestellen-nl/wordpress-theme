@@ -1,5 +1,13 @@
 <?php get_template_part( 'template-parts/head' ); ?>
 
+   <?php if ( $message = get_option( 'site_message' ) ) { ?>
+      <div class="top-bar">
+         <div class="container">
+            <span class="top-bar__message"><?php echo $message; ?></span>
+         </div>
+      </div>
+   <?php } ?>
+
    <header class="main-header">
 
       <div class="header-inner">
