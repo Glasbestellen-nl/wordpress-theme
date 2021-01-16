@@ -92,11 +92,11 @@
                <div class="teaser space-below">
 
                   <a href="<?php echo get_post_type_archive_link( 'product' ); ?>tuinspiegels/" class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/tuinspiegel.png'; ?>" alt="Tuinspiegel op maat" class="lazyload teaser__image-img">
+                     <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2016/05/Douchecabine-met-zijpaneel-op-muur.jpg" alt="Douchecabine op maat" class="lazyload teaser__image-img">
                   </a>
 
                   <div class="teaser__body teaser__body--bottom">
-                     <a href="<?php echo get_post_type_archive_link( 'product' ); ?>tuinspiegels/" class="teaser__headline">Tuinspiegels</a>
+                     <a href="<?php echo get_post_type_archive_link( 'product' ); ?>douchecabines/" class="teaser__headline">Douchecabines</a>
                   </div>
 
                </div>
