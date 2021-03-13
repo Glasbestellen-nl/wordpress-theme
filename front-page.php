@@ -44,7 +44,7 @@
                <div class="teaser space-below">
 
                   <a href="<?php echo get_post_type_archive_link( 'product' ); ?>glazen-achterwand-keuken/" class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/keuken-achterwand.png'; ?>" alt="Glazen keuken achterwand op maat" class="lazyload teaser__image-img">
+                     <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2018/05/Keuken-achterwand-glas.jpg" alt="Glazen keuken achterwand op maat" class="lazyload teaser__image-img">
                   </a>
 
                   <div class="teaser__body teaser__body--bottom">
@@ -75,12 +75,12 @@
 
                <div class="teaser space-below">
 
-                  <a href="<?php echo get_post_type_archive_link( 'product' ); ?>glazen-tafelblad/" class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/glazen-tafelblad.png'; ?>" alt="Glazen tafelblad op maat" class="lazyload teaser__image-img">
+                  <a href="<?php echo get_post_type_archive_link( 'product' ); ?>glazen-balustrade/" class="teaser__image teaser__image--cover">
+                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/glazen-balustrade.jpg'; ?>" alt="Glazen balustrade zonder handrailing" class="lazyload teaser__image-img">
                   </a>
 
                   <div class="teaser__body teaser__body--bottom">
-                     <a href="<?php echo get_post_type_archive_link( 'product' ); ?>glazen-tafelblad/" class="teaser__headline">Tafelbladen</a>
+                     <a href="<?php echo get_post_type_archive_link( 'product' ); ?>glazen-balustrade/" class="teaser__headline">Glazen balustrade</a>
                   </div>
 
                </div>
