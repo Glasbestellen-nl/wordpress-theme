@@ -300,7 +300,6 @@
                <div class="area">
                   <div class="container">
                      <arcticle class="text">
-                        <h2><?php echo sprintf( __( 'Algemene informatie %s', 'glasbestellen' ), get_the_title() ); ?></h2>
                         <?php echo wpautop( $seo_content ); ?>
                      </article>
                   </div>
