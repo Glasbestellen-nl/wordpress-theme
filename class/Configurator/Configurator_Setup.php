@@ -13,6 +13,9 @@ class Configurator_Setup {
          case 'single-showerdoor' :
             return new Configurators\Showerdoor\Configurator( $configurator_id );
             break;
+         case 'showerwall' :
+            return new Configurators\Showerwall\Configurator( $configurator_id );
+            break;
          case 'double-showerdoor' :
             return new Configurators\Showerdoor\Configurator( $configurator_id );
             break;
