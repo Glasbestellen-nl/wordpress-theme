@@ -218,7 +218,7 @@ get_header();
                                              <?php echo sprintf( __( '%s samenstellen', 'glasbestellen' ), get_first_term_by_id( get_the_id(), 'startopstelling', 'name' ) ); ?>
                                              <span class="configurator__heading-addition">(* <?php _e( 'Verplicht', 'glasbestellen' ); ?>)</span>
                                           </span>
-                                          <p class="text--marked-red"><?php echo sprintf( __( 'Klik voor meer informatie op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
+                                          <p><?php echo sprintf( __( 'Klik voor meer informatie op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
                                        </div>
 
                                        <form method="post" class="configurator__form js-configurator-blur-update">
