@@ -73,9 +73,10 @@ class Configurator {
          $total += $price_addition;
       }
 
-      if ( $min_price = $this->get_min_price() ) {
-         $total = ( $total < $min_price ) ? $min_price : $total;
+      if ( $starting_price = $this->get_starting_price() ) {
+         $total += $starting_price;
       }
+
       return ( $round ) ? \Money::round_including_vat( $total ) : $total;
    }
 
@@ -672,12 +673,12 @@ class Configurator {
       }
       return $summary;
    }
-
+   
    /**
-    * Returns the minimum price when exists in $_settings
+    * Used to set a start price that is always included inside the total
     */
-   public function get_min_price() {
-      return ! empty( $this->_settings['price'] ) ? str_replace( ',', '.', $this->_settings['price'] ) : 0;
+   public function get_starting_price() {
+      return ! empty( $this->_settings['starting_price'] ) ? str_replace( ',', '.', $this->_settings['starting_price'] ) : 0;
    }
 
    /**
