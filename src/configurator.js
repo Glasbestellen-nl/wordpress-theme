@@ -241,18 +241,22 @@ const Configurator = (function() {
                   }
                }
 
-               if (rules.greater_than || rules.less_than) {
-                  let dependentStepId = rules.greater_than || rules.less_than;
-                  let dependentStep = $('.js-step-' + dependentStepId).find('.js-form-validate');
-                  let dependentValue  = dependentStep.is('select') && dependentStep.find(':selected').data('option-value') || dependentStep.val();
+               if (rules.less_than && rules.less_than.step) {
 
-                  if (rules.greater_than && dependentValue >= value) {
-                     valid = false;
-                     msg = gb.msg.dimensionMustBeGreaterThan.replace('{0}', dependentValue);
+                  let lessThan = rules.less_than;
+
+                  let dependentStepId = lessThan.step;
+                  let dependentStep = $('.js-step-' + dependentStepId).find('.js-form-validate');
+                  let dependentValue  = parseInt(dependentStep.is('select') && dependentStep.find(':selected').data('option-value')) || parseInt(dependentStep.val());
+
+                  if (lessThan.value) {
+                     dependentValue -= parseInt(lessThan.value);
                   }
-                  else if (rules.less_than && dependentValue <= value) {
+                  if (dependentValue < value) {
                      valid = false;
-                     msg = gb.msg.dimensionMustBeLessThan.replace('{0}', dependentValue);
+                     if (rules.less_than.message) {
+                        msg = rules.less_than.message;
+                     }
                   }
                }
             }
