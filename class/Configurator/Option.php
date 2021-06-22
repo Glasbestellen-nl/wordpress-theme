@@ -24,6 +24,10 @@ class Option {
       return $this->get_field( 'price' );
    }
 
+   public function get_value() {
+      return $this->get_field( 'value' );
+   }
+
    public function get_validation_rules() {
       return ( $this->get_field( 'rules' ) ) ? json_encode( $this->get_field( 'rules' ) ) : false;
    }

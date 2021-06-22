@@ -194,7 +194,7 @@ const Configurator = (function() {
          let msg = gb.msg.enterField;
          let showFeedback = true;
 
-         let value = element.value;
+         let value = $(element).is('select') && $(element).find(':selected').data('option-value') || element.value;
          let req = element.dataset.required;
          let rules = $(element).data('validation-rules');
 
@@ -206,6 +206,7 @@ const Configurator = (function() {
             }
          } else {
             if (rules) {
+
                if (rules.min !== undefined) {
                   if (value < parseInt(rules.min)) {
                      valid = false;
@@ -237,6 +238,21 @@ const Configurator = (function() {
                   if (value > max) {
                      valid = false;
                      msg = gb.msg.dimensionValueTooLarge.replace('{0}', max);
+                  }
+               }
+
+               if (rules.greater_than || rules.less_than) {
+                  let dependentStepId = rules.greater_than || rules.less_than;
+                  let dependentStep = $('.js-step-' + dependentStepId).find('.js-form-validate');
+                  let dependentValue  = dependentStep.is('select') && dependentStep.find(':selected').data('option-value') || dependentStep.val();
+
+                  if (rules.greater_than && dependentValue >= value) {
+                     valid = false;
+                     msg = gb.msg.dimensionMustBeGreaterThan.replace('{0}', dependentValue);
+                  }
+                  else if (rules.less_than && dependentValue <= value) {
+                     valid = false;
+                     msg = gb.msg.dimensionMustBeLessThan.replace('{0}', dependentValue);
                   }
                }
             }

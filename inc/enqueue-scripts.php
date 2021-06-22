@@ -41,6 +41,8 @@ function gb_enqueue_scripts() {
             'enterField'             => __( 'Vul a.u.b. dit veld in.', 'glasbestellen' ),
             'dimensionValueTooSmall' => __( 'Voer een maat in groter of gelijk aan {0}.', 'glasbestellen' ),
             'dimensionValueTooLarge' => __( 'Voer een maat in kleiner of gelijk aan {0}.', 'glasbestellen' ),
+            'dimensionMustBeGreaterThan' => __( 'Voer een maat in groter dan {0}', 'glasbestellen' ),
+            'dimensionMustBeLessThan' => __( 'Voer een maat in groter dan {0}', 'glasbestellen' ),
             'enterValidEmail'        => __( 'Vul a.u.b. een geldig e-mail adres in.', 'glasbestellen' ),
             'filesSelected'          => __( 'bijlage(s) geselecteerd.', 'glasbestellen' ),
             'inspiration'            => __( 'Inspiratie', 'glasbestellen' ),

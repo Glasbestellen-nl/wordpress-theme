@@ -67,7 +67,7 @@ class Step {
          $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
          $child_steps  = ( $option->get_child_steps() ) ? 'data-child-steps=\'' . $option->get_child_steps_attr() . '\'' : '';
          $plus_price   = ( ! $hide_price  && ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', \Money::display( $option->get_plus_price() ), $this->get_id() ) : '';
-         $html .= '<option value="' . $option->get_id() . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_steps . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
+         $html .= '<option value="' . $option->get_id() . '" data-option-value="' . $option->get_value() . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_steps . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
       }
       return $html;
    }

@@ -210,12 +210,49 @@ class Configurator {
       }
    }
 
+   protected function filter_matrix_values_callback( $value = 0, $rules = [] ) {
+      if ( ! empty( $rules['min'] ) && $rules['min'] > $value ) return;
+      if ( ! empty( $rules['max'] ) && $rules['max'] < $value ) return;
+      return ! empty( $value );
+   }
+
+   protected function map_insert_option_callback( $value = 0, $index = 0 ) {
+      return [
+         'id' => $index + 1,
+         'title' => $value . ' mm',
+         'value' => $value,
+         'default' => $index == 1
+      ];
+   }
+
+   protected function insert_step_options_from_matrix( $step ) {
+
+      if ( empty( $step ) ) return;
+      $matrix = $this->get_price_matrix();
+      $rules = ! empty( $step['rules'] ) ? $step['rules'] : [];
+      switch ( $step['id'] ) {
+         case 'width' :
+            $line_array = array_filter( $matrix->get_line(0), function( $value ) use( $rules ) { return $this->filter_matrix_values_callback( $value, $rules ); } );
+            $step['options'] = array_map( [$this, 'map_insert_option_callback'], $line_array, array_keys( array_values( $line_array ) ) );
+            break;
+         case 'height' :
+            $col_array = array_filter( $matrix->get_col(0), function( $value ) use( $rules ) { return $this->filter_matrix_values_callback( $value, $rules ); } );
+            $step['options'] = array_map( [$this, 'map_insert_option_callback'], $col_array, array_keys( array_values( $col_array ) ) );
+            break;
+         default:
+      }
+      return $step;
+   }
+
    /**
     * Creates an array of step objects from the steps settings input
     */
    protected function set_steps() {
       if ( empty( $this->_settings['steps'] ) ) return;
       $this->_steps = array_map( function( $step ) {
+         if ( ! empty( $step['options_from_matrix'] ) && $this->get_price_matrix() ) {
+            $step = $this->insert_step_options_from_matrix( $step );
+         }
          return new Step( $step );
       }, $this->_settings['steps'] );
    }
@@ -373,6 +410,18 @@ class Configurator {
          if ( $option->get_id() == $option_id ) return $option;
       }
       return false;
+   }
+
+   /**
+    * Returns the (step) option price
+    *
+    * @param string $step_id the step id
+    * @param int $option_id the id of the option
+    */
+   public function get_option_value( string $step_id = '', $option_id ) {
+      $option = $this->get_option( $step_id, $option_id );
+      if ( ! $option ) return;
+      return $option->get_value();
    }
 
    /**
@@ -673,7 +722,7 @@ class Configurator {
       }
       return $summary;
    }
-   
+
    /**
     * Used to set a start price that is always included inside the total
     */

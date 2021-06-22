@@ -22,6 +22,22 @@ class Price_Matrix {
       return ! empty( $price ) ? str_replace( ',', '.', $price ) : 0;
    }
 
+   public function get_line( $index = 0 ) {
+      return ! empty( $this->_lines[$index] ) ? $this->_lines[$index] : false;
+   }
+
+   public function get_col( $index = 0 ) {
+      if ( empty( $this->_lines ) ) return;
+
+      $y_values = [];
+
+      foreach ( $this->_lines as $line ) {
+         if ( $line[$index] )
+            $y_values[] = $line[$index];
+      }
+      return ! empty( $y_values ) ? $y_values : false;
+   }
+
    protected function find_closest( $target_value, array $values = [] ) {
 
       $closest_index = 0;
@@ -48,6 +64,5 @@ class Price_Matrix {
       }
       fclose( $handle );
    }
-
 
 }
