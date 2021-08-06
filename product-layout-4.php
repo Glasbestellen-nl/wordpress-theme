@@ -2,7 +2,6 @@
 // Template name: Product layout 4
 // Template post type: product
 get_header(); ?>
-
    <?php
    if ( have_posts() ) {
       while ( have_posts() ) {

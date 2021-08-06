@@ -24,6 +24,8 @@ class Archive {
       $this->_query_args = [
          'post_type' => 'configurator',
          'posts_per_page' => -1,
+         'orderby' => 'menu_order',
+         'order' => 'desc',
          'tax_query' => [
             [
                'taxonomy' => 'startopstelling',

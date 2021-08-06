@@ -221,7 +221,7 @@ function gb_register_post_types() {
 		'label'                 => __( 'Configurator', 'glasbestellen' ),
 		'description'           => __( 'Post Type Description', 'glasbestellen' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'editor', 'custom-fields', 'thumbnail' ),
+		'supports'              => array( 'title', 'editor', 'custom-fields', 'thumbnail', 'page-attributes' ),
 		'taxonomies'            => array( 'startopstelling', 'filter' ),
 		'hierarchical'          => false,
 		'public'                => true,
