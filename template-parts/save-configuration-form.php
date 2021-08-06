@@ -1,12 +1,17 @@
 <?php
 if ( ! empty( $_GET['metadata'] ) ) {
    $configurator = gb_get_configurator( $_GET['metadata'] );
+
+   $save_form_cta = gb_get_configurator_save_form_cta( $configurator->get_id() );
+   if ( empty( $save_form_cta ) ) {
+      $save_form_cta = __( 'Wilt u uw samenstelling als offerte ontvangen? Vul dan uw naam, e-mail en eventuele specifieke wensen in.', 'glasbestellen' );
+   }
    ?>
 
    <form method="post" class="js-form-validation" novalidate>
 
       <div class="text text--small">
-         <p><?php _e( 'Wilt u uw samenstelling als offerte ontvangen? Vul dan uw naam, e-mail en eventuele specifieke wensen in.', 'glasbestellen' ); ?></p>
+         <p><?php echo $save_form_cta; ?></p>
       </div>
 
       <div class="row">

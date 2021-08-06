@@ -174,3 +174,9 @@ function gb_get_configurator_settings( int $configurator_id ) {
 function gb_get_configurator_explanation_page_id( int $configurator_id = 0 ) {
    return get_field( 'explanation_page_id', $configurator_id );
 }
+
+function gb_get_configurator_save_form_cta( int $configurator_id = 0 ) {
+   $term_id = get_first_term_by_id( $configurator_id, 'startopstelling' );
+   if ( empty( $term_id ) ) return;
+   return get_field( 'save_form_cta', 'term_' . $term_id );
+}
