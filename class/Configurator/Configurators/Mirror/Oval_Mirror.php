@@ -22,6 +22,10 @@ class Oval_Mirror extends \Configurator\Configurator {
             $x_value = $this->get_option_value( 'width', $configuration['width'] );
             $y_value = $this->get_option_value( 'height', $configuration['height'] );
             $price_table['size'] = $price_matrix->get_price( $x_value, $y_value );
+            
+            if ( $multiplier = $this->get_metadata( 'price_matrix_multiplier' ) ) {
+               $price_table['size'] *= $multiplier;
+            }
          }
 
          // Extra shipping large products
