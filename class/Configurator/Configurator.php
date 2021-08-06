@@ -705,7 +705,7 @@ class Configurator {
             $option_title = $this->get_option_title( $step_id, $input );
             $value = $option_title ? $option_title : $input;
          } else {
-            $value = '---';
+            $value = __( 'Geen' );
          }
 
          $summary[] = [

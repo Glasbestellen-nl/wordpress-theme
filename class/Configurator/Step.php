@@ -59,7 +59,7 @@ class Step {
       $hide_price = $this->get_field( 'hide_price' );
 
       if ( ! $this->get_default() ) {
-         $html .= '<option value="">---</option>';
+         $html .= '<option value="">' .  __( 'Geen' ) . '</option>';
       }
 
       foreach ( $options as $option ) {
