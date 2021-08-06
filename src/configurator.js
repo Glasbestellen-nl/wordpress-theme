@@ -91,7 +91,12 @@ const Configurator = (function() {
                let formtype = $(this).data('formtype');
                let metadata = $(this).data('meta');
 
-               showModalForm(title, formtype, metadata);
+               showModalForm(title, formtype, metadata, function(modalForm) {
+                  let messageFieldValue = $('.js-configurator-message').val();
+                  if (messageFieldValue) {
+                     $('.js-form-content-field', modalForm).val(messageFieldValue);
+                  }
+               });
 
             }.bind(this));
          });

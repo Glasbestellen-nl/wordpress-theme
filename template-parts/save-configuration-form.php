@@ -43,7 +43,7 @@ if ( ! empty( $_GET['metadata'] ) ) {
 
       <div class="form-group js-form-group">
          <label class="form-label"><?php _e( 'Heeft u specifieke wensen? (optioneel)', 'glasbestellen' ); ?></label>
-         <textarea name="lead[content]" class="form-control js-form-validate" rows="6" placeholder="<?php _e( 'Denk bijvoorbeeld aan montage of afwijkende maten..', 'glasbestellen' ); ?>"></textarea>
+         <textarea name="lead[content]" class="form-control js-form-validate js-form-content-field" rows="6" placeholder="<?php _e( 'Denk bijvoorbeeld aan montage of afwijkende maten..', 'glasbestellen' ); ?>"></textarea>
          <div class="invalid-feedback js-invalid-feedback"></div>
       </div>
 

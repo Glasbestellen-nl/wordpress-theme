@@ -510,7 +510,7 @@
 /**
 * Shows modal form
 */
-function showModalForm(title, formtype, metadata) {
+function showModalForm(title, formtype, metadata, callback) {
 
    showModal(title);
 
@@ -521,7 +521,9 @@ function showModalForm(title, formtype, metadata) {
       metadata: metadata
    }
    jQuery.get(gb.ajaxUrl, data, function(html) {
-      loadModalContent(html);
+      loadModalContent(html, false, function(modalElement) {
+         if (callback) callback(modalElement);
+      });
    });
 }
 
@@ -553,13 +555,14 @@ function showModal(title, size = 'small') {
 /**
 * Loads modal content
 */
-function loadModalContent(html, title = '') {
+function loadModalContent(html, title = '', callback) {
    jQuery('.js-modal-body').html(html);
    if (title) {
       jQuery('.js-modal-title').html(title);
    }
    jQuery('.js-modal-loader').hide();
    jQuery('.js-modal-inner').fadeIn(300);
+   if (callback) callback(jQuery('.js-modal'));
 }
 
 /**
