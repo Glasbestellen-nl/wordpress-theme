@@ -301,6 +301,15 @@ class Configurator {
    }
 
    /**
+    * Return the size unit (cm or mm)
+    *
+    * @uses get_setting() to get a setting from the $_settings property
+    */
+   public function get_size_unit() {
+      return $this->get_setting( 'size_unit' ) ? $this->get_setting( 'size_unit' ) : 'mm';
+   }
+
+   /**
     * Return a value from the metadata array when exists in $_settings
     *
     * @param string $key the meta key in the metadata array in $_settings
