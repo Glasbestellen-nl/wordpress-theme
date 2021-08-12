@@ -180,7 +180,7 @@ get_header();
 
                               <div class="col-12 col-lg-6">
 
-                                 <div class="">
+                                 <div>
 
                                     <div class="configurator__header large-space-below">
 
@@ -353,10 +353,13 @@ get_header();
                                        <div id="hidden_technical_details_tables" class="d-none">
                                     <?php } ?>
 
-                                    <div class="space-below">
+                                    <div class="large-space-below">
 
                                        <header class="space-below">
                                           <strong><?php the_sub_field( 'title' ); ?></strong>
+                                          <?php if ( get_sub_field( 'subline' ) ) { ?>
+                                             <p><?php the_sub_field( 'subline' ); ?></p>
+                                          <?php } ?>
                                        </header>
 
                                        <div class="space-below">
