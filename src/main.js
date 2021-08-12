@@ -311,10 +311,12 @@
           * Show target
           */
          if (e.target.closest('.js-show-target-trigger')) {
+            let hideAfter = e.target.dataset.hideAfter || false;
             let target = e.target.dataset.showTarget;
             let element = document.querySelector(target);
             element.classList.add('d-block');
             element.classList.remove('d-none');
+            if (hideAfter) $(e.target).hide();
             return;
          }
 

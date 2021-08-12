@@ -1704,6 +1704,11 @@ Collapse box
    color: #0c5994;
 }
 
+.collapse-box__header,
+.collapse-box__header::before {
+   color: #0c5994;
+}
+
 .collapse-box__header {
    padding: 1em 1em 1em 2.25em;
    border: 1px dashed #ccc;
