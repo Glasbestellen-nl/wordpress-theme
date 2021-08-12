@@ -349,7 +349,7 @@ get_header();
                                     the_row();
                                     $count ++; ?>
 
-                                    <?php if ( $count == 2 ) { ?>
+                                    <?php if ( count( $technical_details ) > 1 && $count == 2 ) { ?>
                                        <div id="hidden_technical_details_tables" class="d-none">
                                     <?php } ?>
 
@@ -393,7 +393,7 @@ get_header();
                                     </div>
 
                                     <?php
-                                    if ( $count == count( $technical_details ) ) echo '</div>'; ?>
+                                    if ( count( $technical_details ) > 1 && $count == count( $technical_details ) ) echo '</div>'; ?>
 
                                  <?php
                                  }
