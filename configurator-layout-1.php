@@ -387,7 +387,7 @@ get_header();
                                        </div>
 
                                        <?php if ( $count == 1 ) { ?>
-                                          <span class="link js-show-target-trigger" data-show-target="#hidden_technical_details_tables" data-hide-after="true"><?php _e( 'Lees meer' ); ?> <i class="fas fa-arrow-down"></i></span>
+                                          <span class="link js-show-target-trigger" data-show-target="#hidden_technical_details_tables" data-hide-after="true"><?php _e( 'Meer specificaties tonen' ); ?> <i class="fas fa-arrow-down"></i></span>
                                        <?php } ?>
 
                                     </div>
