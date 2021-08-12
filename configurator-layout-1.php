@@ -13,6 +13,7 @@ get_header();
             } else {
                $reviews = false;
             }
+            $configurator_total = $configurator->get_total_price();
             ?>
 
             <div class="configurator js-configurator">
@@ -198,7 +199,7 @@ get_header();
 
                                           <div class="col-12 col-md-6">
                                              <div class="configurator__details">
-                                                <span class="configurator__detail--price js-config-total-price"><?php echo Money::display( $configurator->get_total_price() ); ?></span>
+                                                <span class="configurator__detail--price js-config-total-price"><?php echo Money::display( $configurator_total ); ?></span>
                                                 <span class="configurator__detail--tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
                                                 <?php if ( $delivery_time = $configurator->get_setting( 'delivery_time' ) ) { ?>
                                                    <span class="configurator__detail--delivery"><?php echo sprintf( __( 'Levertijd %s', 'glasbestellen' ), $delivery_time ); ?></span>
@@ -482,7 +483,7 @@ get_header();
                <div class="fixed-bottom-wrapper fixed-bottom-wrapper--mobile">
                   <div class="d-flex align-items-center justify-content-between">
                      <div>
-                        <span class="js-config-total-price d-block tiny-space-below text-size-medium text-color-blue text-weight-bold"><?php echo Money::display( $configurator->get_total_price() ); ?></span>
+                        <span class="js-config-total-price d-block tiny-space-below text-size-medium text-color-blue text-weight-bold"><?php echo Money::display( $configurator_total ); ?></span>
                         <span class="text-size-small text-color-grey"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
                      </div>
                      <button class="btn btn--primary btn--small btn--next js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
