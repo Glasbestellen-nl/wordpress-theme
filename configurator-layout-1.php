@@ -275,7 +275,7 @@ get_header();
 
                                                    <?php } else { ?>
                                                       <div class="configurator__form-col configurator__form-input js-form-group">
-                                                         <input type="number" name="configuration[<?php echo $step_id; ?>]" class="form-control configurator__form-control js-form-validate" placeholder="mm" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configurator->get_step_value( $step_id, true ); ?>" />
+                                                         <input type="number" name="configuration[<?php echo $step_id; ?>]" class="form-control configurator__form-control js-form-validate" placeholder="<?php echo $configurator->get_size_unit(); ?>" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configurator->get_step_value( $step_id, true ); ?>" />
                                                          <div class="invalid-feedback js-invalid-feedback"></div>
                                                       </div>
                                                    <?php } ?>
@@ -349,7 +349,7 @@ get_header();
                                     the_row();
                                     $count ++; ?>
 
-                                    <?php if ( $count == 2 ) { ?>
+                                    <?php if ( count( $technical_details ) > 1 && $count == 2 ) { ?>
                                        <div id="hidden_technical_details_tables" class="d-none">
                                     <?php } ?>
 
@@ -393,7 +393,7 @@ get_header();
                                     </div>
 
                                     <?php
-                                    if ( $count == count( $technical_details ) ) echo '</div>'; ?>
+                                    if ( count( $technical_details ) > 1 && $count == count( $technical_details ) ) echo '</div>'; ?>
 
                                  <?php
                                  }
