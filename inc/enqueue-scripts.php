@@ -46,7 +46,7 @@ function gb_enqueue_scripts() {
             'enterValidEmail'        => __( 'Vul a.u.b. een geldig e-mail adres in.', 'glasbestellen' ),
             'filesSelected'          => __( 'bijlage(s) geselecteerd.', 'glasbestellen' ),
             'inspiration'            => __( 'Inspiratie', 'glasbestellen' ),
-            'pleaseWait'             => __( 'Een moment geduld..', 'glasbestellen' ),
+            'pleaseWait'             => __( 'Bezig..', 'glasbestellen' ),
             'sent'                   => __( 'Verstuurd!', 'glasbestellen' ),
             'fileUploadLimit'        => __( 'Uw bijlages overschrijden het maximale upload limiet van {0}MB. Stuur a.u.b. grotere bijlages naar ' . get_bloginfo( 'admin_email' ) . '.', 'glasbestellen' )
          ],

@@ -203,6 +203,26 @@ a, .link {
    background-color: #f8d7da;
 }
 
+.text-color-grey {
+   color: #acacac;
+}
+
+.text-color-blue {
+   color: #155f99;
+}
+
+.text-size-medium {
+   font-size: 1.25em;
+}
+
+.text-size-small {
+   font-size: 0.875em;
+}
+
+.text-weight-bold {
+   font-weight: 700;
+}
+
 /* Small devices (tablets, 768px and up) */
 @media (max-width: 767px) {
 
@@ -427,12 +447,20 @@ Spacing
    display: block;
 }
 
+.tiny-space-below {
+   margin-bottom: 0.25em !important;
+}
+
 .space-sm-below {
    margin-bottom: 1.25em !important;
 }
 
 .tiny-space-sm-below {
    margin-bottom: 0.3125em !important;
+}
+
+.no-space-below {
+   margin-bottom: 0 !important;
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -695,6 +723,10 @@ Button
    font-size: 1.25em;
 }
 
+.btn--small {
+   font-size: 1.125em;
+}
+
 .btn--block {
    width: 100%;
    display: block;
@@ -816,7 +848,8 @@ Fixed bottom wrapper
    box-sizing: border-box;
    position: fixed;
    bottom: 0;
-   background-color: rgba(255,255,255,.8);
+   background-color: rgba(255,255,255,1);
+   box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%);
    z-index: 5;
 }
 
@@ -3313,7 +3346,6 @@ Configurator
 
 .configurator__header {
    padding: 0.625em 0 1.25em 0;
-   position: sticky;
    top: 0;
    z-index: 1;
    border-bottom: 1px solid #dbdbdb;
@@ -3359,11 +3391,20 @@ Configurator
    text-align: right;
 }
 
+.configurator__details--bottom-wrapper {
+   align-items: flex-start;
+   text-align: left;
+}
+
 .configurator__detail--price {
    margin-bottom: 0.125em;
    font-size: 2em;
    font-weight: bold;
    color: #155f99;
+}
+
+.configurator__detail--price-small {
+   font-size: 1.5em;
 }
 
 .configurator__detail--tax {
