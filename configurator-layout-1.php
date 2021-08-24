@@ -550,13 +550,13 @@ get_header();
                <div class="sticky-bar sticky-bar--desktop-top js-sticky-bar" data-trigger='[{"element": ".js-configurator-details", "screen": "desktop"}, {"element": ".js-configurator-details", "screen": "mobile"}]' style="display: none;">
                   <div class="container">
                      <div class="row d-flex align-items-center">
-                        <div class="col-4 col-md-3">
-                           <span class="js-config-total-price d-block tiny-space-below text-size-medium text-color-blue text-weight-bold"><?php echo Money::display( $configurator_total ); ?></span>
-                           <span class="text-size-small text-color-grey"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
+                        <div class="col-4 col-lg-2 offset-lg-6">
+                           <span class="js-config-total-price d-block text-size-medium text-color-blue text-weight-bold"><?php echo Money::display( $configurator_total ); ?></span>
+                           <span class="text-size-tiny text-color-grey"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
                         </div>
-                        <div class="col-7 offset-1 col-md-4 offset-md-5">
+                        <div class="col-7 offset-1 col-lg-4 offset-lg-0">
                            <div class="d-flex">
-                              <button class="btn btn--block btn--primary btn--small js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
+                              <button class="btn btn--block btn--primary btn--tiny js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
                               <span class="d-none d-md-flex align-items-center justify-content-center btn btn--block btn--aside js-configurator-save-button small-space-left" data-popup-title="<?php _e( 'Samenstelling als offerte ontvangen', 'glasbestellen' ); ?>" data-formtype="save-configuration" data-meta="<?php the_id(); ?>"><i class="fas fa-file-import"></i> &nbsp;&nbsp;<?php _e( 'Offerte', 'glasbestellen' ); ?></span>
                            </div>
                         </div>

@@ -219,6 +219,10 @@ a, .link {
    font-size: 0.875em;
 }
 
+.text-size-tiny {
+   font-size: 0.75em;
+}
+
 .text-weight-bold {
    font-weight: 700;
 }
@@ -731,6 +735,11 @@ Button
    font-size: 1.125em;
 }
 
+.btn--tiny {
+   padding: 0.75em 1.25em;
+   font-size: 1.125em;
+}
+
 .btn--block {
    width: 100%;
    display: block;
@@ -832,6 +841,11 @@ Button
       padding: 0.875em 1.875em;
    }
 
+   .btn--tiny {
+      padding: 0.75em 1.25em;
+      font-size: 1em;
+   }
+
    .btn--next {
       padding-right: 2.125em;
    }
@@ -839,6 +853,7 @@ Button
    .btn--large.btn--next {
       padding-right: 2.5em;
    }
+
 
 }
 
@@ -848,11 +863,13 @@ Sticky bar
 
 .sticky-bar {
    width: 100%;
-   padding: 0.9375em;
+   padding: 0.5em;
    box-sizing: border-box;
    position: fixed;
    bottom: 0;
    background-color: rgba(255,255,255,1);
+   -moz-box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%);
+   -webkit-box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%);
    box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%);
    z-index: 5;
 }
