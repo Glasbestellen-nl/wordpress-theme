@@ -432,6 +432,10 @@ Spacing
    display: block;
 }
 
+.small-space-left {
+   margin-left: 0.625em;
+}
+
 .large-space-around {
    margin: 1.875em !important;
    display: block;
@@ -839,10 +843,10 @@ Button
 }
 
 /*--------------------------------------------------------------
-Fixed bottom wrapper
+Sticky bar
 --------------------------------------------------------------*/
 
-.fixed-bottom-wrapper {
+.sticky-bar {
    width: 100%;
    padding: 0.9375em;
    box-sizing: border-box;
@@ -856,10 +860,10 @@ Fixed bottom wrapper
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
 
-   .fixed-bottom-wrapper--mobile {
-      display: none;
+   .sticky-bar--desktop-top {
+      top: 0;
+      bottom: auto;
    }
-
 }
 
 /*--------------------------------------------------------------
@@ -3487,10 +3491,6 @@ Configurator
 
    /* Large devices (desktops, 992px and up) */
    @media (min-width: 992px) {
-
-      .configurator {
-         padding: 0 0.625em;
-      }
 
       .configurator__info-icon {
          font-size: 0.9375em;

@@ -348,6 +348,35 @@
    });
 
    /**
+   * Sticky bar
+   */
+   $(document).on('scroll', function() {
+
+      let $stickyBar = $('.js-sticky-bar');
+      let triggerData = $stickyBar.data('trigger');
+      let viewportTop = $(window).scrollTop();
+      let viewPortWidth = $(window).width();
+
+      let show = false;
+
+      triggerData.forEach(function(data) {
+
+         if (!data.screen || !data.element) return;
+         let elementTop = $(data.element).offset().top;
+
+         if (viewportTop > elementTop) {
+            if (data.screen == 'mobile' && viewPortWidth < 768) {
+               show = true;
+            } else if (data.screen == 'desktop' && viewPortWidth >= 768) {
+               show = true;
+            }
+         }
+      });
+      if (show) $stickyBar.fadeIn(100);
+      else $stickyBar.fadeOut(100);
+   });
+
+   /**
     * Delegate change events
     */
    document.addEventListener('change', e => {
