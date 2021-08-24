@@ -319,8 +319,16 @@ get_header();
                                              <?php } ?>
 
                                              <ul class="configurator__checks space-below">
+                                                <?php
+                                                if ( get_field( 'checks' ) ) {
+                                                   while ( have_rows( 'checks' ) ) {
+                                                      the_row();
+                                                      echo '<li class="configurator__checks-item">' . get_sub_field( 'check_title' ) . '</li>';
+                                                   }
+                                                }
+                                                ?>
                                                 <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Bestel check', 'glasbestellen' ) . ':</strong> ' . __( 'Uw bestelling wordt op juistheid en volledigheid gecontroleerd.', 'glasbestellen' ); ?></li>
-                                                <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Klanttevredenheid', 'glasbestellen' ) . ':</strong> ' . sprintf( __( 'Klanten beoordelen ons gemiddeld met een %s.', 'glasbestellen' ), '<a href="' . get_post_type_archive_link( 'review' ) . '" target="_blank" rel="nofollow">' . gb_get_review_average( true ) . '</a>' ); ?></li>
+                                                <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Klantbeoordeling', 'glasbestellen' ) . ':</strong> ' . '<a href="' . get_post_type_archive_link( 'review' ) . '" target="_blank" rel="nofollow">' . gb_get_review_average( true ) . '/10</a>'; ?></li>
                                              </ul>
 
                                           </form>
