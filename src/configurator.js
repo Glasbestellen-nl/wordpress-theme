@@ -83,7 +83,7 @@ const Configurator = (function() {
 
          }).on('click', '.js-configurator-save-button', function(e) {
 
-            const form = $(this).parents('form');
+            const form = $('.js-configurator-form');
 
             self.validateForm(form, function() {
 
