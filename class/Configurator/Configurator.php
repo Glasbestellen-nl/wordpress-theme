@@ -310,6 +310,15 @@ class Configurator {
    }
 
    /**
+    * Converts dimension to milimeters based on size unit
+    *
+    * @uses get_size_unit() to get the set size unit
+    */
+   public function convert_to_mm( $value = 0 ) {
+      return ( $this->get_size_unit() == 'cm' ) ? $value * 10 : $value;
+   }
+
+   /**
     * Return a value from the metadata array when exists in $_settings
     *
     * @param string $key the meta key in the metadata array in $_settings
@@ -507,7 +516,10 @@ class Configurator {
     */
    public function get_step_title( string $step_id = '' ) {
       $this->set_current_step( $step_id );
-      return $this->_current_step->get_title();
+      $args = [
+         'size_unit' => $this->get_size_unit()
+      ];
+      return $this->_current_step->get_title( $args );
    }
 
    /**
@@ -656,7 +668,10 @@ class Configurator {
     */
    public function render_step_options( string $step_id = '' ) {
       $this->set_current_step( $step_id );
-      $this->_current_step->render_options( $this->get_step_configuration() );
+      $args = [
+         'size_unit' => $this->get_size_unit()
+      ];
+      $this->_current_step->render_options( $this->get_step_configuration(), $args );
       return true;
    }
 
@@ -680,7 +695,7 @@ class Configurator {
     */
    public function get_validation_rules( string $step_id = '', string $field = '' ) {
       $this->set_current_step( $step_id );
-      return $this->_current_step->get_validation_rules( $field );
+      return $this->_current_step->get_validation_rules( $field, $this->get_size_unit() );
    }
 
    /**

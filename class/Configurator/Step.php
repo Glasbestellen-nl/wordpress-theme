@@ -20,8 +20,12 @@ class Step {
       return $this->get_field( 'type' );
    }
 
-   public function get_title() {
-      return $this->get_field( 'title' );
+   public function get_title( $args = [] ) {
+      $title = $this->get_field( 'title' );
+      if ( ! empty( $args['size_unit'] ) && $args['size_unit'] == 'cm' ) {
+         $title = str_replace( 'mm', 'cm', $title );
+      }
+      return $title;
    }
 
    public function get_description() {
@@ -51,9 +55,11 @@ class Step {
       return false;
    }
 
-   public function get_options_html( $value = null ) {
+   public function get_options_html( $value = null, $args = [] ) {
       $options = $this->get_options();
       if ( ! $options ) return;
+
+      $size_unit = ! empty( $args['size_unit'] ) ? $args['size_unit'] : 'mm';
 
       $html = '';
       $hide_price = $this->get_field( 'hide_price' );
@@ -64,16 +70,17 @@ class Step {
 
       foreach ( $options as $option ) {
          $selected     = selected( $value, $option->get_id(), false );
+         $title        = $option->get_title( ['size_unit' => $size_unit] );
          $rules        = ( $option->get_validation_rules() ) ? 'data-validation-rules=\'' . $option->get_validation_rules() . '\'' : '';
          $child_steps  = ( $option->get_child_steps() ) ? 'data-child-steps=\'' . $option->get_child_steps_attr() . '\'' : '';
          $plus_price   = ( ! $hide_price  && ! $option->is_default() ) ? apply_filters( 'gb_step_part_price_difference', \Money::display( $option->get_plus_price() ), $this->get_id() ) : '';
-         $html .= '<option value="' . $option->get_id() . '" data-option-value="' . $option->get_value() . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_steps . ' ' . $selected . '>' . $option->get_title() . ' ' . $plus_price . '</option>';
+         $html .= '<option value="' . $option->get_id() . '" data-option-value="' . $option->get_value( $size_unit ) . '" data-option-id="' . $option->get_id() . '" ' . $rules . ' ' . $child_steps . ' ' . $selected . '>' . $title . ' ' . $plus_price . '</option>';
       }
       return $html;
    }
 
-   public function render_options( $value = null ) {
-      echo $this->get_options_html( $value );
+   public function render_options( $value = null, $args = [] ) {
+      echo $this->get_options_html( $value, $args );
    }
 
    public function get_visual() {
@@ -103,11 +110,20 @@ class Step {
       return ! empty( $field['id'] ) ? $field['id'] : false;
    }
 
-   public function get_validation_rules( string $field = '' ) {
+   public function get_validation_rules( string $field = '', $size_unit = 'mm' ) {
       $rules = $this->get_field( 'rules' );
       if ( ! empty( $field ) ) {
          $rules = ! empty( $rules[$field] ) ? $rules[$field] : $rules;
       }
+      $rules = array_map( function( $value ) use( $size_unit ) {
+         if ( ! is_array( $value ) ) {
+            return ( $size_unit == 'cm' && is_numeric( $value ) ) ? $value / 10 : $value;
+         } else {
+            return array_map( function( $value ) use( $size_unit ) {
+               return ( $size_unit == 'cm' && is_numeric( $value ) ) ? $value / 10 : $value;
+            }, $value );
+         }
+      }, $rules );
       return ! empty( $rules ) ? json_encode( $rules ) : false;
    }
 

@@ -16,16 +16,21 @@ class Option {
       return $this->get_field( 'id' );
    }
 
-   public function get_title() {
-      return $this->get_field( 'title' );
+   public function get_title( $args = [] ) {
+      $title = $this->get_field( 'title' );
+      if ( ! empty( $args['size_unit'] ) && $args['size_unit'] == 'cm' ) {
+         $title = str_replace( 'mm', 'cm', $title );
+      }
+      return $title;
    }
 
    public function get_price() {
       return $this->get_field( 'price' );
    }
 
-   public function get_value() {
-      return $this->get_field( 'value' );
+   public function get_value( $size_unit = 'mm' ) {
+      $value = $this->get_field( 'value' );
+      return ( $size_unit == 'cm' && is_numeric( $value ) ) ? $value / 10 : $value;
    }
 
    public function get_validation_rules() {
