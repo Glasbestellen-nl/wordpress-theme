@@ -25,7 +25,7 @@ class Archive {
          'post_type' => 'configurator',
          'posts_per_page' => -1,
          'orderby' => 'menu_order',
-         'order' => 'desc',
+         'order' => 'asc',
          'tax_query' => [
             [
                'taxonomy' => 'startopstelling',

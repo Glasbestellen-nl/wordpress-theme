@@ -180,7 +180,7 @@ get_header();
 
                               <div class="col-12 col-lg-6">
 
-                                 <div class="">
+                                 <div>
 
                                     <div class="configurator__header large-space-below">
 
@@ -198,7 +198,7 @@ get_header();
                                           </div>
 
                                           <div class="col-12 col-md-6">
-                                             <div class="configurator__details">
+                                             <div class="configurator__details js-configurator-details">
                                                 <span class="configurator__detail--price js-config-total-price"><?php echo Money::display( $configurator_total ); ?></span>
                                                 <span class="configurator__detail--tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
                                                 <?php if ( $delivery_time = $configurator->get_setting( 'delivery_time' ) ) { ?>
@@ -319,8 +319,16 @@ get_header();
                                              <?php } ?>
 
                                              <ul class="configurator__checks space-below">
+                                                <?php
+                                                if ( get_field( 'checks' ) ) {
+                                                   while ( have_rows( 'checks' ) ) {
+                                                      the_row();
+                                                      echo '<li class="configurator__checks-item">' . get_sub_field( 'check_title' ) . '</li>';
+                                                   }
+                                                }
+                                                ?>
                                                 <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Bestel check', 'glasbestellen' ) . ':</strong> ' . __( 'Uw bestelling wordt op juistheid en volledigheid gecontroleerd.', 'glasbestellen' ); ?></li>
-                                                <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Klanttevredenheid', 'glasbestellen' ) . ':</strong> ' . sprintf( __( 'Klanten beoordelen ons gemiddeld met een %s.', 'glasbestellen' ), '<a href="' . get_post_type_archive_link( 'review' ) . '" target="_blank" rel="nofollow">' . gb_get_review_average( true ) . '</a>' ); ?></li>
+                                                <li class="configurator__checks-item"><?php echo '<strong>' . __( 'Klantbeoordeling', 'glasbestellen' ) . ':</strong> ' . '<a href="' . get_post_type_archive_link( 'review' ) . '" target="_blank" rel="nofollow">' . gb_get_review_average( true ) . '/10</a>'; ?></li>
                                              </ul>
 
                                           </form>
@@ -349,14 +357,17 @@ get_header();
                                     the_row();
                                     $count ++; ?>
 
-                                    <?php if ( $count == 2 ) { ?>
+                                    <?php if ( count( $technical_details ) > 1 && $count == 2 ) { ?>
                                        <div id="hidden_technical_details_tables" class="d-none">
                                     <?php } ?>
 
-                                    <div class="space-below">
+                                    <div class="large-space-below">
 
                                        <header class="space-below">
                                           <strong><?php the_sub_field( 'title' ); ?></strong>
+                                          <?php if ( get_sub_field( 'subline' ) ) { ?>
+                                             <p><?php the_sub_field( 'subline' ); ?></p>
+                                          <?php } ?>
                                        </header>
 
                                        <div class="space-below">
@@ -393,7 +404,7 @@ get_header();
                                     </div>
 
                                     <?php
-                                    if ( $count == count( $technical_details ) ) echo '</div>'; ?>
+                                    if ( count( $technical_details ) > 1 && $count == count( $technical_details ) ) echo '</div>'; ?>
 
                                  <?php
                                  }
@@ -536,13 +547,20 @@ get_header();
 
                </main>
 
-               <div class="fixed-bottom-wrapper fixed-bottom-wrapper--mobile">
-                  <div class="d-flex align-items-center justify-content-between">
-                     <div>
-                        <span class="js-config-total-price d-block tiny-space-below text-size-medium text-color-blue text-weight-bold"><?php echo Money::display( $configurator_total ); ?></span>
-                        <span class="text-size-small text-color-grey"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
+               <div class="sticky-bar sticky-bar--desktop-top js-sticky-bar" data-trigger='[{"element": ".js-configurator-details", "screen": "desktop"}, {"element": ".js-configurator-details", "screen": "mobile"}]' style="display: none;">
+                  <div class="container">
+                     <div class="row d-flex align-items-center">
+                        <div class="col-4 col-lg-2 offset-lg-6">
+                           <span class="js-config-total-price d-block text-size-medium text-color-blue text-weight-bold"><?php echo Money::display( $configurator_total ); ?></span>
+                           <span class="text-size-tiny text-color-grey"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
+                        </div>
+                        <div class="col-7 offset-1 col-lg-4 offset-lg-0">
+                           <div class="d-flex">
+                              <button class="btn btn--block btn--primary btn--tiny js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
+                              <span class="d-none d-md-flex align-items-center justify-content-center btn btn--block btn--aside js-configurator-save-button small-space-left" data-popup-title="<?php _e( 'Samenstelling als offerte ontvangen', 'glasbestellen' ); ?>" data-formtype="save-configuration" data-meta="<?php the_id(); ?>"><i class="fas fa-file-import"></i> &nbsp;&nbsp;<?php _e( 'Offerte', 'glasbestellen' ); ?></span>
+                           </div>
+                        </div>
                      </div>
-                     <button class="btn btn--primary btn--small btn--next js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
                   </div>
                </div>
 
