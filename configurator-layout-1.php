@@ -242,16 +242,17 @@ get_header();
 
                                                 <div class="configurator__form-row <?php echo $configurator->get_step_class( $step_id ); ?>" data-step-id="<?php echo $step_id; ?>">
 
-                                                   <div class="configurator__form-col configurator__form-info <?php echo ( ! $explanation_id ) ? 'd-none d-md-block' : ''; ?>">
-                                                      <?php if ( $explanation_id ) { ?>
-                                                         <i class="fas fa-info-circle configurator__info-icon js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"></i>
-                                                      <?php } ?>
-                                                   </div>
 
                                                    <div class="configurator__form-col">
                                                       <label class="configurator__form-label <?php echo $label_class; ?>" data-explanation-id="<?php echo $explanation_id; ?>"><?php echo $configurator->get_step_title(); ?></label>
                                                       <?php if ( ( $configurator->is_step_required() && ! $options ) || ( $configurator->is_step_required() && $options && count( $options ) > 1 ) ) { ?>
                                                          <span>*</span>
+                                                      <?php } ?>
+                                                   </div>
+
+                                                   <div class="configurator__form-col configurator__form-info <?php echo ( ! $explanation_id ) ? 'd-none d-md-block' : ''; ?>">
+                                                      <?php if ( $explanation_id ) { ?>
+                                                         <i class="fas fa-info-circle configurator__info-icon js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"></i>
                                                       <?php } ?>
                                                    </div>
 
