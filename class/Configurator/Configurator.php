@@ -494,7 +494,7 @@ class Configurator {
    public function get_step_value( string $step_id = '' ) {
       $value = $this->get_step_configuration( $step_id );
       if ( ! $value && $this->_current_step->get_field( 'show_default' ) ) {
-         return ! empty( $this->_default_configuration[$step_id] ) ? $this->_default_configuration[$step_id] : false;
+         return $this->get_step_default() ? $this->get_step_default() : false;
       }
       return $value;
    }
@@ -648,7 +648,10 @@ class Configurator {
     */
    public function get_step_default( string $step_id = '' ) {
       $this->set_current_step( $step_id );
-      return $this->_current_step->get_default();
+      $args = [
+         'size_unit' => $this->get_size_unit()
+      ];
+      return $this->_current_step->get_default( $args );
    }
 
    /**

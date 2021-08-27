@@ -117,10 +117,10 @@ class Step {
       }
       $rules = array_map( function( $value ) use( $size_unit ) {
          if ( ! is_array( $value ) ) {
-            return $this->validation_rules_map_callback( $value, $size_unit );
+            return $this->convert_mm_string_to_cm( $value, $size_unit );
          } else {
             return array_map( function( $value ) use( $size_unit ) {
-               return $this->validation_rules_map_callback( $value, $size_unit );
+               return $this->convert_mm_string_to_cm( $value, $size_unit );
             }, $value );
          }
       }, $rules );
@@ -135,9 +135,17 @@ class Step {
       return ! empty( $this->_data[$field] ) ? $this->_data[$field] : false;
    }
 
-   public function get_default() {
+   public function get_default( $args = [] ) {
       if ( ! $this->_default ) return;
-      return is_a( $this->_default, 'Configurator\Option' ) ? $this->_default->get_id() : $this->_default;
+      $default = $this->_default;
+
+      if ( is_a( $default, 'Configurator\Option' ) ) {
+         $default = $default->get_id();
+      } else {
+         if ( ! empty( $args['size_unit'] ) && $args['size_unit'] == 'cm' )
+            $default /= 10;
+      }
+      return $default;
    }
 
    protected function set_default() {
@@ -153,7 +161,7 @@ class Step {
       }
    }
 
-   protected function validation_rules_map_callback( $value = '', $size_unit = 'mm' ) {
+   protected function convert_mm_string_to_cm( $value = '', $size_unit = 'mm' ) {
       $value = ( $size_unit == 'cm' && is_numeric( $value ) ) ? $value / 10 : $value;
       $value = preg_replace_callback( '/\d+(?:[,.]\d+)?(?=\s*(?:mm))/', function( $matches ) {
          return ( $matches[0] / 10 );
