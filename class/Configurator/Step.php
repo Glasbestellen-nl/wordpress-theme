@@ -117,10 +117,10 @@ class Step {
       }
       $rules = array_map( function( $value ) use( $size_unit ) {
          if ( ! is_array( $value ) ) {
-            return ( $size_unit == 'cm' && is_numeric( $value ) ) ? $value / 10 : $value;
+            return $this->validation_rules_map_callback( $value, $size_unit );
          } else {
             return array_map( function( $value ) use( $size_unit ) {
-               return ( $size_unit == 'cm' && is_numeric( $value ) ) ? $value / 10 : $value;
+               return $this->validation_rules_map_callback( $value, $size_unit );
             }, $value );
          }
       }, $rules );
@@ -151,7 +151,15 @@ class Step {
             }
          }
       }
+   }
 
+   protected function validation_rules_map_callback( $value = '', $size_unit = 'mm' ) {
+      $value = ( $size_unit == 'cm' && is_numeric( $value ) ) ? $value / 10 : $value;
+      $value = preg_replace_callback( '/\d+(?:[,.]\d+)?(?=\s*(?:mm))/', function( $matches ) {
+         return ( $matches[0] / 10 );
+      }, $value );
+      $value = str_replace( 'mm', 'cm', $value );
+      return $value;
    }
 
 }

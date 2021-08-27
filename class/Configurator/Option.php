@@ -19,6 +19,9 @@ class Option {
    public function get_title( $args = [] ) {
       $title = $this->get_field( 'title' );
       if ( ! empty( $args['size_unit'] ) && $args['size_unit'] == 'cm' ) {
+         $title = preg_replace_callback( '/\d+(?:[,.]\d+)?(?=\s*(?:mm))/', function( $matches ) {
+            return ( $matches[0] / 10 );
+         }, $title );
          $title = str_replace( 'mm', 'cm', $title );
       }
       return $title;
