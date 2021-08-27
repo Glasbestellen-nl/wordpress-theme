@@ -18,25 +18,34 @@ class Oval_Mirror extends \Configurator\Configurator {
 
       if ( ! empty( $configuration['width'] ) && ! empty( $configuration['height'] ) ) {
 
+         $width = $configuration['width'];
+         $height = $configuration['height'];
+
+         if ( $this->get_size_unit() == 'cm' ) {
+            $width  = $this->convert_to_mm( $width );
+            $height = $this->convert_to_mm( $height );
+         }
+
          if ( $price_matrix = $this->get_price_matrix() ) {
-            $x_value = $this->get_option_value( 'width', $configuration['width'] );
-            $y_value = $this->get_option_value( 'height', $configuration['height'] );
+            $x_value = $this->get_option_value( 'width', $width );
+            $y_value = $this->get_option_value( 'height', $height );
+
             $price_table['size'] = $price_matrix->get_price( $x_value, $y_value );
-            
+
             if ( $multiplier = $this->get_metadata( 'price_matrix_multiplier' ) ) {
                $price_table['size'] *= $multiplier;
             }
          }
 
          // Extra shipping large products
-         if ( ( $configuration['width'] > 1199 ) || ( $configuration['height'] > 1199 ) ) {
+         if ( ( $width > 1199 ) || ( $height > 1199 ) ) {
             $price_table['large_shipping'] = $this->get_metadata( 'large_shipping' );
          }
 
          // Price addition for large sizes
          if ( $size_price_additions = $this->get_setting( 'size_price_additions' ) ) {
 
-            $largest_size = ( $configuration['width'] >= $configuration['height'] ) ? $configuration['width'] : $configuration['height'];
+            $largest_size = ( $width >= $height ) ? $width : $height;
             $price_addition = 0;
             $latest_largest = 0;
 
