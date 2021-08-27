@@ -206,7 +206,7 @@ class Configurator {
       if ( empty( $this->_steps ) ) return;
       foreach ( $this->_steps as $step ) {
          $step_id = $step->get_id();
-         $this->_default_configuration[$step_id] = $step->get_default();
+         $this->_default_configuration[$step_id] = $this->get_step_default( $step_id );
       }
    }
 

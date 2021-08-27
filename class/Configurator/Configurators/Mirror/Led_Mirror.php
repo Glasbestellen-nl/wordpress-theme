@@ -19,7 +19,7 @@ class Led_Mirror extends \Configurator\Configurator {
       // Calculate square meters
       if ( ! empty( $configuration['width'] ) && ! empty( $configuration['height'] ) ) {
 
-         $width = $configuration['width'];
+         $width  = $configuration['width'];
          $height = $configuration['height'];
 
          if ( $this->get_size_unit() == 'cm' ) {
