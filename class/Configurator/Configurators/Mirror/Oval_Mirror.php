@@ -18,8 +18,15 @@ class Oval_Mirror extends \Configurator\Configurator {
 
       if ( ! empty( $configuration['width'] ) && ! empty( $configuration['height'] ) ) {
 
-         $width  = $this->get_option_value( 'width', $configuration['width'] );
-         $height = $this->get_option_value( 'height', $configuration['height'] );
+         $width  = $configuration['width'];
+         $height = $configuration['height'];
+
+         if ( $this->get_step_options( 'width' ) ) {
+            $width = $this->get_option_value( 'width', $configuration['width'] );
+         }
+         if ( $this->get_step_options( 'height' ) ) {
+            $height = $this->get_option_value( 'height', $configuration['height'] );
+         }
 
          if ( $price_matrix = $this->get_price_matrix() ) {
 
