@@ -18,17 +18,15 @@ class Oval_Mirror extends \Configurator\Configurator {
 
       if ( ! empty( $configuration['width'] ) && ! empty( $configuration['height'] ) ) {
 
-         $width = $configuration['width'];
-         $height = $configuration['height'];
-
-         if ( $this->get_size_unit() == 'cm' ) {
-            $width  = $this->convert_to_mm( $width );
-            $height = $this->convert_to_mm( $height );
-         }
+         $width  = $this->get_option_value( 'width', $configuration['width'] );
+         $height = $this->get_option_value( 'height', $configuration['height'] );
 
          if ( $price_matrix = $this->get_price_matrix() ) {
-            $x_value = $this->get_option_value( 'width', $width );
-            $y_value = $this->get_option_value( 'height', $height );
+
+            if ( $this->get_size_unit() == 'cm' ) {
+               $x_value  = $this->convert_to_mm( $width );
+               $y_value  = $this->convert_to_mm( $height );
+            }
 
             $price_table['size'] = $price_matrix->get_price( $x_value, $y_value );
 
@@ -45,7 +43,7 @@ class Oval_Mirror extends \Configurator\Configurator {
          // Price addition for large sizes
          if ( $size_price_additions = $this->get_setting( 'size_price_additions' ) ) {
 
-            $largest_size = ( $width >= $height ) ? $width : $height;
+            $largest_size   = ( $width >= $height ) ? $width : $height;
             $price_addition = 0;
             $latest_largest = 0;
 

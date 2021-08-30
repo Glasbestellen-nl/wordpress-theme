@@ -439,7 +439,7 @@ class Configurator {
    public function get_option_value( string $step_id = '', $option_id ) {
       $option = $this->get_option( $step_id, $option_id );
       if ( ! $option ) return;
-      return $option->get_value();
+      return $option->get_value( $this->get_size_unit() );
    }
 
    /**
