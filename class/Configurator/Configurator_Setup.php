@@ -39,6 +39,9 @@ class Configurator_Setup {
          case 'oval-mirror' :
             return new Configurators\Mirror\Oval_Mirror( $configurator_id );
             break;
+         case 'sloping-roof-mirror' :
+            return new Configurators\Mirror\Sloping_Roof_Mirror( $configurator_id );
+            break;
          case 'door' :
             return new Configurators\Door\Configurator( $configurator_id );
             break;

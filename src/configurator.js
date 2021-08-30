@@ -225,16 +225,23 @@ const Configurator = (function() {
 
                   if (rules.max.dependence !== undefined) {
 
-                     let dependentStepId = rules.max.dependence;
-                     let dependentValue  = $('.js-step-' + dependentStepId).find('.js-form-validate').val();
+                     let dependentStepIds = rules.max.dependence;
+                     dependentStepIds = !Array.isArray(dependentStepIds) && [dependentStepIds] || dependentStepIds;
 
-                     if (dependentValue) {
-                        if (rules.max.greater && rules.max.less) {
-                           max = (value > parseInt(dependentValue)) ? parseInt(rules.max.greater) : parseInt(rules.max.less);
-                        } else {
-                           max = parseInt(dependentValue);
+                     let previousMax = 0;
+                     dependentStepIds.forEach((dependentStepId) => {
+
+                        let dependentValue  = $('.js-step-' + dependentStepId).find('.js-form-validate').val();
+
+                        if (dependentValue && dependentValue > previousMax) {
+                           if (rules.max.greater && rules.max.less) {
+                              max = (value > parseInt(dependentValue)) ? parseInt(rules.max.greater) : parseInt(rules.max.less);
+                           } else {
+                              max = parseInt(dependentValue);
+                           }
+                           previousMax = max;
                         }
-                     }
+                     });
 
                   } else {
                      max = parseInt(rules.max);
