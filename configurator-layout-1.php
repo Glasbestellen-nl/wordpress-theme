@@ -557,7 +557,9 @@ get_header();
                         </div>
                         <div class="col-7 offset-1 col-lg-4 offset-lg-0">
                            <div class="d-flex">
-                              <button class="btn btn--block btn--primary btn--tiny js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
+                              <?php if ( ! get_field( 'disable_quote_button' ) ) { ?>
+                                 <button class="btn btn--block btn--primary btn--tiny js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
+                              <?php } ?>
                               <span class="d-none d-md-flex align-items-center justify-content-center btn btn--block btn--aside js-configurator-save-button small-space-left" data-popup-title="<?php _e( 'Samenstelling als offerte ontvangen', 'glasbestellen' ); ?>" data-formtype="save-configuration" data-meta="<?php the_id(); ?>"><i class="fas fa-file-import"></i> &nbsp;&nbsp;<?php _e( 'Offerte', 'glasbestellen' ); ?></span>
                            </div>
                         </div>
