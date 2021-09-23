@@ -48,6 +48,9 @@ class Configurator_Setup {
          case 'sliding-door' :
             return new Configurators\Door\Sliding_Door( $configurator_id );
             break;
+         case 'sliding-door-simple' :
+            return new Configurators\Door\Sliding_Door_Simple( $configurator_id );
+            break;
          case 'tabletop' :
             return new Configurators\Tabletop\Configurator( $configurator_id );
             break;
