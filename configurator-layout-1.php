@@ -352,7 +352,30 @@ get_header();
 
                               <?php
                               $startopstelling = get_first_term_by_id( get_the_id(), 'startopstelling' );
-                              if ( $technical_details = get_field( 'technical_details', 'term_' . $startopstelling ) ) {
+                              if ( have_rows( 'technical_details' ) ) { ?>
+
+                                 <table class="details-table">
+                                    <tbody>
+
+                                       <?php
+                                       $rows_count = 0;
+                                       while ( have_rows( 'technical_details' ) ) {
+                                          the_row();
+                                          $rows_count ++;
+                                          $class = ( $rows_count % 2 ) ? 'details-table__row' : 'details-table__row details-table__row--even'; ?>
+
+                                          <tr class="<?php echo $class; ?>">
+                                             <td class="details-table__col"><?php the_sub_field( 'label' ); ?></td>
+                                             <td class="details-table__col"><?php the_sub_field( 'description' ); ?></td>
+                                          </tr>
+
+                                       <?php } ?>
+
+                                    </tbody>
+                                 </table>
+                              <?php
+                              }
+                              elseif ( $technical_details = get_field( 'technical_details', 'term_' . $startopstelling ) ) {
                                  $count = 0;
                                  while ( have_rows( 'technical_details', 'term_' . $startopstelling ) ) {
                                     the_row();
@@ -409,29 +432,8 @@ get_header();
 
                                  <?php
                                  }
-                              } elseif ( have_rows( 'technical_details' ) ) { ?>
-
-                                 <table class="details-table">
-                                    <tbody>
-
-                                       <?php
-                                       $rows_count = 0;
-                                       while ( have_rows( 'technical_details' ) ) {
-                                          the_row();
-                                          $rows_count ++;
-                                          $class = ( $rows_count % 2 ) ? 'details-table__row' : 'details-table__row details-table__row--even'; ?>
-
-                                          <tr class="<?php echo $class; ?>">
-                                             <td class="details-table__col"><?php the_sub_field( 'label' ); ?></td>
-                                             <td class="details-table__col"><?php the_sub_field( 'description' ); ?></td>
-                                          </tr>
-
-                                       <?php } ?>
-
-                                    </tbody>
-                                 </table>
-
-                              <?php } ?>
+                              }
+                              ?>
 
                            </article>
 
