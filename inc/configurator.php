@@ -1,6 +1,22 @@
 <?php
 use Configurator\Configurator_Setup;
 
+function gb_configurator_show_price_table_array() {
+
+   if ( ! empty( $_GET['show_price_table'] ) && is_singular( 'configurator' ) ) {
+
+      global $post;
+
+      $configurator = gb_get_configurator( $post->ID );
+      echo '<pre>';
+      var_dump( $configurator->get_price_table() );
+      echo '</pre>';
+
+   }
+
+}
+add_action( 'wp', 'gb_configurator_show_price_table_array' );
+
 /**
  * Add configurator body classes
  */
