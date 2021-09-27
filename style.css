@@ -905,7 +905,8 @@ Tables
 }
 
 .details-table__col p:last-child,
-.details-table__col ul:last-child {
+.details-table__col ul:last-child,
+.details-table__col ol:last-child {
    margin-bottom: 0;
 }
 
