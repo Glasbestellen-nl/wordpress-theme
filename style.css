@@ -904,6 +904,11 @@ Tables
    font-size: 0.875em;
 }
 
+.details-table__col p:last-child,
+.details-table__col ul:last-child {
+   margin-bottom: 0;
+}
+
 /*--------------------------------------------------------------
 Links list
 --------------------------------------------------------------*/
