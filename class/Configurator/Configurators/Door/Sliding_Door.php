@@ -16,6 +16,8 @@ class Sliding_Door extends Configurator {
 
       $m2s = 0;
 
+      $price_table['rail_width'] = $this->get_metadata( 'rail_1000' );
+
       if ( ! empty( $configuration['width'] ) && ! empty( $configuration['height'] ) ) {
 
          $m2s = \Calculate::to_square_meters( $configuration['width'], $configuration['height'] );
@@ -23,9 +25,7 @@ class Sliding_Door extends Configurator {
          $width = $configuration['width'];
 
          // Rail price
-         if ( $width <= 1000 ) {
-            $price_table['rail_width'] = $this->get_metadata( 'rail_1000' );
-         } else {
+         if ( $width > 1000 ) {
             $price_table['rail_width'] = $this->get_metadata( 'rail_1500' );
          }
       }
