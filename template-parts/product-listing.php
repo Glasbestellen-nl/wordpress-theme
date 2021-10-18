@@ -1,4 +1,7 @@
-<?php $product_count = ! empty( $product_count ) ? $product_count : 0; ?>
+<?php
+$product_count = ! empty( $product_count ) ? $product_count : 0;
+$static_price = get_field( 'static_price' );
+?>
 
 <div class="product-listing <?php echo ( $product_count == 1 ) ? 'product-listing--first' : ''; ?>">
    <a href="<?php the_permalink(); ?>" class="product-listing__image">
@@ -7,7 +10,7 @@
    <div class="product-listing__body">
       <h2 class="h5"><a href="<?php the_permalink(); ?>" class="product-listing__title" data-mh="product-listing-title"><?php the_title(); ?></a></h2>
       <div class="product-listing__info">
-         <span class="product-listing__price"><?php echo sprintf( __( 'v.a. %s', 'glasbestellen' ), Money::display( $configurator->get_total_price( true, true ) ) ); ?></span>
+         <span class="product-listing__price"><?php echo ( ( ! $static_price ) ? __( 'v.a.', 'glasbestellen' ) : '' ) . ' ' . Money::display( $configurator->get_total_price( true, true ) ); ?></span>
          <span class="product-listing__tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
          <span class="product-listing__shipping"><i class="fas fa-shipping-fast"></i> <?php _e( 'Gratis verzending', 'glasbestellen' ); ?></span>
       </div>
