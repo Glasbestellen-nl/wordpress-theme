@@ -46,7 +46,7 @@ class Sloping_Roof_Mirror extends \Configurator\Configurator {
     */
    public function get_step_value( string $step_id = '' ) {
       $value = $this->get_step_configuration( $step_id );
-      if ( ! isset( $value ) && $this->_current_step->get_field( 'show_default' ) ) {
+      if ( ( ! empty( $value ) || $value !== 0 ) && $this->_current_step->get_field( 'show_default' ) ) {
          return $this->get_step_default() ? $this->get_step_default() : false;
       }
       return $value;
