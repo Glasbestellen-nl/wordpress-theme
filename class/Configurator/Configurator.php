@@ -731,6 +731,8 @@ class Configurator {
          if ( ! empty( $input ) ) {
             $option_title = $this->get_option_title( $step_id, $input );
             $value = $option_title ? $option_title : $input;
+         } elseif ( 0 == $input ) {
+            $value = 0;
          } else {
             $value = __( 'Geen' );
          }

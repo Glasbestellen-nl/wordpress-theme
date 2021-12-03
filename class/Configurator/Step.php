@@ -115,6 +115,7 @@ class Step {
       if ( ! empty( $field ) ) {
          $rules = ! empty( $rules[$field] ) ? $rules[$field] : $rules;
       }
+      if ( ! $rules ) return;
       $rules = array_map( function( $value ) use( $size_unit ) {
          if ( ! is_array( $value ) ) {
             return $this->convert_mm_string_to_cm( $value, $size_unit );
