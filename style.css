@@ -2116,7 +2116,8 @@ Gallery
    transition: transform .3s;
 }
 
-.gallery__item:hover .gallery__image {
+.gallery__item:hover .gallery__image,
+.gallery__item:hover picture.gallery__image img {
    -webkit-transform: scale(1.1);
    -moz-transform: scale(1.1);
    -o-transform: scale(1.1);
