@@ -403,7 +403,7 @@ img[data-lazy-src] {
 
 img.lazyloaded {
 	/* prepare the future animation */
-	transition: opacity .5s linear 0.2s;
+	transition: opacity .3s linear 0.2s;
 
 	/* we set the opacity to 1 to do the magic */
 	opacity: 1;
@@ -1923,7 +1923,8 @@ Teaser
    transform: scale(1.1);
 }
 
-.teaser__image--cover .teaser__image-img {
+.teaser__image--cover .teaser__image-img,
+.teaser__image--cover .teaser__image-img img {
    height: 100%;
    width: 100%;
    position: absolute;
@@ -2241,7 +2242,8 @@ Hero
    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
 }
 
-.hero__background {
+.hero__background,
+.hero__background img {
    height: 100%;
    width: 100%;
    position: absolute;
