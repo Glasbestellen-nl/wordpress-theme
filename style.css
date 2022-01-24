@@ -1924,7 +1924,7 @@ Teaser
 }
 
 .teaser__image--cover .teaser__image-img,
-.teaser__image--cover .teaser__image-img picture img {
+picture.teaser__image--cover .teaser__image-img img {
    height: 100%;
    width: 100%;
    position: absolute;
@@ -2243,7 +2243,7 @@ Hero
 }
 
 .hero__background,
-.hero__background picture img {
+picture.hero__background img {
    height: 100%;
    width: 100%;
    position: absolute;
