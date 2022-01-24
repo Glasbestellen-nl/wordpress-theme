@@ -50,7 +50,7 @@ $cart = gb_get_cart(); ?>
 
                                     <?php if ( $cart->get_item_thumbnail() ) { ?>
                                        <a href="<?php echo $cart->get_item_thumbnail(); ?>" class="fancybox cart-table__col cart-table__col--image" title="<?php echo $cart->get_item_title(); ?>">
-                                          <img data-src="<?php echo $cart->get_item_thumbnail(); ?>" class="lazyload rounded-corners">
+                                          <img data-src="<?php echo $cart->get_item_thumbnail(); ?>" class="rounded-corners">
                                        </a>
                                     <?php } ?>
 

@@ -104,7 +104,7 @@ get_header(); ?>
                               <div class="row">
                                  <div class="col-6 offset-3 col-md-3 offset-md-0 col-lg-2">
                                     <div class="avatar avatar--banner box-shadow space-sm-below">
-                                       <img data-src="<?php echo get_template_directory_uri() . '/assets/images/sales-medewerker.jpg'; ?>" class="lazyload avatar__image" />
+                                       <img src="<?php echo get_template_directory_uri() . '/assets/images/sales-medewerker.jpg'; ?>" class="avatar__image" />
                                     </div>
                                  </div>
 
@@ -160,7 +160,7 @@ get_header(); ?>
                                  <div class="col-6 col-md-4 col-lg-3 js-brick">
 
                                     <a href="<?php echo $image['url']; ?>" class="gallery__item fancybox" rel="product-images" title="<?php echo $image['caption']; ?>">
-                                       <img data-src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" class="lazyload gallery__image" />
+                                       <img src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" class="gallery__image" />
                                     </a>
 
                                  </div>

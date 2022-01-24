@@ -98,7 +98,7 @@ get_header();
 
                         <div class="col-12 col-md-6 col-lg-12">
                            <div class="space-below">
-                              <img data-src="<?php echo get_template_directory_uri() . '/assets/images/glasbestellen-kantoor.jpg'; ?>" class="lazyload rounded-corners box-shadow--dark">
+                              <img src="<?php echo get_template_directory_uri() . '/assets/images/glasbestellen-kantoor.jpg'; ?>" class="rounded-corners box-shadow--dark">
                            </div>
                         </div>
 

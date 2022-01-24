@@ -33,7 +33,7 @@ get_header();
                                     <i class="fas fa-chevron-right"></i>
                                  </div>
                               </div>
-                              <img data-src="<?php echo $gallery_images[0]['url']; ?>" class="lazyload image-slider__img image-slider__main-img js-main" alt="<?php echo $gallery_images[0]['alt']; ?>">
+                              <img src="<?php echo $gallery_images[0]['url']; ?>" class="image-slider__img image-slider__main-img js-main" alt="<?php echo $gallery_images[0]['alt']; ?>">
                            </div>
 
                            <div class="image-slider__thumbs">
@@ -44,7 +44,7 @@ get_header();
                                  $index ++; ?>
 
                                  <div class="image-slider__container image-slider__thumb js-thumb <?php echo ( $index == 1 ) ? 'current' : ''; ?>">
-                                    <img data-src="<?php echo $image['url']; ?>" class="lazyload image-slider__img image-slider__thumb-img" alt="<?php echo $image['alt']; ?>" data-index="<?php echo $index; ?>" data-image="<?php echo $image['url']; ?>">
+                                    <img src="<?php echo $image['url']; ?>" class="image-slider__img image-slider__thumb-img" alt="<?php echo $image['alt']; ?>" data-index="<?php echo $index; ?>" data-image="<?php echo $image['url']; ?>">
                                  </div>
 
                               <?php } ?>

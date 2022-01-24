@@ -11,7 +11,7 @@
                <a href="<?php echo get_post_type_archive_link( 'product' ); ?>" class="teaser space-below">
 
                   <div class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/glass-home.png'; ?>" alt="Glas op maat" class="lazyload teaser__image-img">
+                     <img src="<?php echo get_template_directory_uri() . '/assets/images/glass-home.png'; ?>" alt="Glas op maat" class="teaser__image-img">
                   </div>
 
                   <div class="teaser__body teaser__body--full">
@@ -28,7 +28,7 @@
                <div class="teaser space-below">
 
                   <a href="<?php echo get_post_type_archive_link( 'product' ); ?>douchedeur/" class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/douchedeur.png'; ?>" alt="Glazen douchedeur op maat" class="lazyload teaser__image-img">
+                     <img src="<?php echo get_template_directory_uri() . '/assets/images/douchedeur.png'; ?>" alt="Glazen douchedeur op maat" class="teaser__image-img">
                   </a>
 
                   <div class="teaser__body teaser__body--bottom">
@@ -44,7 +44,7 @@
                <div class="teaser space-below">
 
                   <a href="<?php echo get_post_type_archive_link( 'product' ); ?>glazen-achterwand-keuken/" class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/keuken-achterwand.png'; ?>" alt="Glazen keuken achterwand op maat" class="lazyload teaser__image-img">
+                     <img src="<?php echo get_template_directory_uri() . '/assets/images/keuken-achterwand.png'; ?>" alt="Glazen keuken achterwand op maat" class="teaser__image-img">
                   </a>
 
                   <div class="teaser__body teaser__body--bottom">
@@ -60,7 +60,7 @@
                <div class="teaser space-below">
 
                   <a href="<?php echo get_post_type_archive_link( 'product' ); ?>douchewand/" class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/douchewand.png'; ?>" alt="Douchewand op maat" class="lazyload teaser__image-img">
+                     <img src="<?php echo get_template_directory_uri() . '/assets/images/douchewand.png'; ?>" alt="Douchewand op maat" class="teaser__image-img">
                   </a>
 
                   <div class="teaser__body teaser__body--bottom">
@@ -76,7 +76,7 @@
                <div class="teaser space-below">
 
                   <a href="<?php echo get_post_type_archive_link( 'product' ); ?>glazen-balustrade/" class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/glazen-balustrade.jpg'; ?>" alt="Glazen balustrade zonder handrailing" class="lazyload teaser__image-img">
+                     <img src="<?php echo get_template_directory_uri() . '/assets/images/glazen-balustrade.jpg'; ?>" alt="Glazen balustrade zonder handrailing" class="teaser__image-img">
                   </a>
 
                   <div class="teaser__body teaser__body--bottom">
@@ -92,7 +92,7 @@
                <div class="teaser space-below">
 
                   <a href="<?php echo get_post_type_archive_link( 'product' ); ?>douchecabine/" class="teaser__image teaser__image--cover">
-                     <img data-src="https://www.glasbestellen.nl/wp-content/uploads/2016/05/Douchecabine-met-zijpaneel-op-muur.jpg" alt="Douchecabine op maat" class="lazyload teaser__image-img">
+                     <img src="https://www.glasbestellen.nl/wp-content/uploads/2016/05/Douchecabine-met-zijpaneel-op-muur.jpg" alt="Douchecabine op maat" class="teaser__image-img">
                   </a>
 
                   <div class="teaser__body teaser__body--bottom">
@@ -108,7 +108,7 @@
                <a href="<?php echo get_post_type_archive_link( 'review' ); ?>" class="teaser space-below">
 
                   <div class="teaser__image teaser__image--cover">
-                     <img data-src="<?php echo get_template_directory_uri() . '/assets/images/glasbestellen-kantoor.jpg'; ?>" alt="Glasbestellen kantoor" class="lazyload teaser__image-img">
+                     <img src="<?php echo get_template_directory_uri() . '/assets/images/glasbestellen-kantoor.jpg'; ?>" alt="Glasbestellen kantoor" class="teaser__image-img">
                   </div>
 
                   <div class="teaser__body teaser__body--full">
@@ -140,7 +140,7 @@
                      <div class="teaser teaser--tall space-below">
 
                         <a href="<?php echo get_post_type_archive_link( 'product' ); ?>spiegels-met-verlichting/" class="teaser__image teaser__image--cover">
-                           <img data-src="<?php echo get_template_directory_uri() . '/assets/images/spiegels-met-verlichting.jpeg'; ?>" alt="Spiegels met verlichting" class="lazyload teaser__image-img">
+                           <img src="<?php echo get_template_directory_uri() . '/assets/images/spiegels-met-verlichting.jpeg'; ?>" alt="Spiegels met verlichting" class="teaser__image-img">
                         </a>
 
                         <div class="teaser__body teaser__body--bottom">
@@ -156,7 +156,7 @@
                      <div class="teaser space-below">
 
                         <a href="<?php echo get_post_type_archive_link( 'product' ); ?>beloopbaar-glas/" class="teaser__image teaser__image--cover">
-                           <img data-src="<?php echo get_template_directory_uri() . '/assets/images/beloopbaar-glas-2.png'; ?>" alt="Beloopbaar glas" class="lazyload teaser__image-img">
+                           <img src="<?php echo get_template_directory_uri() . '/assets/images/beloopbaar-glas-2.png'; ?>" alt="Beloopbaar glas" class="teaser__image-img">
                         </a>
 
                         <div class="teaser__body teaser__body--bottom">
@@ -172,7 +172,7 @@
                      <div class="teaser space-below">
 
                         <a href="<?php echo get_post_type_archive_link( 'product' ); ?>glazen-achterwand-keuken/" class="teaser__image teaser__image--cover">
-                           <img data-src="<?php echo get_template_directory_uri() . '/assets/images/glazen-keuken-achterwand-fornuis.png'; ?>" alt="Glazen keuken achterwand fornuis" class="lazyload teaser__image-img">
+                           <img src="<?php echo get_template_directory_uri() . '/assets/images/glazen-keuken-achterwand-fornuis.png'; ?>" alt="Glazen keuken achterwand fornuis" class="teaser__image-img">
                         </a>
 
                      </div>

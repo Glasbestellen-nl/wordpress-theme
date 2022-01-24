@@ -50,7 +50,7 @@
 
             </div>
 
-            <img data-src="<?php echo gb_get_cover_image_url( get_the_id() ); ?>" class="lazyload hero__background">
+            <img src="<?php echo gb_get_cover_image_url( get_the_id() ); ?>" class="hero__background">
 
          </div>
 
@@ -157,7 +157,7 @@
                            <div class="col-6 col-md-4 col-lg-3 js-brick">
 
                               <a href="<?php echo $image['url']; ?>" class="gallery__item fancybox" rel="product-images" title="<?php echo $image['caption']; ?>">
-                                 <img data-src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" class="lazyload gallery__image" />
+                                 <img src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" class="gallery__image" />
                               </a>
 
                            </div>

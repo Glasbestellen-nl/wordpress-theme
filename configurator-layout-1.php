@@ -77,7 +77,7 @@ get_header();
                                              </div>
                                           <?php } ?>
                                           <a href="<?php echo $gallery_images[0]['url']; ?>" class="fancybox" title="<?php echo $gallery_images[0]['title']; ?>">
-                                             <img data-src="<?php echo $gallery_images[0]['url']; ?>" class="lazyload image-slider__img image-slider__main-img js-main" alt="<?php echo $gallery_images[0]['alt']; ?>">
+                                             <img src="<?php echo $gallery_images[0]['url']; ?>" class="image-slider__img image-slider__main-img js-main" alt="<?php echo $gallery_images[0]['alt']; ?>">
                                           </a>
                                        </div>
 
@@ -88,7 +88,7 @@ get_header();
                                           foreach ( $gallery_images as $image ) {
                                              $index ++; ?>
                                              <div class="image-slider__container image-slider__thumb js-thumb <?php echo ( $index == 1 ) ? 'current' : ''; ?>">
-                                                <img data-src="<?php echo $image['sizes']['medium']; ?>" class="lazyload image-slider__img image-slider__thumb-img" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" data-index="<?php echo $index; ?>" data-image="<?php echo $image['url']; ?>">
+                                                <img src="<?php echo $image['sizes']['medium']; ?>" class="image-slider__img image-slider__thumb-img" alt="<?php echo $image['alt']; ?>" title="<?php echo $image['title']; ?>" data-index="<?php echo $index; ?>" data-image="<?php echo $image['url']; ?>">
                                              </div>
 
                                           <?php } ?>
@@ -138,7 +138,7 @@ get_header();
                                                 <div class="video-list__item">
                                                    <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
                                                       <div class="lr-video__play"></div>
-                                                      <img data-src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
+                                                      <img src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lr-video__img">
                                                    </a>
                                                    <span class="video-list__item-caption"><?php _e( 'Hoe meten?', 'glasbestellen' ); ?></span>
                                                 </div>
@@ -151,7 +151,7 @@ get_header();
                                                 <div class="video-list__item">
                                                    <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
                                                       <div class="lr-video__play"></div>
-                                                      <img data-src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
+                                                      <img src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lr-video__img">
                                                    </a>
                                                    <span class="video-list__item-caption"><?php _e( 'Hoe monteren?', 'glasbestellen' ); ?></span>
                                                 </div>
@@ -164,7 +164,7 @@ get_header();
                                                 <div class="video-list__item">
                                                    <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
                                                       <div class="lr-video__play"></div>
-                                                      <img data-src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lazyload lr-video__img">
+                                                      <img src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lr-video__img">
                                                    </a>
                                                    <span class="video-list__item-caption"><?php _e( 'Uitleg configurator', 'glasbestellen' ); ?></span>
                                                 </div>
@@ -191,7 +191,7 @@ get_header();
 
                                              <?php if ( get_field( 'show_energy_label' ) ) { ?>
                                                 <div class="configurator__energy-label">
-                                                   <img data-src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" class="lazyload" title="<?php _e( 'Energielabel', 'glasbestellen' ); ?>">
+                                                   <img src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" title="<?php _e( 'Energielabel', 'glasbestellen' ); ?>">
                                                 </div>
                                              <?php } ?>
 

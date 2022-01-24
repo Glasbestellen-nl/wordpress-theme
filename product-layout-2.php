@@ -54,7 +54,7 @@ get_header();
             </div>
 
             <?php if ( $background_image = get_field( 'background_image' ) ) { ?>
-               <img data-src="<?php echo $background_image['url']; ?>" class="lazyload hero__background" alt="<?php echo $background_image['alt']; ?>">
+               <img src="<?php echo $background_image['url']; ?>" class="hero__background" alt="<?php echo $background_image['alt']; ?>">
             <?php } ?>
 
          </div>
@@ -78,7 +78,7 @@ get_header();
                            <div class="col-12 col-md-5 col-lg-4">
                               <?php if ( $image = get_sub_field( 'featured_item_image' ) ) { ?>
                                  <a href="<?php echo $image['url']; ?>" class="fancybox space-below">
-                                    <img data-src="<?php echo $image['sizes']['medium_large']; ?>" class="lazyload rounded-corners box-shadow" alt="<?php echo $image['alt']; ?>">
+                                    <img src="<?php echo $image['sizes']['medium_large']; ?>" class="rounded-corners box-shadow" alt="<?php echo $image['alt']; ?>">
                                  </a>
                               <?php } ?>
                            </div>

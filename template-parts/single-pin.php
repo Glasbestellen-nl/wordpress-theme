@@ -4,7 +4,7 @@
 
       <div class="col-12 col-md-5 col-lg-5">
          <a href="<?php echo get_the_post_thumbnail_url(); ?>" class="fancybox">
-            <img data-src="<?php echo get_the_post_thumbnail_url(); ?>" class="lazyload pin__image space-below" alt="<?php echo get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true ); ?>">
+            <img src="<?php echo get_the_post_thumbnail_url(); ?>" class="pin__image space-below" alt="<?php echo get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true ); ?>">
          </a>
       </div>
 

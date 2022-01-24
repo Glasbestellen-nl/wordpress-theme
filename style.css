@@ -383,14 +383,14 @@ Iconic link
 Lazyloading
 --------------------------------------------------------------*/
 
-.lazyload,
+/* .lazyload,
 .lazyloading {
     opacity: 0 !important;
 }
 .lazyloaded {
     opacity: 1;
     transition: opacity 150ms;
-}
+} */
 
 /*--------------------------------------------------------------
 Spacing
