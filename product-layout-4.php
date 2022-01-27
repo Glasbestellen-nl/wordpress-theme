@@ -69,6 +69,7 @@ get_header(); ?>
 
                      <?php
                      $items = $archive->get_items_query_object();
+                     $product_id = get_the_id(); // To use to check in product listing (temporary);
                      if ( $items->have_posts() ) { ?>
 
                         <?php if ( ! $archive->get_filters() ) { ?>
