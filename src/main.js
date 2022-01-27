@@ -253,7 +253,13 @@
          const title = current.attr('title');
 
          // Change main image url
-         main.attr('src', url).parent('a').attr('href', url);
+         if (main.is('picture')) {
+            main.find('source').attr('srcset', url);
+            main.find('img').attr('src', url);
+            main.parent('a').attr('href', url);
+         } else {
+            main.attr('src', url).parent('a').attr('href', url);
+         }
 
          // Change main image title
          main.parent('a').attr('title', title);
