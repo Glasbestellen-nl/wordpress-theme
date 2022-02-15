@@ -35,7 +35,7 @@ class Led_Mirror extends \Configurator\Configurator {
          }
 
          // Extra shipping large products
-         if ( ( $width > 1199 ) || ( $height > 1199 ) ) {
+         if ( ( $width > 1200 ) || ( $height > 1200 ) ) {
             $price_table['large_shipping'] = $this->get_metadata( 'large_shipping' );
          }
 
