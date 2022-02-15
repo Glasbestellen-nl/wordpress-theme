@@ -8,7 +8,7 @@ $static_price = get_field( 'static_price' );
       <img src="<?php echo get_the_post_thumbnail_url( get_the_id(), 'large' ); ?>" class="product-listing__image-img" alt="<?php echo get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true ); ?>">
    </a>
    <div class="product-listing__body">
-      <?php if ( ! empty( $product_id ) && in_array( $product_id, [2773, 3940, 4206] ) ) { // Temporary ?>
+      <?php if ( ! empty( $product_id ) && in_array( $product_id, [2773, 3940, 4206, 1891, 1916] ) ) { // Temporary ?>
          <h3 class="h5"><a href="<?php the_permalink(); ?>" class="product-listing__title" data-mh="product-listing-title"><?php the_title(); ?></a></h3>
       <?php } else { ?>
          <h2 class="h5"><a href="<?php the_permalink(); ?>" class="product-listing__title" data-mh="product-listing-title"><?php the_title(); ?></a></h2>
