@@ -2,6 +2,7 @@
     "require": {
         "mollie/mollie-api-php": "^2.0",
         "theiconic/php-ga-measurement-protocol": "^2.0",
-        "vitalybaev/google-merchant-feed": "^2.0"
+        "vitalybaev/google-merchant-feed": "^2.0",
+        "activecampaign/api-php": "^2.0"
     }
 }

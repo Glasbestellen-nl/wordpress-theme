@@ -8,16 +8,16 @@ class Active_Campaign_Wrapper {
 
    protected static $instance;
 
-   protected static $ac;
+   protected static $activecampaign;
 
    protected function __construct() {
       try {
-         $ac = new ActiveCampaign( ACTIVECAMPAIGN_URL, ACTIVECAMPAIGN_API_KEY );
-         if ( ! (int) $ac->credentials_test() ) {
-            error_log( 'Access denied: Invalid credentials (URL and/or API key).' )
+         $activecampaign = new ActiveCampaign( self::ACTIVECAMPAIGN_URL, self::ACTIVECAMPAIGN_API_KEY );
+         if ( ! (int) $activecampaign->credentials_test() ) {
+            error_log( 'Access denied: Invalid credentials (URL and/or API key).' );
             exit();
          }
-         self::$ac = $ac;
+         self::$activecampaign = $activecampaign;
       } catch ( Exception $e ) {
          error_log( $e->getMessage() );
       }
@@ -30,10 +30,10 @@ class Active_Campaign_Wrapper {
       return self::$instance;
    }
 
-   public static function create_contact( string $email, array $contact_data = [] ) {
+   public static function update_contact( string $email, array $contact_data = [] ) {
       try {
          $post_data = [...$contact_data, 'email' => $email];
-         $response = self::$ac->api( 'contact/sync', $contact_data );
+         $response = self::$activecampaign->api( 'contact/sync', $post_data );
          if ( ! (int) $response->success ) {
             error_log( 'Syncing contact failed. Error returned: ' . $response->error );
             exit();
@@ -44,18 +44,23 @@ class Active_Campaign_Wrapper {
       }
    }
 
-   public static function log_event( string $email, string $event, $event_data ) {
+   public static function log_event( string $email, string $event, string $event_data = '' ) {
       try {
-         $success = self::create_contact( $email );
+         $success = self::update_contact( $email );
          if ( ! $success ) return;
-         self::$ac->track_actid = ACTIVECAMPAIGN_ACTID;
-         self::$ac->track_key   = ACTIVECAMPAIGN_EVENT_KEY;
-         self::$ac->track_email = $email;
-         $response = self::$ac->api( 'tracking/log', $post_data );
+         self::$activecampaign->track_actid = self::ACTIVECAMPAIGN_ACTID;
+         self::$activecampaign->track_key   = self::ACTIVECAMPAIGN_EVENT_KEY;
+         self::$activecampaign->track_email = $email;
+         $post_data = [
+            'event' => $event,
+            'eventdata' => $event_data
+         ];
+         $response = self::$activecampaign->api( 'tracking/log', $post_data );
          if ( ! (int) $response->success ) {
-            error_log( 'Tracking event failed: ' . $response->error );
+            error_log( 'Tracking event failed' );
             exit();
          }
+         return $response;
       } catch ( Exception $e ) {
          error_log( $e->getMessage() );
       }
