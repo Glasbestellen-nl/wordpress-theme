@@ -107,4 +107,4 @@ function gb_trigger_activecampaign_purchase_events( $transaction, $cart ) {
       $category_ids[] = $category_id;
    }
 }
-add_action( 'gb_webhook_payment_success', 'gb_trigger_activecampaign_purchase_events' );
+add_action( 'gb_webhook_payment_success', 'gb_trigger_activecampaign_purchase_events', 10, 2 );
