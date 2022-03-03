@@ -73,7 +73,7 @@ function gb_webhook_template_include( $template ) {
                   ->sendItem();
             }
 
-            do_action( 'gb_webhook_payment_success', $transaction, $cart );
+            // do_action( 'gb_webhook_payment_success', $transaction, $cart );
          }
 
       } catch ( \Mollie\Api\Exceptions\ApiException $e ) {
@@ -107,4 +107,4 @@ function gb_trigger_activecampaign_purchase_events( $transaction, $cart ) {
       $category_ids[] = $category_id;
    }
 }
-add_action( 'gb_webhook_payment_success', 'gb_trigger_activecampaign_purchase_events', 10, 2 );
+// add_action( 'gb_webhook_payment_success', 'gb_trigger_activecampaign_purchase_events', 10, 2 );
