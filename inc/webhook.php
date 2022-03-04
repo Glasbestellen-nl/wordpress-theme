@@ -62,6 +62,10 @@ function gb_webhook_template_include( $template ) {
             $cart = new Cart( $transaction->get_items() );
 
             // Transaction item requests to analytics
+            $category_ids = [];
+            $acw = Active_Campaign_Wrapper::get_instance();
+
+            $billing_email = $transaction->get_billing_data( 'email' );
             while ( $cart->have_items() ) {
                $cart->the_item();
                $analytics->setTransactionId( $transaction->get_transaction_id() )
@@ -71,9 +75,14 @@ function gb_webhook_template_include( $template ) {
                   ->setItemPrice( $cart->get_item_price() )
                   ->setItemQuantity( $cart->get_item_quantity() )
                   ->sendItem();
-            }
 
-            // do_action( 'gb_webhook_payment_success', $transaction, $cart );
+               // ActiveCampaign
+               $category_id = $cart->get_item_category( 'startopstelling', 'term_id' );
+               if ( $category_id && ! in_array( $category_id, $category_ids ) ) {
+                  $acw->log_event( $billing_email, 'configured_product_purchase', 'category_' . $category_id );
+               }
+               $category_ids[] = $category_id;
+            }
          }
 
       } catch ( \Mollie\Api\Exceptions\ApiException $e ) {
@@ -87,24 +96,3 @@ function gb_webhook_template_include( $template ) {
 
 }
 add_action( 'template_include', 'gb_webhook_template_include' );
-
-/**
- * Sends purchase events to activecampaign api
- */
-function gb_trigger_activecampaign_purchase_events( $transaction, $cart ) {
-
-   $category_ids = [];
-   $acw = Active_Campaign_Wrapper::get_instance();
-
-   while ( $cart->have_items() ) {
-      $cart->the_item();
-      $category_id = $cart->get_item_category( 'startopstelling', 'term_id' );
-      $email       = $transaction->get_billing_data( 'email' );
-
-      if ( $category_id && ! in_array( $category_id, $category_ids ) ) {
-         $acw->log_event( $email, 'configured_product_purchase', 'category_' . $category_id );
-      }
-      $category_ids[] = $category_id;
-   }
-}
-// add_action( 'gb_webhook_payment_success', 'gb_trigger_activecampaign_purchase_events', 10, 2 );
