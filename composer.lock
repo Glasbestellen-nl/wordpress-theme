@@ -907,9 +907,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-<<<<<<< HEAD
     "plugin-api-version": "1.1.0"
-=======
-    "plugin-api-version": "2.1.0"
->>>>>>> 07c4505f3eea2b5aa06c2e261d072b9d2e31b615
 }
