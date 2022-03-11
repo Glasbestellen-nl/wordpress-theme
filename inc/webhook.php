@@ -86,7 +86,8 @@ function gb_webhook_template_include( $template ) {
          }
 
       } catch ( \Mollie\Api\Exceptions\ApiException $e ) {
-          echo "API call failed: " . htmlspecialchars( $e->getMessage() );
+         error_log( htmlspecialchars( $e->getMessage() ) );
+         echo "API call failed: " . htmlspecialchars( $e->getMessage() );
       }
 
       return;
