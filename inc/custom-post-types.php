@@ -55,7 +55,7 @@ function gb_register_post_types() {
 		'capability_type'       => 'page',
 		'rewrite'					=> array( 'slug' => _x( 'producten', 'Product rewrite slug', 'glasbestellen' ) )
 	);
-	register_post_type( 'product', $args );
+	// register_post_type( 'product', $args );
 
 	// Review
 	$labels = array(

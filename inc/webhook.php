@@ -93,6 +93,5 @@ function gb_webhook_template_include( $template ) {
    }
 
    return $template;
-
 }
 add_action( 'template_include', 'gb_webhook_template_include' );
