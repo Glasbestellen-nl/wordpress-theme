@@ -38,4 +38,4 @@ function woocommerce_custom_price_to_cart_item( $cart_object ) {
         }  
     }  
 }
-// add_action( 'woocommerce_before_calculate_totals', 'woocommerce_custom_price_to_cart_item', 1000 );
+add_action( 'woocommerce_before_calculate_totals', 'woocommerce_custom_price_to_cart_item', 1000 );
