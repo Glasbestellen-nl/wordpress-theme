@@ -1,4 +1,14 @@
 <?php
+add_filter( 'rewrite_rules_array', function( $rules ) {
+    $new_rules = [
+        'producten/([^/]*?)/?$' => 'index.php?product_cat=$matches[1]',
+        'producten/([^/]*?)/([^/]*?)?$' => 'index.php?product_cat=$matches[1]&product=$matches[2]',
+        'producten/([^/]*?)/page/([0-9]{1,})/?$' => 'index.php?product_cat=$matches[1]&paged=$matches[2]',
+    ];
+    return $new_rules + $rules;
+});
+
+
 function gb_test_wc() {
 
     // $order = wc_create_order();
