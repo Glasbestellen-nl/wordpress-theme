@@ -1,4 +1,9 @@
 <?php
+function mytheme_add_woocommerce_support() {
+	add_theme_support( 'woocommerce' );
+}
+add_action( 'after_setup_theme', 'mytheme_add_woocommerce_support' );
+
 add_filter( 'rewrite_rules_array', function( $rules ) {
     $new_rules = [
         'producten/([^/]*?)/?$' => 'index.php?product_cat=$matches[1]',
