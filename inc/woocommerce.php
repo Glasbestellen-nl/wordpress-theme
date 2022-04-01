@@ -1,5 +1,60 @@
 <?php
 /**
+ * Adds a custom woocommerce product tab
+ */
+function gb_product_data_tabs( $tabs) {
+
+	$tabs['configurable'] = array(
+		'label'		=> __( 'Configurable', 'woocommerce' ),
+		'target'	=> 'configurable_options',
+		'class'		=> array( 'show_if_configurable', 'show_if_configurable'  ),
+	);
+	return $tabs;
+}
+add_filter( 'woocommerce_product_data_tabs', 'gb_product_data_tabs' );
+
+/**
+ * Add a custom woocommerce panel html
+ */
+function gb_product_data_panels() { 
+    
+    echo '<div id="configurable_options" class="panel woocommerce_options_panel" style="display: none">';
+
+    $configurators = get_posts( 'post_type=configurator&posts_per_page=-1' );
+    if ( ! $configurators ) return;
+
+    $options = [];
+    foreach ( $configurators as $configurator ) {
+        $options[$configurator->ID] = $configurator->post_title;    
+    }
+
+    woocommerce_wp_select([
+		'id'            => 'configurator',
+		'value'         => get_post_meta( get_the_id(), 'configurator', true ),
+		'label'         => __( 'Configurator', 'glasbestellen' ),
+        'wrapper_class' => 'show_if_configurable',
+		'options'       => $options
+    ]);
+
+    echo '</div>';
+}
+add_action( 'woocommerce_product_data_panels', 'gb_product_data_panels' );
+
+/**
+ * Saves custom woocommerce panel fields
+ */
+function gb_process_product_meta( $post_id ){
+
+	if ( ! empty( $_POST['configurator'] ) ) {
+		update_post_meta( $post_id, 'configurator', $_POST['configurator'] );
+	} else {
+	    delete_post_meta( $post_id, 'configurator' );
+	}
+}
+add_action( 'woocommerce_process_product_meta', 'gb_process_product_meta', 10 );
+
+
+/**
  * Single product wrapper class
  */
 function gb_single_product_wrapper_class() {
@@ -17,17 +72,7 @@ function gb_single_product_wrapper_class() {
  * Adds configurable product type class
  */
 function gb_register_configurable_product_type() {
-
-    class WC_Product_Configurable extends WC_Product_Simple {
-        public function __construct( $product ) {
-            $this->product_type = 'configurable';
-            parent::__construct( $product );
-        }
-
-        public function get_type(){
-            return 'configurable';
-        }
-    }
+    require_once( TEMPLATEPATH . '/class/WC_Configured_Product.php' );
 }
 add_action( 'init', 'gb_register_configurable_product_type' );
 
