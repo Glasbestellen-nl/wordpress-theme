@@ -19,7 +19,6 @@ defined( 'ABSPATH' ) || exit;
 
 global $product;
 $configurator = $product->get_configurator();
-$configurator_total_price = $configurator->get_total_price();
 
 /**
  * Hook: woocommerce_before_single_product.
@@ -41,17 +40,16 @@ if ( post_password_required() ) {
 
 			<div class="col-12 col-md-6">
 				<span class="h4 configurator__heading"><?php _e( 'Onze aanbieding voor u', 'glasbestellen' ); ?></span>
-
 				<?php if ( get_field( 'show_energy_label' ) ) { ?>
-				<div class="configurator__energy-label">
-					<img src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" title="<?php _e( 'Energielabel', 'glasbestellen' ); ?>">
-				</div>
+					<div class="configurator__energy-label">
+						<img src="<?php echo get_template_directory_uri() . '/assets/images/energy-label-a++.png'; ?>" title="<?php _e( 'Energielabel', 'glasbestellen' ); ?>">
+					</div>
 				<?php } ?>
 			</div>
 
 			<div class="col-12 col-md-6">
 				<div class="configurator__details js-configurator-details">
-				<span class="configurator__detail--price js-config-total-price"><?php echo wc_price( $configurator_total_price ); ?></span>
+				<span class="configurator__detail--price js-config-total-price"><?php echo wc_price( $product->get_price() ); ?></span>
 				<span class="configurator__detail--tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
 				<?php if ( $delivery_time = $configurator->get_setting( 'delivery_time' ) ) { ?>
 					<span class="configurator__detail--delivery"><?php echo sprintf( __( 'Levertijd %s', 'glasbestellen' ), $delivery_time ); ?></span>
@@ -73,6 +71,7 @@ if ( post_password_required() ) {
 	</div>
 
 	<form method="post" class="configurator__form js-configurator-blur-update js-configurator-form">
+		
 		<?php
 		while ( $configurator->have_steps() ) {
 			$configurator->the_step();
