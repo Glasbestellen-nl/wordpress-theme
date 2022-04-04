@@ -1,5 +1,21 @@
 <?php
 /**
+ * Change total configured product price based on configurator total
+ */
+function gb_configured_product_price( $price, $product ) {
+    if ( $product->get_type() == "configurable" ) {
+        $configurator = $product->get_configurator();
+        if ( is_singular( 'product' ) ) {
+            $price = $configurator->get_total_price();
+        } else {
+            $price = $configurator->calculate_subtotal();
+        }
+    }
+    return $price;
+}
+add_filter( 'woocommerce_product_get_price', 'gb_configured_product_price', 10, 2 );
+
+/**
  * Adds a custom woocommerce product tab
  */
 function gb_product_data_tabs( $tabs) {

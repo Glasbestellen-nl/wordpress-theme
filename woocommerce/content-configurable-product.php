@@ -71,7 +71,7 @@ if ( post_password_required() ) {
 	</div>
 
 	<form method="post" class="configurator__form js-configurator-blur-update js-configurator-form">
-		
+
 		<?php
 		while ( $configurator->have_steps() ) {
 			$configurator->the_step();

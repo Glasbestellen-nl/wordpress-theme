@@ -68,10 +68,9 @@ function gb_get_configurator_total_price() {
    if ( ! empty( $_GET['configurator_id'] ) ) {
       $configurator_id = $_GET['configurator_id'];
       $configurator = gb_get_configurator( $configurator_id );
-      echo Money::display( $configurator->get_total_price() );
+      echo wc_price( $configurator->get_total_price() );
    }
    wp_die();
-
 }
 add_action( 'wp_ajax_get_configurator_total_price', 'gb_get_configurator_total_price' );
 add_action( 'wp_ajax_nopriv_get_configurator_total_price', 'gb_get_configurator_total_price' );
