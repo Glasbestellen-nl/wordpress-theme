@@ -1,9 +1,12 @@
 <?php
 class WC_Product_Configurable extends WC_Product_Simple {
 
+    public $price;
+
     public function __construct( $product ) {
-        $this->product_type = 'configurable';
         parent::__construct( $product );
+        $this->price = 20;
+        $this->product_type = 'configurable';
     }
 
     public function get_type(){

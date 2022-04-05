@@ -5,15 +5,38 @@
 function gb_configured_product_price( $price, $product ) {
     if ( $product->get_type() == "configurable" ) {
         $configurator = $product->get_configurator();
+        if ( is_cart() || is_checkout() ) return $price;
         if ( is_singular( 'product' ) ) {
             $price = $configurator->get_total_price();
         } else {
-            $price = $configurator->calculate_subtotal();
+            $price = $configurator->get_total_price( true, true );
         }
     }
     return $price;
 }
 add_filter( 'woocommerce_product_get_price', 'gb_configured_product_price', 10, 2 );
+
+/**
+ * Use custom price from configuring product as cart item price
+ */
+function woocommerce_add_custom_price( $cart ) {
+
+    // This is necessary for WC 3.0+
+    if ( is_admin() && ! defined( 'DOING_AJAX' ) )
+        return;
+
+    // Avoiding hook repetition (when using price calculations for example)
+    if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
+        return;
+
+    // Loop through cart items
+    foreach ( $cart->get_cart() as $item ) {
+        if ( ! empty( $item['custom_price'] ) ) {
+            $item['data']->set_price( $item['custom_price'] );
+        }
+    }
+}
+add_action( 'woocommerce_before_calculate_totals', 'woocommerce_add_custom_price', 20, 1);
 
 /**
  * Adds a custom woocommerce product tab
@@ -131,45 +154,3 @@ add_filter( 'rewrite_rules_array', function( $rules ) {
     ];
     return $new_rules + $rules;
 });
-
-
-function gb_test_wc() {
-
-    // $order = wc_create_order();
-    $product_id = 2367;
-    // $product = wc_get_product( $product_id );
-    $quantity = 1;
-
-    // $order->add_product( $product, $quantity, [
-    //     'subtotal'  => 525.34,
-    //     'total'     => 525.34, 
-    // ]);
-    // $total = $order->calculate_totals();
-    // $order->set_total($total);
-    // $order->save();
-
-    global $woocommerce;
-    $cart_item_data = ['custom_price' => 117.22];
-    $woocommerce->cart->add_to_cart( $product_id, $quantity, null, null, $cart_item_data );
-    $woocommerce->cart->calculate_totals();
-    $woocommerce->cart->set_session();
-    $woocommerce->cart->maybe_set_cart_cookies();
-
-    // die;
-
-}
-// add_action( 'init', 'gb_test_wc' );
-
-function woocommerce_custom_price_to_cart_item( $cart_object ) {  
-    if( !WC()->session->__isset( "reload_checkout" )) {
-        foreach ( $cart_object->cart_contents as $key => $value ) {
-            if( isset( $value["custom_price"] ) ) {
-                //for woocommerce version lower than 3
-                //$value['data']->price = $value["custom_price"];
-                //for woocommerce version +3
-                $value['data']->set_price($value["custom_price"]);
-            }
-        }  
-    }  
-}
-add_action( 'woocommerce_before_calculate_totals', 'woocommerce_custom_price_to_cart_item', 1000 );

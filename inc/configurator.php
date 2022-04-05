@@ -102,24 +102,32 @@ add_action( 'wp_ajax_nopriv_handle_configurator_form_submit', 'gb_handle_configu
 
 function gb_handle_configurator_to_cart() {
 
+   global $woocommerce;
+
    $response = [];
 
-   if ( empty( $_POST['configurator_id'] ) ) wp_die();
+   if ( empty( $_POST['product_id'] ) ) wp_die();
 
-   $configurator_id = $_POST['configurator_id'];
-   $configurator = gb_get_configurator( $configurator_id );
+   $product = wc_get_product( $_POST['product_id'] );
+   $configurator = $product->get_configurator();
 
-   $cart = gb_get_cart();
+   $cart_item_data = ['custom_price' => $configurator->get_total_price()];
+   $woocommerce->cart->add_to_cart( $_POST['product_id'], $_POST['quantity'], null, null, $cart_item_data );
+   $woocommerce->cart->calculate_totals();
+   $woocommerce->cart->set_session();
+   $woocommerce->cart->maybe_set_cart_cookies();
 
-   $price         = $configurator->get_total_price();
-   $summary       = $configurator->get_summary( $_POST['message'] );
-   $configuration = $configurator->get_configuration();
-   $cart->add_item( $configurator_id, $price, $_POST['quantity'], $summary, $configuration );
+   // $cart = gb_get_cart();
 
-   gb_update_cart_session_items( $cart->get_items() );
-   gb_unset_configuration_session( $configurator_id );
+   // $price         = $configurator->get_total_price();
+   // $summary       = $configurator->get_summary( $_POST['message'] );
+   // $configuration = $configurator->get_configuration();
+   // $cart->add_item( $configurator_id, $price, $_POST['quantity'], $summary, $configuration );
 
-   $response['url'] = gb_get_cart_url();
+   // gb_update_cart_session_items( $cart->get_items() );
+   gb_unset_configuration_session( $configurator->get_id() );
+
+   $response['url'] = wc_get_cart_url();
 
    wp_send_json( $response );
 

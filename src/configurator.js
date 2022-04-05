@@ -122,7 +122,7 @@ const Configurator = (function () {
 
       let data = {
         action: "handle_configurator_to_cart",
-        configurator_id: gb.configuratorId,
+        product_id: gb.postId,
         quantity: quantity,
         message: message,
       };
