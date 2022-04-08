@@ -37,4 +37,3 @@ if ( $gallery_image_ids ) { ?>
     </div>
 
 <?php } ?>
-</div>

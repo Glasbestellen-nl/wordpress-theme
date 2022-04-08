@@ -129,7 +129,8 @@ function gb_single_product_wrapper_class() {
  * Adds configurable product type class
  */
 function gb_register_configurable_product_type() {
-    require_once( TEMPLATEPATH . '/class/WC_Configured_Product.php' );
+    require_once( TEMPLATEPATH . '/class/WC_Product_Extended.php' );
+    require_once( TEMPLATEPATH . '/class/WC_Product_Configurable.php' );
 }
 add_action( 'init', 'gb_register_configurable_product_type' );
 
@@ -139,7 +140,9 @@ add_action( 'init', 'gb_register_configurable_product_type' );
 function gb_load_product_type_class( $classname, $product_type ) {
 	if ( $product_type == 'configurable' ) {
 	    $classname = 'WC_Product_Configurable';
-	}
+	} else {
+        $classname = 'WC_Product_Extended';
+    }
 	return $classname;
 }
 add_filter( 'woocommerce_product_class', 'gb_load_product_type_class', 10, 2);
