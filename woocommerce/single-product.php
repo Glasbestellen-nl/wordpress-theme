@@ -41,14 +41,11 @@ get_header( 'shop' ); ?>
 						<div class="col-12 col-lg-6">
 				
 							<?php 
-							while ( have_posts() ) {
-								the_post();
-								if ( $product->get_type() == "configurable" ) {
-									wc_get_template_part( 'content', 'configurable-product' );
-								} else {
-									wc_get_template_part( 'content', 'single-product' );
-								}
-							} 
+							if ( $product->get_type() == "configurable" ) {
+								wc_get_template_part( 'content', 'configurable-product' );
+							} else {
+								wc_get_template_part( 'content', 'single-product' );
+							}
 							?>
 
 						</div>	

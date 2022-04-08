@@ -1,5 +1,23 @@
 <?php
 /**
+ * Loads step indicators on cart page
+ */
+function gb_cart_page_before_layout() {
+    if ( is_cart() ) 
+        wc_get_template_part( 'cart/step-indicators' );
+}
+add_action( 'page_before_layout', 'gb_cart_page_before_layout' );
+
+/**
+ * Loads step indicators on checkout page
+ */
+function gb_checkout_page_before_layout() {
+    if ( is_checkout() ) 
+        wc_get_template_part( 'checkout/step-indicators' );
+}
+add_action( 'page_before_layout', 'gb_checkout_page_before_layout' );
+
+/**
  * Change total configured product price based on configurator total
  */
 function gb_configured_product_price( $price, $product ) {
