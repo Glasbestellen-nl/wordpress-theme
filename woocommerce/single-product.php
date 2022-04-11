@@ -33,6 +33,7 @@ get_header( 'shop' );
 							<?php 
 							wc_get_template_part( 'single-product/image-gallery' ); 
 							wc_get_template_part( 'single-product/links-list' ); 
+							wc_get_template_part( 'single-product/videos' );
 							?>
 
 						</div>
@@ -48,7 +49,17 @@ get_header( 'shop' );
 							?>
 
 						</div>	
-					</div>	
+					</div>
+
+					<article class="text space-below">
+
+						<?php the_content(); ?>
+
+						<h2 class="space-below"><?php _e( 'Technische informatie', 'glasbestellen' ); ?></h2>
+
+						<?php wc_get_template_part( 'single-product/technical-details' ); ?>
+
+					</article>
 					
 					<?php do_action( 'woocommerce_after_main_content' ); ?>
 
