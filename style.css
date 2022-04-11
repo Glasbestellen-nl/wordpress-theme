@@ -3837,3 +3837,18 @@ Modal
     max-width: 1200px;
   }
 }
+
+/* Woocommerce */
+
+.woocommerce td.product-name .wc-item-meta .wc-item-meta-label,
+.woocommerce td.product-name .wc-item-meta dt,
+.woocommerce td.product-name dl.variation .wc-item-meta-label,
+.woocommerce td.product-name dl.variation dt {
+  font-size: 0.875em;
+  font-weight: bold;
+}
+
+.woocommerce td.product-name .wc-item-meta dd,
+.woocommerce td.product-name dl.variation dd {
+  font-size: 0.875em;
+}

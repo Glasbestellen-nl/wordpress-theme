@@ -1,5 +1,37 @@
 <?php
 /**
+ * Show configuration summary data in cart item
+ */
+function gb_display_configuration_summary_in_cart( $item_data, $cart_item ) {
+
+	if ( empty( $cart_item['configuration_summary'] ) ) 
+        return $item_data;
+	
+    foreach ( $cart_item['configuration_summary'] as $line ) {
+        $item_data[] = [
+            'key'     => $line['label'],
+            'value'   => $line['value'],
+            'display' => '',
+        ];
+    }
+	return $item_data;
+}
+add_filter( 'woocommerce_get_item_data', 'gb_display_configuration_summary_in_cart', 10, 2 );
+
+
+function iconic_add_engraving_text_to_order_items( $item, $cart_item_key, $values, $order ) {
+	if ( empty( $values['configuration_summary'] ) ) {
+		return;
+	}
+
+    foreach ( $values['configuration_summary'] as $line ) {
+        $item->add_meta_data( $line['label'], $line['value'] );
+    }
+}
+
+add_action( 'woocommerce_checkout_create_order_line_item', 'iconic_add_engraving_text_to_order_items', 10, 4 );
+
+/**
  * Loads step indicators on cart page
  */
 function gb_cart_page_before_layout() {

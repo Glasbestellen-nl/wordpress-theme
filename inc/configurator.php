@@ -81,8 +81,11 @@ function gb_handle_configurator_to_cart() {
 
    $product = wc_get_product( $_POST['product_id'] );
    $configurator = $product->get_configurator();
-
-   $cart_item_data = ['custom_price' => $configurator->get_total_price()];
+   $summary = $configurator->get_summary( $_POST['message'] );
+   $cart_item_data = [
+      'custom_price'  => $configurator->get_total_price(),
+      'configuration_summary' => $summary
+   ];
    $woocommerce->cart->add_to_cart( $_POST['product_id'], $_POST['quantity'], null, null, $cart_item_data );
    $woocommerce->cart->calculate_totals();
    $woocommerce->cart->set_session();
