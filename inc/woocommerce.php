@@ -24,7 +24,7 @@ function gb_configured_product_price( $price, $product ) {
     if ( $product->get_type() == "configurable" ) {
         $configurator = $product->get_configurator();
         if ( is_cart() || is_checkout() ) return $price;
-        if ( is_singular( 'product' ) ) {
+        if ( is_singular( 'product' ) || defined( 'DOING_AJAX' ) ) {
             $price = $configurator->get_total_price();
         } else {
             $price = $configurator->get_total_price( true, true );

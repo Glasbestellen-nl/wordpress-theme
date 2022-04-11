@@ -110,7 +110,7 @@ const Configurator = (function () {
       let totalPrice = $(".js-config-total-price", this.element);
       let data = {
         action: "get_configurator_total_price",
-        configurator_id: gb.configuratorId,
+        product_id: gb.postId,
       };
       $.get(gb.ajaxUrl, data, function (price) {
         totalPrice.html(price);

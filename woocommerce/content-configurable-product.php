@@ -49,7 +49,7 @@ if ( post_password_required() ) {
 
 			<div class="col-12 col-md-6">
 				<div class="configurator__details js-configurator-details">
-				<span class="configurator__detail--price js-config-total-price"><?php echo wc_price( $product->get_price() ); ?></span>
+				<span class="configurator__detail--price js-config-total-price"><?php echo wc_price( wc_get_price_including_tax( $product ) ); ?></span>
 				<span class="configurator__detail--tax"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
 				<?php if ( $delivery_time = $configurator->get_setting( 'delivery_time' ) ) { ?>
 					<span class="configurator__detail--delivery"><?php echo sprintf( __( 'Levertijd %s', 'glasbestellen' ), $delivery_time ); ?></span>

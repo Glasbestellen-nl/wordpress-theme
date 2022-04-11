@@ -11,39 +11,10 @@ function gb_configurator_show_price_table_array() {
       echo '<pre>';
       var_dump( $configurator->get_price_table() );
       echo '</pre>';
-
    }
-
 }
 add_action( 'wp', 'gb_configurator_show_price_table_array' );
 
-/**
- * Add configurator body classes
- */
-function gb_configurator_body_class( $class ) {
-
-   if ( is_tax( 'startopstelling' ) || ( is_singular( 'configurator' ) && ! is_page_template() ) )
-      $class[] = 'body--grey';
-
-   if ( is_singular( 'configurator' ) )
-      $class[] = 'js-configurator';
-
-   return $class;
-}
-add_action( 'body_class', 'gb_configurator_body_class' );
-
-/**
- * Hide main nav in configurator
- */
-function gb_configurator_hide_main_nav( $show_nav ) {
-
-   if ( is_tax( 'startopstelling' ) || ( is_singular( 'configurator' ) && ! is_page_template() ) ) {
-      $show_nav = false;
-   }
-
-   return $show_nav;
-}
-add_filter( 'gb_show_main_nav', 'gb_configurator_hide_main_nav' );
 
 /**
  * Changes step part price difference output based on step id
@@ -65,10 +36,10 @@ add_filter( 'gb_step_part_price_difference', 'gb_filter_part_price_difference', 
  */
 function gb_get_configurator_total_price() {
 
-   if ( ! empty( $_GET['configurator_id'] ) ) {
-      $configurator_id = $_GET['configurator_id'];
-      $configurator = gb_get_configurator( $configurator_id );
-      echo wc_price( $configurator->get_total_price() );
+   if ( ! empty( $_GET['product_id'] ) ) {
+      $product = wc_get_product( $_GET['product_id'] );
+      $configurator = $product->get_configurator();
+      echo wc_price( wc_get_price_including_tax( $product ) );
    }
    wp_die();
 }
@@ -117,14 +88,6 @@ function gb_handle_configurator_to_cart() {
    $woocommerce->cart->set_session();
    $woocommerce->cart->maybe_set_cart_cookies();
 
-   // $cart = gb_get_cart();
-
-   // $price         = $configurator->get_total_price();
-   // $summary       = $configurator->get_summary( $_POST['message'] );
-   // $configuration = $configurator->get_configuration();
-   // $cart->add_item( $configurator_id, $price, $_POST['quantity'], $summary, $configuration );
-
-   // gb_update_cart_session_items( $cart->get_items() );
    gb_unset_configuration_session( $configurator->get_id() );
 
    $response['url'] = wc_get_cart_url();
