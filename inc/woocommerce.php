@@ -19,6 +19,17 @@ function gb_display_configuration_summary_in_cart( $item_data, $cart_item ) {
 add_filter( 'woocommerce_get_item_data', 'gb_display_configuration_summary_in_cart', 10, 2 );
 
 /**
+ * Adds product reference metadata at the end of the admin order item metadata
+ */
+function gb_reference_after_order_itemmeta( $item_id, $item, $product ) {
+    if ( ! is_a( $product, 'WC_Product_Extended' ) ) return;
+    $product_reference = $product->get_reference();
+    if ( ! $product_reference ) return;
+    echo '<strong>' . __( 'Referentie', 'glasbestellen' ) . ':</strong> ' . $product_reference;
+}
+add_action( 'woocommerce_after_order_itemmeta', 'gb_reference_after_order_itemmeta', 10, 3 );
+
+/**
  * Add configuration summary to order items metadata
  */
 function gb_configuration_summary_to_order_items( $item, $cart_item_key, $values, $order ) {
@@ -30,7 +41,6 @@ function gb_configuration_summary_to_order_items( $item, $cart_item_key, $values
         $item->add_meta_data( $line['label'], $line['value'] );
     }
 }
-
 add_action( 'woocommerce_checkout_create_order_line_item', 'gb_configuration_summary_to_order_items', 10, 4 );
 
 /**
@@ -208,7 +218,6 @@ function gb_product_cat_link_filter( $url, $term, $taxonomy ) {
     return $url;
 }
 add_filter( 'term_link', 'gb_product_cat_link_filter', 10, 3 );
-
 
 /**
  * Adds rewrite rules for product and product cat (shop) with same base

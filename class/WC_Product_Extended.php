@@ -41,4 +41,8 @@ class WC_Product_Extended extends WC_Product {
         }
     }
 
+    public function get_reference() {
+        return get_post_meta( $this->id, 'configurator_reference', true );
+    }
+
 }
