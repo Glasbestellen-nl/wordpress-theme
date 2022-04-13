@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $review_category = get_field( 'review_category' );
 $review_avarage = gb_get_review_average( true, $review_category, 1 );
 if ( ! $review_category || ! $review_avarage ) exit;
-$reviews = $review_category ? gb_get_reviews( -1, $review_category ) : false; ?>
+$reviews = ( $review_category ) ? gb_get_reviews( -1, $review_category ) : false; ?>
 
 <div class="rating justify-content-start scroll-to js-scroll-to" data-scroll-to="#reviews">
     <div class="stars rating__stars" title="<?php _e( 'Ervaringen', 'glasbestellen' ); ?>">

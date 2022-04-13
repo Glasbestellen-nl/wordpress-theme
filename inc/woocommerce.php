@@ -199,6 +199,18 @@ function gb_add_woocommerce_support() {
 add_action( 'after_setup_theme', 'gb_add_woocommerce_support' );
 
 /**
+ * Filters product cat term url to rewrite structure
+ */
+function gb_product_cat_link_filter( $url, $term, $taxonomy ) {
+    if ( 'product_cat' == $taxonomy ) {
+        $url = site_url( "/producten/$term->slug/" );
+    }
+    return $url;
+}
+add_filter( 'term_link', 'gb_product_cat_link_filter', 10, 3 );
+
+
+/**
  * Adds rewrite rules for product and product cat (shop) with same base
  */
 add_filter( 'rewrite_rules_array', function( $rules ) {

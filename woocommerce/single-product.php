@@ -15,7 +15,11 @@ get_header( 'shop' );
 
 				<div class="layout__column box-shadow">
 
-					<?php do_action( 'woocommerce_before_main_content' ); ?>
+					<?php
+					if ( function_exists( 'yoast_breadcrumb' ) ) {
+						yoast_breadcrumb( '<div class="breadcrumbs small-space-below">', '</div>' );
+					}
+					?>
 
 					<div class="d-block d-md-flex align-items-center space-below">
 
@@ -61,6 +65,8 @@ get_header( 'shop' );
 						<?php wc_get_template_part( 'single-product/technical-details' ); ?>
 
 					</article>
+
+					<?php wc_get_template_part( 'single-product/reviews' ); ?>
 					
 					<?php do_action( 'woocommerce_after_main_content' ); ?>
 
