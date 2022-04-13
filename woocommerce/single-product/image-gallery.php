@@ -1,4 +1,7 @@
 <?php 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 global $product;
 $gallery_image_ids = $product->get_gallery_image_ids();
 

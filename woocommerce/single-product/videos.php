@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+
 if ( get_field( 'measure_video_youtube_id' ) || get_field( 'assembly_video_youtube_id' ) || get_field( 'explainer_video_youtube_id' )) {
 
     $video_args = ['autoplay' => 1, 'rel' => 0]; ?>

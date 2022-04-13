@@ -18,18 +18,20 @@ function gb_display_configuration_summary_in_cart( $item_data, $cart_item ) {
 }
 add_filter( 'woocommerce_get_item_data', 'gb_display_configuration_summary_in_cart', 10, 2 );
 
+/**
+ * Add configuration summary to order items metadata
+ */
+function gb_configuration_summary_to_order_items( $item, $cart_item_key, $values, $order ) {
 
-function iconic_add_engraving_text_to_order_items( $item, $cart_item_key, $values, $order ) {
-	if ( empty( $values['configuration_summary'] ) ) {
+	if ( empty( $values['configuration_summary'] ) ) 
 		return;
-	}
-
+	
     foreach ( $values['configuration_summary'] as $line ) {
         $item->add_meta_data( $line['label'], $line['value'] );
     }
 }
 
-add_action( 'woocommerce_checkout_create_order_line_item', 'iconic_add_engraving_text_to_order_items', 10, 4 );
+add_action( 'woocommerce_checkout_create_order_line_item', 'gb_configuration_summary_to_order_items', 10, 4 );
 
 /**
  * Loads step indicators on cart page
@@ -201,6 +203,7 @@ add_action( 'after_setup_theme', 'gb_add_woocommerce_support' );
  */
 add_filter( 'rewrite_rules_array', function( $rules ) {
     $new_rules = [
+        // 'producten/?$' => 'index.php?taxonomy=product_cat',
         'producten/([^/]*?)/?$' => 'index.php?product_cat=$matches[1]',
         'producten/([^/]*?)/([^/]*?)?$' => 'index.php?product_cat=$matches[1]&product=$matches[2]',
         'producten/([^/]*?)/page/([0-9]{1,})/?$' => 'index.php?product_cat=$matches[1]&paged=$matches[2]',

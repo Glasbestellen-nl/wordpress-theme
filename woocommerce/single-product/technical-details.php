@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 $product_cat = get_first_term_by_id( get_the_id(), 'product_cat' );
 $technical_details = get_field( 'technical_details' );
 

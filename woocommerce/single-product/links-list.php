@@ -1,6 +1,8 @@
 <?php 
-global $product; 
-?>
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
+global $product; ?>
 
 <ul class="links-list large-space-below">
 

@@ -2,7 +2,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-
 get_header( 'shop' );
 ?>
 
@@ -23,6 +22,8 @@ get_header( 'shop' );
 						<section class="text space-right">
 							<h1 class="h-default tiny-space-sm-below"><?php the_title(); ?></h1>
 						</section>
+
+						<?php wc_get_template_part( 'single-product/review-summary' ); ?>
 
 					</div>
 
