@@ -19,4 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-wc_get_template( 'archive-product.php' );
+$object_id = get_queried_object_id();
+$product_cat_template = get_field( 'product_cat_template', 'term_' . $object_id  );
+if ( $product_cat_template ) {
+	switch ( $product_cat_template ) {
+		case 'layout_1' :
+			wc_get_template( 'taxonomy-product-cat/layout-1.php' );
+			break;
+	}
+} else {
+	wc_get_template( 'archive-product.php' );
+}

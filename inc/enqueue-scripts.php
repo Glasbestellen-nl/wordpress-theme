@@ -44,9 +44,11 @@ function gb_enqueue_scripts() {
          'sent'                   => __( 'Verstuurd!', 'glasbestellen' ),
          'fileUploadLimit'        => __( 'Uw bijlages overschrijden het maximale upload limiet van {0}MB. Stuur a.u.b. grotere bijlages naar ' . get_bloginfo( 'admin_email' ) . '.', 'glasbestellen' )
       ],
-      'postId' => ( is_singular() ) ? $post->ID : false,
-      'configuratorId' => get_post_meta( $post->ID, 'configurator', true )
    ];
+   if ( is_singular() ) {
+      $l10n['postId'] = $post->ID;
+      $l10n['configuratorId'] = get_post_meta( $post->ID, 'configurator', true );
+   }
    wp_localize_script( 'main-js', 'gb', $l10n );
 
 }

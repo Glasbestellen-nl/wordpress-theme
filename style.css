@@ -2226,6 +2226,7 @@ Hero
   background-size: cover;
   background-repeat: no-repeat;
   background-color: #5e7e99;
+  overflow: hidden;
 }
 
 .hero__inner {
