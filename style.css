@@ -1440,6 +1440,10 @@ Step indicator
   width: 38%;
 }
 
+.step-indicator--done-4::after {
+  width: 100%;
+}
+
 .step-indicator__step {
   margin: 0 1.25em;
   display: flex;
