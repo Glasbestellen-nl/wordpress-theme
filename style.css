@@ -685,7 +685,7 @@ Layout
 }
 
 .layout__column {
-  padding: 1.875em;
+  padding: 1.25em;
 }
 
 .layout--sm-full-width .layout__column {
@@ -720,7 +720,10 @@ Layout
     background-color: #fff;
   }
 
-  .layout__column,
+  .layout__column {
+    padding: 2em;
+  }
+
   .layout--sm-full-width .layout__column,
   .layout--save-space .layout__column {
     padding: 3em;
@@ -3840,15 +3843,41 @@ Modal
 
 /* Woocommerce */
 
-.woocommerce td.product-name .wc-item-meta .wc-item-meta-label,
-.woocommerce td.product-name .wc-item-meta dt,
-.woocommerce td.product-name dl.variation .wc-item-meta-label,
+.woocommerce td.product-name dl.variation dt,
+.woocommerce td.product-name dl.variation dd {
+  font-size: 0.75em;
+}
+
 .woocommerce td.product-name dl.variation dt {
-  font-size: 0.875em;
   font-weight: bold;
 }
 
-.woocommerce td.product-name .wc-item-meta dd,
-.woocommerce td.product-name dl.variation dd {
-  font-size: 0.875em;
+.woocommerce-cart table.cart img {
+  width: 150px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.woocommerce-cart table.cart td {
+  padding: 15px;
+}
+
+.select2-container .select2-selection--single {
+  height: 40px;
+}
+
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__rendered {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 12px;
+}
+
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__arrow {
+  width: 36px;
+  height: 36px;
 }
