@@ -36,7 +36,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
         <div class="row" id="customer_details">
             <div class="col-lg-6">
-                <div class="small-space-around">
+                <div class="">
                     <div class="space-below">
                         <?php do_action( 'woocommerce_checkout_billing' ); ?>
                     </div> 
@@ -46,7 +46,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
             <div class="col-lg-6">
 
-                <div class="small-space-around">
+                <div class="">
 
                     <?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
         
