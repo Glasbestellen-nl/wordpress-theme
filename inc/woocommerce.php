@@ -219,12 +219,27 @@ function gb_product_cat_link_filter( $url, $term, $taxonomy ) {
 }
 add_filter( 'term_link', 'gb_product_cat_link_filter', 10, 3 );
 
+function gb_add_product_query_vars( $vars ) {
+    $vars[] = 'is_product_cat_archive';
+    return $vars;
+}
+add_filter( 'query_vars', 'gb_add_product_query_vars' );
+
+function gb_product_cat_archive_template( $template ) {
+    if ( get_query_var( 'is_product_cat_archive' ) ) {
+        $archive_template = locate_template( ['product-cat-archive.php'] );
+        if ( $archive_template ) return $archive_template;
+    }
+    return $template;
+}
+add_action( 'template_include', 'gb_product_cat_archive_template', 1 );
+
 /**
  * Adds rewrite rules for product and product cat (shop) with same base
  */
 add_filter( 'rewrite_rules_array', function( $rules ) {
     $new_rules = [
-        // 'producten/?$' => 'index.php?taxonomy=product_cat',
+        'producten/?$' => 'index.php?is_product_cat_archive=1',
         'producten/([^/]*?)/?$' => 'index.php?product_cat=$matches[1]',
         'producten/([^/]*?)/([^/]*?)?$' => 'index.php?product_cat=$matches[1]&product=$matches[2]',
         'producten/([^/]*?)/page/([0-9]{1,})/?$' => 'index.php?product_cat=$matches[1]&paged=$matches[2]',
