@@ -8,7 +8,7 @@
 
             <div class="col col-12 col-md-6 col-lg-3">
 
-               <a href="<?php echo get_post_type_archive_link( 'product' ); ?>" class="teaser space-below">
+               <a href="<?php echo get_permalink( wc_get_page_id( 'shop' ) ); ?>" class="teaser space-below">
 
                   <div class="teaser__image teaser__image--cover">
                      <img src="<?php echo get_template_directory_uri() . '/assets/images/glass-home.png'; ?>" alt="Glas op maat" class="teaser__image-img">

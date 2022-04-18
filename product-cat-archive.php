@@ -17,24 +17,25 @@ $terms = $the_query->get_terms();
 
                <?php
                foreach ( $terms as $term ) { 
-                   $term_thumb_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
-                   $term_thumb_url = wp_get_attachment_url( $term_thumb_id ); ?>
+                  $term_thumb_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
+                  $term_thumb_url = wp_get_attachment_url( $term_thumb_id ); 
+                  if ( get_field( 'hide_on_archive', 'term_' . $term->term_id ) ) continue; ?>
                  
-                    <div class="col-12 col-md-6 col-lg-4">
+                  <div class="col-12 col-md-6 col-lg-4">
 
-                    <article class="teaser teaser--short space-below">
+                     <article class="teaser teaser--short space-below">
 
                         <a href="<?php echo get_term_link( $term, 'product_cat' ); ?>" class="teaser__image teaser__image--cover">
-                            <img src="<?php echo $term_thumb_url; ?>" alt="<?php echo get_post_meta( $term_thumb_id, '_wp_attachment_image_alt', true ); ?>" class="teaser__image-img">
+                              <img src="<?php echo $term_thumb_url; ?>" alt="<?php echo get_post_meta( $term_thumb_id, '_wp_attachment_image_alt', true ); ?>" class="teaser__image-img">
                         </a>
 
                         <a href="<?php echo get_term_link( $term, 'product_cat' ); ?>" class="teaser__body teaser__body--full">
-                            <h3 class="h-default teaser__headline"><?php echo $term->name; ?></h3>
+                              <h3 class="h-default teaser__headline"><?php echo $term->name; ?></h3>
                         </a>
 
-                    </article>
+                     </article>
 
-                    </div>
+                  </div>
 
                <?php } ?>
 

@@ -234,6 +234,11 @@ function gb_product_cat_archive_template( $template ) {
 }
 add_action( 'template_include', 'gb_product_cat_archive_template', 1 );
 
+function gb_change_return_shop_url() {
+    return site_url( '/producten/' );
+}
+add_filter( 'woocommerce_return_to_shop_redirect', 'gb_change_return_shop_url' );
+
 /**
  * Adds rewrite rules for product and product cat (shop) with same base
  */

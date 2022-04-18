@@ -35,7 +35,9 @@ get_header( 'shop' ); ?>
             * @hooked woocommerce_breadcrumb - 20
             * @hooked WC_Structured_Data::generate_website_data() - 30
             */
-            do_action( 'woocommerce_before_main_content' );
+            if ( function_exists( 'yoast_breadcrumb' ) ) {
+               yoast_breadcrumb( '<div class="breadcrumbs small-space-below">', '</div>' );
+            }
 
             ?>
             <header class="woocommerce-products-header">
@@ -71,6 +73,7 @@ get_header( 'shop' ); ?>
                <section class="row product-listings large-space-below">
 
                   <?php
+                  $column_width = get_field( 'number_of_columns' ) ? 12 / get_field( 'number_of_columns' ) : 3;
                   if ( wc_get_loop_prop( 'total' ) ) {
                      while ( have_posts() ) {
                         the_post();
@@ -80,7 +83,7 @@ get_header( 'shop' ); ?>
                         */
                         do_action( 'woocommerce_shop_loop' ); ?>
 
-                        <div class="col-6 col-md-6 col-lg-3">
+                        <div class="col-6 col-md-6 col-lg-<?php echo $column_width; ?>">
                            <?php wc_get_template_part( 'content', 'product' ); ?>
                         </div>
                         <?php
