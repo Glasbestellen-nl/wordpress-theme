@@ -1,5 +1,5 @@
 <?php
-if ( ! class_exists( 'WC_Product' ) ) {
+if ( class_exists( 'WC_Product' ) ) {
 
     class WC_Product_Extended extends WC_Product {
 
