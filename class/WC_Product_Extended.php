@@ -1,4 +1,6 @@
 <?php
+if ( ! class_exists( 'WC_Product' ) ) exit;
+
 class WC_Product_Extended extends WC_Product {
 
     public function __construct( $product ) {
