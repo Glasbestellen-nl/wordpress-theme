@@ -17,7 +17,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
-get_header( 'shop' ); ?>
+get_header( 'shop' ); 
+
+$term_id = get_queried_object_id();
+$excerpt = get_field( 'excerpt', 'term_' . $term_id );
+$number_of_columns = get_field( 'number_of_columns', 'term_' . $term_id ); ?>
 
 <main class="main-section main-section--space-around main-section-sm-without-space main-section--grey">
 
@@ -28,59 +32,36 @@ get_header( 'shop' ); ?>
          <div class="layout__column box-shadow">
 
             <?php
-            /**
-             * Hook: woocommerce_before_main_content.
-            *
-            * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
-            * @hooked woocommerce_breadcrumb - 20
-            * @hooked WC_Structured_Data::generate_website_data() - 30
-            */
             if ( function_exists( 'yoast_breadcrumb' ) ) {
                yoast_breadcrumb( '<div class="breadcrumbs small-space-below">', '</div>' );
             }
 
             ?>
-            <header class="woocommerce-products-header">
+            <article class="text large-space-below">
                <?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
                   <h1><?php woocommerce_page_title(); ?></h1>
                <?php endif; ?>
 
-               <?php
-               /**
-                * Hook: woocommerce_archive_description.
-               *
-               * @hooked woocommerce_taxonomy_archive_description - 10
-               * @hooked woocommerce_product_archive_description - 10
-               */
-               do_action( 'woocommerce_archive_description' );
-               ?>
-            </header>
+               <p><?php echo $excerpt; ?> <a href="#main_content" class="js-scroll-to" data-scroll-to="#main_content"><?php _e( 'Lees verder', 'glasbestellen' ); ?> &raquo;</a></p>
+            </article>
+
+            <span class="arrow-down-bar"><?php echo sprintf( __( 'Kies en stel uw %s samen', 'glasbestellen' ), strtolower( single_term_title( null, false ) ) ); ?>:</span>
 
             <?php
             if ( woocommerce_product_loop() ) {
 
-               /**
-                * Hook: woocommerce_before_shop_loop.
-               *
-               * @hooked woocommerce_output_all_notices - 10
-               * @hooked woocommerce_result_count - 20
-               * @hooked woocommerce_catalog_ordering - 30
-               */
-               do_action( 'woocommerce_before_shop_loop' );
+               //do_action( 'woocommerce_before_shop_loop' );
 
                woocommerce_product_loop_start(); ?>
 
                <section class="row product-listings large-space-below">
 
                   <?php
-                  $column_width = get_field( 'number_of_columns' ) ? 12 / get_field( 'number_of_columns' ) : 3;
+                  $column_width = $number_of_columns ? 12 / $number_of_columns : 3;
                   if ( wc_get_loop_prop( 'total' ) ) {
                      while ( have_posts() ) {
                         the_post();
 
-                        /**
-                         * Hook: woocommerce_shop_loop.
-                        */
                         do_action( 'woocommerce_shop_loop' ); ?>
 
                         <div class="col-6 col-md-6 col-lg-<?php echo $column_width; ?>">
@@ -89,39 +70,42 @@ get_header( 'shop' ); ?>
                         <?php
                      }
                   }
-                  
                   woocommerce_product_loop_end(); ?>
 
                </section>
                
                <?php
-               /**
-                * Hook: woocommerce_after_shop_loop.
-               *
-               * @hooked woocommerce_pagination - 10
-               */
+
                do_action( 'woocommerce_after_shop_loop' );
             } else {
-               /**
-                * Hook: woocommerce_no_products_found.
-               *
-               * @hooked wc_no_products_found - 10
-               */
                do_action( 'woocommerce_no_products_found' );
             }
 
-            /**
-             * Hook: woocommerce_after_main_content.
-            *
-            * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
-            */
-            do_action( 'woocommerce_after_main_content' );
+            wc_get_template_part( 'taxonomy-product-cat/contact-box' );
+            ?>
 
-            /**
-             * Hook: woocommerce_sidebar.
-            *
-            * @hooked woocommerce_get_sidebar - 10
-            */
+            <section class="text" id="main_content">
+
+               <?php 
+               echo term_description(); 
+
+               wc_get_template_part( 'taxonomy-product-cat/usps' );
+               
+               wc_get_template_part( 'taxonomy-product-cat/gallery-images' );
+
+               if ( $seo_content = get_field( 'seo_content', 'term_' . $term_id ) ) {
+                  echo wpautop( $seo_content );
+               }
+
+               wc_get_template_part( 'taxonomy-product-cat/faq' );
+
+               wc_get_template_part( 'taxonomy-product-cat/reviews' );
+               ?>
+
+            </section>
+
+            <?php
+            do_action( 'woocommerce_after_main_content' );
             do_action( 'woocommerce_sidebar' );
             ?>
 
