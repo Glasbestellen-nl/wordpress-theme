@@ -1,7 +1,7 @@
-<?php 
-get_header(); 
-$product_cat_id = get_queried_object_id();
-$configurator = get_field( 'configurator' ); ?>
+<?php
+get_header();
+$term_id = get_queried_object_id();
+$configurator = get_field( 'configurator', 'term_' . $term_id ); ?>
 
 <div class="hero hero--shadow">
 
@@ -12,7 +12,7 @@ $configurator = get_field( 'configurator' ); ?>
 			<div class="hero__body text-center">
 
 				<div class="hero__header">
-					<h1 class="h1 hero__title"><?php echo ( get_field( 'second_title' ) ) ? get_field( 'second_title' ) : single_term_title(); ?></h1>
+					<h1 class="h1 hero__title"><?php echo ( get_field( 'second_title', 'term_' . $term_id ) ) ? get_field( 'second_title', 'term_' . $term_id ) : single_term_title(); ?></h1>
 				</div>
 
 				<div class="hero__buttons">
@@ -26,11 +26,11 @@ $configurator = get_field( 'configurator' ); ?>
 					</div>
 				</div>
 
-				<?php if ( ( ! $configurator ) && ( ! get_field( 'hide_hero_button_cta' ) ) ) { ?>
+				<?php if ( ( ! $configurator ) && ( ! get_field( 'hide_hero_button_cta', 'term_' . $term_id ) ) ) { ?>
 					<span class="hero__button-cta space-above"><?php _e( 'Binnen 1 dag in je mail!', 'glasbestellen' ); ?></span>
 				<?php } ?>
 
-				<?php if ( get_field( 'show_sticker' ) ) { ?>
+				<?php if ( get_field( 'show_sticker', 'term_' . $term_id ) ) { ?>
 					<div class="hero__sticker d-none d-lg-block">
 						<div class="sticker">
 							<div class="sticker__body">
@@ -57,7 +57,7 @@ $configurator = get_field( 'configurator' ); ?>
 
 		<div class="row">
 
-			<div class="col-12 col-md-12 col-lg-<?php echo ( get_field( 'review_category' ) ) ? '7' : '12'; ?>">
+			<div class="col-12 col-md-12 col-lg-<?php echo ( get_field( 'review_category', 'term_' . $term_id  ) ) ? '7' : '12'; ?>">
 
 				<section class="section text space-lg-right">
 
@@ -74,7 +74,7 @@ $configurator = get_field( 'configurator' ); ?>
 			</div>
 
 			<?php
-			if ( $reviews = gb_get_reviews( $number = 14, get_field( 'review_category' ) ) ) { ?>
+			if ( $reviews = gb_get_reviews( $number = 14, get_field( 'review_category', 'term_' . $term_id ) ) ) { ?>
 
 				<div class="col-12 col-md-12 col-lg-5">
 
@@ -140,7 +140,7 @@ $configurator = get_field( 'configurator' ); ?>
 
 	</div>
 
-	<?php if ( $gallery_images = get_field( 'gallery_images' ) ) { ?>
+	<?php if ( $gallery_images = get_field( 'gallery_images', 'term_' . $term_id ) ) { ?>
 
 		<div class="area area--grey">
 
@@ -168,7 +168,7 @@ $configurator = get_field( 'configurator' ); ?>
 
 	<?php } ?>
 
-	<?php if ( get_field( 'youtube_videos' ) ) { ?>
+	<?php if ( get_field( 'youtube_videos', 'term_' . $term_id ) ) { ?>
 
 		<div class="area">
 
@@ -181,7 +181,7 @@ $configurator = get_field( 'configurator' ); ?>
 				<div class="row">
 
 					<?php
-					while ( have_rows( 'youtube_videos' ) ) {
+					while ( have_rows( 'youtube_videos', 'term_' . $term_id ) ) {
 						the_row(); ?>
 
 						<div class="space-below col-12 col-md-6">
@@ -203,7 +203,7 @@ $configurator = get_field( 'configurator' ); ?>
 
 		<div class="container">
 
-			<?php if ( have_rows( 'usps' ) ) { ?>
+			<?php if ( have_rows( 'usps', 'term_' . $term_id ) ) { ?>
 
 				<header class="divider divider--line-behind divider--centered">
 				<strong class="divider__content h2"><?php _e( 'Redenen om voor ons te kiezen', 'glasbestellen' ); ?></strong>
@@ -214,7 +214,7 @@ $configurator = get_field( 'configurator' ); ?>
 				<div class="row">
 
 					<?php
-					while ( have_rows( 'usps' ) ) {
+					while ( have_rows( 'usps', 'term_' . $term_id ) ) {
 						the_row(); ?>
 
 						<div class="col-12 col-md-6 col-lg-6">
@@ -242,7 +242,7 @@ $configurator = get_field( 'configurator' ); ?>
 
 			<?php } ?>
 
-			<?php if ( have_rows( 'faq' ) ) { ?>
+			<?php if ( have_rows( 'faq', 'term_' . $term_id ) ) { ?>
 
 				<header class="divider divider--line-behind divider--centered">
 				<strong class="divider__content h2"><?php _e( 'Veelgestelde vragen', 'glasbestellen' ); ?></strong>
@@ -253,7 +253,7 @@ $configurator = get_field( 'configurator' ); ?>
 				<div class="row">
 
 					<?php
-					while ( have_rows( 'faq' ) ) {
+					while ( have_rows( 'faq', 'term_' . $term_id ) ) {
 						the_row(); ?>
 
 						<div class="col-12">
@@ -289,7 +289,7 @@ $configurator = get_field( 'configurator' ); ?>
 
 	</div>
 
-	<?php if ( $seo_content = get_field( 'seo_content' ) ) { ?>
+	<?php if ( $seo_content = get_field( 'seo_content', 'term_' . $term_id ) ) { ?>
 
 		<div class="area">
 			<div class="container">
