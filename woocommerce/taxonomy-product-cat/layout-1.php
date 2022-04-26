@@ -47,7 +47,7 @@ $configurator = get_field( 'configurator', 'term_' . $term_id ); ?>
 
 	</div>
 
-	<img src="<?php echo gb_get_cover_image_url( get_the_id() ); ?>" class="hero__background">
+	<img src="<?php echo gb_get_cover_image_url( 'term_' . $term_id ); ?>" class="hero__background">
 
 </div>
 
