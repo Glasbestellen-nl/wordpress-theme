@@ -28,7 +28,7 @@ $product_count = ! empty( $product_count ) ? $product_count : 0;
 $static_price = get_field( 'static_price' );
 ?>
 
-<div <?php wc_product_class( 'product-listing', $product ); ?>>
+<div class="product-listing">
    <a href="<?php the_permalink(); ?>" class="product-listing__image">
       <img src="<?php echo get_the_post_thumbnail_url( get_the_id(), 'large' ); ?>" class="product-listing__image-img" alt="<?php echo get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true ); ?>">
    </a>
