@@ -1,5 +1,53 @@
 <?php
 /**
+ * Adds checkout fields
+ */
+function gb_woocommerce_checkout_fields( $fields ) {
+
+    $fields['billing']['billing_reference'] = [
+        'label' => __( 'Referentie', 'glasbestellen' ),
+        'priority' => 30,
+        'class' => ['form-row-last']
+    ];
+    return $fields;
+}
+add_filter( 'woocommerce_checkout_fields' , 'gb_woocommerce_checkout_fields' );
+
+/**
+ * Adds admin billing fields
+ */
+function gb_woocommerce_admin_billing_fields( $fields ) {
+    $fields['reference'] = [
+        'label' => __( 'Referentie' ), 
+        'show' => true
+    ];
+    return $fields;
+}
+add_filter( 'woocommerce_admin_billing_fields' , 'gb_woocommerce_admin_billing_fields' );
+
+/**
+ * Adds row classes to checkout field
+ */
+function gb_woocommerce_checkout_fields_classes( $fields ) {
+    $fields['company']['class'] = ['form-row-first'];
+    $fields['postcode']['class'] = ['form-row-first'];
+    $fields['city']['class'] = ['form-row-last'];
+    return $fields;
+}
+add_filter( 'woocommerce_default_address_fields', 'gb_woocommerce_checkout_fields_classes' );
+
+/**
+ * Saves custom checkout fields
+ */
+function gb_save_custom_checkout_fields( $order, $data ) {
+
+    if ( ! empty( $_POST['billing_reference'] ) ) {
+        $order->update_meta_data( 'billing_reference', $data['billing_reference'] );
+    }
+}
+add_action( 'woocommerce_checkout_create_order', 'gb_save_custom_checkout_fields', 10, 2 );
+
+/**
  * Hides shipping estimate text "Shipping options will be updated at checkout."
  */
 add_filter('woocommerce_shipping_estimate_html', '__return_null');

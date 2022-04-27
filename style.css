@@ -3891,5 +3891,14 @@ Modal
 .woocommerce form .form-row-last,
 .woocommerce-page form .form-row-first,
 .woocommerce-page form .form-row-last {
-  width: 49%;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .woocommerce form .form-row-first,
+  .woocommerce form .form-row-last,
+  .woocommerce-page form .form-row-first,
+  .woocommerce-page form .form-row-last {
+    width: 49%;
+  }
 }
