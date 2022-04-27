@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     <div class="container">
         <div class="row d-flex align-items-center">
         <div class="col-4 col-lg-2 offset-lg-6">
-            <span class="js-config-total-price d-block text-size-medium text-color-blue text-weight-bold"><?php echo wc_price( $product->get_price() ); ?></span>
+            <span class="js-config-total-price d-block text-size-medium text-color-blue text-weight-bold"><?php echo wc_price( wc_get_price_including_tax( $product ) ); ?></span>
             <span class="text-size-tiny text-color-grey"><?php _e( 'Prijs incl. BTW.', 'glasbestellen' ); ?></span>
         </div>
         <div class="col-7 offset-1 col-lg-4 offset-lg-0">
