@@ -1,5 +1,10 @@
 <?php
 /**
+ * Hides shipping estimate text "Shipping options will be updated at checkout."
+ */
+add_filter('woocommerce_shipping_estimate_html', '__return_null');
+
+/**
  * Show configuration summary data in cart item
  */
 function gb_display_configuration_summary_in_cart( $item_data, $cart_item ) {
