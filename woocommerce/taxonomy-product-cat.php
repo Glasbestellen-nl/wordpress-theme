@@ -26,6 +26,9 @@ switch ( $product_cat_template ) {
 	case 'layout_1' :
 		wc_get_template( 'taxonomy-product-cat/layout-1.php' );
 		break;
+	case 'layout_2' :
+		wc_get_template( 'taxonomy-product-cat/layout-2.php' );
+		break;		
 	default :
 		wc_get_template( 'archive-product.php' );	
 }
