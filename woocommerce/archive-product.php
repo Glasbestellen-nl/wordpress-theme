@@ -51,7 +51,7 @@ $number_of_columns = get_field( 'number_of_columns', 'term_' . $term_id ); ?>
             if ( woocommerce_product_loop() ) {
 
                //do_action( 'woocommerce_before_shop_loop' );
-
+               
                woocommerce_product_loop_start(); ?>
 
                <section class="row product-listings large-space-below">
@@ -70,11 +70,12 @@ $number_of_columns = get_field( 'number_of_columns', 'term_' . $term_id ); ?>
                         <?php
                      }
                   }
-                  woocommerce_product_loop_end(); ?>
+                  ?>
 
                </section>
                
                <?php
+               woocommerce_product_loop_end();
 
                do_action( 'woocommerce_after_shop_loop' );
             } else {

@@ -67,6 +67,8 @@ get_header( 'shop' );
 					</article>
 
 					<?php wc_get_template_part( 'single-product/reviews' ); ?>
+
+					<?php wc_get_template_part( 'single-product/related-products' ); ?>
 					
 					<?php do_action( 'woocommerce_after_main_content' ); ?>
 
