@@ -1,8 +1,10 @@
 <?php 
 get_header(); 
 $the_query = new WP_Term_Query([
-    'taxonomy'      => 'product_cat',
-    'hide_empty'    => false
+   'taxonomy'      => 'product_cat',
+   'hide_empty'    => false,
+   'orderby'       => 'meta_value_num',
+   'meta_key'      => 'order_number'
 ]);
 $terms = $the_query->get_terms();
 ?>
