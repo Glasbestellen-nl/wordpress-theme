@@ -107,7 +107,8 @@ const Configurator = (function () {
     };
 
     this.updateTotalPrice = function () {
-      let totalPrice = $(".js-config-total-price", this.element);
+      let totalPrice = $(".js-config-total-price");
+      totalPrice.html("...");
       let data = {
         action: "get_configurator_total_price",
         product_id: gb.postId,
