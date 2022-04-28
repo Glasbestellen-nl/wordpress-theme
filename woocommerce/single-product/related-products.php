@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $related_products = new WP_Query([
     'post_type' => 'product',
-    'post__in'  => $product->get_upsells()
+    'post__in'  => $product->get_upsell_ids()
 ]);
 ?>
 

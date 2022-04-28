@@ -232,12 +232,16 @@ class Configurator {
       $rules = ! empty( $step['rules'] ) ? $step['rules'] : [];
       switch ( $step['id'] ) {
          case 'width' :
-            $line_array = array_filter( $matrix->get_line(0), function( $value ) use( $rules ) { return $this->filter_matrix_values_callback( $value, $rules ); } );
-            $step['options'] = array_map( [$this, 'map_insert_option_callback'], $line_array, array_keys( array_values( $line_array ) ) );
+            if ( $line_array = $matrix->get_line(0) ) {
+               $line_array = array_filter( $line_array, function( $value ) use( $rules ) { return $this->filter_matrix_values_callback( $value, $rules ); } );
+               $step['options'] = array_map( [$this, 'map_insert_option_callback'], $line_array, array_keys( array_values( $line_array ) ) );
+            }
             break;
          case 'height' :
-            $col_array = array_filter( $matrix->get_col(0), function( $value ) use( $rules ) { return $this->filter_matrix_values_callback( $value, $rules ); } );
-            $step['options'] = array_map( [$this, 'map_insert_option_callback'], $col_array, array_keys( array_values( $col_array ) ) );
+            if ( $col_array = $matrix->get_col(0) ) {
+               $col_array = array_filter( $col_array, function( $value ) use( $rules ) { return $this->filter_matrix_values_callback( $value, $rules ); } );
+               $step['options'] = array_map( [$this, 'map_insert_option_callback'], $col_array, array_keys( array_values( $col_array ) ) );
+            }
             break;
          default:
       }
