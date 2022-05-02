@@ -73,6 +73,7 @@ const Configurator = (function () {
           }
         )
         .on("click", ".js-configurator-cart-button", function (e) {
+          console.log("CLICKED!");
           e.preventDefault();
 
           const form = $(".js-configurator-form");

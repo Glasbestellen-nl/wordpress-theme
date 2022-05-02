@@ -3261,11 +3261,13 @@ Cart
 }
 
 .cart-table__action {
-  margin: 0 0.625em 0.625em 0;
+  margin: 0 0 0.625em 0;
   padding: 0.75em 0.875em;
   border: 1px solid #dbdbdb;
   border-radius: 3px;
-  font-size: 0.875em;
+  font-size: 0.75em;
+  background-color: rgb(239, 239, 239);
+  color: #000;
   cursor: pointer;
 }
 
@@ -3278,6 +3280,10 @@ Cart
   font-weight: 600;
   font-family: "Font Awesome 5 Free";
   color: #007bff;
+}
+
+.cart-table__action--edit {
+  margin-right: 0.25em;
 }
 
 .cart-table__action--edit::before {

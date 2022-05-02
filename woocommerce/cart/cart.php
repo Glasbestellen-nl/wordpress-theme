@@ -95,6 +95,12 @@ defined( 'ABSPATH' ) || exit;
 							echo wp_kses_post( apply_filters( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'woocommerce' ) . '</p>', $product_id ) );
 						}
 						?>
+						
+						<div>
+							<button class="cart-table__action cart-table__action--edit js-cart-item-edit" data-cart-item-key="<?php echo $cart_item_key; ?>"><?php _e( 'Bewerken', 'glasbestellen' ); ?></button>
+							<a href="<?php echo $product_permalink; ?>" class="cart-table__action cart-table__action--redo js-cart-item-redo"><?php _e( 'Nog een samenstellen', 'glasbestellen' ); ?></a>
+						</div>
+
 						</td>
 
 						<td class="product-price" data-title="<?php esc_attr_e( 'Price', 'woocommerce' ); ?>">
