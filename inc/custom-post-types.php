@@ -4,59 +4,6 @@
  */
 function gb_register_post_types() {
 
-	// Product
-	$labels = array(
-		'name'                  => _x( 'Producten', 'Post Type General Name', 'glasbestellen' ),
-		'singular_name'         => _x( 'Product', 'Post Type Singular Name', 'glasbestellen' ),
-		'menu_name'             => __( 'Producten', 'glasbestellen' ),
-		'name_admin_bar'        => __( 'Product', 'glasbestellen' ),
-		'archives'              => __( 'Product archieven', 'glasbestellen' ),
-		'attributes'            => __( 'Product attributen', 'glasbestellen' ),
-		'parent_item_colon'     => __( 'Parent Product:', 'glasbestellen' ),
-		'all_items'             => __( 'Alle Producten', 'glasbestellen' ),
-		'add_new_item'          => __( 'Voeg nieuw product toe', 'glasbestellen' ),
-		'add_new'               => __( 'Voeg nieuwe toe', 'glasbestellen' ),
-		'new_item'              => __( 'Nieuw Product', 'glasbestellen' ),
-		'edit_item'             => __( 'Bewerk Product', 'glasbestellen' ),
-		'update_item'           => __( 'Update Product', 'glasbestellen' ),
-		'view_item'             => __( 'Bekijk Product', 'glasbestellen' ),
-		'view_items'            => __( 'Bekijk Products', 'glasbestellen' ),
-		'search_items'          => __( 'Zoek Product', 'glasbestellen' ),
-		'not_found'             => __( 'Niet gevonden', 'glasbestellen' ),
-		'not_found_in_trash'    => __( 'Niet gevonden in prullenbak', 'glasbestellen' ),
-		'featured_image'        => __( 'Uitgelichte afbeelding', 'glasbestellen' ),
-		'set_featured_image'    => __( 'Stel uitgelichte afbeelding in', 'glasbestellen' ),
-		'remove_featured_image' => __( 'Verwijder uitgelichte afbeelding', 'glasbestellen' ),
-		'use_featured_image'    => __( 'Gebruik als uitgelichte afbeelding', 'glasbestellen' ),
-		'insert_into_item'      => __( 'Voeg aan product toe', 'glasbestellen' ),
-		'uploaded_to_this_item' => __( 'Geupload naar dit product', 'glasbestellen' ),
-		'items_list'            => __( 'Producten lijst', 'glasbestellen' ),
-		'items_list_navigation' => __( 'Producten lijst navigatie', 'glasbestellen' ),
-		'filter_items_list'     => __( 'Filter producten lijst', 'glasbestellen' ),
-	);
-	$args = array(
-		'label'                 => __( 'Product', 'glasbestellen' ),
-		'description'           => __( 'Post Type Description', 'glasbestellen' ),
-		'labels'                => $labels,
-		'supports'              => array( 'title', 'editor', 'custom-fields', 'excerpt', 'thumbnail', 'page-attributes' ),
-		'taxonomies'            => array( 'product-categorie' ),
-		'hierarchical'          => false,
-		'public'                => true,
-		'show_ui'               => true,
-		'show_in_menu'          => true,
-      'menu_icon'             => 'dashicons-screenoptions',
-		'menu_position'         => 5,
-		'show_in_admin_bar'     => true,
-		'show_in_nav_menus'     => true,
-		'can_export'            => true,
-		'has_archive'           => true,
-		'exclude_from_search'   => false,
-		'publicly_queryable'    => true,
-		'capability_type'       => 'page',
-		'rewrite'					=> array( 'slug' => _x( 'producten', 'Product rewrite slug', 'glasbestellen' ) )
-	);
-	// register_post_type( 'product', $args );
-
 	// Review
 	$labels = array(
 		'name'                  => _x( 'Ervaring', 'Post Type General Name', 'glasbestellen' ),
