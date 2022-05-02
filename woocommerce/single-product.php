@@ -5,9 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header( 'shop' );
 ?>
 
-<div class="<?php echo gb_single_product_wrapper_class(); ?>">
+<main class="<?php echo gb_single_product_wrapper_class(); ?>">
 
-	<main class="main-section main-section--space-around main-section--grey">
+	<div class="main-section main-section--space-around main-section--grey">
 
 		<div class="container container--sm-without-space">
 
@@ -70,16 +70,14 @@ get_header( 'shop' );
 
 					<?php wc_get_template_part( 'single-product/related-products' ); ?>
 					
-					<?php do_action( 'woocommerce_after_main_content' ); ?>
-
 				</div>
 			</section>
 		</div>
-	</main>
+	</div>
 	
 	<?php wc_get_template_part( 'single-product/sticky-bar' ); ?>
 
-</div>	
+</main>	
 
 <?php
 get_footer( 'shop' );
