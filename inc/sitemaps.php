@@ -17,13 +17,14 @@ function create_product_sitemap() {
 
   $products_query = new WP_Term_Query([
     'taxonomy' => 'product_cat',
-    'hide_empty' => false
+    'hide_empty' => false,
   ]);
   if ( empty( $products_query->terms ) ) return;
   $sitemap = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
   $count = 0;
   foreach ( $products_query->terms as $term ) {
     $count ++;
+    if ( get_field( 'hide_on_archive', 'term_' . $term->ID ) ) continue;
     if ( $count == 1 ) continue; // Skip no category
     $sitemap .= '
       <url>
