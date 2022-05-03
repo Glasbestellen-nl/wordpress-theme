@@ -1,13 +1,50 @@
 <?php
-function enable_custom_sitemap() {
+function sitemap_exclude_post_type( $value, $post_type ) {
+  if ( $post_type == 'product' ) return true;
+}
+add_filter( 'wpseo_sitemap_exclude_post_type', 'sitemap_exclude_post_type', 10, 2 );
+
+function gb_change_products_sitemap() {
+  global $wpseo_sitemaps;
+  if ( empty( $wpseo_sitemaps ) ) return;
+  $wpseo_sitemaps->register_sitemap( 'products', 'create_product_sitemap' );
+}
+add_action( 'init', 'gb_change_products_sitemap', 99 );
+
+function create_product_sitemap() {
+
+  global $wpseo_sitemaps;
+
+  $products_query = new WP_Term_Query([
+    'taxonomy' => 'product_cat'
+  ]);
+  if ( empty( $products_query->terms ) ) return;
+  $sitemap = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+  $count = 0;
+  foreach ( $products_query->terms as $term ) {
+    $count ++;
+    if ( $count == 1 ) continue; // Skip no category
+    $sitemap .= '
+      <url>
+        <loc>' . get_term_link( $term ) . '</loc>
+        <lastmod></lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+      </url>';
+  }
+  $sitemap .= '</urlset>';
+  $wpseo_sitemaps->set_sitemap( $sitemap );
+}
+
+function gb_enable_custom_sitemap() {
    global $wpseo_sitemaps;
    if ( isset( $wpseo_sitemaps ) && ! empty ( $wpseo_sitemaps ) ) {
       $wpseo_sitemaps->register_sitemap( 'external', 'create_external_sitemap' );
    }
 }
-add_action( 'init', 'enable_custom_sitemap' );
+add_action( 'init', 'gb_enable_custom_sitemap' );
 
-function create_external_sitemap() {
+function gb_create_external_sitemap() {
    global $wpseo_sitemaps;
 
    $sitemap = '
@@ -612,14 +649,18 @@ function create_external_sitemap() {
    $wpseo_sitemaps->set_sitemap( $sitemap );
 }
 
-function add_sitemap_custom_items( $sitemap_custom_items ) {
+function gb_add_sitemap_custom_items( $sitemap_custom_items ) {
    $sitemap_custom_items .= '
       <sitemap>
          <loc>' . site_url( 'external-sitemap.xml' ) . '</loc>
          <lastmod>2019-09-30</lastmod>
       </sitemap>
-   ';
+      <sitemap>
+        <loc>' . site_url( 'products-sitemap.xml' ) . '</loc>
+        <lastmod></lastmod>
+    </sitemap>
 
+   ';
    return $sitemap_custom_items;
 }
-add_filter( 'wpseo_sitemap_index', 'add_sitemap_custom_items' );
+add_filter( 'wpseo_sitemap_index', 'gb_add_sitemap_custom_items' );
