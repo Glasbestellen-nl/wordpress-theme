@@ -16,7 +16,8 @@ function create_product_sitemap() {
   global $wpseo_sitemaps;
 
   $products_query = new WP_Term_Query([
-    'taxonomy' => 'product_cat'
+    'taxonomy' => 'product_cat',
+    'hide_empty' => false
   ]);
   if ( empty( $products_query->terms ) ) return;
   $sitemap = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
