@@ -11,7 +11,7 @@ function gb_lead_form_submit_save_configuration( $lead_id, $post_data ) {
    if ( ! empty( $post_data['configuration'] ) ) {
       CRM::update_lead_meta( $lead_id, 'saved_configuration', $post_data['configuration'] );
    }
-
+   
    // $email_template = gb_get_saved_configuration_email_html( $lead_id );
    // $email = new Email( __( 'Uw samenstelling als offerte', 'glasbestellen' ) );
    // $email->set_template( $email_template );
