@@ -31,7 +31,7 @@ function gb_products_page_content_load() {
  * Sets products archive meta title from options value
  */
 function gb_products_archive_meta_title( $title ) {
-	if ( ! get_query_var( 'is_product_cat_archive' ) ) return;
+	if ( ! get_query_var( 'is_product_cat_archive' ) ) return $title;
 	$page_content = get_option( 'product_post_type_content' );
 	if ( ! empty( $page_content['meta_title'] ) ) {
 		$title = $page_content['meta_title'] . ' - ' . get_bloginfo( 'name' );
@@ -44,7 +44,7 @@ add_filter( 'wpseo_title', 'gb_products_archive_meta_title' );
  * Sets products archive meta description from options value
  */
 function gb_products_archive_meta_description( $desc ) {
-	if ( ! get_query_var( 'is_product_cat_archive' ) ) return;
+	if ( ! get_query_var( 'is_product_cat_archive' ) ) return $desc;
 	$page_content = get_option( 'product_post_type_content' );
 	if ( ! empty( $page_content['meta_description'] ) ) {
 		$desc = $page_content['meta_description'];
