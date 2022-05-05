@@ -55,6 +55,14 @@
     );
   };
 
+  // Load cart quantity dynamically
+  (function () {
+    $.get(gb.ajaxUrl, { action: "get_cart_quantity" }, function (number) {
+      if (number > 0)
+        $(".js-total-cart-quantity").text(number).removeClass("d-none");
+    });
+  })();
+
   // Fancybox
   $(".fancybox").fancybox({
     prevEffect: "none",
