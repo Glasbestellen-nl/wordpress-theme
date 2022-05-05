@@ -1,5 +1,13 @@
 <?php
 /**
+ * Adds hidden fields to checkout form
+ */
+function gb_woocommerce_checkout_billing() {
+    echo '<input type="hidden" name="gclid" class="gclid_field">';
+}
+add_action( 'woocommerce_checkout_billing', 'gb_woocommerce_checkout_billing', 99 );
+
+/**
  * Adds checkout fields
  */
 function gb_woocommerce_checkout_fields( $fields ) {
@@ -39,13 +47,17 @@ add_filter( 'woocommerce_default_address_fields', 'gb_woocommerce_checkout_field
 /**
  * Saves custom checkout fields
  */
-function gb_save_custom_checkout_fields( $order, $data ) {
+function gb_save_custom_checkout_fields( $order ) {
 
     if ( ! empty( $_POST['billing_reference'] ) ) {
-        $order->update_meta_data( 'billing_reference', $data['billing_reference'] );
+        $order->update_meta_data( 'billing_reference', $_POST['billing_reference'] );
+    }
+
+    if ( ! empty( $_POST['gclid'] ) ) {
+        $order->update_meta_data( 'gclid', $_POST['gclid'] );
     }
 }
-add_action( 'woocommerce_checkout_create_order', 'gb_save_custom_checkout_fields', 10, 2 );
+add_action( 'woocommerce_checkout_create_order', 'gb_save_custom_checkout_fields', 10 );
 
 /**
  * Hides shipping estimate text "Shipping options will be updated at checkout."
