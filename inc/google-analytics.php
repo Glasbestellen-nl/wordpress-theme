@@ -70,7 +70,7 @@ function gb_push_order_data_to_google_analytics( $order_id ) {
             $analytics->setTransactionId( $item_id )
                ->setItemName( $item->get_name() )
                ->setItemCode( $item->get_product_id() )
-               ->setItemCategory( $item_category )
+               ->setItemCategory( $category_id )
                ->setItemPrice( $item->get_total() )
                ->setItemQuantity( $item->get_quantity() )
                ->sendItem();
