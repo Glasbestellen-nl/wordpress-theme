@@ -38,4 +38,3 @@ foreach ( $files as $file ) {
 }
 
 $offline_conversion_tracking = new Offline_Conversion_Tracking\Core;
-
