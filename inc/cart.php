@@ -1,11 +1,30 @@
 <?php
-function gb_handle_get_cart_quantity() {
-   global $woocommerce;
-   echo $woocommerce->cart->cart_contents_count;
-   wp_die();
+// function gb_handle_get_cart_quantity() {
+//    global $woocommerce;
+//    echo $woocommerce->cart->cart_contents_count;
+//    wp_die();
+// }
+// add_action( 'wp_ajax_get_cart_quantity', 'gb_handle_get_cart_quantity' );
+// add_action( 'wp_ajax_nopriv_get_cart_quantity', 'gb_handle_get_cart_quantity' );
+
+/**
+ * Show cart contents / total Ajax
+ */
+function woocommerce_header_add_to_cart_fragment( $fragments ) {
+	global $woocommerce;
+
+	ob_start(); ?>
+
+   <a href="<?php echo wc_get_cart_url(); ?>" class="cart-button btn--aside cart-customlocation">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-button__quantity"><?php echo $woocommerce->cart->cart_contents_count; ?></span>
+   </a>
+
+   <?php
+	$fragments['a.cart-customlocation'] = ob_get_clean();
+	return $fragments;
 }
-add_action( 'wp_ajax_get_cart_quantity', 'gb_handle_get_cart_quantity' );
-add_action( 'wp_ajax_nopriv_get_cart_quantity', 'gb_handle_get_cart_quantity' );
+add_filter( 'woocommerce_add_to_cart_fragments', 'woocommerce_header_add_to_cart_fragment' );
 
 function gb_handle_edit_cart_item() {
 

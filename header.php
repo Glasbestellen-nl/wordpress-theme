@@ -51,9 +51,9 @@
 
                <div class="col-4 col-lg-1 offset-md-4 offset-lg-0 d-flex">
                   <div class="header-inner__cart">
-                     <a href="<?php echo wc_get_cart_url(); ?>" class="cart-button btn--aside">
+                     <a href="<?php echo wc_get_cart_url(); ?>" class="cart-button btn--aside cart-customlocation">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-button__quantity js-total-cart-quantity d-none">0</span>
+                        <span class="cart-button__quantity"><?php echo WC()->cart->cart_contents_count; ?></span>
                      </a>
                   </div>
                </div>
