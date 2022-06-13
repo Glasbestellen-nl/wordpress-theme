@@ -116,6 +116,20 @@
     $(target).scrollTo(-10);
   });
 
+  // Cart edit item
+  $(".js-cart-item-edit").on("click", function (e) {
+    e.preventDefault();
+    let itemKey = $(this).data("cart-item-key");
+    $.post(
+      gb.ajaxUrl,
+      { action: "edit_cart_item", cart_item_key: itemKey },
+      function (response) {
+        if (response.redirect_url) window.location.href = response.redirect_url;
+      },
+      "json"
+    );
+  });
+
   /**
    * Rotator
    */
