@@ -39,7 +39,7 @@ if ( class_exists( 'WC_Product' ) ) {
                     return get_field( 'fittings_info', $this->id );
                     break;                    
                 default :
-                    return get_field( 'assembly', $this->id );
+                    return get_field( 'assembly_instruction', $this->id );
             }
         }
 
