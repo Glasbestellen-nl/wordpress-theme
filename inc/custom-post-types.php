@@ -225,41 +225,6 @@ function gb_register_post_types() {
 	);
 	register_post_type( 'onderdeel', $args );
 
-	// Transactie
-	$labels = array(
-		'name'                => _x( 'Transacties', 'Post Type General Name', 'glasbestellen' ),
-		'singular_name'       => _x( 'Transactie', 'Post Type Singular Name', 'glasbestellen' ),
-		'menu_name'           => __( 'Transacties', 'glasbestellen' ),
-		'parent_item_colon'   => __( 'Parent transactie:', 'glasbestellen' ),
-		'all_items'           => __( 'Alle transacties', 'glasbestellen' ),
-		'view_item'           => __( 'Bekijk transactie', 'glasbestellen' ),
-		'add_new_item'        => __( 'Voeg nieuwe transactie toe', 'glasbestellen' ),
-		'add_new'             => __( 'Voeg nieuwe toe', 'glasbestellen' ),
-		'edit_item'           => __( 'Bewerk transactie', 'glasbestellen' ),
-		'update_item'         => __( 'Update transactie', 'glasbestellen' ),
-		'search_items'        => __( 'Zoek transacties', 'glasbestellen' ),
-		'not_found'           => __( 'Niet gevonden', 'glasbestellen' ),
-		'not_found_in_trash'  => __( 'Niet gevonden in prullenbak', 'glasbestellen' ),
-	);
-	$args = array(
-		'labels'              => $labels,
-		'supports'            => array( 'title', 'custom-fields' ),
-		'hierarchical'        => true,
-		'public'              => false,
-		'show_ui'             => true,
-		'show_in_menu'        => true,
-		'show_in_nav_menus'   => true,
-		'show_in_admin_bar'   => true,
-		'menu_position'       => 2,
-		'menu_icon'           => 'dashicons-chart-area',
-		'can_export'          => true,
-		'exclude_from_search' => false,
-		'publicly_queryable'  => true,
-		'capability_type'     => 'page',
-		'map_meta_cap'        => true,
-	);
-	register_post_type( 'transactie', $args );
-
 	// Explanation
 	$labels = array(
 		'name'                => _x( 'Uitleg', 'Post Type General Name', 'glasbestellen' ),
