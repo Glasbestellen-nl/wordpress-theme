@@ -29,9 +29,9 @@
                <div class="row">
                   <?php
                   if ( ! empty( $terms ) ) {
-                     if ( $post_id = gb_get_product_id_by_string( $terms[0]->name ) ) { ?>
+                     if ( $product_cat_id = gb_get_product_id_by_string( $terms[0]->name ) ) { ?>
                         <div class="col-12 col-lg-6">
-                           <a href="<?php echo get_permalink( $post_id ); ?>" class="btn btn--primary btn--block btn--next pin__button"><?php _e( 'Meer informatie', 'glasbestellen' ); ?></a>
+                           <a href="<?php echo get_term_link( $product_cat_id, 'product_cat' ); ?>" class="btn btn--primary btn--block btn--next pin__button"><?php _e( 'Meer informatie', 'glasbestellen' ); ?></a>
                         </div>
                      <?php
                      }

@@ -28,11 +28,10 @@ function gb_get_product_id_by_string( string $string ) {
 
 	if ( empty( $string ) ) return;
 
-	if ( $post = get_page_by_title( $string, OBJECT, 'product' ) ) {
-		return $post->ID;
-	}
+	$terms = get_terms( 'product_cat', ['search' => $string] );
+	if ( empty( $terms ) ) return;
 
-	return false;
+	return reset( $terms )->term_id;
 }
 
 /**
