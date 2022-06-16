@@ -26,7 +26,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
 <?php /* translators: %s: Customer first name */ ?>
 <p><?php printf( esc_html__( 'Beste %s,', 'glasbestellen' ), esc_html( $order->get_billing_first_name() ) ); ?></p>
-<p><?php printf( esc_html__( 'Bedankt voor uw bestelling! Uw factuur met ordernummer #%d vindt u in de bijlage. Mocht u vragen hebben neem dan gerust contact met ons op.', 'glasbestellen' ), $order->get_id() ); ?></p>
+<p><?php printf( esc_html__( 'Bedankt voor uw bestelling! Uw factuur met ordernummer #%d vindt u in de bijlage. Mocht u vragen hebben neem dan gerust contact met ons op.', 'glasbestellen' ), $order->get_order_number() ); ?></p>
 <?php
 
 /*
