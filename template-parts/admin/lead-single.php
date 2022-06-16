@@ -74,7 +74,7 @@ use Offline_Conversion_Tracking\Dashboard_UI;
                            </tbody>
                         </table>
 
-                        <p><a href="<?php echo $configurator->get_configuration_url(); ?>" target="_blank"><?php _e( 'Open configuratie in tablad', 'glasbestellen' ); ?> &raquo;</a></p>
+                        <!-- <p><a href="<?php echo $configurator->get_configuration_url(); ?>" target="_blank"><?php _e( 'Open configuratie in tablad', 'glasbestellen' ); ?> &raquo;</a></p> -->
 
                      </div>
                   </div>

@@ -25,7 +25,7 @@
       <?php wp_head(); ?>
    </head>
 
-   <body <?php body_class(); ?>
+   <body <?php body_class(); ?>>
 
       <?php if ( $gtm_container_id = get_option( 'gtm_container_id' ) ) { ?>
          <!-- Google Tag Manager (noscript) -->

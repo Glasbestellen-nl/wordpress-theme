@@ -29,7 +29,7 @@ function gb_register_taxonomies() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy( 'product-categorie', array( 'product' ), $args );
+	// register_taxonomy( 'product-categorie', array( 'product' ), $args );
 
 	// Review product
 	$labels = array(

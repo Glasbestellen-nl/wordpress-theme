@@ -6,17 +6,7 @@ function gb_render_email_template( $template ) {
 
    if ( current_user_can( 'administrator' ) ) {
 
-      if ( ! empty( $_GET['order_email'] ) ) {
-
-         $transaction_id = $_GET['order_email'];
-         $transaction = new Transaction( $transaction_id );
-
-         $html = gb_get_order_confirmation_email_html( $transaction );
-         echo $html;
-         return;
-      }
-
-      else if ( ! empty( $_GET['lead_email'] ) ) {
+      if ( ! empty( $_GET['lead_email'] ) ) {
          $html = gb_get_lead_request_email_html( $_GET['lead_email'] );
          echo $html;
          return;
@@ -47,26 +37,6 @@ function gb_send_lead_request_email( $lead_id, $post_data ) {
 }
 add_action( 'gb_lead_form_submit_before_redirect', 'gb_send_lead_request_email', 0, 2 );
 
-/**
- * Returns order confirmation email html by transaction input
- */
-function gb_get_order_confirmation_email_html( Transaction $transaction ) {
-
-   if ( empty( $transaction ) ) return;
-
-   $template_path = TEMPLATEPATH . '/email-templates/order-confirmation.php';
-
-   $data['billing']          = $transaction->get_billing_data();
-   $data['delivery_address'] = $transaction->get_delivery_data();
-   $data['order_id']         = $transaction->get_transaction_id();
-   $data['total_price']      = $transaction->get_total_price();
-   $data['items']            = $transaction->get_items();
-   $data['shipping']         = true;
-
-   $builder = new Email_Template_Builder( $template_path, $data );
-
-   return $builder->get_html();
-}
 
 /**
  * Returns lead request email html

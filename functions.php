@@ -2,6 +2,7 @@
 // Constants
 define( 'GB_NONCE', '8dnnjndds_dn38ndjns009wsP' );
 
+
 // Composer autoloading
 require __DIR__ . '/vendor/autoload.php';
 

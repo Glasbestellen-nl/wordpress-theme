@@ -1,114 +1,38 @@
 <?php
 /**
- * Handles checkout form
+ * Changes "Place Order" Button text WooCommerce Checkout
  */
-function gb_handle_checkout_form() {
-
-   $response = [];
-
-   // Check whether form is submitted and billing fields are too
-   if ( empty( $_POST['billing'] ) ) wp_die();
-
-   $cart = gb_get_cart();
-   $transaction = new Transaction;
-
-   $billing = array_filter( $_POST['billing'], function( $value ) {
-      return ! empty( $value );
-   });
-   $delivery_address = array_filter( $_POST['delivery_address'], function( $value ) {
-      return ! empty( $value );
-   });
-
-   $transaction->update_billing_data( $billing );
-   $transaction->update_delivery_data( $delivery_address );
-   $transaction->update_client_data( $_POST['client'] );
-   $transaction->update_items( $cart->get_items() );
-   $transaction->update_total_price( $cart->get_total_price() );
-
-   // Format the total value right (1000.00) including vat
-   $value = number_format( Money::including_vat( $cart->get_total_price() ), 2, '.', '' );
-
-   $order_id = $transaction->get_post_id();
-
-   // Initialize mollie client
-   $mollie = gb_get_mollie_client();
-
-   // Create payment
-   $payment = $mollie->payments->create([
-      "amount" => [
-         "currency" => "EUR",
-         "value"    => $value
-      ],
-      "description" => sprintf( __( 'Bestelling #%s', 'glasbestellen' ), $transaction->get_transaction_id() ),
-      "redirectUrl" => gb_get_payment_redirect_url( $order_id ),
-      "webhookUrl"  => gb_get_payment_webhook_url(),
-      "metadata" => [
-         "order_id" => $order_id,
-      ],
-   ]);
-
-   $response['redirect'] = $payment->getCheckoutUrl();
-
-   echo json_encode( $response );
-
-   wp_die();
-
+function bcc_woocommerce_button_text( $button_text ) {
+	return __( 'Bestellen en betalen', 'glasbestellen' );
 }
-add_action( 'wp_ajax_handle_checkout_form', 'gb_handle_checkout_form' );
-add_action( 'wp_ajax_nopriv_handle_checkout_form', 'gb_handle_checkout_form' );
+add_filter( 'woocommerce_order_button_text', 'bcc_woocommerce_button_text' );
 
 /**
- * Handles payment return. For example: emptying shopping cart
+ * Moves payment below billing fields
  */
-function gb_handle_payment_return() {
-
-   if ( empty( $_GET['order_id'] ) ) return;
-
-   $transaction = new Transaction( $_GET['order_id'] );
-
-   if ( 'paid' == $transaction->get_status() )
-      gb_update_cart_session_items([]);
-
+function bcc_theme_wc_setup() {
+    remove_action( 'woocommerce_checkout_order_review', 'woocommerce_checkout_payment', 20 );
+    add_action( 'woocommerce_checkout_after_shipping', 'woocommerce_checkout_payment', 20 );
 }
-add_action( 'init', 'gb_handle_payment_return' );
+add_action( 'after_setup_theme', 'bcc_theme_wc_setup' );
 
 /**
- * Initializes mollie payment client
+ * Adds heading above payment on checkout
  */
-function gb_get_mollie_client() {
+add_action( 'woocommerce_review_order_before_payment', function() {
+    echo '<h3>' . __( 'Kies betaalmethode', 'glasbestellen' ) . '</h3>';
+});
 
-   $api_key = ( get_option( 'payment_test_mode' ) )
-      ? get_option( 'payment_api_key_test' )
-      : get_option( 'payment_api_key_live' );
-
-   // Initialize mollie client
-   $mollie = new \Mollie\Api\MollieApiClient();
-
-   // Set mollie api key
-   $mollie->setApiKey( $api_key );
-
-   return $mollie;
-}
-
-/**
- * Returns checkout page url
+/** 
+ * Removes Order Notes Title - Additional Information & Notes Field
  */
-function gb_get_checkout_url() {
-   if ( $page_id = get_page_id_by_template( 'checkout.php' ) )
-   return get_permalink( $page_id );
-}
+add_filter( 'woocommerce_enable_order_notes_field', '__return_false', 9999 );
 
-/**
- * Returns payment redirect url from options table
+/** 
+ * Remove Order Notes Field
  */
-function gb_get_payment_redirect_url( $order_id = 0 ) {
-   return get_permalink( get_option( 'payment_redirect_url' ) ) . '?order_id=' . $order_id;
+function remove_order_notes( $fields ) {
+    unset ( $fields['order']['order_comments'] );
+    return $fields;
 }
-
-/**
- * Returns payment webhook url from options table
- */
-function gb_get_payment_webhook_url() {
-   $option = get_option( 'payment_webhook_url' );
-   return ( ! empty( $option ) ) ? $option : site_url( '/webhook' );
-}
+add_filter( 'woocommerce_checkout_fields' , 'remove_order_notes' );
