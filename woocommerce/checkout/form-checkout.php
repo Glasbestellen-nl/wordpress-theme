@@ -79,7 +79,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
                                 <div class="stars stars--large rating__stars">
                                     <?php
                                     for ( $i = 1; $i <= 5; $i ++ ) {
-                                        $checked_class = ( $i <= gb_get_review_average() ) ? 'star--checked' : '';
+                                        $checked_class = ( $i <= gb_get_review_average( false, null, 0 ) ) ? 'star--checked' : '';
                                         echo '<div class="fas fa-star star ' . $checked_class . '"></div> ';
                                     }
                                     ?>
