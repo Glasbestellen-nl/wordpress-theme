@@ -36,17 +36,18 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
         <div class="row" id="customer_details">
             <div class="col-lg-6">
-                <div class="">
+                <div class="space-md-around">
                     <div class="space-below">
                         <?php do_action( 'woocommerce_checkout_billing' ); ?>
                     </div> 
                     <?php do_action( 'woocommerce_checkout_shipping' ); ?>
+                    <?php do_action( 'woocommerce_checkout_after_shipping' ); ?>
                 </div>
             </div>
 
             <div class="col-lg-6">
 
-                <div class="">
+                <div class="space-md-around">
 
                     <?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
         
@@ -60,7 +61,35 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
                     <?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
 
-                </div> 
+                    <div class="layout space-below">
+                        <div class="layout__column">
+                            <h2 class="h3 h-underlined"><?php _e( 'Betaal bij ons met', 'glasbestellen' ); ?></h2>
+                            <div class="payment-icons">
+                                <img src="<?php echo get_template_directory_uri() . '/assets/images/payment-icons.png'; ?>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layout space-below">
+                        <div class="layout__column text-center">
+                            <h2 class="h3"><?php _e( 'Klanttevredenheid is wat ons drijft!', 'glasbestellen' ); ?></h2>
+                            <span class="subline space-below"><?php _e( 'Onze klanten beoordelen ons gemiddeld met', 'glasbestellen' ); ?>:</span>
+
+                            <div class="rating rating--checkout">
+                                <div class="stars stars--large rating__stars">
+                                    <?php
+                                    for ( $i = 1; $i <= 5; $i ++ ) {
+                                        $checked_class = ( $i <= gb_get_review_average() ) ? 'star--checked' : '';
+                                        echo '<div class="fas fa-star star ' . $checked_class . '"></div> ';
+                                    }
+                                    ?>
+                                </div>
+                                <span class="rating__number rating__number--light-bg"><?php echo gb_get_review_average( true ); ?></span>
+                            </div>
+                        </div>  
+                    </div> 
+
+               </div>
 
             </div>
         </div>
