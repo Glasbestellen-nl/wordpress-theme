@@ -87,4 +87,4 @@ function gb_push_order_data_to_google_analytics( $order_id ) {
          echo "API call failed: " . htmlspecialchars( $e->getMessage() );
    }
 }
-add_action( 'woocommerce_order_status_completed', 'gb_push_order_data_to_google_analytics' );
+add_action( 'woocommerce_order_status_processing', 'gb_push_order_data_to_google_analytics' );
