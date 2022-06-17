@@ -48,61 +48,6 @@ do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, 
  */
 do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
 
-?>
-
-<table style="border-collapse: collapse;" border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tr>
-		<td style="padding: 0; padding-bottom: 20px;">
-
-			<table style="border-collapse: collapse;" border="0" cellpadding="0" cellspacing="0" width="100%">
-
-				<tr>
-					<td style="padding: 0; color: #0c5994;">
-						<h2><?php echo __( 'Verder verloop van uw bestelling', 'glasbestellen' ); ?></h2>
-					</td>
-				</tr>
-
-				<tr>
-					<td style="padding-top: 20px;">
-
-						<table style="border-collapse: collapse;" border="0" cellpadding="0" cellspacing="0" width="100%">
-							<tr>
-								<th style="padding: 0 15px 0 0; font-size: 18px; text-align: left; vertical-align: middle; color: #399c19;">1.</th>
-								<td style="padding: 15px; border: 1px solid #339015; background: #399c19; color: #fff;">
-									<strong><?php _e( 'Bestelling', 'glasbestellen' ); ?></strong>
-									<p style="margin: 0; line-height: 12px;"><?php _e( 'Bedankt voor uw bestelling!', 'glasbestellen' ); ?></p>
-								</td>
-							</tr>
-
-							<tr>
-								<th style="padding: 0 15px 0 0; font-size: 18px; vertical-align: middle; text-align: left;">2.</th>
-								<td style="padding: 15px; border: 1px solid #dbdad7; background: #fcfcfd;">
-									<strong><?php _e( 'Productie', 'glasbestellen' ); ?></strong>
-									<p style="margin: 0; line-height: 20px;">
-										<?php _e( 'Uw bestelling wordt op maat voor u geproduceerd.', 'glasbestellen' ); ?>
-									</p>
-								</td>
-							</tr>
-
-							<tr>
-								<th style="padding: 0 15px 0 0; font-size: 18px; vertical-align: middle; text-align: left;">3.</th>
-								<td style="padding: 15px; border: 1px solid #dbdad7; background: #fcfcfd;">
-									<strong><?php _e( 'Levering', 'glasbestellen' ); ?></strong>
-									<p style="margin: 0; line-height: 20px;"><?php _e( 'Uw bestelling wordt geleverd. Transport neemt voorafgaand aan de levering contact met u op om een afspraak te maken.', 'glasbestellen' ); ?></p>
-								</td>
-							</tr>
-						</table>
-
-					</td>
-				</tr>
-
-			</table>
-		</td>
-	</tr>
-</table>
-
-<?php
-
 /**
  * Show user-defined additional content - this is set in each email's settings.
  */
