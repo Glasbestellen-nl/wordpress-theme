@@ -114,7 +114,8 @@ get_header();
                            </ul>
                            <strong class="h3 h-orange"><?php _e( 'Openingstijden', 'glasbestellen' ); ?></strong>
                            <ul class="contact-details--dark-bg">
-                              <li class="contact-details__item"><?php echo __( 'Maandag', 'glasbestellen' ) . ' - ' . __( 'vrijdag', 'glasbestellen' ) . ': 09:00 - 17:00'; ?></li>
+                              <li class="contact-details__item"><?php echo __( 'Maandag', 'glasbestellen' ) . ' - ' . __( 'Donderdag', 'glasbestellen' ) . ': 09:00 - 17:00'; ?></li>
+                              <li class="contact-details__item"><?php echo __( 'Vrijdag', 'glasbestellen' ) . ': 09:00 - 16:00'; ?></li>
                            </ul>
                         </div>
 
