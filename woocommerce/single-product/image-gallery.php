@@ -19,7 +19,7 @@ if ( $gallery_image_ids ) { ?>
                     </div>
                 </div>
             <?php } ?>
-            <a href="<?php echo wp_get_attachment_image_src( $gallery_image_ids[0], 'full' )[0]; ?>" class="fancybox" title="<?php echo get_the_title( $gallery_image_ids[0] ); ?>">
+            <a href="<?php echo wp_get_attachment_image_src( $gallery_image_ids[0], 'full' )[0]; ?>" class="fancybox" data-fancybox="gallery" title="<?php echo get_the_title( $gallery_image_ids[0] ); ?>" data-caption="<?php echo get_the_title( $gallery_image_ids[0] ); ?>">
                 <img src="<?php echo wp_get_attachment_image_src( $gallery_image_ids[0], 'full' )[0]; ?>" class="image-slider__img image-slider__main-img js-main" alt="<?php echo get_post_meta( $gallery_image_ids[0], '_wp_attachment_image_alt', true ); ?>">
             </a>
         </div>	

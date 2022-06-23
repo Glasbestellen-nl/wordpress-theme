@@ -55,25 +55,6 @@
     );
   };
 
-  // Fancybox
-  $(".fancybox").fancybox({
-    prevEffect: "none",
-    nextEffect: "none",
-  });
-
-  // Fancybox iframe
-  $(".fancybox-various").fancybox({
-    maxWidth: 800,
-    maxHeight: 600,
-    fitToView: false,
-    width: "80%",
-    height: "80%",
-    autoSize: true,
-    closeClick: false,
-    openEffect: "none",
-    closeEffect: "none",
-  });
-
   /**
    * Toggle side nav
    */
@@ -268,6 +249,7 @@
 
       // Change main image title
       main.parent("a").attr("title", title);
+      main.parent("a").attr("data-caption", title);
 
       // Change current index class
       const currentClass = "current";

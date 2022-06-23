@@ -7,7 +7,7 @@ $terms = get_the_terms( get_the_id(), 'inspiratie-categorie' );
    <div class="row">
 
       <div class="col-12 col-md-5 col-lg-5">
-         <a href="<?php echo get_the_post_thumbnail_url(); ?>" class="fancybox">
+         <a href="<?php echo get_the_post_thumbnail_url(); ?>" class="fancybox" data-fancybox>
             <img src="<?php echo get_the_post_thumbnail_url(); ?>" class="pin__image space-below" alt="<?php echo get_post_meta( get_post_thumbnail_id(), '_wp_attachment_image_alt', true ); ?>">
          </a>
       </div>

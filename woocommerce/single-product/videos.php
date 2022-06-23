@@ -16,7 +16,7 @@ if ( get_field( 'measure_video_youtube_id' ) || get_field( 'assembly_video_youtu
                 $url = add_query_arg( $video_args, 'https://www.youtube.com/embed/' . $youtube_id ); ?>
                 <div class="col-4 col-md-4">
                 <div class="video-list__item">
-                    <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
+                    <a href="<?php echo $url; ?>" data-fancybox class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
                         <div class="lr-video__play"></div>
                         <img src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lr-video__img">
                     </a>
@@ -29,7 +29,7 @@ if ( get_field( 'measure_video_youtube_id' ) || get_field( 'assembly_video_youtu
                 $url = add_query_arg( $video_args, 'https://www.youtube.com/embed/' . $youtube_id ); ?>
                 <div class="col-4 col-md-4">
                 <div class="video-list__item">
-                    <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
+                    <a href="<?php echo $url; ?>" data-fancybox class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
                         <div class="lr-video__play"></div>
                         <img src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lr-video__img">
                     </a>
@@ -42,7 +42,7 @@ if ( get_field( 'measure_video_youtube_id' ) || get_field( 'assembly_video_youtu
                 $url = add_query_arg( $video_args, 'https://www.youtube.com/embed/' . $youtube_id ); ?>
                 <div class="col-4 col-md-4">
                 <div class="video-list__item">
-                    <a href="<?php echo $url; ?>" class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
+                    <a href="<?php echo $url; ?>" data-fancybox class="video-list__item-canvas lr-video fancybox-various fancybox.iframe">
                         <div class="lr-video__play"></div>
                         <img src="https://img.youtube.com/vi/<?php echo $youtube_id; ?>/maxresdefault.jpg" class="lr-video__img">
                     </a>
