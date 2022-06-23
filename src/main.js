@@ -249,6 +249,7 @@
 
       // Change main image title
       main.parent("a").attr("title", title);
+      main.parent("a").attr("data-caption", title);
 
       // Change current index class
       const currentClass = "current";
