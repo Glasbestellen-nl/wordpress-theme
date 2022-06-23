@@ -67,8 +67,8 @@
 
                     <div class="col-12 col-md-5 col-lg-4">
                         <?php if ( $image = get_sub_field( 'featured_item_image' ) ) { ?>
-                            <a href="<?php echo $image['url']; ?>" class="fancybox space-below">
-                            <img src="<?php echo $image['sizes']['medium_large']; ?>" class="rounded-corners box-shadow" alt="<?php echo $image['alt']; ?>">
+                            <a href="<?php echo $image['url']; ?>" class="fancybox space-below" data-fancybox>
+                                <img src="<?php echo $image['sizes']['medium_large']; ?>" class="rounded-corners box-shadow" alt="<?php echo $image['alt']; ?>">
                             </a>
                         <?php } ?>
                     </div>
