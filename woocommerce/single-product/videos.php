@@ -14,7 +14,8 @@ foreach ( $video_types as $video_type ) {
 
         switch ( $video_type ) {
             case 'product';
-                $caption = __( 'Product video', 'glasbesellen' );
+                $product_caption = get_field( 'product_video_caption' );
+                $caption = $product_caption ? $product_caption : __( 'Product video', 'glasbesellen' );
                 break;
             case 'measure';
                 $caption = __( 'Hoe meten?', 'glasbesellen' );
