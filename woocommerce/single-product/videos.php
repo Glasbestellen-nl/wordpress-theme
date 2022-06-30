@@ -44,10 +44,10 @@ foreach ( $video_types as $video_type ) {
             </div>
         </div>
 
-        <?php
-        if ( $count == $total_videos_count ) {
-            echo '</div></div>';
-        }
+    <?php
+    }
+    if ( $count == $total_videos_count ) {
+        echo '</div></div>';
     }
 }
 
