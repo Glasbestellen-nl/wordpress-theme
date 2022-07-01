@@ -13,6 +13,7 @@ $video_types = ['product', 'measure', 'assembly', 'explainer'];
     foreach ( $video_types as $video_type ) {
         $youtube_id = get_field( $video_type . '_video_youtube_id' );
         if ( $youtube_id ) {
+            $url = add_query_arg( $video_args, 'https://www.youtube.com/embed/' . $youtube_id );
 
             switch ( $video_type ) {
                 case 'product';
