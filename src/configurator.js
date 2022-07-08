@@ -28,28 +28,47 @@ const Configurator = (function () {
             const childStepIds = $("option:selected", this).data("child-steps");
 
             const showChildStep = function (stepId) {
-              $(".js-step-" + stepId)
+              const childStep = $(".js-step-" + stepId);
+              childStep
                 .removeClass("d-none")
                 .find(".js-form-validate")
                 .trigger("change");
+
+              const childStepIds = $("option:selected", childStep).data(
+                "child-steps"
+              );
+              if (childStepIds && childStepIds.length > 0)
+                childStepIds.forEach((stepId) => {
+                  showChildStep(stepId);
+                });
             };
 
-            const hideChildStep = function (stepId) {
-              const step = $(".js-parent-step-" + stepId);
-              const input = step.find(".js-form-validate");
-              step.addClass("d-none");
-              clearValidate(input);
+            const hideChildSteps = function (stepId) {
+              const childSteps = $(".js-parent-step-" + stepId);
+              if (childSteps && childSteps.length > 0) {
+                childSteps.each((i, element) => {
+                  const input = $(element).find(".js-form-validate");
+                  $(element).addClass("d-none");
+                  clearValidate(input);
+                  const childStepIds = $("option:selected", element).data(
+                    "child-steps"
+                  );
+                  if (childStepIds && childStepIds.length > 0) {
+                    childStepIds.forEach((stepId) => {
+                      hideChildSteps(stepId);
+                    });
+                  }
+                });
+              }
             };
 
-            hideChildStep(stepId);
+            hideChildSteps(stepId);
 
             if (childStepIds) {
               if ($.isArray(childStepIds)) {
                 childStepIds.forEach(function (childStepId) {
                   showChildStep(childStepId);
                 });
-              } else {
-                showChildStep(childStepIds);
               }
             }
 
