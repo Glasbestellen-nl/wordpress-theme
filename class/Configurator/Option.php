@@ -54,7 +54,7 @@ class Option {
    public function get_child_steps_attr() {
       $child_steps = $this->get_child_steps();
       if ( ! $child_steps ) return;
-      return ( is_array( $child_steps ) ) ? json_encode( $child_steps ) : $child_steps;
+      return ( is_array( $child_steps ) ) ? json_encode( $child_steps ) : json_encode( [$child_steps] );
    }
 
    public function get_field( string $field = '' ) {
