@@ -284,6 +284,31 @@ function gb_product_cat_link_filter( $url, $term, $taxonomy ) {
 }
 add_filter( 'term_link', 'gb_product_cat_link_filter', 10, 3 );
 
+/**
+ * Sets primary category in product url
+ */
+function gb_product_post_type_link_primary_cat( $term, $terms, $post ) {
+
+    // Get the primary term as saved by Yoast
+    $primary_cat_id = get_post_meta( $post->ID, '_yoast_wpseo_primary_product_cat', true );
+
+    // If there is a primary and it's not currently chosen as primary
+    if ( $primary_cat_id && $term->term_id != $primary_cat_id ) {
+
+        // Find the primary term in the term list
+        foreach ( $terms as $term_key => $term_object ) {
+
+            if ( $term_object->term_id == $primary_cat_id ) {
+                // Return this as the primary term
+                $term = $terms[$term_key];
+                break;
+            }
+        }
+    }
+    return $term;
+}
+add_filter( 'wc_product_post_type_link_product_cat', 'gb_product_post_type_link_primary_cat', 10, 3 );
+
 function gb_add_product_query_vars( $vars ) {
     $vars[] = 'is_product_cat_archive';
     return $vars;
