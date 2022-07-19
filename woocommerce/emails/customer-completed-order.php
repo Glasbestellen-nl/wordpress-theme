@@ -25,8 +25,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
 <?php /* translators: %s: Customer first name */ ?>
-<p><?php printf( esc_html__( 'Beste %s,', 'glasbestellen' ), esc_html( $order->get_billing_first_name() ) ); ?></p>
-<p><?php printf( esc_html__( 'Bedankt voor uw bestelling! Uw factuur met ordernummer #%d vindt u in de bijlage. Mocht u vragen hebben neem dan gerust contact met ons op.', 'glasbestellen' ), $order->get_order_number() ); ?></p>
+<p><?php printf( esc_html__( 'Hallo %s,', 'glasbestellen' ), esc_html( $order->get_billing_first_name() ) ); ?></p>
+<p><?php printf( esc_html__( 'Uw bestelling (#%s) is geproduceerd en overgedragen aan de transporteur. Transport gaat de routes plannen en contact met u opnemen om een afspraak te maken voor de levering.
+Wanneer u heeft gekozen voor achteraf betalen is dat vanaf nu mogelijk. U kunt natuurlijk ook wachten tot u de bestelling ontvangt.', 'glasbestellen' ), $order->get_order_number() ); ?></p>
 <?php
 
 /*
