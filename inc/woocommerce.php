@@ -186,7 +186,7 @@ function gb_product_data_panels() {
     
     echo '<div id="configurable_options" class="panel woocommerce_options_panel" style="display: none">';
 
-    $configurators = get_posts( 'post_type=configurator&posts_per_page=-1' );
+    $configurators = get_posts( 'post_type=configurator&posts_per_page=-1&post_status=any' );
     if ( ! $configurators ) return;
 
     $options = [];
