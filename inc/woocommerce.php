@@ -1,4 +1,9 @@
 <?php
+add_filter( 'woocommerce_gpf_wc_get_products_args', function ( $args ) {
+    $args['type'][] = 'configurable';
+    return $args;
+} );
+
 /**
  * Adds hidden fields to checkout form
  */
