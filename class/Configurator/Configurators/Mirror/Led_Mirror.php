@@ -29,10 +29,11 @@ class Led_Mirror extends \Configurator\Configurator {
 
          if ( $price_matrix = $this->get_price_matrix() ) {
             $price_table['size'] = $price_matrix->get_price( $width, $height );
-            if ( $multiplier = $this->get_metadata( 'price_matrix_multiplier' ) ) {
-               $price_table['size'] *= $multiplier;
+            if ( $margin_number = $this->get_metadata( 'price_matrix_margin_number' ) ) {
+               $price_table['size'] /= $margin_number;
             }
          }
+
 
          // Extra shipping large products
          if ( ( $width > 1200 ) || ( $height > 1200 ) ) {
