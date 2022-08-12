@@ -503,6 +503,11 @@ class Configurator {
       return $value;
    }
 
+   public function is_step_disabled( string $step_id ) {
+      $this->set_current_step( $step_id );
+      return $this->_current_step->is_disabled();
+   }
+
    /**
     * Returns the current step type
     *

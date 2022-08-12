@@ -121,7 +121,7 @@ if ( post_password_required() ) {
 
 				<?php } else { ?>
 					<div class="configurator__form-col configurator__form-input js-form-group">
-						<input type="number" name="configuration[<?php echo $step_id; ?>]" class="form-control configurator__form-control js-form-validate" placeholder="<?php echo $configurator->get_size_unit(); ?>" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configurator->get_step_value( $step_id, true ); ?>" />
+						<input type="number" name="configuration[<?php echo $step_id; ?>]" class="form-control configurator__form-control js-form-validate" placeholder="<?php echo $configurator->get_size_unit(); ?>" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configurator->get_step_value( $step_id, true ); ?>" <?php echo $configurator->is_step_disabled( $step_id ) ? "disabled" : ""; ?> />
 						<div class="invalid-feedback js-invalid-feedback"></div>
 					</div>
 				<?php } ?>

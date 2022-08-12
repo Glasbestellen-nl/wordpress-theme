@@ -3486,6 +3486,10 @@ Configurator
   font-size: 0.875em;
 }
 
+.configurator__form-control:disabled {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
 .configurator__checks-item {
   margin-bottom: 0.5em;
   font-size: 0.875em;
