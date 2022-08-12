@@ -5,7 +5,6 @@
 function gb_enqueue_scripts() {
 
    global $post;
-   global $product;
 
    $theme = wp_get_theme();
    $version = $theme->get('Version');
@@ -18,11 +17,7 @@ function gb_enqueue_scripts() {
 
    // Scripts
    wp_enqueue_script( 'masonry' );
-   wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', ['jquery', 'fancybox-js'], $version, true );
-
-   if ( is_singular( 'product' ) ) {
-      wp_enqueue_script( 'react-configurator', get_template_directory_uri() . '/assets/js/configurator.js', ['jquery', 'wp-element'], $version, true );
-   }
+   wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], $version, true );
 
    // Localize scripts
    $l10n = [
@@ -45,7 +40,17 @@ function gb_enqueue_scripts() {
    ];
    if ( is_singular() ) {
       $l10n['postId'] = $post->ID;
-      $l10n['configuratorId'] = get_post_meta( $post->ID, 'configurator', true );
+   }
+
+   // Configurator
+   if ( is_singular( 'product' ) ) {
+      $product = wc_get_product( $post->ID );
+      if ( $product && $product->is_type( 'configurable' ) ) {
+         $configurator_id = get_post_meta( $product->get_id(), 'configurator', true );
+         $l10n['configuratorId'] = $configurator_id;
+         $l10n['configuratorSettings'] = get_post_meta( $configurator_id, 'configurator_settings', true );
+         wp_enqueue_script( 'react-configurator', get_template_directory_uri() . '/assets/js/configurator.js', ['jquery', 'wp-element'], $version, true );
+      }
    }
    wp_localize_script( 'main-js', 'gb', $l10n );
 
