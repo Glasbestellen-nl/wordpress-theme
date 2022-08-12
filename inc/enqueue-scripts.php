@@ -18,12 +18,10 @@ function gb_enqueue_scripts() {
 
    // Scripts
    wp_enqueue_script( 'masonry' );
-   wp_enqueue_script( 'fancybox-js', get_template_directory_uri() . '/assets/js/fancybox.js', ['jquery'], null, true );
-   wp_enqueue_script( 'matchheight-js', get_template_directory_uri() . '/assets/js/matchHeight.min.js', ['jquery'], null, true );
    wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', ['jquery', 'fancybox-js'], $version, true );
 
    if ( is_singular( 'product' ) ) {
-      wp_enqueue_script( 'configurator-js', get_template_directory_uri() . '/assets/js/configurator.js', ['jquery', 'main-js'], $version, true );
+      wp_enqueue_script( 'react-configurator', get_template_directory_uri() . '/assets/js/configurator.js', ['jquery', 'wp-element'], $version, true );
    }
 
    // Localize scripts
