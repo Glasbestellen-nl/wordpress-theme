@@ -8,19 +8,25 @@ export const SettingsProvider = (props) => {
     sizeUnit: "mm",
   });
 
+  const setSizeUnit = (sizeUnit) => {
+    setSettings((prevState) => {
+      return { ...prevState, sizeUnit };
+    });
+  };
+
+  const setSteps = (steps) => {
+    setSettings((prevState) => {
+      return { ...prevState, steps };
+    });
+  };
+
   useEffect(() => {
-    if (window.gb && window.gb.configuratorSettings) {
+    if (window.gb.configuratorSettings) {
       const data = window.gb.configuratorSettings;
-      if (data.sizeUnit)
-        setSettings((prevState) => {
-          return { ...prevState, sizeUnit: data.size };
-        });
-      if (data.steps)
-        setSettings((prevState) => {
-          return { ...prevState, steps: data.steps };
-        });
+      if (data.sizeUnit) setSizeUnit(data.sizeUnit);
+      if (data.steps) setSteps(data.steps);
     }
-  }, [window.gb.configuratorSettings]);
+  }, []);
 
   return (
     <SettingsContext.Provider value={{ ...settings, setSettings }}>

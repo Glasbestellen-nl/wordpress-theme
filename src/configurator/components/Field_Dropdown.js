@@ -4,15 +4,13 @@ import { ConfigurationContext } from "../context/ConfigurationContext";
 
 const Field_Dropdown = (props) => {
   const { id, options } = props;
-  const { configuration, setConfiguration } = useContext(ConfigurationContext);
+  const { configuration, updateConfiguration } =
+    useContext(ConfigurationContext);
 
   const handleChange = (e) => {
-    if (e.target.value) {
-      setConfiguration((prevConfiguration) => ({
-        ...prevConfiguration,
-        [id]: e.target.value,
-      }));
-    }
+    updateConfiguration({
+      [id]: e.target.value,
+    });
   };
 
   const getValue = () => {
@@ -30,7 +28,7 @@ const Field_Dropdown = (props) => {
       onChange={handleChange}
       value={getValue()}
     >
-      {!getDefault() && <option>Geen</option>}
+      {!getDefault() && <option value="">Geen</option>}
       {options &&
         options.length > 0 &&
         options.map((option) => <Option key={option.id} option={option} />)}

@@ -2169,7 +2169,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _context_SettingsContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/SettingsContext */ "./src/configurator/context/SettingsContext.js");
-/* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
+/* harmony import */ var _context_ConfigurationContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ConfigurationContext */ "./src/configurator/context/ConfigurationContext.js");
+/* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
 
 const {
   useContext
@@ -2177,14 +2178,21 @@ const {
 
 
 
+
 const Configurator = () => {
   const {
     steps
   } = useContext(_context_SettingsContext__WEBPACK_IMPORTED_MODULE_1__.SettingsContext);
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, steps.map(step => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    key: step.id,
-    step: step
-  })));
+  const {
+    configuration,
+    setConfiguration
+  } = useContext(_context_ConfigurationContext__WEBPACK_IMPORTED_MODULE_2__.ConfigurationContext);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, steps.map(step => {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      key: step.id,
+      step: step
+    });
+  }));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Configurator);
@@ -2220,15 +2228,13 @@ const Field_Dropdown = props => {
   } = props;
   const {
     configuration,
-    setConfiguration
+    updateConfiguration
   } = useContext(_context_ConfigurationContext__WEBPACK_IMPORTED_MODULE_2__.ConfigurationContext);
 
   const handleChange = e => {
-    if (e.target.value) {
-      setConfiguration(prevConfiguration => ({ ...prevConfiguration,
-        [id]: e.target.value
-      }));
-    }
+    updateConfiguration({
+      [id]: e.target.value
+    });
   };
 
   const getValue = () => {
@@ -2244,7 +2250,9 @@ const Field_Dropdown = props => {
     class: "dropdown configurator__dropdown configurator__form-control",
     onChange: handleChange,
     value: getValue()
-  }, !getDefault() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", null, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, !getDefault() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: ""
+  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_1__["default"], {
     key: option.id,
     option: option
   })));
@@ -2288,7 +2296,7 @@ const Field_Number = _ref => {
   const [value, setValue] = useState(null);
   const {
     configuration,
-    setConfiguration
+    updateConfiguration
   } = useContext(_context_ConfigurationContext__WEBPACK_IMPORTED_MODULE_2__.ConfigurationContext);
   useEffect(() => {
     if (configuration && configuration[id]) setValue(configuration[id]);
@@ -2300,9 +2308,9 @@ const Field_Number = _ref => {
 
   const handleBlur = () => {
     if (value) {
-      setConfiguration(prevConfiguration => ({ ...prevConfiguration,
+      updateConfiguration({
         [id]: value
-      }));
+      });
     }
   };
 
@@ -2469,34 +2477,76 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_configuration__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/configuration */ "./src/configurator/services/configuration.js");
+/* harmony import */ var _SettingsContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SettingsContext */ "./src/configurator/context/SettingsContext.js");
+/* harmony import */ var _services_configuration__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/configuration */ "./src/configurator/services/configuration.js");
 
 const {
   createContext,
   useState,
-  useEffect
+  useEffect,
+  useContext
 } = wp.element;
+
 
 const ConfigurationContext = createContext();
 const ConfigurationProvider = props => {
+  const {
+    steps
+  } = useContext(_SettingsContext__WEBPACK_IMPORTED_MODULE_1__.SettingsContext);
   const [configuration, setConfiguration] = useState({});
+
+  const filterConfiguration = configuration => {
+    return Object.fromEntries(Object.entries(configuration).filter(row => {
+      const id = row[0];
+      const step = steps.find(step => id == step.id);
+
+      if (step && step.parent_step) {
+        const parentId = step.parent_step;
+        const parentStep = steps.find(step => parentId == step.id);
+
+        if (parentStep && parentStep.options && parentStep.options.length > 0) {
+          const activeOption = parentStep.options.find(option => option.id == configuration[parentId]);
+
+          if (activeOption && activeOption.child_steps) {
+            if (Array.isArray(activeOption.child_steps)) {
+              return activeOption.child_steps.includes(id);
+            } else {
+              return activeOption.child_steps == id;
+            }
+          }
+        }
+      }
+
+      return true;
+    }));
+  };
+
+  const updateConfiguration = configuration => {
+    setConfiguration(prevConfiguration => ({ ...prevConfiguration,
+      ...configuration
+    }));
+  };
+
   useEffect(() => {
     (async () => {
       try {
-        const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.gb.configuratorId);
+        const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_2__.getConfiguration)(window.gb.configuratorId);
 
         if (response && response.data && response.data.configuration) {
-          setConfiguration(response.data.configuration);
+          //console.log(response.data.configuration);
+          const filteredConfiguration = filterConfiguration(response.data.configuration); //console.log(filteredConfiguration);
+
+          setConfiguration(filteredConfiguration);
         }
       } catch (err) {
         console.error(err);
       }
     })();
-  }, []);
+  }, [steps]);
   useEffect(() => {
     (async () => {
       try {
-        await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.storeConfiguration)(window.gb.configuratorId, configuration);
+        await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_2__.storeConfiguration)(window.gb.configuratorId, configuration);
       } catch (err) {
         console.error(err);
       }
@@ -2505,7 +2555,7 @@ const ConfigurationProvider = props => {
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ConfigurationContext.Provider, {
     value: {
       configuration,
-      setConfiguration
+      updateConfiguration
     }
   }, props.children);
 };
@@ -2538,21 +2588,30 @@ const SettingsProvider = props => {
     steps: [],
     sizeUnit: "mm"
   });
+
+  const setSizeUnit = sizeUnit => {
+    setSettings(prevState => {
+      return { ...prevState,
+        sizeUnit
+      };
+    });
+  };
+
+  const setSteps = steps => {
+    setSettings(prevState => {
+      return { ...prevState,
+        steps
+      };
+    });
+  };
+
   useEffect(() => {
-    if (window.gb && window.gb.configuratorSettings) {
+    if (window.gb.configuratorSettings) {
       const data = window.gb.configuratorSettings;
-      if (data.sizeUnit) setSettings(prevState => {
-        return { ...prevState,
-          sizeUnit: data.size
-        };
-      });
-      if (data.steps) setSettings(prevState => {
-        return { ...prevState,
-          steps: data.steps
-        };
-      });
+      if (data.sizeUnit) setSizeUnit(data.sizeUnit);
+      if (data.steps) setSteps(data.steps);
     }
-  }, [window.gb.configuratorSettings]);
+  }, []);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SettingsContext.Provider, {
     value: { ...settings,
       setSettings

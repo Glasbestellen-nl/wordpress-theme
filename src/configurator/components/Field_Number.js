@@ -5,7 +5,8 @@ import { ConfigurationContext } from "../context/ConfigurationContext";
 const Field_Number = ({ id }) => {
   const { sizeUnit } = useContext(SettingsContext);
   const [value, setValue] = useState(null);
-  const { configuration, setConfiguration } = useContext(ConfigurationContext);
+  const { configuration, updateConfiguration } =
+    useContext(ConfigurationContext);
 
   useEffect(() => {
     if (configuration && configuration[id]) setValue(configuration[id]);
@@ -17,10 +18,9 @@ const Field_Number = ({ id }) => {
 
   const handleBlur = () => {
     if (value) {
-      setConfiguration((prevConfiguration) => ({
-        ...prevConfiguration,
+      updateConfiguration({
         [id]: value,
-      }));
+      });
     }
   };
 
