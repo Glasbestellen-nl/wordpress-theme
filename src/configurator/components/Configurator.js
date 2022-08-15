@@ -1,11 +1,9 @@
 const { useContext } = wp.element;
-import { SettingsContext } from "../context/SettingsContext";
-import { ConfigurationContext } from "../context/ConfigurationContext";
+import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import Step from "./Step";
 
 const Configurator = () => {
-  const { steps } = useContext(SettingsContext);
-  const { configuration, setConfiguration } = useContext(ConfigurationContext);
+  const { steps } = useContext(ConfiguratorContext);
 
   return (
     <div>

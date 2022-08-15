@@ -1,16 +1,16 @@
 const { useState, useEffect, useContext } = wp.element;
-import { SettingsContext } from "../context/SettingsContext";
-import { ConfigurationContext } from "../context/ConfigurationContext";
+import { ConfiguratorContext } from "../context/ConfiguratorContext";
 
 const Field_Number = ({ id }) => {
-  const { sizeUnit } = useContext(SettingsContext);
   const [value, setValue] = useState(null);
-  const { configuration, updateConfiguration } =
-    useContext(ConfigurationContext);
+  const { steps, setSteps, sizeUnit } = useContext(ConfiguratorContext);
 
   useEffect(() => {
-    if (configuration && configuration[id]) setValue(configuration[id]);
-  }, [configuration]);
+    if (steps) {
+      const step = steps.find((step) => step.id == id);
+      if (step && step.value) setValue(step.value);
+    }
+  }, [steps]);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -18,8 +18,11 @@ const Field_Number = ({ id }) => {
 
   const handleBlur = () => {
     if (value) {
-      updateConfiguration({
-        [id]: value,
+      setSteps((prevSteps) => {
+        return prevSteps.map((step) => {
+          if (step.id == id) step.value = value;
+          return step;
+        });
       });
     }
   };

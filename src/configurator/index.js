@@ -1,14 +1,11 @@
 const { render } = wp.element;
-import { SettingsProvider } from "./context/SettingsContext";
-import { ConfigurationProvider } from "./context/ConfigurationContext";
+import { ConfiguratorProvider } from "./context/ConfiguratorContext";
 import Configurator from "./components/Configurator";
 if (document.getElementById("react_configurator")) {
   render(
-    <SettingsProvider>
-      <ConfigurationProvider>
-        <Configurator />
-      </ConfigurationProvider>
-    </SettingsProvider>,
+    <ConfiguratorProvider>
+      <Configurator />
+    </ConfiguratorProvider>,
     document.getElementById("react_configurator")
   );
 }

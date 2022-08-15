@@ -1,20 +1,26 @@
 const { useContext } = wp.element;
 import Option from "./Option";
-import { ConfigurationContext } from "../context/ConfigurationContext";
+import { ConfiguratorContext } from "../context/ConfiguratorContext";
 
 const Field_Dropdown = (props) => {
   const { id, options } = props;
-  const { configuration, updateConfiguration } =
-    useContext(ConfigurationContext);
+  const { steps, setSteps } = useContext(ConfiguratorContext);
 
   const handleChange = (e) => {
-    updateConfiguration({
-      [id]: e.target.value,
-    });
+    if (e.target.value)
+      setSteps((prevSteps) => {
+        return prevSteps.map((step) => {
+          if (step.id == id) step.value = e.target.value;
+          return step;
+        });
+      });
   };
 
   const getValue = () => {
-    return configuration && configuration[id];
+    if (steps) {
+      const step = steps.find((step) => step.id == id);
+      return step && step.value;
+    }
   };
 
   const getDefault = () => {
