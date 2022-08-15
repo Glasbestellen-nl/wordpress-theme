@@ -15,7 +15,6 @@ function gb_configurator_show_price_table_array() {
 }
 add_action( 'wp', 'gb_configurator_show_price_table_array' );
 
-
 /**
  * Changes step part price difference output based on step id
  */
@@ -31,6 +30,27 @@ function gb_filter_part_price_difference( $value, $step_id ) {
 }
 add_filter( 'gb_step_part_price_difference', 'gb_filter_part_price_difference', 10, 2 );
 
+function gb_handle_get_configuration() {
+
+   $response = [];
+
+   if ( empty( $_POST['configurator_id'] ) ) wp_die();
+
+   $session_configuration = gb_get_configuration_session( $_POST['configurator_id'] );
+   if ( $session_configuration ) {
+      $response['configuration'] = $session_configuration;
+   } else {
+      $configurator = gb_get_configurator( $_POST['configurator_id'] );
+      $response['configuration'] = $configurator->get_default_configuration();
+   }
+
+   wp_send_json( $response );
+   wp_die();
+
+}
+add_action( 'wp_ajax_get_configuration', 'gb_handle_get_configuration' );
+add_action( 'wp_ajax_nopriv_get_configuration', 'gb_handle_get_configuration' );
+
 /**
  * AJAX handles get total configuration price
  */
@@ -38,7 +58,7 @@ function gb_get_configurator_total_price() {
 
    if ( ! empty( $_GET['product_id'] ) ) {
       $product = wc_get_product( $_GET['product_id'] );
-      $configurator = $product->get_configurator();
+      // $configurator = $product->get_configurator();
       echo wc_price( wc_get_price_including_tax( $product ) );
    }
    wp_die();
@@ -58,7 +78,6 @@ function gb_handle_configurator_form_submit() {
    $configurator_id = $_POST['configurator_id'];
 
    if ( ! empty( $_POST['configuration'] ) ) {
-
       $configurator = gb_get_configurator( $configurator_id );
       $configurator->update( $_POST['configuration'] );
 

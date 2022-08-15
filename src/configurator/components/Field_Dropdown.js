@@ -1,7 +1,23 @@
+const { useContext } = wp.element;
 import Option from "./Option";
+import { ConfigurationContext } from "../context/ConfigurationContext";
 
 const Field_Dropdown = (props) => {
-  const { options } = props;
+  const { id, options } = props;
+  const { configuration, setConfiguration } = useContext(ConfigurationContext);
+
+  const handleChange = (e) => {
+    if (e.target.value) {
+      setConfiguration((prevConfiguration) => ({
+        ...prevConfiguration,
+        [id]: e.target.value,
+      }));
+    }
+  };
+
+  const getValue = () => {
+    return configuration && configuration[id];
+  };
 
   const getDefault = () => {
     if (!options || options.length == 0) return;
@@ -9,7 +25,11 @@ const Field_Dropdown = (props) => {
   };
 
   return (
-    <select class="dropdown configurator__dropdown configurator__form-control">
+    <select
+      class="dropdown configurator__dropdown configurator__form-control"
+      onChange={handleChange}
+      value={getValue()}
+    >
       {!getDefault() && <option>Geen</option>}
       {options &&
         options.length > 0 &&

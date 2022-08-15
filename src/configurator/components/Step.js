@@ -2,14 +2,7 @@ import Field_Number from "./Field_Number";
 import Field_Dropdown from "./Field_Dropdown";
 
 const Step = ({ step }) => {
-  const { title, required, options, description } = step;
-
-  const isRequired = () => {
-    return (
-      (required && options && options.length == 0) ||
-      (required && options && options.length > 0 && options.length > 1)
-    );
-  };
+  const { id, title, required, options, description } = step;
 
   const getDescriptionId = () => {
     return description && description.id;
@@ -21,7 +14,7 @@ const Step = ({ step }) => {
 
   const renderInputField = () => {
     if (hasOptions()) {
-      if (options.length == 1 && isRequired()) {
+      if (options.length == 1 && required) {
         return (
           <>
             <span>{options[0].title}</span>
@@ -29,16 +22,16 @@ const Step = ({ step }) => {
           </>
         );
       } else {
-        return <Field_Dropdown options={options} />;
+        return <Field_Dropdown id={id} options={options} />;
       }
     } else {
-      return <Field_Number />;
+      return <Field_Number id={id} />;
     }
   };
 
   const getInputRowClasses = () => {
     const classes = ["configurator__form-col", "configurator__form-input"];
-    if (hasOptions() && options.length == 1 && isRequired()) {
+    if (hasOptions() && options.length == 1 && required) {
       classes.push("configurator__form-input--default");
     }
     return classes.join(" ");
@@ -53,7 +46,7 @@ const Step = ({ step }) => {
         >
           {title}
         </label>{" "}
-        {isRequired() && <span>*</span>}
+        {required && <span>*</span>}
       </div>
       {getDescriptionId() && (
         <div className="configurator__form-col configurator__form-info">

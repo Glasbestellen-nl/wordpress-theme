@@ -54,6 +54,13 @@ class Configurator {
    }
 
    /**
+    * Returns default configuration
+    */
+   public function get_default_configuration() {
+      return $this->_default_configuration;
+   }
+
+   /**
     * Return total calculated price
     *
     * @param bool $round whether change the price so the vat included price is
