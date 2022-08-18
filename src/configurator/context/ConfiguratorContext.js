@@ -1,63 +1,36 @@
 const { createContext, useState, useEffect, useContext } = wp.element;
-import {
-  getConfiguration,
-  storeConfiguration,
-} from "../services/configuration";
-
+import { getConfiguration } from "../services/configuration";
 export const ConfiguratorContext = createContext();
 
 export const ConfiguratorProvider = (props) => {
   const [sizeUnit, setSizeUnit] = useState("mm");
-  const [steps, setSteps] = useState([]);
+  const [configuration, setConfiguration] = useState({});
+  const [collapsedSteps, setCollapsedSteps] = useState([
+    "makeup_mirror_type_lit",
+    "makeup_mirror_type_unlit",
+  ]);
 
   useEffect(() => {
-    // if (window.gb.configuratorSettings) {
-    //   if (data.sizeUnit) setSizeUnit(data.sizeUnit);
-    // }
-
     (async () => {
-      try {
-        if (window.gb.configuratorSettings) {
-          const settings = window.gb.configuratorSettings;
-          let steps = settings.steps;
-          const response = await getConfiguration(window.gb.configuratorId);
-          if (response && response.data && response.data.configuration) {
-            const configuration = response.data.configuration;
-            steps = steps.map((step) => {
-              if (configuration[step.id]) {
-                step.value = configuration[step.id];
-              }
-              return step;
-            });
-          }
-          if (steps) setSteps(steps);
-        }
-      } catch (err) {
-        console.error(err);
+      const response = await getConfiguration(window.gb.configuratorId);
+      if (response.data && response.data.configuration) {
+        //console.log(response.data.configuration);
+        // setConfiguration(response.data.configuration);
+        // console.log(response.data.configuration);
       }
     })();
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const configuration = {};
-        steps.forEach((step) => {
-          configuration[step.id] = step.value;
-        });
-        const response = await storeConfiguration(
-          window.gb.configuratorId,
-          configuration
-        );
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, [steps]);
-
   return (
     <ConfiguratorContext.Provider
-      value={{ steps, setSteps, sizeUnit, setSizeUnit }}
+      value={{
+        configuration,
+        setConfiguration,
+        collapsedSteps,
+        setCollapsedSteps,
+        sizeUnit,
+        setSizeUnit,
+      }}
     >
       {props.children}
     </ConfiguratorContext.Provider>

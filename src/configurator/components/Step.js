@@ -1,8 +1,11 @@
-import Field_Number from "./Field_Number";
-import Field_Dropdown from "./Field_Dropdown";
+const { useState, useEffect, useContext } = wp.element;
+import { ConfiguratorContext } from "../context/ConfiguratorContext";
+import FieldNumber from "./FieldNumber";
+import FieldDropdown from "./FieldDropdown";
 
 const Step = ({ step }) => {
-  const { id, title, required, options, description } = step;
+  const { id, title, required, options, description, parent_step } = step;
+  const { configuration, collapsedSteps } = useContext(ConfiguratorContext);
 
   const getDescriptionId = () => {
     return description && description.id;
@@ -22,11 +25,17 @@ const Step = ({ step }) => {
           </>
         );
       } else {
-        return <Field_Dropdown id={id} options={options} />;
+        return <FieldDropdown id={id} options={options} />;
       }
     } else {
-      return <Field_Number id={id} />;
+      return <FieldNumber id={id} />;
     }
+  };
+
+  const getClasses = () => {
+    const classes = ["configurator__form-row"];
+    if (collapsedSteps.includes(id)) classes.push("d-none");
+    return classes.join(" ");
   };
 
   const getInputRowClasses = () => {
@@ -38,7 +47,7 @@ const Step = ({ step }) => {
   };
 
   return (
-    <div className="configurator__form-row">
+    <div className={getClasses()}>
       <div className="configurator__form-col">
         <label
           className="configurator__form-label"

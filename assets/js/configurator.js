@@ -2168,19 +2168,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _services_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/data */ "./src/configurator/services/data.js");
 /* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
 
-const {
-  useContext
-} = wp.element;
 
 
 
 const Configurator = () => {
-  const {
-    steps
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
+  const steps = (0,_services_data__WEBPACK_IMPORTED_MODULE_1__.getStepsData)();
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, steps.map(step => {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_2__["default"], {
       key: step.id,
@@ -2193,10 +2188,10 @@ const Configurator = () => {
 
 /***/ }),
 
-/***/ "./src/configurator/components/Field_Dropdown.js":
-/*!*******************************************************!*\
-  !*** ./src/configurator/components/Field_Dropdown.js ***!
-  \*******************************************************/
+/***/ "./src/configurator/components/FieldDropdown.js":
+/*!******************************************************!*\
+  !*** ./src/configurator/components/FieldDropdown.js ***!
+  \******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2206,8 +2201,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
 
 const {
   useContext
@@ -2215,30 +2210,56 @@ const {
 
 
 
-const Field_Dropdown = props => {
+const FieldDropdown = props => {
   const {
     id,
     options
   } = props;
   const {
-    steps,
-    setSteps
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
+    configuration,
+    setConfiguration,
+    setCollapsedSteps
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
 
   const handleChange = e => {
-    if (e.target.value) setSteps(prevSteps => {
-      return prevSteps.map(step => {
-        if (step.id == id) step.value = e.target.value;
-        return step;
+    const value = e.target.value;
+    setConfiguration(prevState => ({ ...prevState,
+      [id]: value
+    }));
+
+    if (options) {
+      setCollapsedSteps(prevCollapsedSteps => {
+        let updatedCollapsedSteps = prevCollapsedSteps;
+        options.forEach(option => {
+          const childSteps = option.child_steps;
+
+          if (childSteps) {
+            if (Array.isArray(childSteps)) {
+              option.child_steps.forEach(stepId => {
+                if (option.id == value) {
+                  updatedCollapsedSteps = updatedCollapsedSteps.filter(id => id !== stepId);
+                } else {
+                  updatedCollapsedSteps.push(stepId);
+                }
+              });
+            } else {
+              const stepId = childSteps;
+
+              if (option.id == value) {
+                updatedCollapsedSteps = updatedCollapsedSteps.filter(id => id !== stepId);
+              } else {
+                updatedCollapsedSteps.push(stepId);
+              }
+            }
+          }
+        });
+        return updatedCollapsedSteps;
       });
-    });
+    }
   };
 
   const getValue = () => {
-    if (steps) {
-      const step = steps.find(step => step.id == id);
-      return step && step.value;
-    }
+    return configuration && configuration[id];
   };
 
   const getDefault = () => {
@@ -2252,20 +2273,20 @@ const Field_Dropdown = props => {
     value: getValue()
   }, !getDefault() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
-  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_2__["default"], {
     key: option.id,
     option: option
   })));
 };
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Field_Dropdown);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FieldDropdown);
 
 /***/ }),
 
-/***/ "./src/configurator/components/Field_Number.js":
-/*!*****************************************************!*\
-  !*** ./src/configurator/components/Field_Number.js ***!
-  \*****************************************************/
+/***/ "./src/configurator/components/FieldNumber.js":
+/*!****************************************************!*\
+  !*** ./src/configurator/components/FieldNumber.js ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2284,36 +2305,22 @@ const {
 } = wp.element;
 
 
-const Field_Number = _ref => {
+const FieldNumber = _ref => {
   let {
     id
   } = _ref;
-  const [value, setValue] = useState(null);
   const {
-    steps,
-    setSteps,
     sizeUnit
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
-  useEffect(() => {
-    if (steps) {
-      const step = steps.find(step => step.id == id);
-      if (step && step.value) setValue(step.value);
-    }
-  }, [steps]);
+  const [value, setValue] = useState(null); // useEffect(() => {
+  //   if (configuration[id]) setValue(configuration[id]);
+  // }, [configuration[id]]);
 
   const handleChange = e => {
     setValue(e.target.value);
   };
 
-  const handleBlur = () => {
-    if (value) {
-      setSteps(prevSteps => {
-        return prevSteps.map(step => {
-          if (step.id == id) step.value = value;
-          return step;
-        });
-      });
-    }
+  const handleBlur = () => {// setConfiguration((prevConfig) => ({ ...prevConfig, [id]: value }));
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
@@ -2326,7 +2333,7 @@ const Field_Number = _ref => {
   });
 };
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Field_Number);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FieldNumber);
 
 /***/ }),
 
@@ -2385,8 +2392,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Field_Number__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Field_Number */ "./src/configurator/components/Field_Number.js");
-/* harmony import */ var _Field_Dropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Field_Dropdown */ "./src/configurator/components/Field_Dropdown.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _FieldNumber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FieldNumber */ "./src/configurator/components/FieldNumber.js");
+/* harmony import */ var _FieldDropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FieldDropdown */ "./src/configurator/components/FieldDropdown.js");
+
+const {
+  useState,
+  useEffect,
+  useContext
+} = wp.element;
 
 
 
@@ -2400,8 +2414,13 @@ const Step = _ref => {
     title,
     required,
     options,
-    description
+    description,
+    parent_step
   } = step;
+  const {
+    configuration,
+    collapsedSteps
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
 
   const getDescriptionId = () => {
     return description && description.id;
@@ -2420,16 +2439,22 @@ const Step = _ref => {
           class: "js-input-hidden"
         }));
       } else {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Field_Dropdown__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
           id: id,
           options: options
         });
       }
     } else {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Field_Number__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldNumber__WEBPACK_IMPORTED_MODULE_2__["default"], {
         id: id
       });
     }
+  };
+
+  const getClasses = () => {
+    const classes = ["configurator__form-row"];
+    if (collapsedSteps.includes(id)) classes.push("d-none");
+    return classes.join(" ");
   };
 
   const getInputRowClasses = () => {
@@ -2443,7 +2468,7 @@ const Step = _ref => {
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "configurator__form-row"
+    className: getClasses()
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-col"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
@@ -2491,53 +2516,24 @@ const {
 const ConfiguratorContext = createContext();
 const ConfiguratorProvider = props => {
   const [sizeUnit, setSizeUnit] = useState("mm");
-  const [steps, setSteps] = useState([]);
+  const [configuration, setConfiguration] = useState({});
+  const [collapsedSteps, setCollapsedSteps] = useState(["makeup_mirror_type_lit", "makeup_mirror_type_unlit"]);
   useEffect(() => {
-    // if (window.gb.configuratorSettings) {
-    //   if (data.sizeUnit) setSizeUnit(data.sizeUnit);
-    // }
     (async () => {
-      try {
-        if (window.gb.configuratorSettings) {
-          const settings = window.gb.configuratorSettings;
-          let steps = settings.steps;
-          const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.gb.configuratorId);
+      const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.gb.configuratorId);
 
-          if (response && response.data && response.data.configuration) {
-            const configuration = response.data.configuration;
-            steps = steps.map(step => {
-              if (configuration[step.id]) {
-                step.value = configuration[step.id];
-              }
-
-              return step;
-            });
-          }
-
-          if (steps) setSteps(steps);
-        }
-      } catch (err) {
-        console.error(err);
+      if (response.data && response.data.configuration) {//console.log(response.data.configuration);
+        // setConfiguration(response.data.configuration);
+        // console.log(response.data.configuration);
       }
     })();
   }, []);
-  useEffect(() => {
-    (async () => {
-      try {
-        const configuration = {};
-        steps.forEach(step => {
-          configuration[step.id] = step.value;
-        });
-        const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.storeConfiguration)(window.gb.configuratorId, configuration);
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, [steps]);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ConfiguratorContext.Provider, {
     value: {
-      steps,
-      setSteps,
+      configuration,
+      setConfiguration,
+      collapsedSteps,
+      setCollapsedSteps,
       sizeUnit,
       setSizeUnit
     }
@@ -2578,6 +2574,74 @@ const storeConfiguration = async (configuratorId, configuration) => {
     configuration
   }));
   return response;
+};
+
+/***/ }),
+
+/***/ "./src/configurator/services/data.js":
+/*!*******************************************!*\
+  !*** ./src/configurator/services/data.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getStepsData": () => (/* binding */ getStepsData)
+/* harmony export */ });
+const getStepsData = () => {
+  // return (
+  //   window.gb &&
+  //   window.gb.configuratorSettings &&
+  //   window.gb.configuratorSettings.steps
+  // );
+  return [{
+    id: "step_a",
+    title: "Step A",
+    options: [{
+      id: "1",
+      title: "Option 1",
+      child_steps: ["step_b"]
+    }, {
+      id: "2",
+      title: "Option 2",
+      child_steps: ["step_c"]
+    }]
+  }, {
+    id: "step_b",
+    title: "Step B",
+    parent_step: "step_a",
+    options: [{
+      id: "1",
+      title: "Option 1"
+    }, {
+      id: "2",
+      title: "Option 2"
+    }]
+  }, {
+    id: "step_c",
+    title: "Step C",
+    parent_step: "step_a",
+    options: [{
+      id: "1",
+      title: "Option 1",
+      child_steps: ["step_d"]
+    }, {
+      id: "2",
+      title: "Option 2"
+    }]
+  }, {
+    id: "step_d",
+    title: "Step D",
+    parent_step: "step_c",
+    options: [{
+      id: "1",
+      title: "Option 1"
+    }, {
+      id: "2",
+      title: "Option 2"
+    }]
+  }];
 };
 
 /***/ }),
