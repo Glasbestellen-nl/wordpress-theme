@@ -49,11 +49,10 @@ function gb_register_post_types() {
 		'show_in_admin_bar'     => true,
 		'show_in_nav_menus'     => true,
 		'can_export'            => true,
-		'has_archive'           => true,
-		'exclude_from_search'   => false,
+		'has_archive'           => _x( 'ervaringen', 'Product rewrite slug', 'glasbestellen' ),
+		'exclude_from_search'   => true,
 		'publicly_queryable'    => true,
 		'capability_type'       => 'page',
-		'rewrite'					=> array( 'slug' => _x( 'ervaringen', 'Product rewrite slug', 'glasbestellen' ) )
 	);
 	register_post_type( 'review', $args );
 

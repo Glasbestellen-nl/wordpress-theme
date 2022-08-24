@@ -550,6 +550,10 @@ Spacing
     margin-left: 1.25em;
     display: block;
   }
+
+  .padding-right-lg-none {
+    padding-right: 0 !important;
+  }
 }
 
 /*--------------------------------------------------------------
