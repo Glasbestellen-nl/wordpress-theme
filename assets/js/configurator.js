@@ -2201,8 +2201,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
-/* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
+/* harmony import */ var _services_validation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/validation */ "./src/configurator/services/validation.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
 
 const {
   useContext
@@ -2210,15 +2211,20 @@ const {
 
 
 
+
 const FieldDropdown = _ref => {
   let {
     id,
     options,
-    changeHandler
+    changeHandler,
+    required,
+    rules,
+    invalid,
+    setInvalid
   } = _ref;
   const {
     configuration
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
 
   const getValue = () => {
     return configuration && configuration[id];
@@ -2229,17 +2235,49 @@ const FieldDropdown = _ref => {
     return options.find(option => option.default);
   };
 
+  const validate = value => {
+    let validationResult = required ? (0,_services_validation__WEBPACK_IMPORTED_MODULE_1__.validateBasic)(value) : {
+      valid: true,
+      message: ""
+    };
+
+    if (validationResult.valid) {
+      if (rules) {
+        validationResult = (0,_services_validation__WEBPACK_IMPORTED_MODULE_1__.validateByRules)(value, rules, configuration);
+      }
+    }
+
+    return validationResult;
+  };
+
   const handleChange = e => {
-    changeHandler(e.target.value);
+    const value = e.target.value;
+    const {
+      valid,
+      message
+    } = validate(value);
+
+    if (!valid) {
+      setInvalid(message);
+    } else {
+      setInvalid(false);
+      changeHandler(value);
+    }
+  };
+
+  const getClassNames = () => {
+    const classNames = ["dropdown configurator__dropdown", "configurator__form-control"];
+    if (invalid) classNames.push("invalid");else classNames.push("valid");
+    return classNames.join(" ");
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    class: "dropdown configurator__dropdown configurator__form-control",
+    class: getClassNames(),
     onChange: handleChange,
     value: getValue()
   }, !getDefault() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
-  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_3__["default"], {
     key: option.id,
     option: option
   })));
@@ -2263,6 +2301,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _services_validation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/validation */ "./src/configurator/services/validation.js");
 
 const {
   useState,
@@ -2271,15 +2310,19 @@ const {
 } = wp.element;
 
 
+
 const FieldNumber = _ref => {
   let {
     id,
-    changeHandler
+    changeHandler,
+    required,
+    rules,
+    invalid,
+    setInvalid
   } = _ref;
   const {
     sizeUnit,
-    configuration,
-    setConfiguration
+    configuration
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
   const [value, setValue] = useState(null);
   useEffect(() => {
@@ -2287,16 +2330,57 @@ const FieldNumber = _ref => {
   }, [configuration]);
 
   const handleChange = e => {
-    setValue(e.target.value);
+    const value = e.target.value;
+    const {
+      valid,
+      message
+    } = validate(value);
+
+    if (!valid) {
+      setInvalid(message);
+    } else {
+      setInvalid(false);
+    }
+
+    setValue(value);
+  };
+
+  const validate = value => {
+    let validationResult = required ? (0,_services_validation__WEBPACK_IMPORTED_MODULE_2__.validateBasic)(value) : {
+      valid: true,
+      message: ""
+    };
+
+    if (validationResult.valid) {
+      if (rules) validationResult = (0,_services_validation__WEBPACK_IMPORTED_MODULE_2__.validateByRules)(value, rules, configuration);
+    }
+
+    return validationResult;
   };
 
   const handleBlur = () => {
-    changeHandler(value);
+    const {
+      valid,
+      message
+    } = validate(value);
+
+    if (!valid) {
+      setInvalid(message);
+    } else {
+      setInvalid(false);
+      changeHandler(value);
+    }
+  };
+
+  const getClassNames = () => {
+    const classNames = ["form-control", "configurator__form-control"];
+    if (invalid) classNames.push("invalid");else classNames.push("valid");
+    return classNames.join(" ");
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "number",
-    className: "form-control configurator__form-control",
+    className: getClassNames(),
     placeholder: sizeUnit,
     onChange: handleChange,
     onBlur: handleBlur,
@@ -2392,12 +2476,14 @@ const Step = _ref => {
     title,
     required,
     options,
-    description
+    description,
+    rules
   } = step;
   const {
     setConfiguration,
     configuration
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
+  const [invalid, setInvalid] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   useEffect(() => {
     if (options && configuration[id]) {
@@ -2446,34 +2532,42 @@ const Step = _ref => {
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
           id: id,
           options: options,
-          changeHandler: changeHandler
+          changeHandler: changeHandler,
+          rules: rules,
+          invalid: invalid,
+          setInvalid: setInvalid,
+          required: required
         });
       }
     } else {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldNumber__WEBPACK_IMPORTED_MODULE_2__["default"], {
         id: id,
-        changeHandler: changeHandler
+        changeHandler: changeHandler,
+        rules: rules,
+        invalid: invalid,
+        setInvalid: setInvalid,
+        required: required
       });
     }
   };
 
-  const getClasses = () => {
-    const classes = ["configurator__form-row"];
-    return classes.join(" ");
+  const getClassNames = () => {
+    const classNames = ["configurator__form-row"];
+    return classNames.join(" ");
   };
 
-  const getInputRowClasses = () => {
-    const classes = ["configurator__form-col", "configurator__form-input"];
+  const getInputRowClassNames = () => {
+    const classNames = ["configurator__form-col", "configurator__form-input"];
 
     if (hasOptions() && options.length == 1 && required) {
-      classes.push("configurator__form-input--default");
+      classNames.push("configurator__form-input--default");
     }
 
-    return classes.join(" ");
+    return classNames.join(" ");
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: getClasses()
+    className: getClassNames()
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-col"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
@@ -2485,10 +2579,10 @@ const Step = _ref => {
     className: "fas fa-info-circle configurator__info-icon js-popup-explanation",
     "data-explanation-id": getDescriptionId()
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    class: getInputRowClasses()
-  }, renderInputField(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: getInputRowClassNames()
+  }, renderInputField(), invalid && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "invalid-feedback js-invalid-feedback"
-  }))), selectedOption === null || selectedOption === void 0 ? void 0 : (_selectedOption$child = selectedOption.child_steps) === null || _selectedOption$child === void 0 ? void 0 : _selectedOption$child.map(stepId => {
+  }, invalid))), selectedOption === null || selectedOption === void 0 ? void 0 : (_selectedOption$child = selectedOption.child_steps) === null || _selectedOption$child === void 0 ? void 0 : _selectedOption$child.map(stepId => {
     const childStep = stepsMap[stepId];
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Step, {
       key: childStep.id,
@@ -2531,7 +2625,6 @@ const ConfiguratorProvider = props => {
   useEffect(() => {
     (async () => {
       const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.gb.configuratorId);
-      console.log(response);
       if (response && response.data && response.data.configuration) setConfiguration(response.data.configuration);
     })();
   }, []);
@@ -2647,6 +2740,122 @@ const getStepsData = () => {
       title: "Option 2"
     }]
   }];
+};
+
+/***/ }),
+
+/***/ "./src/configurator/services/validation.js":
+/*!*************************************************!*\
+  !*** ./src/configurator/services/validation.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "validateBasic": () => (/* binding */ validateBasic),
+/* harmony export */   "validateByRules": () => (/* binding */ validateByRules)
+/* harmony export */ });
+const {
+  msg
+} = window.gb;
+const validateBasic = value => {
+  if (!value || value === "") {
+    return {
+      valid: false,
+      message: msg.enterField
+    };
+  } else {
+    return {
+      valid: true,
+      message: ""
+    };
+  }
+};
+const validateByRules = (value, rules, configuration) => {
+  let valid = true;
+  let message = "";
+
+  if (rules) {
+    if (rules.min && value < parseInt(rules.min)) {
+      valid = false;
+      message = msg.dimensionValueTooSmall.replace("{0}", rules.min);
+    } else if (rules.max) {
+      let max;
+
+      if (rules.max.dependence) {
+        const maxDependence = rules.max.dependence;
+        const dependentStepIds = !Array.isArray(maxDependence) && [maxDependence] || maxDependence;
+        let previousMax = 0;
+        dependentStepIds.forEach(dependentStepId => {
+          const dependentValue = configuration[dependentStepId];
+
+          if (dependentValue && dependentValue > previousMax) {
+            if (rules.max.greater && rules.max.less) {
+              max = value > parseInt(dependentValue) ? parseInt(rules.max.greater) : parseInt(rules.max.less);
+            } else {
+              max = parseInt(dependentValue);
+            }
+
+            previousMax = max;
+          }
+        });
+      } else {
+        max = parseInt(rules.max);
+      }
+
+      if (value > max) {
+        valid = false;
+        message = msg.dimensionValueTooLarge.replace("{0}", max);
+      }
+    }
+
+    if (rules.less_than && rules.less_than.step) {
+      let lessThan = rules.less_than;
+      let dependentStepId = lessThan.step;
+      let dependentValue = configuration[dependentStepId];
+
+      if (dependentValue) {
+        if (lessThan.value) {
+          dependentValue -= parseInt(lessThan.value);
+        }
+
+        if (dependentValue < value) {
+          valid = false;
+
+          if (rules.less_than.message) {
+            message = rules.less_than.message;
+          }
+        }
+      }
+    }
+
+    if (rules.exclude) {
+      let excludeRules = rules.exclude;
+      console.log(excludeRules);
+
+      if (Array.isArray(excludeRules)) {
+        excludeRules.forEach(excludeRule => {
+          if (excludeRule.step && excludeRule.options) {// let step = $(`.js-step-input-${excludeRule.step}`);
+            // excludeRule.options.forEach((optionId) => {
+            //   let option = step.find(
+            //     `option[data-option-id="${optionId}"]:selected`
+            //   );
+            //   if (option.length > 0) {
+            //     valid = false;
+            //     msg = excludeRule.message;
+            //   }
+            // });
+          }
+        });
+      }
+    }
+  }
+
+  return {
+    valid,
+    message
+  };
 };
 
 /***/ }),

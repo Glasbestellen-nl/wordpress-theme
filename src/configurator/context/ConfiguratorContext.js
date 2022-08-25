@@ -12,7 +12,6 @@ export const ConfiguratorProvider = (props) => {
   useEffect(() => {
     (async () => {
       const response = await getConfiguration(window.gb.configuratorId);
-      console.log(response);
       if (response && response.data && response.data.configuration)
         setConfiguration(response.data.configuration);
     })();

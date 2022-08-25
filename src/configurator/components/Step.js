@@ -8,8 +8,9 @@ const stepsMap = getStepsData().reduce(
   {}
 );
 const Step = ({ step }) => {
-  const { id, title, required, options, description } = step;
+  const { id, title, required, options, description, rules } = step;
   const { setConfiguration, configuration } = useContext(ConfiguratorContext);
+  const [invalid, setInvalid] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
@@ -63,30 +64,43 @@ const Step = ({ step }) => {
             id={id}
             options={options}
             changeHandler={changeHandler}
+            rules={rules}
+            invalid={invalid}
+            setInvalid={setInvalid}
+            required={required}
           />
         );
       }
     } else {
-      return <FieldNumber id={id} changeHandler={changeHandler} />;
+      return (
+        <FieldNumber
+          id={id}
+          changeHandler={changeHandler}
+          rules={rules}
+          invalid={invalid}
+          setInvalid={setInvalid}
+          required={required}
+        />
+      );
     }
   };
 
-  const getClasses = () => {
-    const classes = ["configurator__form-row"];
-    return classes.join(" ");
+  const getClassNames = () => {
+    const classNames = ["configurator__form-row"];
+    return classNames.join(" ");
   };
 
-  const getInputRowClasses = () => {
-    const classes = ["configurator__form-col", "configurator__form-input"];
+  const getInputRowClassNames = () => {
+    const classNames = ["configurator__form-col", "configurator__form-input"];
     if (hasOptions() && options.length == 1 && required) {
-      classes.push("configurator__form-input--default");
+      classNames.push("configurator__form-input--default");
     }
-    return classes.join(" ");
+    return classNames.join(" ");
   };
 
   return (
     <>
-      <div className={getClasses()}>
+      <div className={getClassNames()}>
         <div className="configurator__form-col">
           <label
             className="configurator__form-label"
@@ -104,9 +118,11 @@ const Step = ({ step }) => {
             ></i>
           </div>
         )}
-        <div class={getInputRowClasses()}>
+        <div class={getInputRowClassNames()}>
           {renderInputField()}
-          <div class="invalid-feedback js-invalid-feedback"></div>
+          {invalid && (
+            <div class="invalid-feedback js-invalid-feedback">{invalid}</div>
+          )}
         </div>
       </div>
       {selectedOption?.child_steps?.map((stepId) => {
