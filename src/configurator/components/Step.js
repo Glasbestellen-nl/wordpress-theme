@@ -19,7 +19,7 @@ const Step = ({ step }) => {
     }
   }, [configuration]);
 
-  // Remove item from config when unmounting
+  // Remove element from configuration when unmounting
   useEffect(
     () => () => {
       setConfiguration((prevConfig) => {
@@ -38,9 +38,10 @@ const Step = ({ step }) => {
     return options && options.length > 0;
   };
 
-  const handleDropdownChange = (e) => {
-    const value = e.target.value;
-    setSelectedOption(options.find((option) => option.id === value));
+  const changeHandler = (value) => {
+    if (options) {
+      setSelectedOption(options.find((option) => option.id === value));
+    }
     setConfiguration((prevConfig) => ({
       ...prevConfig,
       [id]: value,
@@ -61,12 +62,12 @@ const Step = ({ step }) => {
           <FieldDropdown
             id={id}
             options={options}
-            changeHandler={handleDropdownChange}
+            changeHandler={changeHandler}
           />
         );
       }
     } else {
-      return <FieldNumber id={id} />;
+      return <FieldNumber id={id} changeHandler={changeHandler} />;
     }
   };
 

@@ -2229,9 +2229,13 @@ const FieldDropdown = _ref => {
     return options.find(option => option.default);
   };
 
+  const handleChange = e => {
+    changeHandler(e.target.value);
+  };
+
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     class: "dropdown configurator__dropdown configurator__form-control",
-    onChange: changeHandler,
+    onChange: handleChange,
     value: getValue()
   }, !getDefault() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
@@ -2269,7 +2273,8 @@ const {
 
 const FieldNumber = _ref => {
   let {
-    id
+    id,
+    changeHandler
   } = _ref;
   const {
     sizeUnit,
@@ -2286,9 +2291,7 @@ const FieldNumber = _ref => {
   };
 
   const handleBlur = () => {
-    setConfiguration(prevConfig => ({ ...prevConfig,
-      [id]: value
-    }));
+    changeHandler(value);
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
@@ -2401,7 +2404,7 @@ const Step = _ref => {
       const option = options.find(option => option.id === configuration[id]);
       if (option) setSelectedOption(option);
     }
-  }, [configuration]); // Remove item from config when unmounting
+  }, [configuration]); // Remove element from configuration when unmounting
 
   useEffect(() => () => {
     setConfiguration(prevConfig => {
@@ -2421,9 +2424,11 @@ const Step = _ref => {
     return options && options.length > 0;
   };
 
-  const handleDropdownChange = e => {
-    const value = e.target.value;
-    setSelectedOption(options.find(option => option.id === value));
+  const changeHandler = value => {
+    if (options) {
+      setSelectedOption(options.find(option => option.id === value));
+    }
+
     setConfiguration(prevConfig => ({ ...prevConfig,
       [id]: value
     }));
@@ -2441,12 +2446,13 @@ const Step = _ref => {
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
           id: id,
           options: options,
-          changeHandler: handleDropdownChange
+          changeHandler: changeHandler
         });
       }
     } else {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldNumber__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        id: id
+        id: id,
+        changeHandler: changeHandler
       });
     }
   };

@@ -14,10 +14,14 @@ const FieldDropdown = ({ id, options, changeHandler }) => {
     return options.find((option) => option.default);
   };
 
+  const handleChange = (e) => {
+    changeHandler(e.target.value);
+  };
+
   return (
     <select
       class="dropdown configurator__dropdown configurator__form-control"
-      onChange={changeHandler}
+      onChange={handleChange}
       value={getValue()}
     >
       {!getDefault() && <option value="">Geen</option>}

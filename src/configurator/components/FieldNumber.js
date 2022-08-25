@@ -1,7 +1,7 @@
 const { useState, useEffect, useContext } = wp.element;
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 
-const FieldNumber = ({ id }) => {
+const FieldNumber = ({ id, changeHandler }) => {
   const { sizeUnit, configuration, setConfiguration } =
     useContext(ConfiguratorContext);
   const [value, setValue] = useState(null);
@@ -15,7 +15,7 @@ const FieldNumber = ({ id }) => {
   };
 
   const handleBlur = () => {
-    setConfiguration((prevConfig) => ({ ...prevConfig, [id]: value }));
+    changeHandler(value);
   };
 
   return (
