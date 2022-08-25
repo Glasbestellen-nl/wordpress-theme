@@ -1,11 +1,34 @@
-const { useState, useEffect, useContext } = wp.element;
+const { useContext, useState, useEffect } = wp.element;
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import FieldNumber from "./FieldNumber";
 import FieldDropdown from "./FieldDropdown";
-
+import { getStepsData } from "../services/steps";
+const stepsMap = getStepsData().reduce(
+  (acc, step) => ({ ...acc, [step.id]: step }),
+  {}
+);
 const Step = ({ step }) => {
-  const { id, title, required, options, description, parent_step } = step;
-  const { configuration, collapsedSteps } = useContext(ConfiguratorContext);
+  const { id, title, required, options, description } = step;
+  const { setConfiguration, configuration } = useContext(ConfiguratorContext);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  useEffect(() => {
+    if (options && configuration[id]) {
+      const option = options.find((option) => option.id === configuration[id]);
+      if (option) setSelectedOption(option);
+    }
+  }, [configuration]);
+
+  // Remove item from config when unmounting
+  useEffect(
+    () => () => {
+      setConfiguration((prevConfig) => {
+        const { [id]: removedItem, ...rest } = prevConfig;
+        return rest;
+      });
+    },
+    []
+  );
 
   const getDescriptionId = () => {
     return description && description.id;
@@ -13,6 +36,15 @@ const Step = ({ step }) => {
 
   const hasOptions = () => {
     return options && options.length > 0;
+  };
+
+  const handleDropdownChange = (e) => {
+    const value = e.target.value;
+    setSelectedOption(options.find((option) => option.id === value));
+    setConfiguration((prevConfig) => ({
+      ...prevConfig,
+      [id]: value,
+    }));
   };
 
   const renderInputField = () => {
@@ -25,7 +57,13 @@ const Step = ({ step }) => {
           </>
         );
       } else {
-        return <FieldDropdown id={id} options={options} />;
+        return (
+          <FieldDropdown
+            id={id}
+            options={options}
+            changeHandler={handleDropdownChange}
+          />
+        );
       }
     } else {
       return <FieldNumber id={id} />;
@@ -34,7 +72,6 @@ const Step = ({ step }) => {
 
   const getClasses = () => {
     const classes = ["configurator__form-row"];
-    if (collapsedSteps.includes(id)) classes.push("d-none");
     return classes.join(" ");
   };
 
@@ -47,29 +84,35 @@ const Step = ({ step }) => {
   };
 
   return (
-    <div className={getClasses()}>
-      <div className="configurator__form-col">
-        <label
-          className="configurator__form-label"
-          data-explanation-id={getDescriptionId()}
-        >
-          {title}
-        </label>{" "}
-        {required && <span>*</span>}
-      </div>
-      {getDescriptionId() && (
-        <div className="configurator__form-col configurator__form-info">
-          <i
-            className="fas fa-info-circle configurator__info-icon js-popup-explanation"
+    <>
+      <div className={getClasses()}>
+        <div className="configurator__form-col">
+          <label
+            className="configurator__form-label"
             data-explanation-id={getDescriptionId()}
-          ></i>
+          >
+            {title}
+          </label>{" "}
+          {required && <span>*</span>}
         </div>
-      )}
-      <div class={getInputRowClasses()}>
-        {renderInputField()}
-        <div class="invalid-feedback js-invalid-feedback"></div>
+        {getDescriptionId() && (
+          <div className="configurator__form-col configurator__form-info">
+            <i
+              className="fas fa-info-circle configurator__info-icon js-popup-explanation"
+              data-explanation-id={getDescriptionId()}
+            ></i>
+          </div>
+        )}
+        <div class={getInputRowClasses()}>
+          {renderInputField()}
+          <div class="invalid-feedback js-invalid-feedback"></div>
+        </div>
       </div>
-    </div>
+      {selectedOption?.child_steps?.map((stepId) => {
+        const childStep = stepsMap[stepId];
+        return <Step key={childStep.id} step={childStep} />;
+      })}
+    </>
   );
 };
 

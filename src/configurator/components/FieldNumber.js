@@ -2,19 +2,20 @@ const { useState, useEffect, useContext } = wp.element;
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 
 const FieldNumber = ({ id }) => {
-  const { sizeUnit } = useContext(ConfiguratorContext);
+  const { sizeUnit, configuration, setConfiguration } =
+    useContext(ConfiguratorContext);
   const [value, setValue] = useState(null);
 
-  // useEffect(() => {
-  //   if (configuration[id]) setValue(configuration[id]);
-  // }, [configuration[id]]);
+  useEffect(() => {
+    if (configuration[id]) setValue(configuration[id]);
+  }, [configuration]);
 
   const handleChange = (e) => {
     setValue(e.target.value);
   };
 
   const handleBlur = () => {
-    // setConfiguration((prevConfig) => ({ ...prevConfig, [id]: value }));
+    setConfiguration((prevConfig) => ({ ...prevConfig, [id]: value }));
   };
 
   return (

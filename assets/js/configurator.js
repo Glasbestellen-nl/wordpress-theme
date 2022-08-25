@@ -2168,14 +2168,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/data */ "./src/configurator/services/data.js");
+/* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
 /* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
 
 
 
 
 const Configurator = () => {
-  const steps = (0,_services_data__WEBPACK_IMPORTED_MODULE_1__.getStepsData)();
+  const steps = (0,_services_steps__WEBPACK_IMPORTED_MODULE_1__.getStepsData)().filter(step => !step.parent_step);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, steps.map(step => {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_2__["default"], {
       key: step.id,
@@ -2210,53 +2210,15 @@ const {
 
 
 
-const FieldDropdown = props => {
-  const {
+const FieldDropdown = _ref => {
+  let {
     id,
-    options
-  } = props;
+    options,
+    changeHandler
+  } = _ref;
   const {
-    configuration,
-    setConfiguration,
-    setCollapsedSteps
+    configuration
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
-
-  const handleChange = e => {
-    const value = e.target.value;
-    setConfiguration(prevState => ({ ...prevState,
-      [id]: value
-    }));
-
-    if (options) {
-      setCollapsedSteps(prevCollapsedSteps => {
-        let updatedCollapsedSteps = prevCollapsedSteps;
-        options.forEach(option => {
-          const childSteps = option.child_steps;
-
-          if (childSteps) {
-            if (Array.isArray(childSteps)) {
-              option.child_steps.forEach(stepId => {
-                if (option.id == value) {
-                  updatedCollapsedSteps = updatedCollapsedSteps.filter(id => id !== stepId);
-                } else {
-                  updatedCollapsedSteps.push(stepId);
-                }
-              });
-            } else {
-              const stepId = childSteps;
-
-              if (option.id == value) {
-                updatedCollapsedSteps = updatedCollapsedSteps.filter(id => id !== stepId);
-              } else {
-                updatedCollapsedSteps.push(stepId);
-              }
-            }
-          }
-        });
-        return updatedCollapsedSteps;
-      });
-    }
-  };
 
   const getValue = () => {
     return configuration && configuration[id];
@@ -2269,7 +2231,7 @@ const FieldDropdown = props => {
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     class: "dropdown configurator__dropdown configurator__form-control",
-    onChange: handleChange,
+    onChange: changeHandler,
     value: getValue()
   }, !getDefault() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
@@ -2310,17 +2272,23 @@ const FieldNumber = _ref => {
     id
   } = _ref;
   const {
-    sizeUnit
+    sizeUnit,
+    configuration,
+    setConfiguration
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
-  const [value, setValue] = useState(null); // useEffect(() => {
-  //   if (configuration[id]) setValue(configuration[id]);
-  // }, [configuration[id]]);
+  const [value, setValue] = useState(null);
+  useEffect(() => {
+    if (configuration[id]) setValue(configuration[id]);
+  }, [configuration]);
 
   const handleChange = e => {
     setValue(e.target.value);
   };
 
-  const handleBlur = () => {// setConfiguration((prevConfig) => ({ ...prevConfig, [id]: value }));
+  const handleBlur = () => {
+    setConfiguration(prevConfig => ({ ...prevConfig,
+      [id]: value
+    }));
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
@@ -2395,17 +2363,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
 /* harmony import */ var _FieldNumber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FieldNumber */ "./src/configurator/components/FieldNumber.js");
 /* harmony import */ var _FieldDropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FieldDropdown */ "./src/configurator/components/FieldDropdown.js");
+/* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
 
 const {
+  useContext,
   useState,
-  useEffect,
-  useContext
+  useEffect
 } = wp.element;
 
 
 
 
+const stepsMap = (0,_services_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsData)().reduce((acc, step) => ({ ...acc,
+  [step.id]: step
+}), {});
+
 const Step = _ref => {
+  var _selectedOption$child;
+
   let {
     step
   } = _ref;
@@ -2414,13 +2389,29 @@ const Step = _ref => {
     title,
     required,
     options,
-    description,
-    parent_step
+    description
   } = step;
   const {
-    configuration,
-    collapsedSteps
+    setConfiguration,
+    configuration
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
+  const [selectedOption, setSelectedOption] = useState(null);
+  useEffect(() => {
+    if (options && configuration[id]) {
+      const option = options.find(option => option.id === configuration[id]);
+      if (option) setSelectedOption(option);
+    }
+  }, [configuration]); // Remove item from config when unmounting
+
+  useEffect(() => () => {
+    setConfiguration(prevConfig => {
+      const {
+        [id]: removedItem,
+        ...rest
+      } = prevConfig;
+      return rest;
+    });
+  }, []);
 
   const getDescriptionId = () => {
     return description && description.id;
@@ -2428,6 +2419,14 @@ const Step = _ref => {
 
   const hasOptions = () => {
     return options && options.length > 0;
+  };
+
+  const handleDropdownChange = e => {
+    const value = e.target.value;
+    setSelectedOption(options.find(option => option.id === value));
+    setConfiguration(prevConfig => ({ ...prevConfig,
+      [id]: value
+    }));
   };
 
   const renderInputField = () => {
@@ -2441,7 +2440,8 @@ const Step = _ref => {
       } else {
         return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
           id: id,
-          options: options
+          options: options,
+          changeHandler: handleDropdownChange
         });
       }
     } else {
@@ -2453,7 +2453,6 @@ const Step = _ref => {
 
   const getClasses = () => {
     const classes = ["configurator__form-row"];
-    if (collapsedSteps.includes(id)) classes.push("d-none");
     return classes.join(" ");
   };
 
@@ -2467,7 +2466,7 @@ const Step = _ref => {
     return classes.join(" ");
   };
 
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: getClasses()
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-col"
@@ -2483,7 +2482,13 @@ const Step = _ref => {
     class: getInputRowClasses()
   }, renderInputField(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "invalid-feedback js-invalid-feedback"
-  })));
+  }))), selectedOption === null || selectedOption === void 0 ? void 0 : (_selectedOption$child = selectedOption.child_steps) === null || _selectedOption$child === void 0 ? void 0 : _selectedOption$child.map(stepId => {
+    const childStep = stepsMap[stepId];
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Step, {
+      key: childStep.id,
+      step: childStep
+    });
+  }));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Step);
@@ -2517,25 +2522,23 @@ const ConfiguratorContext = createContext();
 const ConfiguratorProvider = props => {
   const [sizeUnit, setSizeUnit] = useState("mm");
   const [configuration, setConfiguration] = useState({});
-  const [collapsedSteps, setCollapsedSteps] = useState(["makeup_mirror_type_lit", "makeup_mirror_type_unlit"]);
   useEffect(() => {
     (async () => {
       const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.gb.configuratorId);
-
-      if (response.data && response.data.configuration) {//console.log(response.data.configuration);
-        // setConfiguration(response.data.configuration);
-        // console.log(response.data.configuration);
-      }
+      console.log(response);
+      if (response && response.data && response.data.configuration) setConfiguration(response.data.configuration);
     })();
   }, []);
+  useEffect(() => {
+    (async () => {
+      const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.storeConfiguration)(window.gb.configuratorId, configuration);
+    })();
+  }, [configuration]);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ConfiguratorContext.Provider, {
     value: {
       configuration,
       setConfiguration,
-      collapsedSteps,
-      setCollapsedSteps,
-      sizeUnit,
-      setSizeUnit
+      sizeUnit
     }
   }, props.children);
 };
@@ -2578,10 +2581,10 @@ const storeConfiguration = async (configuratorId, configuration) => {
 
 /***/ }),
 
-/***/ "./src/configurator/services/data.js":
-/*!*******************************************!*\
-  !*** ./src/configurator/services/data.js ***!
-  \*******************************************/
+/***/ "./src/configurator/services/steps.js":
+/*!********************************************!*\
+  !*** ./src/configurator/services/steps.js ***!
+  \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2590,11 +2593,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getStepsData": () => (/* binding */ getStepsData)
 /* harmony export */ });
 const getStepsData = () => {
-  // return (
-  //   window.gb &&
-  //   window.gb.configuratorSettings &&
-  //   window.gb.configuratorSettings.steps
-  // );
+  return window.gb && window.gb.configuratorSettings && window.gb.configuratorSettings.steps;
   return [{
     id: "step_a",
     title: "Step A",

@@ -1,9 +1,9 @@
 export const getStepsData = () => {
-  // return (
-  //   window.gb &&
-  //   window.gb.configuratorSettings &&
-  //   window.gb.configuratorSettings.steps
-  // );
+  return (
+    window.gb &&
+    window.gb.configuratorSettings &&
+    window.gb.configuratorSettings.steps
+  );
   return [
     {
       id: "step_a",
