@@ -44,11 +44,13 @@ class Configurator_Hooks {
       $configurator_settings = get_post_meta( $configurator_id, 'configurator_settings', true );
 
       $configurator_settings['steps'] = array_map( [$this, 'map_configurator_steps'], $configurator_settings['steps'] );
-
+      $product_tax_object = WC_Tax::get_rates( $product->get_tax_class() );
       $data = [
          'productId' => $post->ID,
          'configuratorId' => $configurator_id,
-         'settings' => $configurator_settings
+         'settings' => $configurator_settings,
+         'tax' => reset( $product_tax_object ),
+         'currency' => get_woocommerce_currency()
       ];
 
       wp_enqueue_script( 'configurator', get_template_directory_uri() . '/assets/js/configurator.js', ['jquery', 'wp-element', 'main-js'], $version, true );
@@ -155,13 +157,14 @@ class Configurator_Hooks {
    }
 
    public function map_configurator_steps( $step ) {
-      if ( empty( $step['options'] ) ) return $step;
-      $step['options'] = array_map( function( $option ) {
-         if ( ! empty( $option['child_steps'] ) && ! is_array( $option['child_steps'] ) ) {
-            $option['child_steps'] = [$option['child_steps']];
-         }
-         return $option;
-      }, $step['options'] );
+      if ( ! empty( $step['options'] ) ) {
+         $step['options'] = array_map( function( $option ) {
+            if ( ! empty( $option['child_steps'] ) && ! is_array( $option['child_steps'] ) ) {
+               $option['child_steps'] = [$option['child_steps']];
+            }
+            return $option;
+         }, $step['options'] );
+      }  
       return $step;
    }
 }

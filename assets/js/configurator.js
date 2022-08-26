@@ -2324,7 +2324,8 @@ const FieldDropdown = _ref => {
     value: ""
   }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_3__["default"], {
     key: option.id,
-    option: option
+    option: option,
+    defaultOption: getDefault()
   })));
 };
 
@@ -2450,24 +2451,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_price__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/price */ "./src/configurator/services/price.js");
+
 
 
 const Option = _ref => {
   let {
-    option
+    option,
+    defaultOption
   } = _ref;
   const {
     id,
     title,
-    value
+    price
   } = option;
 
   const getId = () => {
     return id;
   };
 
+  const isDefaultOption = () => {
+    return defaultOption && defaultOption.id == id;
+  };
+
+  const getDefaultPrice = () => {
+    return defaultOption && defaultOption.price || 0;
+  };
+
   const getTitle = () => {
-    return title;
+    const finalTitle = [];
+    const isDefault = isDefaultOption();
+    finalTitle.push(title);
+
+    if (parseInt(price) !== 0 && !isDefault) {
+      const defaultPrice = getDefaultPrice();
+      let plusPrice = (0,_services_price__WEBPACK_IMPORTED_MODULE_1__.formatPrice)((0,_services_price__WEBPACK_IMPORTED_MODULE_1__.priceIncludingVat)(price - defaultPrice));
+      finalTitle.push("+ " + plusPrice);
+    }
+
+    return finalTitle.join(" ");
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -2737,6 +2759,37 @@ const getConfigurationTotalPrice = async productId => {
     product_id: productId
   }));
   return response;
+};
+
+/***/ }),
+
+/***/ "./src/configurator/services/price.js":
+/*!********************************************!*\
+  !*** ./src/configurator/services/price.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "formatPrice": () => (/* binding */ formatPrice),
+/* harmony export */   "priceIncludingVat": () => (/* binding */ priceIncludingVat)
+/* harmony export */ });
+const {
+  tax,
+  currency
+} = window.configurator;
+const priceIncludingVat = price => {
+  const {
+    rate
+  } = tax;
+  return price + price * (rate / 100);
+};
+const formatPrice = price => {
+  return new Intl.NumberFormat("nl-NL", {
+    style: "currency",
+    currency
+  }).format(price);
 };
 
 /***/ }),

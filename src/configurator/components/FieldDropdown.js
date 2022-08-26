@@ -89,7 +89,13 @@ const FieldDropdown = ({
       {!getDefault() && <option value="">Geen</option>}
       {options &&
         options.length > 0 &&
-        options.map((option) => <Option key={option.id} option={option} />)}
+        options.map((option) => (
+          <Option
+            key={option.id}
+            option={option}
+            defaultOption={getDefault()}
+          />
+        ))}
     </select>
   );
 };
