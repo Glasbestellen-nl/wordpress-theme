@@ -1,5 +1,6 @@
 const { useContext, useEffect } = wp.element;
 import { validateBasic, validateByRules } from "../services/validation";
+import { formatTextBySizeUnit } from "../services/sizeUnit";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import Option from "./Option";
 
@@ -12,7 +13,7 @@ const FieldDropdown = ({
   invalid,
   setInvalid,
 }) => {
-  const { configuration } = useContext(ConfiguratorContext);
+  const { configuration, sizeUnit } = useContext(ConfiguratorContext);
 
   useEffect(() => {
     const handleInvalidOptionCombinations = () => {
@@ -32,7 +33,7 @@ const FieldDropdown = ({
             if (configuration[step]) {
               const compareConfig = configuration[step];
               if (options.includes(compareConfig)) {
-                setInvalid(message);
+                setInvalid(formatTextBySizeUnit(message, sizeUnit));
               }
             }
           });
@@ -67,7 +68,7 @@ const FieldDropdown = ({
     const value = e.target.value;
     const { valid, message } = validate(value);
     if (!valid) {
-      setInvalid(message);
+      setInvalid(formatTextBySizeUnit(message, sizeUnit));
     } else {
       setInvalid(false);
       changeHandler(value);

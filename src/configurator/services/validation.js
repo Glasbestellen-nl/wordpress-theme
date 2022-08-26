@@ -1,4 +1,5 @@
 const { msg } = window.gb;
+import { convertNumberBySizeUnit } from "./sizeUnit";
 
 export const validateBasic = (value) => {
   if (!value || value === "") {
@@ -8,15 +9,26 @@ export const validateBasic = (value) => {
   }
 };
 
-export const validateByRules = (value, rules, configuration) => {
+export const validateByRules = (
+  value,
+  rules,
+  configuration,
+  sizeUnit = "mm"
+) => {
   let valid = true;
   let message = "";
 
   if (rules) {
+    // Minimum size
     if (rules.min && value < parseInt(rules.min)) {
       valid = false;
-      message = msg.dimensionValueTooSmall.replace("{0}", rules.min);
-    } else if (rules.max) {
+      message = msg.dimensionValueTooSmall.replace(
+        "{0}",
+        convertNumberBySizeUnit(rules.min, sizeUnit)
+      );
+    }
+    // Maximum size
+    else if (rules.max) {
       let max;
       if (rules.max.dependence) {
         const maxDependence = rules.max.dependence;
@@ -43,10 +55,14 @@ export const validateByRules = (value, rules, configuration) => {
 
       if (value > max) {
         valid = false;
-        message = msg.dimensionValueTooLarge.replace("{0}", max);
+        message = msg.dimensionValueTooLarge.replace(
+          "{0}",
+          convertNumberBySizeUnit(max, sizeUnit)
+        );
       }
     }
 
+    // Based on dependent value
     if (rules.less_than && rules.less_than.step) {
       let lessThan = rules.less_than;
       let dependentStepId = lessThan.step;

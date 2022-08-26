@@ -6,7 +6,9 @@ import {
 export const ConfiguratorContext = createContext();
 
 export const ConfiguratorProvider = (props) => {
-  const [sizeUnit, setSizeUnit] = useState("mm");
+  const [sizeUnit, setSizeUnit] = useState(
+    window?.configurator?.settings?.size_unit || "mm"
+  );
   const [configuration, setConfiguration] = useState({});
   const [totalPriceHtml, setTotalPriceHtml] = useState("");
 

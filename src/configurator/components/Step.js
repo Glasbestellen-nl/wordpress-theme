@@ -1,4 +1,5 @@
 const { useContext, useState, useEffect } = wp.element;
+import { formatTextBySizeUnit } from "../services/sizeUnit";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import FieldNumber from "./FieldNumber";
 import FieldDropdown from "./FieldDropdown";
@@ -8,7 +9,8 @@ const stepsMap = getStepsMap();
 
 const Step = ({ step }) => {
   const { id, title, required, options, description, rules } = step;
-  const { setConfiguration, configuration } = useContext(ConfiguratorContext);
+  const { setConfiguration, configuration, sizeUnit } =
+    useContext(ConfiguratorContext);
   const [invalid, setInvalid] = useState(false);
 
   // Remove element from configuration when unmounting
@@ -99,7 +101,7 @@ const Step = ({ step }) => {
             className="configurator__form-label"
             data-explanation-id={getDescriptionId()}
           >
-            {title}
+            {formatTextBySizeUnit(title, sizeUnit)}
           </label>{" "}
           {required && <span>*</span>}
         </div>

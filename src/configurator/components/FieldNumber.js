@@ -21,7 +21,7 @@ const FieldNumber = ({
     const value = e.target.value;
     const { valid, message } = validate(value);
     if (!valid) {
-      setInvalid(message);
+      setInvalid(message, sizeUnit);
     } else {
       setInvalid(false);
     }
@@ -34,7 +34,12 @@ const FieldNumber = ({
       : { valid: true, message: "" };
     if (validationResult.valid) {
       if (rules)
-        validationResult = validateByRules(value, rules, configuration);
+        validationResult = validateByRules(
+          value,
+          rules,
+          configuration,
+          sizeUnit
+        );
     }
     return validationResult;
   };

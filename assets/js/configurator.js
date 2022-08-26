@@ -2215,13 +2215,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _services_validation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/validation */ "./src/configurator/services/validation.js");
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
-/* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
+/* harmony import */ var _services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/sizeUnit */ "./src/configurator/services/sizeUnit.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
 
 const {
   useContext,
   useEffect
 } = wp.element;
+
 
 
 
@@ -2237,8 +2239,9 @@ const FieldDropdown = _ref => {
     setInvalid
   } = _ref;
   const {
-    configuration
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
+    configuration,
+    sizeUnit
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_3__.ConfiguratorContext);
   useEffect(() => {
     const handleInvalidOptionCombinations = () => {
       if (configuration[id]) {
@@ -2260,7 +2263,7 @@ const FieldDropdown = _ref => {
               const compareConfig = configuration[step];
 
               if (options.includes(compareConfig)) {
-                setInvalid(message);
+                setInvalid((0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__.formatTextBySizeUnit)(message, sizeUnit));
               }
             }
           });
@@ -2303,7 +2306,7 @@ const FieldDropdown = _ref => {
     } = validate(value);
 
     if (!valid) {
-      setInvalid(message);
+      setInvalid((0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__.formatTextBySizeUnit)(message, sizeUnit));
     } else {
       setInvalid(false);
       changeHandler(value);
@@ -2322,7 +2325,7 @@ const FieldDropdown = _ref => {
     value: getValue()
   }, !getDefault() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
-  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_4__["default"], {
     key: option.id,
     option: option,
     defaultOption: getDefault()
@@ -2383,7 +2386,7 @@ const FieldNumber = _ref => {
     } = validate(value);
 
     if (!valid) {
-      setInvalid(message);
+      setInvalid(message, sizeUnit);
     } else {
       setInvalid(false);
     }
@@ -2398,7 +2401,7 @@ const FieldNumber = _ref => {
     };
 
     if (validationResult.valid) {
-      if (rules) validationResult = (0,_services_validation__WEBPACK_IMPORTED_MODULE_2__.validateByRules)(value, rules, configuration);
+      if (rules) validationResult = (0,_services_validation__WEBPACK_IMPORTED_MODULE_2__.validateByRules)(value, rules, configuration, sizeUnit);
     }
 
     return validationResult;
@@ -2452,6 +2455,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _services_price__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/price */ "./src/configurator/services/price.js");
+/* harmony import */ var _services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/sizeUnit */ "./src/configurator/services/sizeUnit.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+
+const {
+  useContext
+} = wp.element;
+
 
 
 
@@ -2465,6 +2475,9 @@ const Option = _ref => {
     title,
     price
   } = option;
+  const {
+    sizeUnit
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_3__.ConfiguratorContext);
 
   const getId = () => {
     return id;
@@ -2483,13 +2496,13 @@ const Option = _ref => {
     const isDefault = isDefaultOption();
     finalTitle.push(title);
 
-    if (parseInt(price) !== 0 && !isDefault) {
+    if (price && parseInt(price) !== 0 && !isDefault) {
       const defaultPrice = getDefaultPrice();
-      let plusPrice = (0,_services_price__WEBPACK_IMPORTED_MODULE_1__.formatPrice)((0,_services_price__WEBPACK_IMPORTED_MODULE_1__.priceIncludingVat)(price - defaultPrice));
+      const plusPrice = (0,_services_price__WEBPACK_IMPORTED_MODULE_1__.formatPrice)((0,_services_price__WEBPACK_IMPORTED_MODULE_1__.priceIncludingVat)(price - defaultPrice));
       finalTitle.push("+ " + plusPrice);
     }
 
-    return finalTitle.join(" ");
+    return (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__.formatTextBySizeUnit)(finalTitle.join(" "), sizeUnit);
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -2514,10 +2527,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
-/* harmony import */ var _FieldNumber__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FieldNumber */ "./src/configurator/components/FieldNumber.js");
-/* harmony import */ var _FieldDropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FieldDropdown */ "./src/configurator/components/FieldDropdown.js");
-/* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
+/* harmony import */ var _services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/sizeUnit */ "./src/configurator/services/sizeUnit.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _FieldNumber__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FieldNumber */ "./src/configurator/components/FieldNumber.js");
+/* harmony import */ var _FieldDropdown__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FieldDropdown */ "./src/configurator/components/FieldDropdown.js");
+/* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
 
 const {
   useContext,
@@ -2528,7 +2542,8 @@ const {
 
 
 
-const stepsMap = (0,_services_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsMap)();
+
+const stepsMap = (0,_services_steps__WEBPACK_IMPORTED_MODULE_5__.getStepsMap)();
 
 const Step = _ref => {
   var _getSelectedOption, _getSelectedOption$ch;
@@ -2546,8 +2561,9 @@ const Step = _ref => {
   } = step;
   const {
     setConfiguration,
-    configuration
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
+    configuration,
+    sizeUnit
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
   const [invalid, setInvalid] = useState(false); // Remove element from configuration when unmounting
 
   useEffect(() => () => {
@@ -2588,7 +2604,7 @@ const Step = _ref => {
           class: "js-input-hidden"
         }));
       } else {
-        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldDropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
           id: id,
           options: options,
           changeHandler: changeHandler,
@@ -2599,7 +2615,7 @@ const Step = _ref => {
         });
       }
     } else {
-      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldNumber__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldNumber__WEBPACK_IMPORTED_MODULE_3__["default"], {
         id: id,
         changeHandler: changeHandler,
         rules: rules,
@@ -2632,7 +2648,7 @@ const Step = _ref => {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "configurator__form-label",
     "data-explanation-id": getDescriptionId()
-  }, title), " ", required && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "*")), getDescriptionId() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(title, sizeUnit)), " ", required && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "*")), getDescriptionId() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-col configurator__form-info"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
     className: "fas fa-info-circle configurator__info-icon js-popup-explanation",
@@ -2678,7 +2694,9 @@ const {
 
 const ConfiguratorContext = createContext();
 const ConfiguratorProvider = props => {
-  const [sizeUnit, setSizeUnit] = useState("mm");
+  var _window, _window$configurator, _window$configurator$;
+
+  const [sizeUnit, setSizeUnit] = useState(((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : (_window$configurator$ = _window$configurator.settings) === null || _window$configurator$ === void 0 ? void 0 : _window$configurator$.size_unit) || "mm");
   const [configuration, setConfiguration] = useState({});
   const [totalPriceHtml, setTotalPriceHtml] = useState("");
   useEffect(() => {
@@ -2794,6 +2812,36 @@ const formatPrice = price => {
 
 /***/ }),
 
+/***/ "./src/configurator/services/sizeUnit.js":
+/*!***********************************************!*\
+  !*** ./src/configurator/services/sizeUnit.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "convertNumberBySizeUnit": () => (/* binding */ convertNumberBySizeUnit),
+/* harmony export */   "formatTextBySizeUnit": () => (/* binding */ formatTextBySizeUnit)
+/* harmony export */ });
+const convertNumberBySizeUnit = function (number) {
+  let sizeUnit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "mm";
+  if ("cm" == sizeUnit) number = number / 10;
+  return number;
+};
+const formatTextBySizeUnit = function (text) {
+  let sizeUnit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "mm";
+
+  if ("cm" == sizeUnit) {
+    text = text.replace("/d+(?:[,.]d+)?(?=s*(?:mm))/", value => value / 10);
+    text = text.replace("mm", "cm");
+  }
+
+  return text;
+};
+
+/***/ }),
+
 /***/ "./src/configurator/services/steps.js":
 /*!********************************************!*\
   !*** ./src/configurator/services/steps.js ***!
@@ -2835,9 +2883,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "validateBasic": () => (/* binding */ validateBasic),
 /* harmony export */   "validateByRules": () => (/* binding */ validateByRules)
 /* harmony export */ });
+/* harmony import */ var _sizeUnit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sizeUnit */ "./src/configurator/services/sizeUnit.js");
 const {
   msg
 } = window.gb;
+
 const validateBasic = value => {
   if (!value || value === "") {
     return {
@@ -2851,15 +2901,18 @@ const validateBasic = value => {
     };
   }
 };
-const validateByRules = (value, rules, configuration) => {
+const validateByRules = function (value, rules, configuration) {
+  let sizeUnit = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "mm";
   let valid = true;
   let message = "";
 
   if (rules) {
+    // Minimum size
     if (rules.min && value < parseInt(rules.min)) {
       valid = false;
-      message = msg.dimensionValueTooSmall.replace("{0}", rules.min);
-    } else if (rules.max) {
+      message = msg.dimensionValueTooSmall.replace("{0}", (0,_sizeUnit__WEBPACK_IMPORTED_MODULE_0__.convertNumberBySizeUnit)(rules.min, sizeUnit));
+    } // Maximum size
+    else if (rules.max) {
       let max;
 
       if (rules.max.dependence) {
@@ -2885,9 +2938,10 @@ const validateByRules = (value, rules, configuration) => {
 
       if (value > max) {
         valid = false;
-        message = msg.dimensionValueTooLarge.replace("{0}", max);
+        message = msg.dimensionValueTooLarge.replace("{0}", (0,_sizeUnit__WEBPACK_IMPORTED_MODULE_0__.convertNumberBySizeUnit)(max, sizeUnit));
       }
-    }
+    } // Based on dependent value
+
 
     if (rules.less_than && rules.less_than.step) {
       let lessThan = rules.less_than;

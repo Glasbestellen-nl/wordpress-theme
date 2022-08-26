@@ -1,7 +1,11 @@
+const { useContext } = wp.element;
 import { priceIncludingVat, formatPrice } from "../services/price";
+import { formatTextBySizeUnit } from "../services/sizeUnit";
+import { ConfiguratorContext } from "../context/ConfiguratorContext";
 
 const Option = ({ option, defaultOption }) => {
   const { id, title, price } = option;
+  const { sizeUnit } = useContext(ConfiguratorContext);
 
   const getId = () => {
     return id;
@@ -19,12 +23,12 @@ const Option = ({ option, defaultOption }) => {
     const finalTitle = [];
     const isDefault = isDefaultOption();
     finalTitle.push(title);
-    if (parseInt(price) !== 0 && !isDefault) {
+    if (price && parseInt(price) !== 0 && !isDefault) {
       const defaultPrice = getDefaultPrice();
-      let plusPrice = formatPrice(priceIncludingVat(price - defaultPrice));
+      const plusPrice = formatPrice(priceIncludingVat(price - defaultPrice));
       finalTitle.push("+ " + plusPrice);
     }
-    return finalTitle.join(" ");
+    return formatTextBySizeUnit(finalTitle.join(" "), sizeUnit);
   };
 
   return <option value={getId()}>{getTitle()}</option>;
