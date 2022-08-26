@@ -3,22 +3,17 @@ import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import FieldNumber from "./FieldNumber";
 import FieldDropdown from "./FieldDropdown";
 import { getStepsData } from "../services/steps";
+
+// Convert steps array to object for easier use
 const stepsMap = getStepsData().reduce(
   (acc, step) => ({ ...acc, [step.id]: step }),
   {}
 );
+
 const Step = ({ step }) => {
   const { id, title, required, options, description, rules } = step;
   const { setConfiguration, configuration } = useContext(ConfiguratorContext);
   const [invalid, setInvalid] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
-
-  useEffect(() => {
-    if (options && configuration[id]) {
-      const option = options.find((option) => option.id === configuration[id]);
-      if (option) setSelectedOption(option);
-    }
-  }, [configuration]);
 
   // Remove element from configuration when unmounting
   useEffect(
@@ -31,6 +26,11 @@ const Step = ({ step }) => {
     []
   );
 
+  const getSelectedOption = () => {
+    if (!hasOptions() || !configuration[id]) return;
+    return options.find((option) => option.id === configuration[id]);
+  };
+
   const getDescriptionId = () => {
     return description && description.id;
   };
@@ -40,9 +40,6 @@ const Step = ({ step }) => {
   };
 
   const changeHandler = (value) => {
-    if (options) {
-      setSelectedOption(options.find((option) => option.id === value));
-    }
     setConfiguration((prevConfig) => ({
       ...prevConfig,
       [id]: value,
@@ -125,7 +122,7 @@ const Step = ({ step }) => {
           )}
         </div>
       </div>
-      {selectedOption?.child_steps?.map((stepId) => {
+      {getSelectedOption()?.child_steps?.map((stepId) => {
         const childStep = stepsMap[stepId];
         return <Step key={childStep.id} step={childStep} />;
       })}

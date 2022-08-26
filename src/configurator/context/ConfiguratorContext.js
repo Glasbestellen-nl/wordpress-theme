@@ -2,7 +2,6 @@ const { createContext, useState, useEffect } = wp.element;
 import {
   getConfiguration,
   storeConfiguration,
-  getConfigurationTotalPrice,
 } from "../services/configuration";
 export const ConfiguratorContext = createContext();
 

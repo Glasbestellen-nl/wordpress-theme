@@ -8,8 +8,8 @@ const Configurator = () => {
   const { totalPriceHtml } = useContext(ConfiguratorContext);
 
   useEffect(() => {
-    // Temporary setting price with jQuery
     if (totalPriceHtml !== "")
+      // Temporary set total price with jQuery
       jQuery(".js-config-total-price").html(totalPriceHtml);
   }, [totalPriceHtml]);
 

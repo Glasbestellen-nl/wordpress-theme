@@ -2186,8 +2186,8 @@ const Configurator = () => {
     totalPriceHtml
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
   useEffect(() => {
-    // Temporary setting price with jQuery
-    if (totalPriceHtml !== "") jQuery(".js-config-total-price").html(totalPriceHtml);
+    if (totalPriceHtml !== "") // Temporary set total price with jQuery
+      jQuery(".js-config-total-price").html(totalPriceHtml);
   }, [totalPriceHtml]);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, steps.map(step => {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -2473,13 +2473,14 @@ const {
 
 
 
+ // Convert steps array to object for easier use
 
 const stepsMap = (0,_services_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsData)().reduce((acc, step) => ({ ...acc,
   [step.id]: step
 }), {});
 
 const Step = _ref => {
-  var _selectedOption$child;
+  var _getSelectedOption, _getSelectedOption$ch;
 
   let {
     step
@@ -2496,14 +2497,7 @@ const Step = _ref => {
     setConfiguration,
     configuration
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
-  const [invalid, setInvalid] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
-  useEffect(() => {
-    if (options && configuration[id]) {
-      const option = options.find(option => option.id === configuration[id]);
-      if (option) setSelectedOption(option);
-    }
-  }, [configuration]); // Remove element from configuration when unmounting
+  const [invalid, setInvalid] = useState(false); // Remove element from configuration when unmounting
 
   useEffect(() => () => {
     setConfiguration(prevConfig => {
@@ -2515,6 +2509,11 @@ const Step = _ref => {
     });
   }, []);
 
+  const getSelectedOption = () => {
+    if (!hasOptions() || !configuration[id]) return;
+    return options.find(option => option.id === configuration[id]);
+  };
+
   const getDescriptionId = () => {
     return description && description.id;
   };
@@ -2524,10 +2523,6 @@ const Step = _ref => {
   };
 
   const changeHandler = value => {
-    if (options) {
-      setSelectedOption(options.find(option => option.id === value));
-    }
-
     setConfiguration(prevConfig => ({ ...prevConfig,
       [id]: value
     }));
@@ -2595,7 +2590,7 @@ const Step = _ref => {
     class: getInputRowClassNames()
   }, renderInputField(), invalid && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "invalid-feedback js-invalid-feedback"
-  }, invalid))), selectedOption === null || selectedOption === void 0 ? void 0 : (_selectedOption$child = selectedOption.child_steps) === null || _selectedOption$child === void 0 ? void 0 : _selectedOption$child.map(stepId => {
+  }, invalid))), (_getSelectedOption = getSelectedOption()) === null || _getSelectedOption === void 0 ? void 0 : (_getSelectedOption$ch = _getSelectedOption.child_steps) === null || _getSelectedOption$ch === void 0 ? void 0 : _getSelectedOption$ch.map(stepId => {
     const childStep = stepsMap[stepId];
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Step, {
       key: childStep.id,
