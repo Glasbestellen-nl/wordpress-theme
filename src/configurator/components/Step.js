@@ -2,13 +2,9 @@ const { useContext, useState, useEffect } = wp.element;
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import FieldNumber from "./FieldNumber";
 import FieldDropdown from "./FieldDropdown";
-import { getStepsData } from "../services/steps";
+import { getStepsMap } from "../services/steps";
 
-// Convert steps array to object for easier use
-const stepsMap = getStepsData().reduce(
-  (acc, step) => ({ ...acc, [step.id]: step }),
-  {}
-);
+const stepsMap = getStepsMap();
 
 const Step = ({ step }) => {
   const { id, title, required, options, description, rules } = step;

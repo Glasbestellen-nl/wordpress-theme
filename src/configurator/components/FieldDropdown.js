@@ -1,4 +1,4 @@
-const { useContext } = wp.element;
+const { useContext, useEffect } = wp.element;
 import { validateBasic, validateByRules } from "../services/validation";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import Option from "./Option";
@@ -13,6 +13,34 @@ const FieldDropdown = ({
   setInvalid,
 }) => {
   const { configuration } = useContext(ConfiguratorContext);
+
+  useEffect(() => {
+    const handleInvalidOptionCombinations = () => {
+      if (configuration[id]) {
+        const selectedOption = options.find(
+          (option) => option.id === configuration[id]
+        );
+        if (
+          selectedOption &&
+          selectedOption.rules &&
+          selectedOption.rules.exclude
+        ) {
+          const { exclude } = selectedOption.rules;
+          setInvalid(false);
+          exclude.forEach((rule) => {
+            const { step, options, message } = rule;
+            if (configuration[step]) {
+              const compareConfig = configuration[step];
+              if (options.includes(compareConfig)) {
+                setInvalid(message);
+              }
+            }
+          });
+        }
+      }
+    };
+    handleInvalidOptionCombinations();
+  }, [configuration]);
 
   const getValue = () => {
     return configuration && configuration[id];

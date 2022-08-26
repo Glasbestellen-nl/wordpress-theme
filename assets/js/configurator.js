@@ -2219,7 +2219,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
 
 const {
-  useContext
+  useContext,
+  useEffect
 } = wp.element;
 
 
@@ -2238,6 +2239,37 @@ const FieldDropdown = _ref => {
   const {
     configuration
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
+  useEffect(() => {
+    const handleInvalidOptionCombinations = () => {
+      if (configuration[id]) {
+        const selectedOption = options.find(option => option.id === configuration[id]);
+
+        if (selectedOption && selectedOption.rules && selectedOption.rules.exclude) {
+          const {
+            exclude
+          } = selectedOption.rules;
+          setInvalid(false);
+          exclude.forEach(rule => {
+            const {
+              step,
+              options,
+              message
+            } = rule;
+
+            if (configuration[step]) {
+              const compareConfig = configuration[step];
+
+              if (options.includes(compareConfig)) {
+                setInvalid(message);
+              }
+            }
+          });
+        }
+      }
+    };
+
+    handleInvalidOptionCombinations();
+  }, [configuration]);
 
   const getValue = () => {
     return configuration && configuration[id];
@@ -2473,11 +2505,8 @@ const {
 
 
 
- // Convert steps array to object for easier use
 
-const stepsMap = (0,_services_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsData)().reduce((acc, step) => ({ ...acc,
-  [step.id]: step
-}), {});
+const stepsMap = (0,_services_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsMap)();
 
 const Step = _ref => {
   var _getSelectedOption, _getSelectedOption$ch;
@@ -2721,57 +2750,22 @@ const getConfigurationTotalPrice = async productId => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getStepsData": () => (/* binding */ getStepsData)
+/* harmony export */   "getStepsData": () => (/* binding */ getStepsData),
+/* harmony export */   "getStepsMap": () => (/* binding */ getStepsMap)
 /* harmony export */ });
 const getStepsData = () => {
   return window.gb && window.gb.configuratorSettings && window.gb.configuratorSettings.steps;
-  return [{
-    id: "step_a",
-    title: "Step A",
-    options: [{
-      id: "1",
-      title: "Option 1",
-      child_steps: ["step_b"]
-    }, {
-      id: "2",
-      title: "Option 2",
-      child_steps: ["step_c"]
-    }]
-  }, {
-    id: "step_b",
-    title: "Step B",
-    parent_step: "step_a",
-    options: [{
-      id: "1",
-      title: "Option 1"
-    }, {
-      id: "2",
-      title: "Option 2"
-    }]
-  }, {
-    id: "step_c",
-    title: "Step C",
-    parent_step: "step_a",
-    options: [{
-      id: "1",
-      title: "Option 1",
-      child_steps: ["step_d"]
-    }, {
-      id: "2",
-      title: "Option 2"
-    }]
-  }, {
-    id: "step_d",
-    title: "Step D",
-    parent_step: "step_c",
-    options: [{
-      id: "1",
-      title: "Option 1"
-    }, {
-      id: "2",
-      title: "Option 2"
-    }]
-  }];
+};
+/**
+ * Convert steps array to object for easier use
+ */
+
+const getStepsMap = () => {
+  const stepsArray = getStepsData();
+  if (!stepsArray) return;
+  return stepsArray.reduce((acc, step) => ({ ...acc,
+    [step.id]: step
+  }), {});
 };
 
 /***/ }),
