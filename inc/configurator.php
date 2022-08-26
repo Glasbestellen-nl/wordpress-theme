@@ -56,11 +56,15 @@ add_action( 'wp_ajax_nopriv_get_configuration', 'gb_handle_get_configuration' );
  */
 function gb_get_configurator_total_price() {
 
-   if ( ! empty( $_GET['product_id'] ) ) {
-      $product = wc_get_product( $_GET['product_id'] );
+   $response = [];
+
+   if ( ! empty( $_POST['product_id'] ) ) {
+      $product = wc_get_product( $_POST['product_id'] );
       // $configurator = $product->get_configurator();
-      echo wc_price( wc_get_price_including_tax( $product ) );
+      $response['price_html'] = wc_price( wc_get_price_including_tax( $product ) );
    }
+
+   wp_send_json( $response );
    wp_die();
 }
 add_action( 'wp_ajax_get_configurator_total_price', 'gb_get_configurator_total_price' );
@@ -73,16 +77,14 @@ function gb_handle_configurator_form_submit() {
 
    $response = [];
 
-   if ( empty( $_POST['configurator_id'] ) ) wp_die();
+   if ( empty( $_POST['product_id'] ) || empty( $_POST['configuration'] ) ) wp_die();
 
-   $configurator_id = $_POST['configurator_id'];
-
-   if ( ! empty( $_POST['configuration'] ) ) {
-      $configurator = gb_get_configurator( $configurator_id );
-      $configurator->update( $_POST['configuration'] );
-
-      $_SESSION['configuration'][$configurator_id] = $configurator->get_configuration();
-   }
+   $product = wc_get_product( $_POST['product_id'] );
+   $configurator = $product->get_configurator();
+   $configurator->update( $_POST['configuration'] );
+   $configurator_id = $configurator->get_id();
+   $_SESSION['configuration'][$configurator_id] = $configurator->get_configuration();
+   $response['price_html'] = wc_price( wc_get_price_including_tax( $product ) );
 
    wp_send_json( $response );
    wp_die();

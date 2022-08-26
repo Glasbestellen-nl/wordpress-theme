@@ -1,13 +1,15 @@
-const { createContext, useState, useEffect, useContext } = wp.element;
+const { createContext, useState, useEffect } = wp.element;
 import {
   getConfiguration,
   storeConfiguration,
+  getConfigurationTotalPrice,
 } from "../services/configuration";
 export const ConfiguratorContext = createContext();
 
 export const ConfiguratorProvider = (props) => {
   const [sizeUnit, setSizeUnit] = useState("mm");
   const [configuration, setConfiguration] = useState({});
+  const [totalPriceHtml, setTotalPriceHtml] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -19,10 +21,16 @@ export const ConfiguratorProvider = (props) => {
 
   useEffect(() => {
     (async () => {
-      const response = await storeConfiguration(
-        window.gb.configuratorId,
-        configuration
-      );
+      try {
+        const { postId } = window.gb;
+        // Store configuration in server session and receive total price html
+        const response = await storeConfiguration(postId, configuration);
+        if (response && response.data && response.data.price_html) {
+          setTotalPriceHtml(response.data.price_html);
+        }
+      } catch (err) {
+        console.error(err);
+      }
     })();
   }, [configuration]);
 
@@ -32,6 +40,7 @@ export const ConfiguratorProvider = (props) => {
         configuration,
         setConfiguration,
         sizeUnit,
+        totalPriceHtml,
       }}
     >
       {props.children}

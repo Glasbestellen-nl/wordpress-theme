@@ -2169,15 +2169,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
-/* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
+
+const {
+  useContext,
+  useEffect
+} = wp.element;
 
 
 
 
 const Configurator = () => {
   const steps = (0,_services_steps__WEBPACK_IMPORTED_MODULE_1__.getStepsData)().filter(step => !step.parent_step);
+  const {
+    totalPriceHtml
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
+  useEffect(() => {
+    // Temporary setting price with jQuery
+    if (totalPriceHtml !== "") jQuery(".js-config-total-price").html(totalPriceHtml);
+  }, [totalPriceHtml]);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, steps.map(step => {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_3__["default"], {
       key: step.id,
       step: step
     });
@@ -2614,14 +2627,14 @@ __webpack_require__.r(__webpack_exports__);
 const {
   createContext,
   useState,
-  useEffect,
-  useContext
+  useEffect
 } = wp.element;
 
 const ConfiguratorContext = createContext();
 const ConfiguratorProvider = props => {
   const [sizeUnit, setSizeUnit] = useState("mm");
   const [configuration, setConfiguration] = useState({});
+  const [totalPriceHtml, setTotalPriceHtml] = useState("");
   useEffect(() => {
     (async () => {
       const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.gb.configuratorId);
@@ -2630,14 +2643,27 @@ const ConfiguratorProvider = props => {
   }, []);
   useEffect(() => {
     (async () => {
-      const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.storeConfiguration)(window.gb.configuratorId, configuration);
+      try {
+        const {
+          postId
+        } = window.gb; // Store configuration in server session and receive total price html
+
+        const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.storeConfiguration)(postId, configuration);
+
+        if (response && response.data && response.data.price_html) {
+          setTotalPriceHtml(response.data.price_html);
+        }
+      } catch (err) {
+        console.error(err);
+      }
     })();
   }, [configuration]);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ConfiguratorContext.Provider, {
     value: {
       configuration,
       setConfiguration,
-      sizeUnit
+      sizeUnit,
+      totalPriceHtml
     }
   }, props.children);
 };
@@ -2654,6 +2680,7 @@ const ConfiguratorProvider = props => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "getConfiguration": () => (/* binding */ getConfiguration),
+/* harmony export */   "getConfigurationTotalPrice": () => (/* binding */ getConfigurationTotalPrice),
 /* harmony export */   "storeConfiguration": () => (/* binding */ storeConfiguration)
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
@@ -2662,18 +2689,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_1__);
 
 
+const {
+  ajaxUrl
+} = window.gb;
 const getConfiguration = async configuratorId => {
-  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(window.gb.ajaxUrl, qs__WEBPACK_IMPORTED_MODULE_1___default().stringify({
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(ajaxUrl, qs__WEBPACK_IMPORTED_MODULE_1___default().stringify({
     action: "get_configuration",
     configurator_id: configuratorId
   }));
   return response;
 };
-const storeConfiguration = async (configuratorId, configuration) => {
-  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(window.gb.ajaxUrl, qs__WEBPACK_IMPORTED_MODULE_1___default().stringify({
+const storeConfiguration = async (productId, configuration) => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(ajaxUrl, qs__WEBPACK_IMPORTED_MODULE_1___default().stringify({
     action: "handle_configurator_form_submit",
-    configurator_id: configuratorId,
+    product_id: productId,
     configuration
+  }));
+  return response;
+};
+const getConfigurationTotalPrice = async productId => {
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(ajaxUrl, qs__WEBPACK_IMPORTED_MODULE_1___default().stringify({
+    action: "get_configurator_total_price",
+    product_id: productId
   }));
   return response;
 };
