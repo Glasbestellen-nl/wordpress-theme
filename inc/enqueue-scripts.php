@@ -41,34 +41,7 @@ function gb_enqueue_scripts() {
    if ( is_singular() ) {
       $l10n['postId'] = $post->ID;
    }
-
-   // Configurator
-   if ( is_singular( 'product' ) ) {
-      $product = wc_get_product( $post->ID );
-      if ( $product && $product->is_type( 'configurable' ) ) {
-
-         $configurator_id = get_post_meta( $product->get_id(), 'configurator', true );
-         $l10n['configuratorId'] = $configurator_id;
-
-         $configurator_settings = get_post_meta( $configurator_id, 'configurator_settings', true );
-         $configurator_settings['steps'] = array_map( function( $step ) {
-            if ( empty( $step['options'] ) ) return $step;
-            $step['options'] = array_map( function( $option ) {
-               if ( ! empty( $option['child_steps'] ) && ! is_array( $option['child_steps'] ) ) {
-                  $option['child_steps'] = [$option['child_steps']];
-               }
-               return $option;
-            }, $step['options'] );
-            return $step;
-         }, $configurator_settings['steps'] );
-
-         $l10n['configuratorSettings'] = $configurator_settings;
-
-         wp_enqueue_script( 'react-configurator', get_template_directory_uri() . '/assets/js/configurator.js', ['jquery', 'wp-element'], $version, true );
-      }
-   }
    wp_localize_script( 'main-js', 'gb', $l10n );
-
 }
 add_action( 'wp_enqueue_scripts', 'gb_enqueue_scripts' );
 
@@ -92,7 +65,5 @@ function gb_admin_enqueue_scripts() {
          ]
       )
    );
-
-
 }
 add_action( 'admin_enqueue_scripts', 'gb_admin_enqueue_scripts' );

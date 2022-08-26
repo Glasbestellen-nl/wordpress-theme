@@ -64,27 +64,6 @@ export const validateByRules = (value, rules, configuration) => {
         }
       }
     }
-
-    if (rules.exclude) {
-      let excludeRules = rules.exclude;
-      console.log(excludeRules);
-      if (Array.isArray(excludeRules)) {
-        excludeRules.forEach((excludeRule) => {
-          if (excludeRule.step && excludeRule.options) {
-            // let step = $(`.js-step-input-${excludeRule.step}`);
-            // excludeRule.options.forEach((optionId) => {
-            //   let option = step.find(
-            //     `option[data-option-id="${optionId}"]:selected`
-            //   );
-            //   if (option.length > 0) {
-            //     valid = false;
-            //     msg = excludeRule.message;
-            //   }
-            // });
-          }
-        });
-      }
-    }
   }
   return { valid, message };
 };

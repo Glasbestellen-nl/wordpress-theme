@@ -2661,7 +2661,7 @@ const ConfiguratorProvider = props => {
   const [totalPriceHtml, setTotalPriceHtml] = useState("");
   useEffect(() => {
     (async () => {
-      const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.gb.configuratorId);
+      const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.configurator.configuratorId);
       if (response && response.data && response.data.configuration) setConfiguration(response.data.configuration);
     })();
   }, []);
@@ -2669,10 +2669,10 @@ const ConfiguratorProvider = props => {
     (async () => {
       try {
         const {
-          postId
-        } = window.gb; // Store configuration in server session and receive total price html
+          productId
+        } = window.configurator; // Store configuration in server session and receive total price html
 
-        const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.storeConfiguration)(postId, configuration);
+        const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.storeConfiguration)(productId, configuration);
 
         if (response && response.data && response.data.price_html) {
           setTotalPriceHtml(response.data.price_html);
@@ -2754,7 +2754,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getStepsMap": () => (/* binding */ getStepsMap)
 /* harmony export */ });
 const getStepsData = () => {
-  return window.gb && window.gb.configuratorSettings && window.gb.configuratorSettings.steps;
+  return window.configurator && window.configurator.settings && window.configurator.settings.steps;
 };
 /**
  * Convert steps array to object for easier use
@@ -2853,27 +2853,6 @@ const validateByRules = (value, rules, configuration) => {
             message = rules.less_than.message;
           }
         }
-      }
-    }
-
-    if (rules.exclude) {
-      let excludeRules = rules.exclude;
-      console.log(excludeRules);
-
-      if (Array.isArray(excludeRules)) {
-        excludeRules.forEach(excludeRule => {
-          if (excludeRule.step && excludeRule.options) {// let step = $(`.js-step-input-${excludeRule.step}`);
-            // excludeRule.options.forEach((optionId) => {
-            //   let option = step.find(
-            //     `option[data-option-id="${optionId}"]:selected`
-            //   );
-            //   if (option.length > 0) {
-            //     valid = false;
-            //     msg = excludeRule.message;
-            //   }
-            // });
-          }
-        });
       }
     }
   }

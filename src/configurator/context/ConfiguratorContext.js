@@ -12,7 +12,9 @@ export const ConfiguratorProvider = (props) => {
 
   useEffect(() => {
     (async () => {
-      const response = await getConfiguration(window.gb.configuratorId);
+      const response = await getConfiguration(
+        window.configurator.configuratorId
+      );
       if (response && response.data && response.data.configuration)
         setConfiguration(response.data.configuration);
     })();
@@ -21,9 +23,9 @@ export const ConfiguratorProvider = (props) => {
   useEffect(() => {
     (async () => {
       try {
-        const { postId } = window.gb;
+        const { productId } = window.configurator;
         // Store configuration in server session and receive total price html
-        const response = await storeConfiguration(postId, configuration);
+        const response = await storeConfiguration(productId, configuration);
         if (response && response.data && response.data.price_html) {
           setTotalPriceHtml(response.data.price_html);
         }

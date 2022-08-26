@@ -1,8 +1,8 @@
 export const getStepsData = () => {
   return (
-    window.gb &&
-    window.gb.configuratorSettings &&
-    window.gb.configuratorSettings.steps
+    window.configurator &&
+    window.configurator.settings &&
+    window.configurator.settings.steps
   );
 };
 
