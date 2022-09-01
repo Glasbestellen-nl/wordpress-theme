@@ -664,10 +664,10 @@ class Configurator {
     */
    public function get_step_default( string $step_id = '' ) {
       $this->set_current_step( $step_id );
-      $args = [
-         'size_unit' => $this->get_size_unit()
-      ];
-      return $this->_current_step->get_default( $args );
+      // $args = [
+      //    'size_unit' => $this->get_size_unit()
+      // ];
+      return $this->_current_step->get_default();
    }
 
    /**

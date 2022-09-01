@@ -2379,7 +2379,8 @@ const FieldNumber = _ref => {
   }, [configuration]);
 
   const handleChange = e => {
-    const value = e.target.value;
+    let value = e.target.value;
+    if (value && sizeUnit === "cm") value *= 10;
     const {
       valid,
       message
@@ -2427,13 +2428,23 @@ const FieldNumber = _ref => {
     return classNames.join(" ");
   };
 
+  const getValue = () => {
+    if (!value) return "";
+
+    if (sizeUnit === "cm") {
+      return value / 10;
+    }
+
+    return value;
+  };
+
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "number",
     className: getClassNames(),
     placeholder: sizeUnit,
     onChange: handleChange,
     onBlur: handleBlur,
-    value: value
+    value: getValue()
   });
 };
 
@@ -2696,7 +2707,8 @@ const ConfiguratorContext = createContext();
 const ConfiguratorProvider = props => {
   var _window, _window$configurator, _window$configurator$;
 
-  const [sizeUnit, setSizeUnit] = useState(((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : (_window$configurator$ = _window$configurator.settings) === null || _window$configurator$ === void 0 ? void 0 : _window$configurator$.size_unit) || "mm");
+  const [sizeUnit, setSizeUnit] = useState(((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : (_window$configurator$ = _window$configurator.settings) === null || _window$configurator$ === void 0 ? void 0 : _window$configurator$.size_unit) || "mm" // "mm"
+  );
   const [configuration, setConfiguration] = useState({});
   const [totalPriceHtml, setTotalPriceHtml] = useState("");
   useEffect(() => {
@@ -2833,7 +2845,9 @@ const formatTextBySizeUnit = function (text) {
   let sizeUnit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "mm";
 
   if ("cm" == sizeUnit) {
-    text = text.replace("/d+(?:[,.]d+)?(?=s*(?:mm))/", value => value / 10);
+    text = text.replace(/\d+\s?(?:[,.]d+)?(?=s*(?:mm))/, value => {
+      return value / 10;
+    });
     text = text.replace("mm", "cm");
   }
 

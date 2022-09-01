@@ -18,7 +18,8 @@ const FieldNumber = ({
   }, [configuration]);
 
   const handleChange = (e) => {
-    const value = e.target.value;
+    let value = e.target.value;
+    if (value && sizeUnit === "cm") value *= 10;
     const { valid, message } = validate(value);
     if (!valid) {
       setInvalid(message, sizeUnit);
@@ -61,6 +62,14 @@ const FieldNumber = ({
     return classNames.join(" ");
   };
 
+  const getValue = () => {
+    if (!value) return "";
+    if (sizeUnit === "cm") {
+      return value / 10;
+    }
+    return value;
+  };
+
   return (
     <input
       type="number"
@@ -68,7 +77,7 @@ const FieldNumber = ({
       placeholder={sizeUnit}
       onChange={handleChange}
       onBlur={handleBlur}
-      value={value}
+      value={getValue()}
     />
   );
 };
