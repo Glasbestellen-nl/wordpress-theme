@@ -2461,20 +2461,18 @@ const FieldNumber = _ref => {
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
   const [value, setValue] = useState(null);
   useEffect(() => {
-    if (configuration[id]) {
-      const {
-        valid,
-        message
-      } = validate(configuration[id]);
+    const {
+      valid,
+      message
+    } = validate(configuration[id]);
 
-      if (!valid) {
-        setInvalid(message);
-      } else {
-        setInvalid(false);
-      }
-
-      setValue(configuration[id]);
+    if (!valid) {
+      setInvalid(message);
+    } else {
+      setInvalid(false);
     }
+
+    setValue(configuration[id]);
   }, [configuration]);
 
   const handleChange = e => {
@@ -2491,7 +2489,6 @@ const FieldNumber = _ref => {
       setInvalid(false);
     }
 
-    setInteraction(true);
     setValue(value);
   };
 
@@ -2597,10 +2594,14 @@ const Option = _ref => {
     const isDefault = isDefaultOption();
     finalTitle.push(title);
 
-    if (price && parseInt(price) !== 0 && !isDefault) {
+    if (parseInt(price) !== 0 && !isDefault) {
       const defaultPrice = getDefaultPrice();
-      const plusPrice = (0,_services_price__WEBPACK_IMPORTED_MODULE_1__.formatPrice)((0,_services_price__WEBPACK_IMPORTED_MODULE_1__.priceIncludingVat)(price - defaultPrice));
-      finalTitle.push("+ " + plusPrice);
+      const plusPrice = price - defaultPrice;
+
+      if (parseInt(plusPrice) !== 0) {
+        const plusFormattedPrice = (0,_services_price__WEBPACK_IMPORTED_MODULE_1__.formatPrice)((0,_services_price__WEBPACK_IMPORTED_MODULE_1__.priceIncludingVat)(plusPrice));
+        finalTitle.push("+ " + plusFormattedPrice);
+      }
     }
 
     return (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__.formatTextBySizeUnit)(finalTitle.join(" "), sizeUnit);

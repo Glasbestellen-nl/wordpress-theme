@@ -23,10 +23,13 @@ const Option = ({ option, defaultOption }) => {
     const finalTitle = [];
     const isDefault = isDefaultOption();
     finalTitle.push(title);
-    if (price && parseInt(price) !== 0 && !isDefault) {
+    if (parseInt(price) !== 0 && !isDefault) {
       const defaultPrice = getDefaultPrice();
-      const plusPrice = formatPrice(priceIncludingVat(price - defaultPrice));
-      finalTitle.push("+ " + plusPrice);
+      const plusPrice = price - defaultPrice;
+      if (parseInt(plusPrice) !== 0) {
+        const plusFormattedPrice = formatPrice(priceIncludingVat(plusPrice));
+        finalTitle.push("+ " + plusFormattedPrice);
+      }
     }
     return formatTextBySizeUnit(finalTitle.join(" "), sizeUnit);
   };

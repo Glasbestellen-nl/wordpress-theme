@@ -14,15 +14,13 @@ const FieldNumber = ({
   const [value, setValue] = useState(null);
 
   useEffect(() => {
-    if (configuration[id]) {
-      const { valid, message } = validate(configuration[id]);
-      if (!valid) {
-        setInvalid(message);
-      } else {
-        setInvalid(false);
-      }
-      setValue(configuration[id]);
+    const { valid, message } = validate(configuration[id]);
+    if (!valid) {
+      setInvalid(message);
+    } else {
+      setInvalid(false);
     }
+    setValue(configuration[id]);
   }, [configuration]);
 
   const handleChange = (e) => {
@@ -34,7 +32,6 @@ const FieldNumber = ({
     } else {
       setInvalid(false);
     }
-    setInteraction(true);
     setValue(value);
   };
 
