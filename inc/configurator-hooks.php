@@ -57,7 +57,13 @@ class Configurator_Hooks {
       wp_localize_script( 'configurator', 'configurator', $data );
    }
 
+   public function check_security_nonce() {
+      return check_ajax_referer( GB_NONCE, 'ajaxNonce' );
+   }
+
    public function handle_ajax_get_configuration() {
+
+      $this->check_security_nonce();
 
       $response = [];
 
@@ -77,6 +83,8 @@ class Configurator_Hooks {
 
    public function handle_ajax_get_configuration_total_price() { 
 
+      $this->check_security_nonce();
+
       $response = [];
 
       if ( ! empty( $_POST['product_id'] ) ) {
@@ -89,6 +97,8 @@ class Configurator_Hooks {
    }
 
    public function handle_ajax_configurator_form_submit() {
+
+      $this->check_security_nonce();
 
       $response = [];
 
@@ -106,6 +116,8 @@ class Configurator_Hooks {
    }
 
    public function handle_ajax_configurator_to_cart() {
+
+      $this->check_security_nonce();
 
       global $woocommerce;
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 
-const { ajaxUrl } = window.gb;
+const { ajaxUrl, ajaxNonce } = window.gb;
 
 export const getConfiguration = async (configuratorId) => {
   const response = await axios.post(
@@ -9,6 +9,7 @@ export const getConfiguration = async (configuratorId) => {
     qs.stringify({
       action: "get_configuration",
       configurator_id: configuratorId,
+      ajaxNonce,
     })
   );
   return response;
@@ -21,6 +22,7 @@ export const storeConfiguration = async (productId, configuration) => {
       action: "handle_configurator_form_submit",
       product_id: productId,
       configuration,
+      ajaxNonce,
     })
   );
   return response;
@@ -32,6 +34,7 @@ export const getConfigurationTotalPrice = async (productId) => {
     qs.stringify({
       action: "get_configurator_total_price",
       product_id: productId,
+      ajaxNonce,
     })
   );
   return response;
@@ -45,6 +48,7 @@ export const addConfigurationToCart = async (productId, quantity, message) => {
       product_id: window?.configurator?.productId,
       quantity,
       message,
+      ajaxNonce,
     })
   );
   return response;

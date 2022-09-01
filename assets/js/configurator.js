@@ -2858,12 +2858,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const {
-  ajaxUrl
+  ajaxUrl,
+  ajaxNonce
 } = window.gb;
 const getConfiguration = async configuratorId => {
   const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(ajaxUrl, qs__WEBPACK_IMPORTED_MODULE_1___default().stringify({
     action: "get_configuration",
-    configurator_id: configuratorId
+    configurator_id: configuratorId,
+    ajaxNonce
   }));
   return response;
 };
@@ -2871,14 +2873,16 @@ const storeConfiguration = async (productId, configuration) => {
   const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(ajaxUrl, qs__WEBPACK_IMPORTED_MODULE_1___default().stringify({
     action: "handle_configurator_form_submit",
     product_id: productId,
-    configuration
+    configuration,
+    ajaxNonce
   }));
   return response;
 };
 const getConfigurationTotalPrice = async productId => {
   const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(ajaxUrl, qs__WEBPACK_IMPORTED_MODULE_1___default().stringify({
     action: "get_configurator_total_price",
-    product_id: productId
+    product_id: productId,
+    ajaxNonce
   }));
   return response;
 };
@@ -2889,7 +2893,8 @@ const addConfigurationToCart = async (productId, quantity, message) => {
     action: "handle_configurator_to_cart",
     product_id: (_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId,
     quantity,
-    message
+    message,
+    ajaxNonce
   }));
   return response;
 };
