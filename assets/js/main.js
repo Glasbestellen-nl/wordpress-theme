@@ -4128,11 +4128,94 @@
 
 /***/ }),
 
+/***/ "./src/main/functions.js":
+/*!*******************************!*\
+  !*** ./src/main/functions.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "hideModal": () => (/* binding */ hideModal),
+/* harmony export */   "loadModalContent": () => (/* binding */ loadModalContent),
+/* harmony export */   "showModal": () => (/* binding */ showModal),
+/* harmony export */   "showModalForm": () => (/* binding */ showModalForm)
+/* harmony export */ });
+/**
+ * Shows modal form
+ */
+const showModalForm = (title, formtype, metadata, callback) => {
+  showModal(title);
+  let data = {
+    action: "get_form_modal_input",
+    post_id: gb.postId,
+    formtype: formtype,
+    metadata: metadata
+  };
+  jQuery.get(gb.ajaxUrl, data, function (html) {
+    loadModalContent(html, false, function (modalElement) {
+      if (callback) callback(modalElement);
+    });
+  });
+};
+/**
+ * Shows modal
+ */
+
+const showModal = function (title) {
+  let size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "small";
+  jQuery(".js-modal-title").html(title); // Remove modal size classes
+
+  jQuery(".js-modal").removeClass(function (index, className) {
+    return (className.match(/(^|\s)modal-\S+/g) || []).join(" ");
+  });
+  jQuery(".js-modal-loader").show();
+  jQuery(".js-modal-inner").hide();
+  jQuery(".js-modal").addClass("show modal-" + size);
+};
+/**
+ * Hides modal
+ */
+
+const hideModal = () => {
+  const modal = jQuery(".js-modal");
+
+  if (modal !== null) {
+    modal.removeClass("show");
+    jQuery(".js-modal-body").html("");
+  }
+};
+/**
+ * Loads modal content
+ */
+
+const loadModalContent = function (html) {
+  let title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+  let callback = arguments.length > 2 ? arguments[2] : undefined;
+  jQuery(".js-modal-body").html(html);
+
+  if (title) {
+    jQuery(".js-modal-title").html(title);
+  }
+
+  jQuery(".js-modal-loader").hide();
+  jQuery(".js-modal-inner").fadeIn(300);
+  if (callback) callback(jQuery(".js-modal"));
+};
+
+/***/ }),
+
 /***/ "./src/main/index.js":
 /*!***************************!*\
   !*** ./src/main/index.js ***!
   \***************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./src/main/functions.js");
+
 
 (function ($) {
   /**
@@ -4403,7 +4486,7 @@
 
 
       if (e.target.closest(".js-close-modal") || e.target.matches(".js-modal")) {
-        hideModal();
+        (0,_functions__WEBPACK_IMPORTED_MODULE_0__.hideModal)();
         return;
       }
       /**
@@ -4608,20 +4691,20 @@
     let title = $(this).data("popup-title");
     let formtype = $(this).data("formtype");
     let metadata = $(this).data("meta");
-    showModalForm(title, formtype, metadata);
+    (0,_functions__WEBPACK_IMPORTED_MODULE_0__.showModalForm)(title, formtype, metadata);
   });
   /**
    * Popup pin
    */
 
   $(document).on("click", ".js-popup-pin", function () {
-    showModal(gb.msg.inspiration, "large");
+    (0,_functions__WEBPACK_IMPORTED_MODULE_0__.showModal)(gb.msg.inspiration, "large");
     let data = {
       action: "get_single_popup_html",
       post_id: $(this).data("pin-id")
     };
     $.get(gb.ajaxUrl, data, function (html) {
-      loadModalContent(html);
+      (0,_functions__WEBPACK_IMPORTED_MODULE_0__.loadModalContent)(html);
     });
   });
   /**
@@ -4629,82 +4712,16 @@
    */
 
   $(document).on("click", ".js-popup-explanation", function () {
-    showModal("", "medium");
+    (0,_functions__WEBPACK_IMPORTED_MODULE_0__.showModal)("", "medium");
     let data = {
       action: "get_explanation_content",
       post_id: $(this).data("explanation-id")
     };
     $.get(gb.ajaxUrl, data, function (response) {
-      loadModalContent(response.html, response.title);
+      (0,_functions__WEBPACK_IMPORTED_MODULE_0__.loadModalContent)(response.html, response.title);
     });
   });
 })(jQuery);
-/**
- * Shows modal form
- */
-
-
-function showModalForm(title, formtype, metadata, callback) {
-  showModal(title);
-  let data = {
-    action: "get_form_modal_input",
-    post_id: gb.postId,
-    formtype: formtype,
-    metadata: metadata
-  };
-  jQuery.get(gb.ajaxUrl, data, function (html) {
-    loadModalContent(html, false, function (modalElement) {
-      if (callback) callback(modalElement);
-    });
-  });
-}
-/**
- * Hides modal
- */
-
-
-function hideModal() {
-  const modal = jQuery(".js-modal");
-
-  if (modal !== null) {
-    modal.removeClass("show");
-    jQuery(".js-modal-body").html("");
-  }
-}
-/**
- * Shows modal
- */
-
-
-function showModal(title) {
-  let size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "small";
-  jQuery(".js-modal-title").html(title); // Remove modal size classes
-
-  jQuery(".js-modal").removeClass(function (index, className) {
-    return (className.match(/(^|\s)modal-\S+/g) || []).join(" ");
-  });
-  jQuery(".js-modal-loader").show();
-  jQuery(".js-modal-inner").hide();
-  jQuery(".js-modal").addClass("show modal-" + size);
-}
-/**
- * Loads modal content
- */
-
-
-function loadModalContent(html) {
-  let title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-  let callback = arguments.length > 2 ? arguments[2] : undefined;
-  jQuery(".js-modal-body").html(html);
-
-  if (title) {
-    jQuery(".js-modal-title").html(title);
-  }
-
-  jQuery(".js-modal-loader").hide();
-  jQuery(".js-modal-inner").fadeIn(300);
-  if (callback) callback(jQuery(".js-modal"));
-}
 /**
  * Validates a form
  */
@@ -5033,6 +5050,35 @@ module.exports = window["jQuery"];
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 /******/ 	

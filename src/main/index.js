@@ -1,3 +1,10 @@
+import {
+  showModalForm,
+  showModal,
+  hideModal,
+  loadModalContent,
+} from "./functions";
+
 (function ($) {
   /**
    * Closest polyfil
@@ -529,63 +536,6 @@
     });
   });
 })(jQuery);
-
-/**
- * Shows modal form
- */
-function showModalForm(title, formtype, metadata, callback) {
-  showModal(title);
-
-  let data = {
-    action: "get_form_modal_input",
-    post_id: gb.postId,
-    formtype: formtype,
-    metadata: metadata,
-  };
-  jQuery.get(gb.ajaxUrl, data, function (html) {
-    loadModalContent(html, false, function (modalElement) {
-      if (callback) callback(modalElement);
-    });
-  });
-}
-
-/**
- * Hides modal
- */
-function hideModal() {
-  const modal = jQuery(".js-modal");
-  if (modal !== null) {
-    modal.removeClass("show");
-    jQuery(".js-modal-body").html("");
-  }
-}
-
-/**
- * Shows modal
- */
-function showModal(title, size = "small") {
-  jQuery(".js-modal-title").html(title);
-  // Remove modal size classes
-  jQuery(".js-modal").removeClass(function (index, className) {
-    return (className.match(/(^|\s)modal-\S+/g) || []).join(" ");
-  });
-  jQuery(".js-modal-loader").show();
-  jQuery(".js-modal-inner").hide();
-  jQuery(".js-modal").addClass("show modal-" + size);
-}
-
-/**
- * Loads modal content
- */
-function loadModalContent(html, title = "", callback) {
-  jQuery(".js-modal-body").html(html);
-  if (title) {
-    jQuery(".js-modal-title").html(title);
-  }
-  jQuery(".js-modal-loader").hide();
-  jQuery(".js-modal-inner").fadeIn(300);
-  if (callback) callback(jQuery(".js-modal"));
-}
 
 /**
  * Validates a form

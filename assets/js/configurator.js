@@ -2168,33 +2168,119 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
-/* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
+/* harmony import */ var _main_functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../main/functions */ "./src/main/functions.js");
+/* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
+/* harmony import */ var _services_configuration__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/configuration */ "./src/configurator/services/configuration.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
 
 const {
   useContext,
-  useEffect
+  useEffect,
+  useState
 } = wp.element;
 
 
 
 
+
+
 const Configurator = () => {
-  const steps = (0,_services_steps__WEBPACK_IMPORTED_MODULE_1__.getStepsData)().filter(step => !step.parent_step);
+  const steps = (0,_services_steps__WEBPACK_IMPORTED_MODULE_2__.getStepsData)().filter(step => !step.parent_step);
   const {
-    totalPriceHtml
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
+    totalPriceHtml,
+    setConfiguration
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_4__.ConfiguratorContext);
+  const [quantity, setQuantity] = useState(1);
+  const [message, setMessage] = useState("");
+  useEffect(() => {
+    // Elements outside of react
+    jQuery(".js-configurator-cart-button").on("click", e => {
+      handleSubmitButtonClick(e);
+    });
+    jQuery(".js-configurator-save-button").on("click", e => {
+      handleSaveButtonClick(e);
+    });
+  }, []);
   useEffect(() => {
     if (totalPriceHtml !== "") // Temporary set total price with jQuery
       jQuery(".js-config-total-price").html(totalPriceHtml);
   }, [totalPriceHtml]);
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, steps.map(step => {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_3__["default"], {
+
+  const handleSubmitButtonClick = async e => {
+    e.preventDefault();
+    setConfiguration(prevConfig => ({ ...prevConfig
+    }));
+
+    try {
+      var _window, _window$configurator;
+
+      const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_3__.addConfigurationToCart)((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId, quantity, message);
+
+      if (response && response.data && response.data.url) {
+        window.location.replace(response.data.url);
+      }
+    } catch (err) {
+      console.err(err);
+    }
+  };
+
+  const handleSaveButtonClick = () => {
+    var _window2, _window2$configurator;
+
+    (0,_main_functions__WEBPACK_IMPORTED_MODULE_1__.showModalForm)("Samenstelling als offerte ontvangen", "save-configuration", (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$configurator = _window2.configurator) === null || _window2$configurator === void 0 ? void 0 : _window2$configurator.configuratorId, () => jQuery(".js-form-content-field").val(message));
+  };
+
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, steps.map(step => {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_5__["default"], {
       key: step.id,
       step: step
     });
-  }));
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "configurator__form-row"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "configurator__form-col configurator__form-label"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, "Opmerking")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "configurator__form-col configurator__form-input"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("textarea", {
+    class: "form-control",
+    placeholder: `Maximaal ${235} karakters`,
+    maxlength: "235",
+    onChange: e => setMessage(e.target.value),
+    value: message
+  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "configurator__form-row space-below"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "configurator__form-col configurator__form-label"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, "Aantal")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "configurator__form-col configurator__form-input"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+    className: "dropdown configurator__form-control",
+    onChange: e => setQuantity(e.target.value),
+    value: quantity
+  }, (() => {
+    const options = [];
+
+    for (let number = 1; number <= 10; number++) {
+      options.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+        value: number
+      }, number));
+    }
+
+    return options;
+  })()))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "configurator__form-button small-space-below"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "btn btn--primary btn--block btn--next",
+    onClick: handleSubmitButtonClick
+  }, "In winkelwagen")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "configurator__form-button space-below"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "btn btn--block btn--aside js-configurator-save-button",
+    onClick: () => handleSaveButtonClick()
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
+    class: "fas fa-file-import"
+  }), " \xA0\xA0 Mail mij een offerte")));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Configurator);
@@ -2375,7 +2461,20 @@ const FieldNumber = _ref => {
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
   const [value, setValue] = useState(null);
   useEffect(() => {
-    if (configuration[id]) setValue(configuration[id]);
+    if (configuration[id]) {
+      const {
+        valid,
+        message
+      } = validate(configuration[id]);
+
+      if (!valid) {
+        setInvalid(message);
+      } else {
+        setInvalid(false);
+      }
+
+      setValue(configuration[id]);
+    }
   }, [configuration]);
 
   const handleChange = e => {
@@ -2392,7 +2491,12 @@ const FieldNumber = _ref => {
       setInvalid(false);
     }
 
+    setInteraction(true);
     setValue(value);
+  };
+
+  const handleBlur = () => {
+    changeHandler(value);
   };
 
   const validate = value => {
@@ -2408,23 +2512,9 @@ const FieldNumber = _ref => {
     return validationResult;
   };
 
-  const handleBlur = () => {
-    const {
-      valid,
-      message
-    } = validate(value);
-
-    if (!valid) {
-      setInvalid(message);
-    } else {
-      setInvalid(false);
-      changeHandler(value);
-    }
-  };
-
   const getClassNames = () => {
     const classNames = ["form-control", "configurator__form-control"];
-    if (invalid) classNames.push("invalid");else classNames.push("valid");
+    if (invalid) classNames.push("invalid");else if (value) classNames.push("valid");
     return classNames.join(" ");
   };
 
@@ -2755,6 +2845,7 @@ const ConfiguratorProvider = props => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "addConfigurationToCart": () => (/* binding */ addConfigurationToCart),
 /* harmony export */   "getConfiguration": () => (/* binding */ getConfiguration),
 /* harmony export */   "getConfigurationTotalPrice": () => (/* binding */ getConfigurationTotalPrice),
 /* harmony export */   "storeConfiguration": () => (/* binding */ storeConfiguration)
@@ -2787,6 +2878,17 @@ const getConfigurationTotalPrice = async productId => {
   const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(ajaxUrl, qs__WEBPACK_IMPORTED_MODULE_1___default().stringify({
     action: "get_configurator_total_price",
     product_id: productId
+  }));
+  return response;
+};
+const addConfigurationToCart = async (productId, quantity, message) => {
+  var _window, _window$configurator;
+
+  const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(ajaxUrl, qs__WEBPACK_IMPORTED_MODULE_1___default().stringify({
+    action: "handle_configurator_to_cart",
+    product_id: (_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId,
+    quantity,
+    message
   }));
   return response;
 };
@@ -2982,6 +3084,84 @@ const validateByRules = function (value, rules, configuration) {
     valid,
     message
   };
+};
+
+/***/ }),
+
+/***/ "./src/main/functions.js":
+/*!*******************************!*\
+  !*** ./src/main/functions.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "hideModal": () => (/* binding */ hideModal),
+/* harmony export */   "loadModalContent": () => (/* binding */ loadModalContent),
+/* harmony export */   "showModal": () => (/* binding */ showModal),
+/* harmony export */   "showModalForm": () => (/* binding */ showModalForm)
+/* harmony export */ });
+/**
+ * Shows modal form
+ */
+const showModalForm = (title, formtype, metadata, callback) => {
+  showModal(title);
+  let data = {
+    action: "get_form_modal_input",
+    post_id: gb.postId,
+    formtype: formtype,
+    metadata: metadata
+  };
+  jQuery.get(gb.ajaxUrl, data, function (html) {
+    loadModalContent(html, false, function (modalElement) {
+      if (callback) callback(modalElement);
+    });
+  });
+};
+/**
+ * Shows modal
+ */
+
+const showModal = function (title) {
+  let size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "small";
+  jQuery(".js-modal-title").html(title); // Remove modal size classes
+
+  jQuery(".js-modal").removeClass(function (index, className) {
+    return (className.match(/(^|\s)modal-\S+/g) || []).join(" ");
+  });
+  jQuery(".js-modal-loader").show();
+  jQuery(".js-modal-inner").hide();
+  jQuery(".js-modal").addClass("show modal-" + size);
+};
+/**
+ * Hides modal
+ */
+
+const hideModal = () => {
+  const modal = jQuery(".js-modal");
+
+  if (modal !== null) {
+    modal.removeClass("show");
+    jQuery(".js-modal-body").html("");
+  }
+};
+/**
+ * Loads modal content
+ */
+
+const loadModalContent = function (html) {
+  let title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+  let callback = arguments.length > 2 ? arguments[2] : undefined;
+  jQuery(".js-modal-body").html(html);
+
+  if (title) {
+    jQuery(".js-modal-title").html(title);
+  }
+
+  jQuery(".js-modal-loader").hide();
+  jQuery(".js-modal-inner").fadeIn(300);
+  if (callback) callback(jQuery(".js-modal"));
 };
 
 /***/ }),

@@ -36,3 +36,16 @@ export const getConfigurationTotalPrice = async (productId) => {
   );
   return response;
 };
+
+export const addConfigurationToCart = async (productId, quantity, message) => {
+  const response = await axios.post(
+    ajaxUrl,
+    qs.stringify({
+      action: "handle_configurator_to_cart",
+      product_id: window?.configurator?.productId,
+      quantity,
+      message,
+    })
+  );
+  return response;
+};

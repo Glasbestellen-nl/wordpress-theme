@@ -76,41 +76,6 @@ if ( post_password_required() ) {
 
 		<div id="react_configurator"></div>
 
-		<div class="configurator__form-row">
-
-			<div class="configurator__form-col configurator__form-label">
-				<label><?php _e( 'Opmerking', 'glasbestellen' ) ?></label>
-			</div>
-
-			<div class="configurator__form-col configurator__form-input">
-				<textarea class="form-control js-configurator-message" placeholder="<?php echo sprintf( __( 'Maximaal %d karakters', 'glasbestellen' ), 235 ); ?>" maxlength="235"></textarea>
-			</div>
-
-		</div>
-
-		<div class="configurator__form-row space-below">
-			<div class="configurator__form-col configurator__form-label">
-				<label><?php _e( 'Aantal', 'glasbestellen' ) ?></label>
-			</div>
-			<div class="configurator__form-col configurator__form-input">
-				<select class="dropdown configurator__form-control js-configurator-quantity">
-					<?php for ( $i = 1; $i <= 10; $i ++ ) { ?>
-						<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-					<?php } ?>
-				</select>
-			</div>
-		</div>
-
-		<div class="configurator__form-button small-space-below">
-			<button class="btn btn--primary btn--block btn--next js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
-		</div>
-
-		<?php if ( ! get_field( 'disable_quote_button' ) ) { ?>
-			<div class="configurator__form-button space-below">
-				<span class="btn btn--block btn--aside js-configurator-save-button" data-popup-title="<?php _e( 'Samenstelling als offerte ontvangen', 'glasbestellen' ); ?>" data-formtype="save-configuration" data-meta="<?php echo $product->get_configurator_id(); ?>"><i class="fas fa-file-import"></i> &nbsp;&nbsp;<?php _e( 'Mail mij een offerte', 'glasbestellen' ); ?></span>
-			</div>
-		<?php } ?>
-
 		<ul class="configurator__checks space-below">
 			<?php
 			if ( get_field( 'checks' ) ) {

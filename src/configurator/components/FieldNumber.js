@@ -14,7 +14,15 @@ const FieldNumber = ({
   const [value, setValue] = useState(null);
 
   useEffect(() => {
-    if (configuration[id]) setValue(configuration[id]);
+    if (configuration[id]) {
+      const { valid, message } = validate(configuration[id]);
+      if (!valid) {
+        setInvalid(message);
+      } else {
+        setInvalid(false);
+      }
+      setValue(configuration[id]);
+    }
   }, [configuration]);
 
   const handleChange = (e) => {
@@ -26,7 +34,12 @@ const FieldNumber = ({
     } else {
       setInvalid(false);
     }
+    setInteraction(true);
     setValue(value);
+  };
+
+  const handleBlur = () => {
+    changeHandler(value);
   };
 
   const validate = (value) => {
@@ -45,20 +58,10 @@ const FieldNumber = ({
     return validationResult;
   };
 
-  const handleBlur = () => {
-    const { valid, message } = validate(value);
-    if (!valid) {
-      setInvalid(message);
-    } else {
-      setInvalid(false);
-      changeHandler(value);
-    }
-  };
-
   const getClassNames = () => {
     const classNames = ["form-control", "configurator__form-control"];
     if (invalid) classNames.push("invalid");
-    else classNames.push("valid");
+    else if (value) classNames.push("valid");
     return classNames.join(" ");
   };
 
