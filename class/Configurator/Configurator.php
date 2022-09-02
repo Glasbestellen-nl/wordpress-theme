@@ -54,6 +54,13 @@ class Configurator {
    }
 
    /**
+    * Returns default configuration
+    */
+   public function get_default_configuration() {
+      return $this->_default_configuration;
+   }
+
+   /**
     * Return total calculated price
     *
     * @param bool $round whether change the price so the vat included price is
@@ -503,6 +510,11 @@ class Configurator {
       return $value;
    }
 
+   public function is_step_disabled( string $step_id ) {
+      $this->set_current_step( $step_id );
+      return $this->_current_step->is_disabled();
+   }
+
    /**
     * Returns the current step type
     *
@@ -652,10 +664,10 @@ class Configurator {
     */
    public function get_step_default( string $step_id = '' ) {
       $this->set_current_step( $step_id );
-      $args = [
-         'size_unit' => $this->get_size_unit()
-      ];
-      return $this->_current_step->get_default( $args );
+      // $args = [
+      //    'size_unit' => $this->get_size_unit()
+      // ];
+      return $this->_current_step->get_default();
    }
 
    /**

@@ -5,7 +5,6 @@
 function gb_enqueue_scripts() {
 
    global $post;
-   global $product;
 
    $theme = wp_get_theme();
    $version = $theme->get('Version');
@@ -18,13 +17,7 @@ function gb_enqueue_scripts() {
 
    // Scripts
    wp_enqueue_script( 'masonry' );
-   wp_enqueue_script( 'fancybox-js', get_template_directory_uri() . '/assets/js/fancybox.js', ['jquery'], null, true );
-   wp_enqueue_script( 'matchheight-js', get_template_directory_uri() . '/assets/js/matchHeight.min.js', ['jquery'], null, true );
-   wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', ['jquery', 'fancybox-js'], $version, true );
-
-   if ( is_singular( 'product' ) ) {
-      wp_enqueue_script( 'configurator-js', get_template_directory_uri() . '/assets/js/configurator.js', ['jquery', 'main-js'], $version, true );
-   }
+   wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], $version, true );
 
    // Localize scripts
    $l10n = [
@@ -47,10 +40,8 @@ function gb_enqueue_scripts() {
    ];
    if ( is_singular() ) {
       $l10n['postId'] = $post->ID;
-      $l10n['configuratorId'] = get_post_meta( $post->ID, 'configurator', true );
    }
    wp_localize_script( 'main-js', 'gb', $l10n );
-
 }
 add_action( 'wp_enqueue_scripts', 'gb_enqueue_scripts' );
 
@@ -74,7 +65,5 @@ function gb_admin_enqueue_scripts() {
          ]
       )
    );
-
-
 }
 add_action( 'admin_enqueue_scripts', 'gb_admin_enqueue_scripts' );

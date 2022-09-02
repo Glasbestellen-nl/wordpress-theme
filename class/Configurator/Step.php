@@ -91,6 +91,10 @@ class Step {
       return $this->get_field( 'parent_step' );
    }
 
+   public function is_disabled() {
+      return $this->get_field( 'disabled' );
+   }
+
    public function get_class( array $additional_classes = [] ) {
 
       $classes = [

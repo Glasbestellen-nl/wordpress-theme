@@ -1103,7 +1103,6 @@ Form
 .invalid-feedback {
   width: 100%;
   margin-top: 0.25rem;
-  display: none;
   font-size: 0.75em;
   font-weight: 400;
   color: #dc3545;
@@ -3488,6 +3487,10 @@ Configurator
 .configurator__form-control {
   padding: 0.5em 0.625em;
   font-size: 0.875em;
+}
+
+.configurator__form-control:disabled {
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
 .configurator__checks-item {
