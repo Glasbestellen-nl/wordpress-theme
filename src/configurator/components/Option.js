@@ -26,7 +26,7 @@ const Option = ({ option, defaultOption }) => {
     if (parseInt(price) !== 0 && !isDefault) {
       const defaultPrice = getDefaultPrice();
       const plusPrice = price - defaultPrice;
-      if (parseInt(plusPrice) !== 0) {
+      if (parseInt(plusPrice) !== 0 && !isNaN(plusPrice)) {
         const plusFormattedPrice = formatPrice(priceIncludingVat(plusPrice));
         finalTitle.push("+ " + plusFormattedPrice);
       }

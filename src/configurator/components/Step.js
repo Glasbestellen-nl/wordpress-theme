@@ -121,7 +121,7 @@ const Step = ({ step, validate }) => {
       </div>
       {getSelectedOption()?.child_steps?.map((stepId) => {
         const childStep = stepsMap[stepId];
-        return <Step key={childStep.id} step={childStep} />;
+        return <Step key={childStep.id} step={childStep} validate={validate} />;
       })}
     </>
   );

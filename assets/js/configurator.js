@@ -2180,7 +2180,8 @@ __webpack_require__.r(__webpack_exports__);
 const {
   useContext,
   useEffect,
-  useState
+  useState,
+  useRef
 } = wp.element;
 
 
@@ -2205,6 +2206,7 @@ const Configurator = () => {
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_6__.ConfiguratorContext);
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
+  const ref = useRef();
   useEffect(() => {
     if (totalPriceHtml !== "") // Temporary set total price with jQuery
       jQuery(".js-config-total-price").html(totalPriceHtml);
@@ -2285,7 +2287,8 @@ const Configurator = () => {
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "configurator__form-rows js-configurator-steps"
+    className: "configurator__form-rows js-configurator-steps",
+    ref: ref
   }, steps.map((step, index) => {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_7__["default"], {
       key: step.id,
@@ -2340,7 +2343,8 @@ const Configurator = () => {
     class: "fas fa-file-import"
   }), " \xA0\xA0 Mail mij een offerte"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StickyBar__WEBPACK_IMPORTED_MODULE_8__["default"], {
     submitButtonHandler: handleSubmitButtonClick,
-    saveButtonHandler: handleSaveButtonClick
+    saveButtonHandler: handleSaveButtonClick,
+    scrollTargetRef: ref
   }));
 };
 
@@ -2633,7 +2637,7 @@ const Option = _ref => {
       const defaultPrice = getDefaultPrice();
       const plusPrice = price - defaultPrice;
 
-      if (parseInt(plusPrice) !== 0) {
+      if (parseInt(plusPrice) !== 0 && !isNaN(plusPrice)) {
         const plusFormattedPrice = (0,_services_price__WEBPACK_IMPORTED_MODULE_1__.formatPrice)((0,_services_price__WEBPACK_IMPORTED_MODULE_1__.priceIncludingVat)(plusPrice));
         finalTitle.push("+ " + plusFormattedPrice);
       }
@@ -2797,7 +2801,8 @@ const Step = _ref => {
     const childStep = stepsMap[stepId];
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Step, {
       key: childStep.id,
-      step: childStep
+      step: childStep,
+      validate: validate
     });
   }));
 };
@@ -2822,22 +2827,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
 
 const {
-  useContext
+  useContext,
+  useRef,
+  useEffect,
+  useState
 } = wp.element;
 
 
 const StickyBar = _ref => {
   let {
     submitButtonHandler,
-    saveButtonHandler
+    saveButtonHandler,
+    scrollTargetRef
   } = _ref;
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
   const {
     loading
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "sticky-bar sticky-bar--desktop-top js-sticky-bar",
+  useEffect(() => {
+    const showOnScroll = () => {
+      const viewportTop = window.scrollY;
+      const elementTop = scrollTargetRef.current.offsetTop;
+
+      if (viewportTop > elementTop) {
+        setVisible(true);
+      } else {
+        setVisible(false);
+      }
+    };
+
+    window.addEventListener("scroll", showOnScroll);
+    return () => {
+      window.removeEventListener("scroll", showOnScroll);
+    };
+  }, []);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ref: ref,
+    className: "sticky-bar sticky-bar--desktop-top",
     style: {
-      left: 0
+      left: 0,
+      display: visible ? "block" : "none"
     }
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "container"
@@ -2866,7 +2896,7 @@ const StickyBar = _ref => {
     disabled: loading
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
     className: "fas fa-file-import"
-  }), " \xA0\xA0 Offerte"))))));
+  }), " \xA0\xA0 Offerte")))))));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (StickyBar);

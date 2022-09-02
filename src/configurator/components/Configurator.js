@@ -1,4 +1,4 @@
-const { useContext, useEffect, useState } = wp.element;
+const { useContext, useEffect, useState, useRef } = wp.element;
 import { showModalForm } from "../../main/functions";
 import { validateBasic, validateByRules } from "../services/validation";
 import { formatTextBySizeUnit } from "../services/sizeUnit";
@@ -6,7 +6,7 @@ import { getStepsData } from "../services/steps";
 import { addConfigurationToCart } from "../services/configuration";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import Step from "./Step";
-import StickBar from "./StickyBar";
+import StickyBar from "./StickyBar";
 
 const Configurator = () => {
   const steps = getStepsData().filter((step) => !step.parent_step);
@@ -22,6 +22,7 @@ const Configurator = () => {
   } = useContext(ConfiguratorContext);
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
+  const ref = useRef();
 
   useEffect(() => {
     if (totalPriceHtml !== "")
@@ -99,7 +100,7 @@ const Configurator = () => {
 
   return (
     <>
-      <div className="configurator__form-rows js-configurator-steps">
+      <div className="configurator__form-rows js-configurator-steps" ref={ref}>
         {steps.map((step, index) => {
           return <Step key={step.id} step={step} validate={validate} />;
         })}
@@ -157,9 +158,10 @@ const Configurator = () => {
           </button>
         </div>
       </div>
-      <StickBar
+      <StickyBar
         submitButtonHandler={handleSubmitButtonClick}
         saveButtonHandler={handleSaveButtonClick}
+        scrollTargetRef={ref}
       />
     </>
   );
