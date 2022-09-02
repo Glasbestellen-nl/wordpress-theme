@@ -2175,6 +2175,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_configuration__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/configuration */ "./src/configurator/services/configuration.js");
 /* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
 /* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
+/* harmony import */ var _StickyBar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./StickyBar */ "./src/configurator/components/StickyBar.js");
 
 const {
   useContext,
@@ -2189,11 +2190,13 @@ const {
 
 
 
+
 const Configurator = () => {
   const steps = (0,_services_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsData)().filter(step => !step.parent_step);
   const {
     configuration,
     totalPriceHtml,
+    loading,
     submitting,
     setSubmitting,
     sizeUnit,
@@ -2202,15 +2205,6 @@ const Configurator = () => {
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_6__.ConfiguratorContext);
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
-  useEffect(() => {
-    // Elements outside of react
-    jQuery(".js-configurator-cart-button").on("click", e => {
-      handleSubmitButtonClick(e);
-    });
-    jQuery(".js-configurator-save-button").on("click", e => {
-      handleSaveButtonClick(e);
-    });
-  }, []);
   useEffect(() => {
     if (totalPriceHtml !== "") // Temporary set total price with jQuery
       jQuery(".js-config-total-price").html(totalPriceHtml);
@@ -2239,7 +2233,9 @@ const Configurator = () => {
     }
   };
 
-  const handleSaveButtonClick = () => {
+  const handleSaveButtonClick = e => {
+    e.preventDefault();
+
     if (!validateForm()) {
       jQuery(".js-configurator-steps").scrollTo(-100);
     } else {
@@ -2288,7 +2284,7 @@ const Configurator = () => {
     return Object.keys(invalid).length === 0;
   };
 
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-rows js-configurator-steps"
   }, steps.map((step, index) => {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -2332,15 +2328,20 @@ const Configurator = () => {
     className: "configurator__form-button small-space-below"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "btn btn--primary btn--block btn--next",
-    onClick: handleSubmitButtonClick
+    onClick: handleSubmitButtonClick,
+    disabled: loading
   }, !submitting && "In winkelwagen" || "Een moment..")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-button space-below"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "btn btn--block btn--aside",
-    onClick: handleSaveButtonClick
+    onClick: handleSaveButtonClick,
+    disabled: loading
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
     class: "fas fa-file-import"
-  }), " \xA0\xA0 Mail mij een offerte")));
+  }), " \xA0\xA0 Mail mij een offerte"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StickyBar__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    submitButtonHandler: handleSubmitButtonClick,
+    saveButtonHandler: handleSaveButtonClick
+  }));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Configurator);
@@ -2805,6 +2806,73 @@ const Step = _ref => {
 
 /***/ }),
 
+/***/ "./src/configurator/components/StickyBar.js":
+/*!**************************************************!*\
+  !*** ./src/configurator/components/StickyBar.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+
+const {
+  useContext
+} = wp.element;
+
+
+const StickyBar = _ref => {
+  let {
+    submitButtonHandler,
+    saveButtonHandler
+  } = _ref;
+  const {
+    loading
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "sticky-bar sticky-bar--desktop-top js-sticky-bar",
+    style: {
+      left: 0
+    }
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "container"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "row d-flex align-items-center"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "col-4 col-lg-2 offset-lg-6"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "js-config-total-price d-block text-size-medium text-color-blue text-weight-bold"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "text-size-tiny text-color-grey"
+  }, "Prijs incl. BTW.")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "col-7 offset-1 col-lg-4 offset-lg-0"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "d-flex"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "btn btn--block btn--primary btn--tiny",
+    onClick: submitButtonHandler,
+    disabled: loading
+  }, "In winkelwagen"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "d-none d-md-flex align-items-center justify-content-center btn btn--block btn--aside js-configurator-save-button small-space-left",
+    "data-popup-title": "",
+    "data-formtype": "save-configuration",
+    "data-meta": "",
+    onClick: saveButtonHandler,
+    disabled: loading
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
+    className: "fas fa-file-import"
+  }), " \xA0\xA0 Offerte"))))));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (StickyBar);
+
+/***/ }),
+
 /***/ "./src/configurator/context/ConfiguratorContext.js":
 /*!*********************************************************!*\
   !*** ./src/configurator/context/ConfiguratorContext.js ***!
@@ -2834,12 +2902,17 @@ const ConfiguratorProvider = props => {
   const [sizeUnit] = useState(((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : (_window$configurator$ = _window$configurator.settings) === null || _window$configurator$ === void 0 ? void 0 : _window$configurator$.size_unit) || "mm");
   const [configuration, setConfiguration] = useState({});
   const [totalPriceHtml, setTotalPriceHtml] = useState("");
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [invalidFields, setInvalidFields] = useState({});
   useEffect(() => {
     (async () => {
       const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.configurator.configuratorId);
-      if (response && response.data && response.data.configuration) setConfiguration(response.data.configuration);
+
+      if (response && response.data && response.data.configuration) {
+        setConfiguration(response.data.configuration);
+        setLoading(false);
+      }
     })();
   }, []);
   useEffect(() => {
@@ -2880,6 +2953,8 @@ const ConfiguratorProvider = props => {
       setConfiguration,
       sizeUnit,
       totalPriceHtml,
+      loading,
+      setLoading,
       submitting,
       setSubmitting,
       invalidFields,

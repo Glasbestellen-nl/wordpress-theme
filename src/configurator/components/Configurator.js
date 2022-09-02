@@ -6,12 +6,14 @@ import { getStepsData } from "../services/steps";
 import { addConfigurationToCart } from "../services/configuration";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import Step from "./Step";
+import StickBar from "./StickyBar";
 
 const Configurator = () => {
   const steps = getStepsData().filter((step) => !step.parent_step);
   const {
     configuration,
     totalPriceHtml,
+    loading,
     submitting,
     setSubmitting,
     sizeUnit,
@@ -20,16 +22,6 @@ const Configurator = () => {
   } = useContext(ConfiguratorContext);
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    // Elements outside of react
-    jQuery(".js-configurator-cart-button").on("click", (e) => {
-      handleSubmitButtonClick(e);
-    });
-    jQuery(".js-configurator-save-button").on("click", (e) => {
-      handleSaveButtonClick(e);
-    });
-  }, []);
 
   useEffect(() => {
     if (totalPriceHtml !== "")
@@ -60,7 +52,8 @@ const Configurator = () => {
     }
   };
 
-  const handleSaveButtonClick = () => {
+  const handleSaveButtonClick = (e) => {
+    e.preventDefault();
     if (!validateForm()) {
       jQuery(".js-configurator-steps").scrollTo(-100);
     } else {
@@ -105,62 +98,70 @@ const Configurator = () => {
   };
 
   return (
-    <div className="configurator__form-rows js-configurator-steps">
-      {steps.map((step, index) => {
-        return <Step key={step.id} step={step} validate={validate} />;
-      })}
-      <div className="configurator__form-row">
-        <div className="configurator__form-col configurator__form-label">
-          <label>Opmerking</label>
-        </div>
+    <>
+      <div className="configurator__form-rows js-configurator-steps">
+        {steps.map((step, index) => {
+          return <Step key={step.id} step={step} validate={validate} />;
+        })}
+        <div className="configurator__form-row">
+          <div className="configurator__form-col configurator__form-label">
+            <label>Opmerking</label>
+          </div>
 
-        <div className="configurator__form-col configurator__form-input">
-          <textarea
-            class="form-control"
-            placeholder={`Maximaal ${235} karakters`}
-            maxlength="235"
-            onChange={(e) => setMessage(e.target.value)}
-            value={message}
-          ></textarea>
+          <div className="configurator__form-col configurator__form-input">
+            <textarea
+              class="form-control"
+              placeholder={`Maximaal ${235} karakters`}
+              maxlength="235"
+              onChange={(e) => setMessage(e.target.value)}
+              value={message}
+            ></textarea>
+          </div>
         </div>
-      </div>
-      <div className="configurator__form-row space-below">
-        <div className="configurator__form-col configurator__form-label">
-          <label>Aantal</label>
+        <div className="configurator__form-row space-below">
+          <div className="configurator__form-col configurator__form-label">
+            <label>Aantal</label>
+          </div>
+          <div className="configurator__form-col configurator__form-input">
+            <select
+              className="dropdown configurator__form-control"
+              onChange={(e) => setQuantity(e.target.value)}
+              value={quantity}
+            >
+              {(() => {
+                const options = [];
+                for (let number = 1; number <= 10; number++) {
+                  options.push(<option value={number}>{number}</option>);
+                }
+                return options;
+              })()}
+            </select>
+          </div>
         </div>
-        <div className="configurator__form-col configurator__form-input">
-          <select
-            className="dropdown configurator__form-control"
-            onChange={(e) => setQuantity(e.target.value)}
-            value={quantity}
+        <div className="configurator__form-button small-space-below">
+          <button
+            className="btn btn--primary btn--block btn--next"
+            onClick={handleSubmitButtonClick}
+            disabled={loading}
           >
-            {(() => {
-              const options = [];
-              for (let number = 1; number <= 10; number++) {
-                options.push(<option value={number}>{number}</option>);
-              }
-              return options;
-            })()}
-          </select>
+            {(!submitting && "In winkelwagen") || "Een moment.."}
+          </button>
+        </div>
+        <div className="configurator__form-button space-below">
+          <button
+            className="btn btn--block btn--aside"
+            onClick={handleSaveButtonClick}
+            disabled={loading}
+          >
+            <i class="fas fa-file-import"></i> &nbsp;&nbsp; Mail mij een offerte
+          </button>
         </div>
       </div>
-      <div className="configurator__form-button small-space-below">
-        <button
-          className="btn btn--primary btn--block btn--next"
-          onClick={handleSubmitButtonClick}
-        >
-          {(!submitting && "In winkelwagen") || "Een moment.."}
-        </button>
-      </div>
-      <div className="configurator__form-button space-below">
-        <span
-          className="btn btn--block btn--aside"
-          onClick={handleSaveButtonClick}
-        >
-          <i class="fas fa-file-import"></i> &nbsp;&nbsp; Mail mij een offerte
-        </span>
-      </div>
-    </div>
+      <StickBar
+        submitButtonHandler={handleSubmitButtonClick}
+        saveButtonHandler={handleSaveButtonClick}
+      />
+    </>
   );
 };
 

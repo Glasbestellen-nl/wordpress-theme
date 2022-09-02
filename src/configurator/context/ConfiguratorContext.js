@@ -11,6 +11,7 @@ export const ConfiguratorProvider = (props) => {
   );
   const [configuration, setConfiguration] = useState({});
   const [totalPriceHtml, setTotalPriceHtml] = useState("");
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [invalidFields, setInvalidFields] = useState({});
 
@@ -19,8 +20,10 @@ export const ConfiguratorProvider = (props) => {
       const response = await getConfiguration(
         window.configurator.configuratorId
       );
-      if (response && response.data && response.data.configuration)
+      if (response && response.data && response.data.configuration) {
         setConfiguration(response.data.configuration);
+        setLoading(false);
+      }
     })();
   }, []);
 
@@ -57,6 +60,8 @@ export const ConfiguratorProvider = (props) => {
         setConfiguration,
         sizeUnit,
         totalPriceHtml,
+        loading,
+        setLoading,
         submitting,
         setSubmitting,
         invalidFields,
