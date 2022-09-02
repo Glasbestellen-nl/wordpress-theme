@@ -2216,38 +2216,37 @@ const Configurator = () => {
       jQuery(".js-config-total-price").html(totalPriceHtml);
   }, [totalPriceHtml]);
 
-  const isValidForm = () => {
-    console.log(invalidFields);
-    return Object.keys(invalidFields).length === 0;
-  };
-
   const handleSubmitButtonClick = async e => {
     e.preventDefault();
-    validateForm();
-    if (!isValidForm()) return;
 
-    try {
-      var _window, _window$configurator;
+    if (!validateForm()) {
+      jQuery(".js-configurator-steps").scrollTo(-100);
+    } else {
+      try {
+        var _window, _window$configurator;
 
-      setSubmitting(true);
-      const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_5__.addConfigurationToCart)((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId, quantity, message);
+        setSubmitting(true);
+        const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_5__.addConfigurationToCart)((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId, quantity, message);
 
-      if (response && response.data && response.data.url) {
+        if (response && response.data && response.data.url) {
+          setSubmitting(false);
+          window.location.replace(response.data.url);
+        }
+      } catch (err) {
         setSubmitting(false);
-        window.location.replace(response.data.url);
+        console.err(err);
       }
-    } catch (err) {
-      setSubmitting(false);
-      console.err(err);
     }
   };
 
   const handleSaveButtonClick = () => {
-    var _window2, _window2$configurator;
+    if (!validateForm()) {
+      jQuery(".js-configurator-steps").scrollTo(-100);
+    } else {
+      var _window2, _window2$configurator;
 
-    validateForm();
-    if (!isValidForm()) return;
-    (0,_main_functions__WEBPACK_IMPORTED_MODULE_1__.showModalForm)("Samenstelling als offerte ontvangen", "save-configuration", (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$configurator = _window2.configurator) === null || _window2$configurator === void 0 ? void 0 : _window2$configurator.configuratorId, () => jQuery(".js-form-content-field").val(message));
+      (0,_main_functions__WEBPACK_IMPORTED_MODULE_1__.showModalForm)("Samenstelling als offerte ontvangen", "save-configuration", (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$configurator = _window2.configurator) === null || _window2$configurator === void 0 ? void 0 : _window2$configurator.configuratorId, () => jQuery(".js-form-content-field").val(message));
+    }
   };
 
   const validate = (value, required, rules, sizeUnit) => {
@@ -2264,7 +2263,7 @@ const Configurator = () => {
   };
 
   const validateForm = () => {
-    const invalid = {};
+    let invalid = {};
     steps === null || steps === void 0 ? void 0 : steps.forEach(step => {
       const {
         id,
@@ -2276,14 +2275,22 @@ const Configurator = () => {
         valid,
         message
       } = validate(value, required, rules, sizeUnit);
-      if (!valid) invalid[id] = (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_3__.formatTextBySizeUnit)(message), sizeUnit;
+      if (!valid) invalid[id] = (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_3__.formatTextBySizeUnit)(message, sizeUnit);
     });
-    setInvalidFields(prevFields => ({ ...prevFields,
+    setInvalidFields(prevFields => {
+      return { ...prevFields,
+        ...invalid
+      };
+    });
+    invalid = { ...invalidFields,
       ...invalid
-    }));
+    };
+    return Object.keys(invalid).length === 0;
   };
 
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, steps.map(step => {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "configurator__form-rows js-configurator-steps"
+  }, steps.map((step, index) => {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_7__["default"], {
       key: step.id,
       step: step,
@@ -2430,16 +2437,9 @@ const FieldDropdown = _ref => {
     } = validate(value, required, rules, sizeUnit);
 
     if (!valid) {
-      addInvalidField(id, (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(message, sizeUnit)); // setInvalidFields((prevFields) => ({
-      //   ...prevFields,
-      //   [id]: formatTextBySizeUnit(message, sizeUnit),
-      // }));
+      addInvalidField(id, (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(message, sizeUnit));
     } else {
-      removeInvalidField(id); // setInvalidFields((prevFields) => {
-      //   if (prevFields[id]) delete prevFields[id];
-      //   return { ...prevFields };
-      // });
-
+      removeInvalidField(id);
       changeHandler(value);
     }
   };

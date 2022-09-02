@@ -61,16 +61,8 @@ const FieldDropdown = ({
     const { valid, message } = validate(value, required, rules, sizeUnit);
     if (!valid) {
       addInvalidField(id, formatTextBySizeUnit(message, sizeUnit));
-      // setInvalidFields((prevFields) => ({
-      //   ...prevFields,
-      //   [id]: formatTextBySizeUnit(message, sizeUnit),
-      // }));
     } else {
       removeInvalidField(id);
-      // setInvalidFields((prevFields) => {
-      //   if (prevFields[id]) delete prevFields[id];
-      //   return { ...prevFields };
-      // });
       changeHandler(value);
     }
   };

@@ -4216,6 +4216,28 @@ const loadModalContent = function (html) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./src/main/functions.js");
 
+/**
+ * jQuery plugin: Checks whether element in viewport
+ */
+
+jQuery.fn.isInViewport = function () {
+  var elementTop = jQuery(this).offset().top;
+  var elementBottom = elementTop + jQuery(this).outerHeight();
+  var viewportTop = jQuery(window).scrollTop();
+  var viewportBottom = viewportTop + jQuery(window).height();
+  return elementBottom > viewportTop && elementTop < viewportBottom;
+};
+/**
+ * jQuery plugin: Scrolls to given element
+ */
+
+
+jQuery.fn.scrollTo = function (offset) {
+  offset = typeof offset !== "undefined" ? offset : -30;
+  jQuery("html, body").animate({
+    scrollTop: jQuery(this).offset().top + offset
+  }, 500);
+};
 
 (function ($) {
   /**
@@ -4249,29 +4271,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   }
-  /**
-   * jQuery plugin: Checks whether element in viewport
-   */
-
-
-  $.fn.isInViewport = function () {
-    var elementTop = $(this).offset().top;
-    var elementBottom = elementTop + $(this).outerHeight();
-    var viewportTop = $(window).scrollTop();
-    var viewportBottom = viewportTop + $(window).height();
-    return elementBottom > viewportTop && elementTop < viewportBottom;
-  };
-  /**
-   * jQuery plugin: Scrolls to given element
-   */
-
-
-  $.fn.scrollTo = function (offset) {
-    offset = typeof offset !== "undefined" ? offset : -30;
-    $("html, body").animate({
-      scrollTop: $(this).offset().top + offset
-    }, 500);
-  };
   /**
    * Toggle side nav
    */

@@ -37,41 +37,40 @@ const Configurator = () => {
       jQuery(".js-config-total-price").html(totalPriceHtml);
   }, [totalPriceHtml]);
 
-  const isValidForm = () => {
-    console.log(invalidFields);
-    return Object.keys(invalidFields).length === 0;
-  };
-
   const handleSubmitButtonClick = async (e) => {
     e.preventDefault();
-    validateForm();
-    if (!isValidForm()) return;
-    try {
-      setSubmitting(true);
-      const response = await addConfigurationToCart(
-        window?.configurator?.productId,
-        quantity,
-        message
-      );
-      if (response && response.data && response.data.url) {
+    if (!validateForm()) {
+      jQuery(".js-configurator-steps").scrollTo(-100);
+    } else {
+      try {
+        setSubmitting(true);
+        const response = await addConfigurationToCart(
+          window?.configurator?.productId,
+          quantity,
+          message
+        );
+        if (response && response.data && response.data.url) {
+          setSubmitting(false);
+          window.location.replace(response.data.url);
+        }
+      } catch (err) {
         setSubmitting(false);
-        window.location.replace(response.data.url);
+        console.err(err);
       }
-    } catch (err) {
-      setSubmitting(false);
-      console.err(err);
     }
   };
 
   const handleSaveButtonClick = () => {
-    validateForm();
-    if (!isValidForm()) return;
-    showModalForm(
-      "Samenstelling als offerte ontvangen",
-      "save-configuration",
-      window?.configurator?.configuratorId,
-      () => jQuery(".js-form-content-field").val(message)
-    );
+    if (!validateForm()) {
+      jQuery(".js-configurator-steps").scrollTo(-100);
+    } else {
+      showModalForm(
+        "Samenstelling als offerte ontvangen",
+        "save-configuration",
+        window?.configurator?.configuratorId,
+        () => jQuery(".js-form-content-field").val(message)
+      );
+    }
   };
 
   const validate = (value, required, rules, sizeUnit) => {
@@ -91,22 +90,23 @@ const Configurator = () => {
   };
 
   const validateForm = () => {
-    const invalid = {};
+    let invalid = {};
     steps?.forEach((step) => {
       const { id, required, rules } = step;
       const value = configuration[id];
       const { valid, message } = validate(value, required, rules, sizeUnit);
-      if (!valid) (invalid[id] = formatTextBySizeUnit(message)), sizeUnit;
+      if (!valid) invalid[id] = formatTextBySizeUnit(message, sizeUnit);
     });
-    setInvalidFields((prevFields) => ({
-      ...prevFields,
-      ...invalid,
-    }));
+    setInvalidFields((prevFields) => {
+      return { ...prevFields, ...invalid };
+    });
+    invalid = { ...invalidFields, ...invalid };
+    return Object.keys(invalid).length === 0;
   };
 
   return (
-    <>
-      {steps.map((step) => {
+    <div className="configurator__form-rows js-configurator-steps">
+      {steps.map((step, index) => {
         return <Step key={step.id} step={step} validate={validate} />;
       })}
       <div className="configurator__form-row">
@@ -160,7 +160,7 @@ const Configurator = () => {
           <i class="fas fa-file-import"></i> &nbsp;&nbsp; Mail mij een offerte
         </span>
       </div>
-    </>
+    </div>
   );
 };
 
