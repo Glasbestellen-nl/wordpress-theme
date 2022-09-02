@@ -6,12 +6,13 @@ import {
 export const ConfiguratorContext = createContext();
 
 export const ConfiguratorProvider = (props) => {
-  const [sizeUnit, setSizeUnit] = useState(
+  const [sizeUnit] = useState(
     window?.configurator?.settings?.size_unit || "mm"
-    // "mm"
   );
   const [configuration, setConfiguration] = useState({});
   const [totalPriceHtml, setTotalPriceHtml] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [invalidFields, setInvalidFields] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -38,6 +39,17 @@ export const ConfiguratorProvider = (props) => {
     })();
   }, [configuration]);
 
+  const addInvalidField = (id, message) => {
+    setInvalidFields((prevFields) => ({ ...prevFields, [id]: message }));
+  };
+
+  const removeInvalidField = (id) => {
+    setInvalidFields((prevFields) => {
+      if (prevFields[id]) delete prevFields[id];
+      return { ...prevFields };
+    });
+  };
+
   return (
     <ConfiguratorContext.Provider
       value={{
@@ -45,6 +57,12 @@ export const ConfiguratorProvider = (props) => {
         setConfiguration,
         sizeUnit,
         totalPriceHtml,
+        submitting,
+        setSubmitting,
+        invalidFields,
+        setInvalidFields,
+        addInvalidField,
+        removeInvalidField,
       }}
     >
       {props.children}

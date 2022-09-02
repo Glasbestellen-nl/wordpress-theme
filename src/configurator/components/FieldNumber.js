@@ -1,36 +1,41 @@
 const { useState, useEffect, useContext } = wp.element;
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
-import { validateBasic, validateByRules } from "../services/validation";
 
-const FieldNumber = ({
-  id,
-  changeHandler,
-  required,
-  rules,
-  invalid,
-  setInvalid,
-}) => {
-  const { sizeUnit, configuration } = useContext(ConfiguratorContext);
+const FieldNumber = ({ id, required, rules, changeHandler, validate }) => {
+  const {
+    sizeUnit,
+    configuration,
+    invalidFields,
+    addInvalidField,
+    removeInvalidField,
+  } = useContext(ConfiguratorContext);
   const [value, setValue] = useState(null);
 
   useEffect(() => {
-    const { valid, message } = validate(configuration[id]);
-    if (!valid) {
-      setInvalid(message);
-    } else {
-      setInvalid(false);
+    if (configuration[id]) {
+      const { valid, message } = validate(
+        configuration[id],
+        required,
+        rules,
+        sizeUnit
+      );
+      if (!valid) {
+        addInvalidField(id, message);
+      } else {
+        removeInvalidField(id);
+      }
+      setValue(configuration[id]);
     }
-    setValue(configuration[id]);
   }, [configuration]);
 
   const handleChange = (e) => {
     let value = e.target.value;
     if (value && sizeUnit === "cm") value *= 10;
-    const { valid, message } = validate(value);
+    const { valid, message } = validate(value, required, rules, sizeUnit);
     if (!valid) {
-      setInvalid(message, sizeUnit);
+      addInvalidField(id, message);
     } else {
-      setInvalid(false);
+      removeInvalidField(id);
     }
     setValue(value);
   };
@@ -39,25 +44,9 @@ const FieldNumber = ({
     changeHandler(value);
   };
 
-  const validate = (value) => {
-    let validationResult = required
-      ? validateBasic(value)
-      : { valid: true, message: "" };
-    if (validationResult.valid) {
-      if (rules)
-        validationResult = validateByRules(
-          value,
-          rules,
-          configuration,
-          sizeUnit
-        );
-    }
-    return validationResult;
-  };
-
   const getClassNames = () => {
     const classNames = ["form-control", "configurator__form-control"];
-    if (invalid) classNames.push("invalid");
+    if (invalidFields[id]) classNames.push("invalid");
     else if (value) classNames.push("valid");
     return classNames.join(" ");
   };

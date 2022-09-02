@@ -2169,10 +2169,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _main_functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../main/functions */ "./src/main/functions.js");
-/* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
-/* harmony import */ var _services_configuration__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/configuration */ "./src/configurator/services/configuration.js");
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
-/* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
+/* harmony import */ var _services_validation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/validation */ "./src/configurator/services/validation.js");
+/* harmony import */ var _services_sizeUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/sizeUnit */ "./src/configurator/services/sizeUnit.js");
+/* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
+/* harmony import */ var _services_configuration__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/configuration */ "./src/configurator/services/configuration.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
 
 const {
   useContext,
@@ -2185,12 +2187,19 @@ const {
 
 
 
+
+
 const Configurator = () => {
-  const steps = (0,_services_steps__WEBPACK_IMPORTED_MODULE_2__.getStepsData)().filter(step => !step.parent_step);
+  const steps = (0,_services_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsData)().filter(step => !step.parent_step);
   const {
+    configuration,
     totalPriceHtml,
-    setConfiguration
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_4__.ConfiguratorContext);
+    submitting,
+    setSubmitting,
+    sizeUnit,
+    invalidFields,
+    setInvalidFields
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_6__.ConfiguratorContext);
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
   useEffect(() => {
@@ -2207,20 +2216,28 @@ const Configurator = () => {
       jQuery(".js-config-total-price").html(totalPriceHtml);
   }, [totalPriceHtml]);
 
+  const isValidForm = () => {
+    console.log(invalidFields);
+    return Object.keys(invalidFields).length === 0;
+  };
+
   const handleSubmitButtonClick = async e => {
     e.preventDefault();
-    setConfiguration(prevConfig => ({ ...prevConfig
-    }));
+    validateForm();
+    if (!isValidForm()) return;
 
     try {
       var _window, _window$configurator;
 
-      const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_3__.addConfigurationToCart)((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId, quantity, message);
+      setSubmitting(true);
+      const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_5__.addConfigurationToCart)((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId, quantity, message);
 
       if (response && response.data && response.data.url) {
+        setSubmitting(false);
         window.location.replace(response.data.url);
       }
     } catch (err) {
+      setSubmitting(false);
       console.err(err);
     }
   };
@@ -2228,13 +2245,49 @@ const Configurator = () => {
   const handleSaveButtonClick = () => {
     var _window2, _window2$configurator;
 
+    validateForm();
+    if (!isValidForm()) return;
     (0,_main_functions__WEBPACK_IMPORTED_MODULE_1__.showModalForm)("Samenstelling als offerte ontvangen", "save-configuration", (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$configurator = _window2.configurator) === null || _window2$configurator === void 0 ? void 0 : _window2$configurator.configuratorId, () => jQuery(".js-form-content-field").val(message));
   };
 
+  const validate = (value, required, rules, sizeUnit) => {
+    let validationResult = required ? (0,_services_validation__WEBPACK_IMPORTED_MODULE_2__.validateBasic)(value) : {
+      valid: true,
+      message: ""
+    };
+
+    if (validationResult.valid) {
+      if (rules) validationResult = (0,_services_validation__WEBPACK_IMPORTED_MODULE_2__.validateByRules)(value, rules, configuration, sizeUnit);
+    }
+
+    return validationResult;
+  };
+
+  const validateForm = () => {
+    const invalid = {};
+    steps === null || steps === void 0 ? void 0 : steps.forEach(step => {
+      const {
+        id,
+        required,
+        rules
+      } = step;
+      const value = configuration[id];
+      const {
+        valid,
+        message
+      } = validate(value, required, rules, sizeUnit);
+      if (!valid) invalid[id] = (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_3__.formatTextBySizeUnit)(message), sizeUnit;
+    });
+    setInvalidFields(prevFields => ({ ...prevFields,
+      ...invalid
+    }));
+  };
+
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, steps.map(step => {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_7__["default"], {
       key: step.id,
-      step: step
+      step: step,
+      validate: validate
     });
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-row"
@@ -2273,11 +2326,11 @@ const Configurator = () => {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "btn btn--primary btn--block btn--next",
     onClick: handleSubmitButtonClick
-  }, "In winkelwagen")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, !submitting && "In winkelwagen" || "Een moment..")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-button space-below"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "btn btn--block btn--aside js-configurator-save-button",
-    onClick: () => handleSaveButtonClick()
+    className: "btn btn--block btn--aside",
+    onClick: handleSaveButtonClick
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
     class: "fas fa-file-import"
   }), " \xA0\xA0 Mail mij een offerte")));
@@ -2300,10 +2353,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_validation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/validation */ "./src/configurator/services/validation.js");
-/* harmony import */ var _services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/sizeUnit */ "./src/configurator/services/sizeUnit.js");
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
-/* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
+/* harmony import */ var _services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/sizeUnit */ "./src/configurator/services/sizeUnit.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
 
 const {
   useContext,
@@ -2313,21 +2365,22 @@ const {
 
 
 
-
 const FieldDropdown = _ref => {
   let {
     id,
     options,
-    changeHandler,
-    required,
     rules,
-    invalid,
-    setInvalid
+    changeHandler,
+    validate,
+    required
   } = _ref;
   const {
     configuration,
-    sizeUnit
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_3__.ConfiguratorContext);
+    sizeUnit,
+    invalidFields,
+    addInvalidField,
+    removeInvalidField
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
   useEffect(() => {
     const handleInvalidOptionCombinations = () => {
       if (configuration[id]) {
@@ -2337,7 +2390,7 @@ const FieldDropdown = _ref => {
           const {
             exclude
           } = selectedOption.rules;
-          setInvalid(false);
+          removeInvalidField(id);
           exclude.forEach(rule => {
             const {
               step,
@@ -2349,7 +2402,7 @@ const FieldDropdown = _ref => {
               const compareConfig = configuration[step];
 
               if (options.includes(compareConfig)) {
-                setInvalid((0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__.formatTextBySizeUnit)(message, sizeUnit));
+                addInvalidField(id, (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(message, sizeUnit));
               }
             }
           });
@@ -2369,39 +2422,31 @@ const FieldDropdown = _ref => {
     return options.find(option => option.default);
   };
 
-  const validate = value => {
-    let validationResult = required ? (0,_services_validation__WEBPACK_IMPORTED_MODULE_1__.validateBasic)(value) : {
-      valid: true,
-      message: ""
-    };
-
-    if (validationResult.valid) {
-      if (rules) {
-        validationResult = (0,_services_validation__WEBPACK_IMPORTED_MODULE_1__.validateByRules)(value, rules, configuration);
-      }
-    }
-
-    return validationResult;
-  };
-
   const handleChange = e => {
     const value = e.target.value;
     const {
       valid,
       message
-    } = validate(value);
+    } = validate(value, required, rules, sizeUnit);
 
     if (!valid) {
-      setInvalid((0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__.formatTextBySizeUnit)(message, sizeUnit));
+      addInvalidField(id, (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(message, sizeUnit)); // setInvalidFields((prevFields) => ({
+      //   ...prevFields,
+      //   [id]: formatTextBySizeUnit(message, sizeUnit),
+      // }));
     } else {
-      setInvalid(false);
+      removeInvalidField(id); // setInvalidFields((prevFields) => {
+      //   if (prevFields[id]) delete prevFields[id];
+      //   return { ...prevFields };
+      // });
+
       changeHandler(value);
     }
   };
 
   const getClassNames = () => {
     const classNames = ["dropdown configurator__dropdown", "configurator__form-control"];
-    if (invalid) classNames.push("invalid");else classNames.push("valid");
+    if (invalidFields[id]) classNames.push("invalid");else classNames.push("valid");
     return classNames.join(" ");
   };
 
@@ -2411,7 +2456,7 @@ const FieldDropdown = _ref => {
     value: getValue()
   }, !getDefault() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
-  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_3__["default"], {
     key: option.id,
     option: option,
     defaultOption: getDefault()
@@ -2436,7 +2481,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
-/* harmony import */ var _services_validation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/validation */ "./src/configurator/services/validation.js");
 
 const {
   useState,
@@ -2445,34 +2489,37 @@ const {
 } = wp.element;
 
 
-
 const FieldNumber = _ref => {
   let {
     id,
-    changeHandler,
     required,
     rules,
-    invalid,
-    setInvalid
+    changeHandler,
+    validate
   } = _ref;
   const {
     sizeUnit,
-    configuration
+    configuration,
+    invalidFields,
+    addInvalidField,
+    removeInvalidField
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
   const [value, setValue] = useState(null);
   useEffect(() => {
-    const {
-      valid,
-      message
-    } = validate(configuration[id]);
+    if (configuration[id]) {
+      const {
+        valid,
+        message
+      } = validate(configuration[id], required, rules, sizeUnit);
 
-    if (!valid) {
-      setInvalid(message);
-    } else {
-      setInvalid(false);
+      if (!valid) {
+        addInvalidField(id, message);
+      } else {
+        removeInvalidField(id);
+      }
+
+      setValue(configuration[id]);
     }
-
-    setValue(configuration[id]);
   }, [configuration]);
 
   const handleChange = e => {
@@ -2481,12 +2528,12 @@ const FieldNumber = _ref => {
     const {
       valid,
       message
-    } = validate(value);
+    } = validate(value, required, rules, sizeUnit);
 
     if (!valid) {
-      setInvalid(message, sizeUnit);
+      addInvalidField(id, message);
     } else {
-      setInvalid(false);
+      removeInvalidField(id);
     }
 
     setValue(value);
@@ -2496,22 +2543,9 @@ const FieldNumber = _ref => {
     changeHandler(value);
   };
 
-  const validate = value => {
-    let validationResult = required ? (0,_services_validation__WEBPACK_IMPORTED_MODULE_2__.validateBasic)(value) : {
-      valid: true,
-      message: ""
-    };
-
-    if (validationResult.valid) {
-      if (rules) validationResult = (0,_services_validation__WEBPACK_IMPORTED_MODULE_2__.validateByRules)(value, rules, configuration, sizeUnit);
-    }
-
-    return validationResult;
-  };
-
   const getClassNames = () => {
     const classNames = ["form-control", "configurator__form-control"];
-    if (invalid) classNames.push("invalid");else if (value) classNames.push("valid");
+    if (invalidFields[id]) classNames.push("invalid");else if (value) classNames.push("valid");
     return classNames.join(" ");
   };
 
@@ -2651,7 +2685,8 @@ const Step = _ref => {
   var _getSelectedOption, _getSelectedOption$ch;
 
   let {
-    step
+    step,
+    validate
   } = _ref;
   const {
     id,
@@ -2664,11 +2699,11 @@ const Step = _ref => {
   const {
     setConfiguration,
     configuration,
-    sizeUnit
+    sizeUnit,
+    invalidFields
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
-  const [invalid, setInvalid] = useState(false); // Remove element from configuration when unmounting
-
-  useEffect(() => () => {
+  useEffect( // Remove element from configuration when unmounting
+  () => () => {
     setConfiguration(prevConfig => {
       const {
         [id]: removedItem,
@@ -2711,9 +2746,8 @@ const Step = _ref => {
           options: options,
           changeHandler: changeHandler,
           rules: rules,
-          invalid: invalid,
-          setInvalid: setInvalid,
-          required: required
+          required: required,
+          validate: validate
         });
       }
     } else {
@@ -2721,9 +2755,8 @@ const Step = _ref => {
         id: id,
         changeHandler: changeHandler,
         rules: rules,
-        invalid: invalid,
-        setInvalid: setInvalid,
-        required: required
+        required: required,
+        validate: validate
       });
     }
   };
@@ -2757,9 +2790,9 @@ const Step = _ref => {
     "data-explanation-id": getDescriptionId()
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: getInputRowClassNames()
-  }, renderInputField(), invalid && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, renderInputField(), invalidFields[id] && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "invalid-feedback js-invalid-feedback"
-  }, invalid))), (_getSelectedOption = getSelectedOption()) === null || _getSelectedOption === void 0 ? void 0 : (_getSelectedOption$ch = _getSelectedOption.child_steps) === null || _getSelectedOption$ch === void 0 ? void 0 : _getSelectedOption$ch.map(stepId => {
+  }, invalidFields[id]))), (_getSelectedOption = getSelectedOption()) === null || _getSelectedOption === void 0 ? void 0 : (_getSelectedOption$ch = _getSelectedOption.child_steps) === null || _getSelectedOption$ch === void 0 ? void 0 : _getSelectedOption$ch.map(stepId => {
     const childStep = stepsMap[stepId];
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Step, {
       key: childStep.id,
@@ -2798,10 +2831,11 @@ const ConfiguratorContext = createContext();
 const ConfiguratorProvider = props => {
   var _window, _window$configurator, _window$configurator$;
 
-  const [sizeUnit, setSizeUnit] = useState(((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : (_window$configurator$ = _window$configurator.settings) === null || _window$configurator$ === void 0 ? void 0 : _window$configurator$.size_unit) || "mm" // "mm"
-  );
+  const [sizeUnit] = useState(((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : (_window$configurator$ = _window$configurator.settings) === null || _window$configurator$ === void 0 ? void 0 : _window$configurator$.size_unit) || "mm");
   const [configuration, setConfiguration] = useState({});
   const [totalPriceHtml, setTotalPriceHtml] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [invalidFields, setInvalidFields] = useState({});
   useEffect(() => {
     (async () => {
       const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.configurator.configuratorId);
@@ -2825,12 +2859,33 @@ const ConfiguratorProvider = props => {
       }
     })();
   }, [configuration]);
+
+  const addInvalidField = (id, message) => {
+    setInvalidFields(prevFields => ({ ...prevFields,
+      [id]: message
+    }));
+  };
+
+  const removeInvalidField = id => {
+    setInvalidFields(prevFields => {
+      if (prevFields[id]) delete prevFields[id];
+      return { ...prevFields
+      };
+    });
+  };
+
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ConfiguratorContext.Provider, {
     value: {
       configuration,
       setConfiguration,
       sizeUnit,
-      totalPriceHtml
+      totalPriceHtml,
+      submitting,
+      setSubmitting,
+      invalidFields,
+      setInvalidFields,
+      addInvalidField,
+      removeInvalidField
     }
   }, props.children);
 };

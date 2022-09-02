@@ -1,5 +1,4 @@
 const { useContext, useEffect } = wp.element;
-import { validateBasic, validateByRules } from "../services/validation";
 import { formatTextBySizeUnit } from "../services/sizeUnit";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import Option from "./Option";
@@ -7,13 +6,18 @@ import Option from "./Option";
 const FieldDropdown = ({
   id,
   options,
-  changeHandler,
-  required,
   rules,
-  invalid,
-  setInvalid,
+  changeHandler,
+  validate,
+  required,
 }) => {
-  const { configuration, sizeUnit } = useContext(ConfiguratorContext);
+  const {
+    configuration,
+    sizeUnit,
+    invalidFields,
+    addInvalidField,
+    removeInvalidField,
+  } = useContext(ConfiguratorContext);
 
   useEffect(() => {
     const handleInvalidOptionCombinations = () => {
@@ -27,13 +31,13 @@ const FieldDropdown = ({
           selectedOption.rules.exclude
         ) {
           const { exclude } = selectedOption.rules;
-          setInvalid(false);
+          removeInvalidField(id);
           exclude.forEach((rule) => {
             const { step, options, message } = rule;
             if (configuration[step]) {
               const compareConfig = configuration[step];
               if (options.includes(compareConfig)) {
-                setInvalid(formatTextBySizeUnit(message, sizeUnit));
+                addInvalidField(id, formatTextBySizeUnit(message, sizeUnit));
               }
             }
           });
@@ -52,25 +56,21 @@ const FieldDropdown = ({
     return options.find((option) => option.default);
   };
 
-  const validate = (value) => {
-    let validationResult = required
-      ? validateBasic(value)
-      : { valid: true, message: "" };
-    if (validationResult.valid) {
-      if (rules) {
-        validationResult = validateByRules(value, rules, configuration);
-      }
-    }
-    return validationResult;
-  };
-
   const handleChange = (e) => {
     const value = e.target.value;
-    const { valid, message } = validate(value);
+    const { valid, message } = validate(value, required, rules, sizeUnit);
     if (!valid) {
-      setInvalid(formatTextBySizeUnit(message, sizeUnit));
+      addInvalidField(id, formatTextBySizeUnit(message, sizeUnit));
+      // setInvalidFields((prevFields) => ({
+      //   ...prevFields,
+      //   [id]: formatTextBySizeUnit(message, sizeUnit),
+      // }));
     } else {
-      setInvalid(false);
+      removeInvalidField(id);
+      // setInvalidFields((prevFields) => {
+      //   if (prevFields[id]) delete prevFields[id];
+      //   return { ...prevFields };
+      // });
       changeHandler(value);
     }
   };
@@ -80,7 +80,7 @@ const FieldDropdown = ({
       "dropdown configurator__dropdown",
       "configurator__form-control",
     ];
-    if (invalid) classNames.push("invalid");
+    if (invalidFields[id]) classNames.push("invalid");
     else classNames.push("valid");
     return classNames.join(" ");
   };

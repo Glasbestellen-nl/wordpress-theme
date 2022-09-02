@@ -7,14 +7,13 @@ import { getStepsMap } from "../services/steps";
 
 const stepsMap = getStepsMap();
 
-const Step = ({ step }) => {
+const Step = ({ step, validate }) => {
   const { id, title, required, options, description, rules } = step;
-  const { setConfiguration, configuration, sizeUnit } =
+  const { setConfiguration, configuration, sizeUnit, invalidFields } =
     useContext(ConfiguratorContext);
-  const [invalid, setInvalid] = useState(false);
 
-  // Remove element from configuration when unmounting
   useEffect(
+    // Remove element from configuration when unmounting
     () => () => {
       setConfiguration((prevConfig) => {
         const { [id]: removedItem, ...rest } = prevConfig;
@@ -60,9 +59,8 @@ const Step = ({ step }) => {
             options={options}
             changeHandler={changeHandler}
             rules={rules}
-            invalid={invalid}
-            setInvalid={setInvalid}
             required={required}
+            validate={validate}
           />
         );
       }
@@ -72,9 +70,8 @@ const Step = ({ step }) => {
           id={id}
           changeHandler={changeHandler}
           rules={rules}
-          invalid={invalid}
-          setInvalid={setInvalid}
           required={required}
+          validate={validate}
         />
       );
     }
@@ -115,8 +112,10 @@ const Step = ({ step }) => {
         )}
         <div class={getInputRowClassNames()}>
           {renderInputField()}
-          {invalid && (
-            <div class="invalid-feedback js-invalid-feedback">{invalid}</div>
+          {invalidFields[id] && (
+            <div class="invalid-feedback js-invalid-feedback">
+              {invalidFields[id]}
+            </div>
           )}
         </div>
       </div>
