@@ -2169,10 +2169,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _main_functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../main/functions */ "./src/main/functions.js");
-/* harmony import */ var _services_validation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/validation */ "./src/configurator/services/validation.js");
-/* harmony import */ var _services_sizeUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/sizeUnit */ "./src/configurator/services/sizeUnit.js");
-/* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
-/* harmony import */ var _services_configuration__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/configuration */ "./src/configurator/services/configuration.js");
+/* harmony import */ var _utils_validation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/validation */ "./src/configurator/utils/validation.js");
+/* harmony import */ var _utils_sizeUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/sizeUnit */ "./src/configurator/utils/sizeUnit.js");
+/* harmony import */ var _utils_steps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/steps */ "./src/configurator/utils/steps.js");
+/* harmony import */ var _utils_configuration__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/configuration */ "./src/configurator/utils/configuration.js");
 /* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
 /* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
 /* harmony import */ var _StickyBar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./StickyBar */ "./src/configurator/components/StickyBar.js");
@@ -2191,42 +2191,61 @@ const {
 
 
 
+const stepsMap = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsMap)();
 
 const Configurator = () => {
-  const steps = (0,_services_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsData)().filter(step => !step.parent_step);
+  const steps = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsData)().filter(step => !step.parent_step);
   const {
     configuration,
     totalPriceHtml,
+    setTotalPriceHtml,
     loading,
     submitting,
     setSubmitting,
     sizeUnit,
-    invalidFields,
     setInvalidFields
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_6__.ConfiguratorContext);
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
   const ref = useRef();
   useEffect(() => {
-    if (totalPriceHtml !== "") // Temporary set total price with jQuery
-      jQuery(".js-config-total-price").html(totalPriceHtml);
+    if (totalPriceHtml !== "") updatePriceOutsideConfigurator();
   }, [totalPriceHtml]);
+  useEffect(() => {
+    if (configuration) {
+      validateForm();
+
+      (async () => {
+        try {
+          const {
+            productId
+          } = window.configurator; // Store configuration in server session and receive total price html
+
+          const response = await (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_5__.storeConfiguration)(productId, configuration);
+
+          if (response && response.data && response.data.price_html) {
+            setTotalPriceHtml(response.data.price_html);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      })();
+    }
+  }, [configuration]);
 
   const handleSubmitButtonClick = async e => {
     e.preventDefault();
 
     if (!validateForm()) {
-      jQuery(".js-configurator-steps").scrollTo(-100);
+      scrollToInvalidFields();
     } else {
       try {
-        var _window, _window$configurator;
-
         setSubmitting(true);
-        const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_5__.addConfigurationToCart)((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId, quantity, message);
+        const cartUrl = await addToCart();
 
-        if (response && response.data && response.data.url) {
+        if (cartUrl) {
           setSubmitting(false);
-          window.location.replace(response.data.url);
+          window.location.replace(cartUrl);
         }
       } catch (err) {
         setSubmitting(false);
@@ -2239,22 +2258,41 @@ const Configurator = () => {
     e.preventDefault();
 
     if (!validateForm()) {
-      jQuery(".js-configurator-steps").scrollTo(-100);
+      scrollToInvalidFields();
     } else {
-      var _window2, _window2$configurator;
-
-      (0,_main_functions__WEBPACK_IMPORTED_MODULE_1__.showModalForm)("Samenstelling als offerte ontvangen", "save-configuration", (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$configurator = _window2.configurator) === null || _window2$configurator === void 0 ? void 0 : _window2$configurator.configuratorId, () => jQuery(".js-form-content-field").val(message));
+      showSaveButtonModal();
     }
   };
 
+  const updatePriceOutsideConfigurator = () => {
+    jQuery(".js-config-total-price").html(totalPriceHtml); // Temporary set with jQuery
+  };
+
+  const addToCart = async () => {
+    var _window, _window$configurator, _response$data;
+
+    const response = await (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_5__.addConfigurationToCart)((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId, quantity, message);
+    return response === null || response === void 0 ? void 0 : (_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.url;
+  };
+
+  const scrollToInvalidFields = () => {
+    jQuery(".js-configurator-steps").scrollTo(-100);
+  };
+
+  const showSaveButtonModal = () => {
+    var _window2, _window2$configurator;
+
+    (0,_main_functions__WEBPACK_IMPORTED_MODULE_1__.showModalForm)("Samenstelling als offerte ontvangen", "save-configuration", (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$configurator = _window2.configurator) === null || _window2$configurator === void 0 ? void 0 : _window2$configurator.configuratorId, () => jQuery(".js-form-content-field").val(message));
+  };
+
   const validate = (value, required, rules, sizeUnit) => {
-    let validationResult = required ? (0,_services_validation__WEBPACK_IMPORTED_MODULE_2__.validateBasic)(value) : {
+    let validationResult = required ? (0,_utils_validation__WEBPACK_IMPORTED_MODULE_2__.validateBasic)(value) : {
       valid: true,
       message: ""
     };
 
     if (validationResult.valid) {
-      if (rules) validationResult = (0,_services_validation__WEBPACK_IMPORTED_MODULE_2__.validateByRules)(value, rules, configuration, sizeUnit);
+      if (rules) validationResult = (0,_utils_validation__WEBPACK_IMPORTED_MODULE_2__.validateByRules)(value, rules, configuration, sizeUnit);
     }
 
     return validationResult;
@@ -2266,24 +2304,62 @@ const Configurator = () => {
       const {
         id,
         required,
+        options,
         rules
       } = step;
-      const value = configuration[id];
+      let value = configuration[id];
+
+      if (options) {
+        const optionValue = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_4__.getOptionValue)(id, value);
+        if (optionValue) value = optionValue;
+        invalid = { ...invalid,
+          ...getInvalidOptionCombinations(id)
+        };
+      }
+
       const {
         valid,
         message
       } = validate(value, required, rules, sizeUnit);
-      if (!valid) invalid[id] = (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_3__.formatTextBySizeUnit)(message, sizeUnit);
+      if (!valid) invalid[id] = (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_3__.formatTextBySizeUnit)(message, sizeUnit);
     });
-    setInvalidFields(prevFields => {
-      return { ...prevFields,
-        ...invalid
-      };
-    });
-    invalid = { ...invalidFields,
-      ...invalid
-    };
+    setInvalidFields(invalid);
     return Object.keys(invalid).length === 0;
+  };
+
+  const getInvalidOptionCombinations = id => {
+    let invalid = {};
+
+    if (configuration[id]) {
+      const selectedOption = getSelectedOption(id);
+      if (!selectedOption || !selectedOption.rules) return invalid;
+      const {
+        exclude
+      } = selectedOption.rules;
+      if (!exclude) return invalid;
+      exclude === null || exclude === void 0 ? void 0 : exclude.forEach(rule => {
+        const {
+          step,
+          options,
+          message
+        } = rule;
+
+        if (configuration[step]) {
+          const compareConfig = configuration[step];
+
+          if (options.includes(compareConfig)) {
+            invalid[id] = (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_3__.formatTextBySizeUnit)(message, sizeUnit);
+          }
+        }
+      });
+    }
+
+    return invalid;
+  };
+
+  const getSelectedOption = id => {
+    if (!stepsMap[id] || !stepsMap[id].options || !configuration[id]) return;
+    return stepsMap[id].options.find(option => option.id === configuration[id]);
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -2293,7 +2369,7 @@ const Configurator = () => {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_7__["default"], {
       key: step.id,
       step: step,
-      validate: validate
+      getSelectedOption: getSelectedOption
     });
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-row"
@@ -2365,15 +2441,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/sizeUnit */ "./src/configurator/services/sizeUnit.js");
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
-/* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _Option__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Option */ "./src/configurator/components/Option.js");
 
 const {
-  useContext,
-  useEffect
+  useContext
 } = wp.element;
-
 
 
 
@@ -2381,57 +2454,15 @@ const FieldDropdown = _ref => {
   let {
     id,
     options,
-    rules,
-    changeHandler,
-    validate,
-    required
+    changeHandler
   } = _ref;
   const {
     configuration,
-    sizeUnit,
-    invalidFields,
-    addInvalidField,
-    removeInvalidField
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
-  useEffect(() => {
-    const handleInvalidOptionCombinations = () => {
-      if (configuration[id]) {
-        const selectedOption = options.find(option => option.id === configuration[id]);
-
-        if (selectedOption && selectedOption.rules && selectedOption.rules.exclude) {
-          const {
-            exclude
-          } = selectedOption.rules;
-          removeInvalidField(id);
-          exclude.forEach(rule => {
-            const {
-              step,
-              options,
-              message
-            } = rule;
-
-            if (configuration[step]) {
-              const compareConfig = configuration[step];
-
-              if (options.includes(compareConfig)) {
-                addInvalidField(id, (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(message, sizeUnit));
-              }
-            }
-          });
-        }
-      }
-    };
-
-    handleInvalidOptionCombinations();
-  }, [configuration]);
+    invalidFields
+  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
 
   const getValue = () => {
     return configuration && configuration[id];
-  };
-
-  const getOptionValueById = id => {
-    const option = options.find(option => option.id === parseInt(id));
-    return option && option.value ? option.value : id;
   };
 
   const getDefault = () => {
@@ -2441,17 +2472,7 @@ const FieldDropdown = _ref => {
 
   const handleChange = e => {
     const value = e.target.value;
-    const {
-      valid,
-      message
-    } = validate(getOptionValueById(value), required, rules, sizeUnit);
-
-    if (!valid) {
-      addInvalidField(id, (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(message, sizeUnit));
-    } else {
-      removeInvalidField(id);
-      changeHandler(value);
-    }
+    changeHandler(value);
   };
 
   const getClassNames = () => {
@@ -2466,7 +2487,7 @@ const FieldDropdown = _ref => {
     value: getValue()
   }, !getDefault() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
-  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_2__["default"], {
     key: option.id,
     option: option,
     defaultOption: getDefault()
@@ -2596,8 +2617,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_price__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/price */ "./src/configurator/services/price.js");
-/* harmony import */ var _services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/sizeUnit */ "./src/configurator/services/sizeUnit.js");
+/* harmony import */ var _utils_price__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/price */ "./src/configurator/utils/price.js");
+/* harmony import */ var _utils_sizeUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/sizeUnit */ "./src/configurator/utils/sizeUnit.js");
 /* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
 
 const {
@@ -2643,12 +2664,12 @@ const Option = _ref => {
       const plusPrice = price - defaultPrice;
 
       if (parseInt(plusPrice) !== 0 && !isNaN(plusPrice)) {
-        const plusFormattedPrice = (0,_services_price__WEBPACK_IMPORTED_MODULE_1__.formatPrice)((0,_services_price__WEBPACK_IMPORTED_MODULE_1__.priceIncludingVat)(plusPrice));
+        const plusFormattedPrice = (0,_utils_price__WEBPACK_IMPORTED_MODULE_1__.formatPrice)((0,_utils_price__WEBPACK_IMPORTED_MODULE_1__.priceIncludingVat)(plusPrice));
         finalTitle.push("+ " + plusFormattedPrice);
       }
     }
 
-    return (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_2__.formatTextBySizeUnit)(finalTitle.join(" "), sizeUnit);
+    return (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_2__.formatTextBySizeUnit)(finalTitle.join(" "), sizeUnit);
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -2673,15 +2694,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/sizeUnit */ "./src/configurator/services/sizeUnit.js");
+/* harmony import */ var _utils_sizeUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/sizeUnit */ "./src/configurator/utils/sizeUnit.js");
 /* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
 /* harmony import */ var _FieldNumber__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FieldNumber */ "./src/configurator/components/FieldNumber.js");
 /* harmony import */ var _FieldDropdown__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FieldDropdown */ "./src/configurator/components/FieldDropdown.js");
-/* harmony import */ var _services_steps__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/steps */ "./src/configurator/services/steps.js");
+/* harmony import */ var _utils_steps__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/steps */ "./src/configurator/utils/steps.js");
 
 const {
   useContext,
-  useState,
   useEffect
 } = wp.element;
 
@@ -2689,14 +2709,15 @@ const {
 
 
 
-const stepsMap = (0,_services_steps__WEBPACK_IMPORTED_MODULE_5__.getStepsMap)();
+const stepsMap = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_5__.getStepsMap)();
 
 const Step = _ref => {
-  var _getSelectedOption, _getSelectedOption$ch;
+  var _selectedOption$child;
 
   let {
     step,
-    validate
+    validate,
+    getSelectedOption
   } = _ref;
   const {
     id,
@@ -2708,10 +2729,10 @@ const Step = _ref => {
   } = step;
   const {
     setConfiguration,
-    configuration,
     sizeUnit,
     invalidFields
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
+  const selectedOption = getSelectedOption(id);
   useEffect( // Remove element from configuration when unmounting
   () => () => {
     setConfiguration(prevConfig => {
@@ -2722,11 +2743,6 @@ const Step = _ref => {
       return rest;
     });
   }, []);
-
-  const getSelectedOption = () => {
-    if (!hasOptions() || !configuration[id]) return;
-    return options.find(option => option.id === configuration[id]);
-  };
 
   const getDescriptionId = () => {
     return description && description.id;
@@ -2793,7 +2809,7 @@ const Step = _ref => {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "configurator__form-label",
     "data-explanation-id": getDescriptionId()
-  }, (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(title, sizeUnit)), " ", required && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "*")), getDescriptionId() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(title, sizeUnit)), " ", required && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "*")), getDescriptionId() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-col configurator__form-info"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
     className: "fas fa-info-circle configurator__info-icon js-popup-explanation",
@@ -2802,12 +2818,12 @@ const Step = _ref => {
     class: getInputRowClassNames()
   }, renderInputField(), invalidFields[id] && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "invalid-feedback js-invalid-feedback"
-  }, invalidFields[id]))), (_getSelectedOption = getSelectedOption()) === null || _getSelectedOption === void 0 ? void 0 : (_getSelectedOption$ch = _getSelectedOption.child_steps) === null || _getSelectedOption$ch === void 0 ? void 0 : _getSelectedOption$ch.map(stepId => {
+  }, invalidFields[id]))), selectedOption === null || selectedOption === void 0 ? void 0 : (_selectedOption$child = selectedOption.child_steps) === null || _selectedOption$child === void 0 ? void 0 : _selectedOption$child.map(stepId => {
     const childStep = stepsMap[stepId];
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Step, {
       key: childStep.id,
       step: childStep,
-      validate: validate
+      getSelectedOption: getSelectedOption
     });
   }));
 };
@@ -2922,7 +2938,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_configuration__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/configuration */ "./src/configurator/services/configuration.js");
+/* harmony import */ var _utils_configuration__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/configuration */ "./src/configurator/utils/configuration.js");
 
 const {
   createContext,
@@ -2935,14 +2951,14 @@ const ConfiguratorProvider = props => {
   var _window, _window$configurator, _window$configurator$;
 
   const [sizeUnit] = useState(((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : (_window$configurator$ = _window$configurator.settings) === null || _window$configurator$ === void 0 ? void 0 : _window$configurator$.size_unit) || "mm");
-  const [configuration, setConfiguration] = useState({});
+  const [configuration, setConfiguration] = useState(false);
   const [totalPriceHtml, setTotalPriceHtml] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [invalidFields, setInvalidFields] = useState({});
   useEffect(() => {
     (async () => {
-      const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.configurator.configuratorId);
+      const response = await (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.configurator.configuratorId);
 
       if (response && response.data && response.data.configuration) {
         setConfiguration(response.data.configuration);
@@ -2950,23 +2966,6 @@ const ConfiguratorProvider = props => {
       }
     })();
   }, []);
-  useEffect(() => {
-    (async () => {
-      try {
-        const {
-          productId
-        } = window.configurator; // Store configuration in server session and receive total price html
-
-        const response = await (0,_services_configuration__WEBPACK_IMPORTED_MODULE_1__.storeConfiguration)(productId, configuration);
-
-        if (response && response.data && response.data.price_html) {
-          setTotalPriceHtml(response.data.price_html);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, [configuration]);
 
   const addInvalidField = (id, message) => {
     setInvalidFields(prevFields => ({ ...prevFields,
@@ -2988,6 +2987,7 @@ const ConfiguratorProvider = props => {
       setConfiguration,
       sizeUnit,
       totalPriceHtml,
+      setTotalPriceHtml,
       loading,
       setLoading,
       submitting,
@@ -3002,10 +3002,10 @@ const ConfiguratorProvider = props => {
 
 /***/ }),
 
-/***/ "./src/configurator/services/configuration.js":
-/*!****************************************************!*\
-  !*** ./src/configurator/services/configuration.js ***!
-  \****************************************************/
+/***/ "./src/configurator/utils/configuration.js":
+/*!*************************************************!*\
+  !*** ./src/configurator/utils/configuration.js ***!
+  \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3066,10 +3066,10 @@ const addConfigurationToCart = async (productId, quantity, message) => {
 
 /***/ }),
 
-/***/ "./src/configurator/services/price.js":
-/*!********************************************!*\
-  !*** ./src/configurator/services/price.js ***!
-  \********************************************/
+/***/ "./src/configurator/utils/price.js":
+/*!*****************************************!*\
+  !*** ./src/configurator/utils/price.js ***!
+  \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3097,10 +3097,10 @@ const formatPrice = price => {
 
 /***/ }),
 
-/***/ "./src/configurator/services/sizeUnit.js":
-/*!***********************************************!*\
-  !*** ./src/configurator/services/sizeUnit.js ***!
-  \***********************************************/
+/***/ "./src/configurator/utils/sizeUnit.js":
+/*!********************************************!*\
+  !*** ./src/configurator/utils/sizeUnit.js ***!
+  \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3129,15 +3129,16 @@ const formatTextBySizeUnit = function (text) {
 
 /***/ }),
 
-/***/ "./src/configurator/services/steps.js":
-/*!********************************************!*\
-  !*** ./src/configurator/services/steps.js ***!
-  \********************************************/
+/***/ "./src/configurator/utils/steps.js":
+/*!*****************************************!*\
+  !*** ./src/configurator/utils/steps.js ***!
+  \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getOptionValue": () => (/* binding */ getOptionValue),
 /* harmony export */   "getStepsData": () => (/* binding */ getStepsData),
 /* harmony export */   "getStepsMap": () => (/* binding */ getStepsMap)
 /* harmony export */ });
@@ -3157,13 +3158,21 @@ const getStepsMap = () => {
     [step.id]: step
   }), {});
 };
+const getOptionValue = (stepId, optionId) => {
+  const steps = getStepsData();
+  const step = steps.find(step => step.id === stepId);
+  if (!step || !step.options) return;
+  const option = step.options.find(option => option.id === parseInt(optionId));
+  if (option && option.value) return option.value;
+  return;
+};
 
 /***/ }),
 
-/***/ "./src/configurator/services/validation.js":
-/*!*************************************************!*\
-  !*** ./src/configurator/services/validation.js ***!
-  \*************************************************/
+/***/ "./src/configurator/utils/validation.js":
+/*!**********************************************!*\
+  !*** ./src/configurator/utils/validation.js ***!
+  \**********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3172,22 +3181,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "validateBasic": () => (/* binding */ validateBasic),
 /* harmony export */   "validateByRules": () => (/* binding */ validateByRules)
 /* harmony export */ });
-/* harmony import */ var _sizeUnit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sizeUnit */ "./src/configurator/services/sizeUnit.js");
-/* harmony import */ var _steps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./steps */ "./src/configurator/services/steps.js");
+/* harmony import */ var _sizeUnit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sizeUnit */ "./src/configurator/utils/sizeUnit.js");
+/* harmony import */ var _steps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./steps */ "./src/configurator/utils/steps.js");
 const {
   msg
 } = window.gb;
 
-
-
-const getOptionValue = (stepId, optionId) => {
-  const steps = (0,_steps__WEBPACK_IMPORTED_MODULE_1__.getStepsData)();
-  const step = steps.find(step => step.id === stepId);
-  if (!step || !step.options) return;
-  const option = step.options.find(option => option.id === parseInt(optionId));
-  if (option && option.value) return option.value;
-  return;
-};
 
 const validateBasic = value => {
   if (!value || value === "") {
@@ -3221,7 +3220,7 @@ const validateByRules = function (value, rules, configuration) {
         const dependentStepIds = !Array.isArray(maxDependence) && [maxDependence] || maxDependence;
         let previousMax = 0;
         dependentStepIds.forEach(dependentStepId => {
-          const dependentValue = getOptionValue(dependentStepId, configuration[dependentStepId]);
+          const dependentValue = (0,_steps__WEBPACK_IMPORTED_MODULE_1__.getOptionValue)(dependentStepId, configuration[dependentStepId]);
 
           if (dependentValue && dependentValue > previousMax) {
             if (rules.max.greater && rules.max.less) {
@@ -3247,7 +3246,7 @@ const validateByRules = function (value, rules, configuration) {
     if (rules.less_than && rules.less_than.step) {
       let lessThan = rules.less_than;
       let dependentStepId = lessThan.step;
-      let dependentValue = getOptionValue(dependentStepId, configuration[dependentStepId]);
+      let dependentValue = (0,_steps__WEBPACK_IMPORTED_MODULE_1__.getOptionValue)(dependentStepId, configuration[dependentStepId]);
 
       if (dependentValue) {
         if (lessThan.value) {

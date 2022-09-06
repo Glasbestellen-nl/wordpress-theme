@@ -1,6 +1,6 @@
 const { useContext } = wp.element;
-import { priceIncludingVat, formatPrice } from "../services/price";
-import { formatTextBySizeUnit } from "../services/sizeUnit";
+import { priceIncludingVat, formatPrice } from "../utils/price";
+import { formatTextBySizeUnit } from "../utils/sizeUnit";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 
 const Option = ({ option, defaultOption }) => {

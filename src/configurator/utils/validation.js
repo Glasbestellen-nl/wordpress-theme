@@ -1,17 +1,6 @@
 const { msg } = window.gb;
 import { convertNumberBySizeUnit } from "./sizeUnit";
-import { getStepsData } from "./steps";
-
-const getOptionValue = (stepId, optionId) => {
-  const steps = getStepsData();
-  const step = steps.find((step) => step.id === stepId);
-  if (!step || !step.options) return;
-  const option = step.options.find(
-    (option) => option.id === parseInt(optionId)
-  );
-  if (option && option.value) return option.value;
-  return;
-};
+import { getOptionValue } from "./steps";
 
 export const validateBasic = (value) => {
   if (!value || value === "") {

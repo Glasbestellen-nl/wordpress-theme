@@ -1,23 +1,28 @@
 const { useContext, useEffect, useState, useRef } = wp.element;
 import { showModalForm } from "../../main/functions";
-import { validateBasic, validateByRules } from "../services/validation";
-import { formatTextBySizeUnit } from "../services/sizeUnit";
-import { getStepsData } from "../services/steps";
-import { addConfigurationToCart } from "../services/configuration";
+import { validateBasic, validateByRules } from "../utils/validation";
+import { formatTextBySizeUnit } from "../utils/sizeUnit";
+import { getStepsData, getStepsMap, getOptionValue } from "../utils/steps";
+import {
+  addConfigurationToCart,
+  storeConfiguration,
+} from "../utils/configuration";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import Step from "./Step";
 import StickyBar from "./StickyBar";
+
+const stepsMap = getStepsMap();
 
 const Configurator = () => {
   const steps = getStepsData().filter((step) => !step.parent_step);
   const {
     configuration,
     totalPriceHtml,
+    setTotalPriceHtml,
     loading,
     submitting,
     setSubmitting,
     sizeUnit,
-    invalidFields,
     setInvalidFields,
   } = useContext(ConfiguratorContext);
   const [quantity, setQuantity] = useState(1);
@@ -25,26 +30,38 @@ const Configurator = () => {
   const ref = useRef();
 
   useEffect(() => {
-    if (totalPriceHtml !== "")
-      // Temporary set total price with jQuery
-      jQuery(".js-config-total-price").html(totalPriceHtml);
+    if (totalPriceHtml !== "") updatePriceOutsideConfigurator();
   }, [totalPriceHtml]);
+
+  useEffect(() => {
+    if (configuration) {
+      validateForm();
+      (async () => {
+        try {
+          const { productId } = window.configurator;
+          // Store configuration in server session and receive total price html
+          const response = await storeConfiguration(productId, configuration);
+          if (response && response.data && response.data.price_html) {
+            setTotalPriceHtml(response.data.price_html);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      })();
+    }
+  }, [configuration]);
 
   const handleSubmitButtonClick = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
-      jQuery(".js-configurator-steps").scrollTo(-100);
+      scrollToInvalidFields();
     } else {
       try {
         setSubmitting(true);
-        const response = await addConfigurationToCart(
-          window?.configurator?.productId,
-          quantity,
-          message
-        );
-        if (response && response.data && response.data.url) {
+        const cartUrl = await addToCart();
+        if (cartUrl) {
           setSubmitting(false);
-          window.location.replace(response.data.url);
+          window.location.replace(cartUrl);
         }
       } catch (err) {
         setSubmitting(false);
@@ -56,15 +73,36 @@ const Configurator = () => {
   const handleSaveButtonClick = (e) => {
     e.preventDefault();
     if (!validateForm()) {
-      jQuery(".js-configurator-steps").scrollTo(-100);
+      scrollToInvalidFields();
     } else {
-      showModalForm(
-        "Samenstelling als offerte ontvangen",
-        "save-configuration",
-        window?.configurator?.configuratorId,
-        () => jQuery(".js-form-content-field").val(message)
-      );
+      showSaveButtonModal();
     }
+  };
+
+  const updatePriceOutsideConfigurator = () => {
+    jQuery(".js-config-total-price").html(totalPriceHtml); // Temporary set with jQuery
+  };
+
+  const addToCart = async () => {
+    const response = await addConfigurationToCart(
+      window?.configurator?.productId,
+      quantity,
+      message
+    );
+    return response?.data?.url;
+  };
+
+  const scrollToInvalidFields = () => {
+    jQuery(".js-configurator-steps").scrollTo(-100);
+  };
+
+  const showSaveButtonModal = () => {
+    showModalForm(
+      "Samenstelling als offerte ontvangen",
+      "save-configuration",
+      window?.configurator?.configuratorId,
+      () => jQuery(".js-form-content-field").val(message)
+    );
   };
 
   const validate = (value, required, rules, sizeUnit) => {
@@ -86,23 +124,58 @@ const Configurator = () => {
   const validateForm = () => {
     let invalid = {};
     steps?.forEach((step) => {
-      const { id, required, rules } = step;
-      const value = configuration[id];
+      const { id, required, options, rules } = step;
+      let value = configuration[id];
+      if (options) {
+        const optionValue = getOptionValue(id, value);
+        if (optionValue) value = optionValue;
+        invalid = { ...invalid, ...getInvalidOptionCombinations(id) };
+      }
       const { valid, message } = validate(value, required, rules, sizeUnit);
       if (!valid) invalid[id] = formatTextBySizeUnit(message, sizeUnit);
     });
-    setInvalidFields((prevFields) => {
-      return { ...prevFields, ...invalid };
-    });
-    invalid = { ...invalidFields, ...invalid };
+    setInvalidFields(invalid);
     return Object.keys(invalid).length === 0;
+  };
+
+  const getInvalidOptionCombinations = (id) => {
+    let invalid = {};
+    if (configuration[id]) {
+      const selectedOption = getSelectedOption(id);
+      if (!selectedOption || !selectedOption.rules) return invalid;
+      const { exclude } = selectedOption.rules;
+      if (!exclude) return invalid;
+      exclude?.forEach((rule) => {
+        const { step, options, message } = rule;
+        if (configuration[step]) {
+          const compareConfig = configuration[step];
+          if (options.includes(compareConfig)) {
+            invalid[id] = formatTextBySizeUnit(message, sizeUnit);
+          }
+        }
+      });
+    }
+    return invalid;
+  };
+
+  const getSelectedOption = (id) => {
+    if (!stepsMap[id] || !stepsMap[id].options || !configuration[id]) return;
+    return stepsMap[id].options.find(
+      (option) => option.id === configuration[id]
+    );
   };
 
   return (
     <>
       <div className="configurator__form-rows js-configurator-steps" ref={ref}>
         {steps.map((step, index) => {
-          return <Step key={step.id} step={step} validate={validate} />;
+          return (
+            <Step
+              key={step.id}
+              step={step}
+              getSelectedOption={getSelectedOption}
+            />
+          );
         })}
         <div className="configurator__form-row">
           <div className="configurator__form-col configurator__form-label">

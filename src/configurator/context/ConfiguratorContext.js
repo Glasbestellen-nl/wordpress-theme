@@ -1,15 +1,12 @@
 const { createContext, useState, useEffect } = wp.element;
-import {
-  getConfiguration,
-  storeConfiguration,
-} from "../services/configuration";
+import { getConfiguration } from "../utils/configuration";
 export const ConfiguratorContext = createContext();
 
 export const ConfiguratorProvider = (props) => {
   const [sizeUnit] = useState(
     window?.configurator?.settings?.size_unit || "mm"
   );
-  const [configuration, setConfiguration] = useState({});
+  const [configuration, setConfiguration] = useState(false);
   const [totalPriceHtml, setTotalPriceHtml] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -26,21 +23,6 @@ export const ConfiguratorProvider = (props) => {
       }
     })();
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const { productId } = window.configurator;
-        // Store configuration in server session and receive total price html
-        const response = await storeConfiguration(productId, configuration);
-        if (response && response.data && response.data.price_html) {
-          setTotalPriceHtml(response.data.price_html);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, [configuration]);
 
   const addInvalidField = (id, message) => {
     setInvalidFields((prevFields) => ({ ...prevFields, [id]: message }));
@@ -60,6 +42,7 @@ export const ConfiguratorProvider = (props) => {
         setConfiguration,
         sizeUnit,
         totalPriceHtml,
+        setTotalPriceHtml,
         loading,
         setLoading,
         submitting,

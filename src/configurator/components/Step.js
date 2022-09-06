@@ -1,16 +1,17 @@
-const { useContext, useState, useEffect } = wp.element;
-import { formatTextBySizeUnit } from "../services/sizeUnit";
+const { useContext, useEffect } = wp.element;
+import { formatTextBySizeUnit } from "../utils/sizeUnit";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import FieldNumber from "./FieldNumber";
 import FieldDropdown from "./FieldDropdown";
-import { getStepsMap } from "../services/steps";
+import { getStepsMap } from "../utils/steps";
 
 const stepsMap = getStepsMap();
 
-const Step = ({ step, validate }) => {
+const Step = ({ step, validate, getSelectedOption }) => {
   const { id, title, required, options, description, rules } = step;
-  const { setConfiguration, configuration, sizeUnit, invalidFields } =
+  const { setConfiguration, sizeUnit, invalidFields } =
     useContext(ConfiguratorContext);
+  const selectedOption = getSelectedOption(id);
 
   useEffect(
     // Remove element from configuration when unmounting
@@ -22,11 +23,6 @@ const Step = ({ step, validate }) => {
     },
     []
   );
-
-  const getSelectedOption = () => {
-    if (!hasOptions() || !configuration[id]) return;
-    return options.find((option) => option.id === configuration[id]);
-  };
 
   const getDescriptionId = () => {
     return description && description.id;
@@ -119,9 +115,15 @@ const Step = ({ step, validate }) => {
           )}
         </div>
       </div>
-      {getSelectedOption()?.child_steps?.map((stepId) => {
+      {selectedOption?.child_steps?.map((stepId) => {
         const childStep = stepsMap[stepId];
-        return <Step key={childStep.id} step={childStep} validate={validate} />;
+        return (
+          <Step
+            key={childStep.id}
+            step={childStep}
+            getSelectedOption={getSelectedOption}
+          />
+        );
       })}
     </>
   );
