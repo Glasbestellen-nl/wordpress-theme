@@ -106,7 +106,7 @@ const Configurator = () => {
         })}
         <div className="configurator__form-row">
           <div className="configurator__form-col configurator__form-label">
-            <label>Opmerking</label>
+            <label>{`Opmerking`}</label>
           </div>
 
           <div className="configurator__form-col configurator__form-input">
