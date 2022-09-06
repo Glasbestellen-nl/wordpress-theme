@@ -2429,6 +2429,11 @@ const FieldDropdown = _ref => {
     return configuration && configuration[id];
   };
 
+  const getOptionValueById = id => {
+    const option = options.find(option => option.id === parseInt(id));
+    return option && option.value ? option.value : id;
+  };
+
   const getDefault = () => {
     if (!options || options.length == 0) return;
     return options.find(option => option.default);
@@ -2439,7 +2444,7 @@ const FieldDropdown = _ref => {
     const {
       valid,
       message
-    } = validate(value, required, rules, sizeUnit);
+    } = validate(getOptionValueById(value), required, rules, sizeUnit);
 
     if (!valid) {
       addInvalidField(id, (0,_services_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(message, sizeUnit));
@@ -3168,9 +3173,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "validateByRules": () => (/* binding */ validateByRules)
 /* harmony export */ });
 /* harmony import */ var _sizeUnit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sizeUnit */ "./src/configurator/services/sizeUnit.js");
+/* harmony import */ var _steps__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./steps */ "./src/configurator/services/steps.js");
 const {
   msg
 } = window.gb;
+
+
+
+const getOptionValue = (stepId, optionId) => {
+  const steps = (0,_steps__WEBPACK_IMPORTED_MODULE_1__.getStepsData)();
+  const step = steps.find(step => step.id === stepId);
+  if (!step || !step.options) return;
+  const option = step.options.find(option => option.id === parseInt(optionId));
+  if (option && option.value) return option.value;
+  return;
+};
 
 const validateBasic = value => {
   if (!value || value === "") {
@@ -3204,7 +3221,7 @@ const validateByRules = function (value, rules, configuration) {
         const dependentStepIds = !Array.isArray(maxDependence) && [maxDependence] || maxDependence;
         let previousMax = 0;
         dependentStepIds.forEach(dependentStepId => {
-          const dependentValue = configuration[dependentStepId];
+          const dependentValue = getOptionValue(dependentStepId, configuration[dependentStepId]);
 
           if (dependentValue && dependentValue > previousMax) {
             if (rules.max.greater && rules.max.less) {
@@ -3230,7 +3247,7 @@ const validateByRules = function (value, rules, configuration) {
     if (rules.less_than && rules.less_than.step) {
       let lessThan = rules.less_than;
       let dependentStepId = lessThan.step;
-      let dependentValue = configuration[dependentStepId];
+      let dependentValue = getOptionValue(dependentStepId, configuration[dependentStepId]);
 
       if (dependentValue) {
         if (lessThan.value) {

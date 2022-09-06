@@ -1,5 +1,17 @@
 const { msg } = window.gb;
 import { convertNumberBySizeUnit } from "./sizeUnit";
+import { getStepsData } from "./steps";
+
+const getOptionValue = (stepId, optionId) => {
+  const steps = getStepsData();
+  const step = steps.find((step) => step.id === stepId);
+  if (!step || !step.options) return;
+  const option = step.options.find(
+    (option) => option.id === parseInt(optionId)
+  );
+  if (option && option.value) return option.value;
+  return;
+};
 
 export const validateBasic = (value) => {
   if (!value || value === "") {
@@ -36,7 +48,10 @@ export const validateByRules = (
           (!Array.isArray(maxDependence) && [maxDependence]) || maxDependence;
         let previousMax = 0;
         dependentStepIds.forEach((dependentStepId) => {
-          const dependentValue = configuration[dependentStepId];
+          const dependentValue = getOptionValue(
+            dependentStepId,
+            configuration[dependentStepId]
+          );
           if (dependentValue && dependentValue > previousMax) {
             if (rules.max.greater && rules.max.less) {
               max =
@@ -66,8 +81,10 @@ export const validateByRules = (
     if (rules.less_than && rules.less_than.step) {
       let lessThan = rules.less_than;
       let dependentStepId = lessThan.step;
-      let dependentValue = configuration[dependentStepId];
-
+      let dependentValue = getOptionValue(
+        dependentStepId,
+        configuration[dependentStepId]
+      );
       if (dependentValue) {
         if (lessThan.value) {
           dependentValue -= parseInt(lessThan.value);

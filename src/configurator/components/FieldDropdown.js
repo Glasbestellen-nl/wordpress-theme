@@ -51,6 +51,11 @@ const FieldDropdown = ({
     return configuration && configuration[id];
   };
 
+  const getOptionValueById = (id) => {
+    const option = options.find((option) => option.id === parseInt(id));
+    return option && option.value ? option.value : id;
+  };
+
   const getDefault = () => {
     if (!options || options.length == 0) return;
     return options.find((option) => option.default);
@@ -58,7 +63,12 @@ const FieldDropdown = ({
 
   const handleChange = (e) => {
     const value = e.target.value;
-    const { valid, message } = validate(value, required, rules, sizeUnit);
+    const { valid, message } = validate(
+      getOptionValueById(value),
+      required,
+      rules,
+      sizeUnit
+    );
     if (!valid) {
       addInvalidField(id, formatTextBySizeUnit(message, sizeUnit));
     } else {
