@@ -1,32 +1,10 @@
-const { useState, useEffect, useContext } = wp.element;
+const { useState, useContext } = wp.element;
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 
 const FieldNumber = ({ id, required, rules, changeHandler, validate }) => {
-  const {
-    sizeUnit,
-    configuration,
-    invalidFields,
-    addInvalidField,
-    removeInvalidField,
-  } = useContext(ConfiguratorContext);
+  const { sizeUnit, invalidFields, addInvalidField, removeInvalidField } =
+    useContext(ConfiguratorContext);
   const [value, setValue] = useState(null);
-
-  useEffect(() => {
-    if (configuration[id]) {
-      const { valid, message } = validate(
-        configuration[id],
-        required,
-        rules,
-        sizeUnit
-      );
-      if (!valid) {
-        addInvalidField(id, message);
-      } else {
-        removeInvalidField(id);
-      }
-      setValue(configuration[id]);
-    }
-  }, [configuration]);
 
   const handleChange = (e) => {
     let value = e.target.value;

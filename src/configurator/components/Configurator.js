@@ -49,7 +49,7 @@ const Configurator = () => {
         }
       })();
     }
-  }, [configuration]);
+  }, [configuration, firstValidation]);
 
   const handleSubmitButtonClick = async (e) => {
     e.preventDefault();
@@ -168,11 +168,12 @@ const Configurator = () => {
   return (
     <>
       <div className="configurator__form-rows js-configurator-steps" ref={ref}>
-        {steps.map((step, index) => {
+        {steps.map((step) => {
           return (
             <Step
               key={step.id}
               step={step}
+              validate={validate}
               getSelectedOption={getSelectedOption}
             />
           );

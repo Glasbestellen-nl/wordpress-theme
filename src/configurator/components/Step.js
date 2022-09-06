@@ -56,7 +56,6 @@ const Step = ({ step, validate, getSelectedOption }) => {
             changeHandler={changeHandler}
             rules={rules}
             required={required}
-            validate={validate}
           />
         );
       }

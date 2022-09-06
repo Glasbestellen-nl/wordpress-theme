@@ -2231,7 +2231,7 @@ const Configurator = () => {
         }
       })();
     }
-  }, [configuration]);
+  }, [configuration, firstValidation]);
 
   const handleSubmitButtonClick = async e => {
     e.preventDefault();
@@ -2365,10 +2365,11 @@ const Configurator = () => {
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-rows js-configurator-steps",
     ref: ref
-  }, steps.map((step, index) => {
+  }, steps.map(step => {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_7__["default"], {
       key: step.id,
       step: step,
+      validate: validate,
       getSelectedOption: getSelectedOption
     });
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -2515,7 +2516,6 @@ __webpack_require__.r(__webpack_exports__);
 
 const {
   useState,
-  useEffect,
   useContext
 } = wp.element;
 
@@ -2530,28 +2530,11 @@ const FieldNumber = _ref => {
   } = _ref;
   const {
     sizeUnit,
-    configuration,
     invalidFields,
     addInvalidField,
     removeInvalidField
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
   const [value, setValue] = useState(null);
-  useEffect(() => {
-    if (configuration[id]) {
-      const {
-        valid,
-        message
-      } = validate(configuration[id], required, rules, sizeUnit);
-
-      if (!valid) {
-        addInvalidField(id, message);
-      } else {
-        removeInvalidField(id);
-      }
-
-      setValue(configuration[id]);
-    }
-  }, [configuration]);
 
   const handleChange = e => {
     let value = e.target.value;
@@ -2772,8 +2755,7 @@ const Step = _ref => {
           options: options,
           changeHandler: changeHandler,
           rules: rules,
-          required: required,
-          validate: validate
+          required: required
         });
       }
     } else {
