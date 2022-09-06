@@ -228,11 +228,11 @@ class Configurator {
          'id' => $index + 1,
          'title' => $value . ' mm',
          'value' => $value,
-         'default' => $index == 1
+         'default' => $index == 0
       ];
    }
 
-   protected function insert_step_options_from_matrix( $step ) {
+   public function insert_step_options_from_matrix( $step ) {
 
       if ( empty( $step ) ) return;
       $matrix = $this->get_price_matrix();

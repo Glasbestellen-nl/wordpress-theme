@@ -1,9 +1,5 @@
 export const getStepsData = () => {
-  return (
-    window.configurator &&
-    window.configurator.settings &&
-    window.configurator.settings.steps
-  );
+  return window?.configurator?.settings?.steps;
 };
 
 /**
