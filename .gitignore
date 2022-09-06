@@ -31,6 +31,3 @@ node_modules
 
 # Composer
 vendor
-
-# Assets will be created by build script
-assets/js
