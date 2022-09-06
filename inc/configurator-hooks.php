@@ -108,7 +108,7 @@ class Configurator_Hooks {
       $configurator = $product->get_configurator();
       $configurator->update( $_POST['configuration'] );
       $configurator_id = $configurator->get_id();
-      $_SESSION['configuration'][$configurator_id] = $configurator->get_configuration();
+      gb_set_configuration_session( $configurator_id, $configurator->get_configuration() );
       $response['price_html'] = wc_price( wc_get_price_including_tax( $product ) );
    
       wp_send_json( $response );
