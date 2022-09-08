@@ -8,7 +8,16 @@ import { getStepsMap } from "../utils/steps";
 const stepsMap = getStepsMap();
 
 const Step = ({ step, validate, getSelectedOption }) => {
-  const { id, title, required, options, description, rules } = step;
+  const {
+    id,
+    title,
+    required,
+    options,
+    description,
+    rules,
+    disabled,
+    formula,
+  } = step;
   const { setConfiguration, sizeUnit, invalidFields } =
     useContext(ConfiguratorContext);
   const selectedOption = getSelectedOption(id);
@@ -67,6 +76,8 @@ const Step = ({ step, validate, getSelectedOption }) => {
           rules={rules}
           required={required}
           validate={validate}
+          disabled={disabled}
+          formula={formula}
         />
       );
     }

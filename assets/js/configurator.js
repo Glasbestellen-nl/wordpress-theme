@@ -2518,6 +2518,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _utils_formulas__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/formulas */ "./src/configurator/utils/formulas.js");
 
 const {
   useState,
@@ -2526,16 +2527,20 @@ const {
 } = wp.element;
 
 
+
 const FieldNumber = _ref => {
   let {
     id,
     required,
     rules,
+    disabled,
+    formula,
     changeHandler,
     validate
   } = _ref;
   const {
     configuration,
+    setConfiguration,
     sizeUnit,
     invalidFields,
     addInvalidField,
@@ -2543,7 +2548,12 @@ const FieldNumber = _ref => {
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
   const [value, setValue] = useState(null);
   useEffect(() => {
-    if (configuration[id]) setValue(configuration[id]);
+    if (configuration[id]) {
+      setValue(configuration[id]);
+    } else if (configuration && formula) {
+      let value = (0,_utils_formulas__WEBPACK_IMPORTED_MODULE_2__.calculateValueByFormula)(formula, configuration);
+      if (value) setValue(Math.round(value));
+    }
   }, [configuration]);
 
   const handleChange = e => {
@@ -2569,7 +2579,7 @@ const FieldNumber = _ref => {
 
   const getClassNames = () => {
     const classNames = ["form-control", "configurator__form-control"];
-    if (invalidFields[id]) classNames.push("invalid");else if (value) classNames.push("valid");
+    if (invalidFields[id]) classNames.push("invalid");else if (value && !disabled) classNames.push("valid");
     return classNames.join(" ");
   };
 
@@ -2589,7 +2599,8 @@ const FieldNumber = _ref => {
     placeholder: sizeUnit,
     onChange: handleChange,
     onBlur: handleBlur,
-    value: getValue()
+    value: getValue(),
+    disabled: disabled
   });
 };
 
@@ -2719,7 +2730,9 @@ const Step = _ref => {
     required,
     options,
     description,
-    rules
+    rules,
+    disabled,
+    formula
   } = step;
   const {
     setConfiguration,
@@ -2775,7 +2788,9 @@ const Step = _ref => {
         changeHandler: changeHandler,
         rules: rules,
         required: required,
-        validate: validate
+        validate: validate,
+        disabled: disabled,
+        formula: formula
       });
     }
   };
@@ -3059,6 +3074,51 @@ const addConfigurationToCart = async (productId, quantity, message) => {
 
 /***/ }),
 
+/***/ "./src/configurator/utils/formulas.js":
+/*!********************************************!*\
+  !*** ./src/configurator/utils/formulas.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "calculateCircleCutSideLeftOver": () => (/* binding */ calculateCircleCutSideLeftOver),
+/* harmony export */   "calculateValueByFormula": () => (/* binding */ calculateValueByFormula)
+/* harmony export */ });
+/* harmony import */ var _utils_steps__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/steps */ "./src/configurator/utils/steps.js");
+
+const calculateCircleCutSideLeftOver = (diameter, cutSideLength) => {
+  const radius = diameter / 2;
+  return (radius - Math.sqrt(Math.pow(radius, 2) - Math.pow(cutSideLength, 2) / 4) - diameter) * -1;
+};
+const calculateValueByFormula = (formula, configuration) => {
+  let value = 0;
+  const {
+    type,
+    params
+  } = formula;
+
+  if (type && params) {
+    switch (type) {
+      case "leftover_height_cut_side_circle":
+        {
+          const {
+            d,
+            c
+          } = params;
+          const diameter = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_0__.getOptionValue)(d, configuration[d]);
+          const cutSideLength = configuration[c];
+          value = calculateCircleCutSideLeftOver(diameter, cutSideLength);
+        }
+    }
+  }
+
+  return value;
+};
+
+/***/ }),
+
 /***/ "./src/configurator/utils/price.js":
 /*!*****************************************!*\
   !*** ./src/configurator/utils/price.js ***!
@@ -3140,10 +3200,6 @@ const getStepsData = () => {
 
   return (_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : (_window$configurator$ = _window$configurator.settings) === null || _window$configurator$ === void 0 ? void 0 : _window$configurator$.steps;
 };
-/**
- * Convert steps array to object for easier use
- */
-
 const getStepsMap = () => {
   const stepsArray = getStepsData();
   if (!stepsArray) return;
@@ -3155,7 +3211,7 @@ const getOptionValue = (stepId, optionId) => {
   const steps = getStepsData();
   const step = steps.find(step => step.id === stepId);
   if (!step || !step.options) return;
-  const option = step.options.find(option => option.id === parseInt(optionId));
+  const option = step.options.find(option => parseInt(option.id) === parseInt(optionId));
   if (option && option.value) return option.value;
   return;
 };

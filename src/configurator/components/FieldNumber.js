@@ -1,9 +1,19 @@
 const { useState, useContext, useEffect } = wp.element;
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
+import { calculateValueByFormula } from "../utils/formulas";
 
-const FieldNumber = ({ id, required, rules, changeHandler, validate }) => {
+const FieldNumber = ({
+  id,
+  required,
+  rules,
+  disabled,
+  formula,
+  changeHandler,
+  validate,
+}) => {
   const {
     configuration,
+    setConfiguration,
     sizeUnit,
     invalidFields,
     addInvalidField,
@@ -12,7 +22,12 @@ const FieldNumber = ({ id, required, rules, changeHandler, validate }) => {
   const [value, setValue] = useState(null);
 
   useEffect(() => {
-    if (configuration[id]) setValue(configuration[id]);
+    if (configuration[id]) {
+      setValue(configuration[id]);
+    } else if (configuration && formula) {
+      let value = calculateValueByFormula(formula, configuration);
+      if (value) setValue(Math.round(value));
+    }
   }, [configuration]);
 
   const handleChange = (e) => {
@@ -34,7 +49,7 @@ const FieldNumber = ({ id, required, rules, changeHandler, validate }) => {
   const getClassNames = () => {
     const classNames = ["form-control", "configurator__form-control"];
     if (invalidFields[id]) classNames.push("invalid");
-    else if (value) classNames.push("valid");
+    else if (value && !disabled) classNames.push("valid");
     return classNames.join(" ");
   };
 
@@ -54,6 +69,7 @@ const FieldNumber = ({ id, required, rules, changeHandler, validate }) => {
       onChange={handleChange}
       onBlur={handleBlur}
       value={getValue()}
+      disabled={disabled}
     />
   );
 };
