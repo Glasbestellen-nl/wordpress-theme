@@ -22,13 +22,23 @@ const FieldNumber = ({
   const [value, setValue] = useState(null);
 
   useEffect(() => {
-    if (configuration[id]) {
-      setValue(configuration[id]);
-    } else if (configuration && formula) {
+    if (!configuration) return;
+    if (formula) {
       let value = calculateValueByFormula(formula, configuration);
-      if (value) setValue(Math.round(value));
+      setValue(Math.round(value));
+    } else if (configuration[id]) {
+      setValue(configuration[id]);
     }
   }, [configuration]);
+
+  useEffect(() => {
+    setConfiguration((prevConfig) => {
+      if (prevConfig[id] && prevConfig[id] !== value) {
+        return { ...prevConfig, [id]: value };
+      }
+      return prevConfig;
+    });
+  }, [value]);
 
   const handleChange = (e) => {
     let value = e.target.value;
