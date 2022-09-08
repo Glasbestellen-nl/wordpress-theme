@@ -2208,12 +2208,15 @@ const Configurator = () => {
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
   const ref = useRef();
+  const isMounted = useRef(false);
+  const [configInit, setConfigInit] = useState(false);
   useEffect(() => {
     if (totalPriceHtml !== "") updatePriceOutsideConfigurator();
   }, [totalPriceHtml]);
   useEffect(() => {
-    if (configuration) {
-      validateForm();
+    if (isMounted.current && configuration) {
+      // To not validate when loading for first time
+      if (configInit) validateForm();else setConfigInit(true);
 
       (async () => {
         try {
@@ -2230,8 +2233,10 @@ const Configurator = () => {
           console.error(err);
         }
       })();
+    } else {
+      isMounted.current = true;
     }
-  }, [configuration, firstValidation]);
+  }, [configuration]);
 
   const handleSubmitButtonClick = async e => {
     e.preventDefault();
@@ -2516,7 +2521,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const {
   useState,
-  useContext
+  useContext,
+  useEffect
 } = wp.element;
 
 
@@ -2529,12 +2535,16 @@ const FieldNumber = _ref => {
     validate
   } = _ref;
   const {
+    configuration,
     sizeUnit,
     invalidFields,
     addInvalidField,
     removeInvalidField
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
   const [value, setValue] = useState(null);
+  useEffect(() => {
+    if (configuration[id]) setValue(configuration[id]);
+  }, [configuration]);
 
   const handleChange = e => {
     let value = e.target.value;
@@ -2685,7 +2695,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const {
   useContext,
-  useEffect
+  useEffect,
+  useState
 } = wp.element;
 
 

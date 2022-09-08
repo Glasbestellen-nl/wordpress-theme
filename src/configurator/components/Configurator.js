@@ -28,14 +28,19 @@ const Configurator = () => {
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState("");
   const ref = useRef();
+  const isMounted = useRef(false);
+  const [configInit, setConfigInit] = useState(false);
 
   useEffect(() => {
     if (totalPriceHtml !== "") updatePriceOutsideConfigurator();
   }, [totalPriceHtml]);
 
   useEffect(() => {
-    if (configuration) {
-      validateForm();
+    if (isMounted.current && configuration) {
+      // To not validate when loading for first time
+      if (configInit) validateForm();
+      else setConfigInit(true);
+
       (async () => {
         try {
           const { productId } = window.configurator;
@@ -48,8 +53,10 @@ const Configurator = () => {
           console.error(err);
         }
       })();
+    } else {
+      isMounted.current = true;
     }
-  }, [configuration, firstValidation]);
+  }, [configuration]);
 
   const handleSubmitButtonClick = async (e) => {
     e.preventDefault();

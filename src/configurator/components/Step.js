@@ -1,4 +1,4 @@
-const { useContext, useEffect } = wp.element;
+const { useContext, useEffect, useState } = wp.element;
 import { formatTextBySizeUnit } from "../utils/sizeUnit";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import FieldNumber from "./FieldNumber";
