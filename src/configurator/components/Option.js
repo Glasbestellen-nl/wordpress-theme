@@ -5,7 +5,7 @@ import { ConfiguratorContext } from "../context/ConfiguratorContext";
 
 const Option = ({ option, defaultOption }) => {
   const { id, title, price } = option;
-  const [state, dispatch] = useContext(ConfiguratorContext);
+  const [state] = useContext(ConfiguratorContext);
 
   const getId = () => {
     return id;

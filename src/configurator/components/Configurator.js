@@ -1,10 +1,9 @@
 const { useEffect, useState, useRef, useReducer } = wp.element;
 import {
-  getStepsData,
-  getStepsMap,
-  getOptionValue,
-  getStepFormula,
-} from "../utils/steps";
+  configuratorReducer,
+  initialState,
+} from "../reducers/configuratorReducer";
+import { getStepsData, getStepsMap, getOptionValue } from "../utils/steps";
 import {
   addConfigurationToCart,
   storeConfiguration,
@@ -20,59 +19,8 @@ import StickyBar from "./StickyBar";
 const stepsMap = getStepsMap();
 const steps = getStepsData().filter((step) => !step.parent_step);
 
-const initialState = {
-  configuration: {},
-  invalidFields: {},
-  sizeUnit: window?.configurator?.settings?.size_unit || "mm",
-  loading: false,
-  submitting: false,
-  quantity: 1,
-  message: "",
-};
-
-const reducer = (state, action) => {
-  const { type, payload } = action;
-  switch (type) {
-    case "set_configuration":
-      return { ...state, configuration: payload, loading: false };
-    case "update_configuration":
-      const configuration = state.configuration
-        ? { ...state.configuration }
-        : {};
-      configuration[payload.id] = payload.value;
-      const formula = getStepFormula(payload.id);
-      if (formula) {
-        const calculatedValue = calculateValueByFormula(formula, configuration);
-        configuration[payload.id] = calculatedValue;
-      }
-      return { ...state, configuration };
-    case "set_invalid_fields":
-      return { ...state, invalidFields: payload };
-    case "add_invalid_field":
-      return {
-        ...state,
-        invalidFields: {
-          ...state.invalidFields,
-          [payload.id]: payload.message,
-        },
-      };
-    case "remove_invalid_field":
-      const invalidFields = { ...state?.invalidFields };
-      if (invalidFields[payload.id]) delete invalidFields[payload.id];
-      return { ...state, invalidFields };
-    case "loading":
-      return { ...state, loading: payload };
-    case "submitting":
-      return { ...state, submitting: payload };
-    case "update_quantity":
-      return { ...state, quantity: payload };
-    default:
-      return state;
-  }
-};
-
 const Configurator = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(configuratorReducer, initialState);
   const ref = useRef();
   const isMounted = useRef(false);
   const [configInit, setConfigInit] = useState(false);
@@ -93,8 +41,8 @@ const Configurator = () => {
   }, []);
 
   useEffect(() => {
-    if (state.totalPriceHtml !== "") updatePriceOutsideConfigurator();
-  }, [state.totalPriceHtml]);
+    if (totalPriceHtml !== "") updatePriceOutsideConfigurator();
+  }, [totalPriceHtml]);
 
   useEffect(() => {
     if (isMounted.current && state.configuration) {
@@ -150,10 +98,6 @@ const Configurator = () => {
     }
   };
 
-  const updatePriceOutsideConfigurator = () => {
-    jQuery(".js-config-total-price").html(totalPriceHtml); // Temporary set with jQuery
-  };
-
   const addToCart = async () => {
     const response = await addConfigurationToCart(
       window?.configurator?.productId,
@@ -164,7 +108,11 @@ const Configurator = () => {
   };
 
   const scrollToInvalidFields = () => {
-    jQuery(".js-configurator-steps").scrollTo(-100);
+    jQuery(".js-configurator-steps").scrollTo(-100); // Temporary set with jQuery
+  };
+
+  const updatePriceOutsideConfigurator = () => {
+    jQuery(".js-config-total-price").html(totalPriceHtml); // Temporary set with jQuery
   };
 
   const showSaveButtonModal = () => {
@@ -172,7 +120,7 @@ const Configurator = () => {
       "Samenstelling als offerte ontvangen",
       "save-configuration",
       window?.configurator?.configuratorId,
-      () => jQuery(".js-form-content-field").val(state.message)
+      () => jQuery(".js-form-content-field").val(state.message) // Temporary set with jQuery
     );
   };
 
@@ -224,10 +172,10 @@ const Configurator = () => {
       if (!exclude) return invalid;
       exclude?.forEach((rule) => {
         const { step, options, message } = rule;
-        if (configuration[step]) {
-          const compareConfig = configuration[step];
+        if (state.configuration[step]) {
+          const compareConfig = state.configuration[step];
           if (options.includes(compareConfig)) {
-            invalid[id] = formatTextBySizeUnit(message, sizeUnit);
+            invalid[id] = formatTextBySizeUnit(message, state.sizeUnit);
           }
         }
       });

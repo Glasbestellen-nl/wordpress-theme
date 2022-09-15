@@ -21,16 +21,13 @@ const Step = ({ step, validate, getSelectedOption }) => {
   const [state, dispatch] = useContext(ConfiguratorContext);
   const selectedOption = getSelectedOption(id);
 
-  // useEffect(
-  // Remove element from configuration when unmounting
-  // () => () => {
-  //   setConfiguration((prevConfig) => {
-  //     const { [id]: removedItem, ...rest } = prevConfig;
-  //     return rest;
-  //   });
-  // },
-  // []
-  // );
+  useEffect(
+    // Remove element from configuration when unmounting
+    () => () => {
+      dispatch({ type: "remove_configuration_item", payload: { id } });
+    },
+    []
+  );
 
   const getDescriptionId = () => {
     return description && description.id;

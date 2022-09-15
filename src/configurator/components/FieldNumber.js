@@ -13,6 +13,10 @@ const FieldNumber = ({
   const [state, dispatch] = useContext(ConfiguratorContext);
   const [value, setValue] = useState(null);
 
+  useEffect(() => {
+    setValue(state.configuration[id]);
+  }, [state.configuration[id]]);
+
   const handleChange = (e) => {
     let value = e.target.value;
     if (value && state.sizeUnit === "cm") value *= 10;

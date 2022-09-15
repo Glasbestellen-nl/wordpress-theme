@@ -3,7 +3,7 @@ import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import Option from "./Option";
 
 const FieldDropdown = ({ id, options, changeHandler }) => {
-  const [state, dispatch] = useContext(ConfiguratorContext);
+  const [state] = useContext(ConfiguratorContext);
 
   const getValue = () => {
     return state.configuration && state.configuration[id];
