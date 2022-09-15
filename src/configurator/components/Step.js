@@ -125,6 +125,7 @@ const Step = ({ step, validate, getSelectedOption }) => {
             key={childStep.id}
             step={childStep}
             getSelectedOption={getSelectedOption}
+            validate={validate}
           />
         );
       })}

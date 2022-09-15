@@ -37,10 +37,9 @@ export const validateByRules = (
           (!Array.isArray(maxDependence) && [maxDependence]) || maxDependence;
         let previousMax = 0;
         dependentStepIds.forEach((dependentStepId) => {
-          const dependentValue = getOptionValue(
-            dependentStepId,
-            configuration[dependentStepId]
-          );
+          const dependentValue =
+            getOptionValue(dependentStepId, configuration[dependentStepId]) ||
+            configuration[dependentStepId];
           if (dependentValue && dependentValue > previousMax) {
             if (rules.max.greater && rules.max.less) {
               max =

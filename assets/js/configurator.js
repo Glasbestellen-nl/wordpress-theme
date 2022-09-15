@@ -2849,7 +2849,8 @@ const Step = _ref => {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Step, {
       key: childStep.id,
       step: childStep,
-      getSelectedOption: getSelectedOption
+      getSelectedOption: getSelectedOption,
+      validate: validate
     });
   }));
 };
@@ -3334,7 +3335,7 @@ const validateByRules = function (value, rules, configuration) {
         const dependentStepIds = !Array.isArray(maxDependence) && [maxDependence] || maxDependence;
         let previousMax = 0;
         dependentStepIds.forEach(dependentStepId => {
-          const dependentValue = (0,_steps__WEBPACK_IMPORTED_MODULE_1__.getOptionValue)(dependentStepId, configuration[dependentStepId]);
+          const dependentValue = (0,_steps__WEBPACK_IMPORTED_MODULE_1__.getOptionValue)(dependentStepId, configuration[dependentStepId]) || configuration[dependentStepId];
 
           if (dependentValue && dependentValue > previousMax) {
             if (rules.max.greater && rules.max.less) {
