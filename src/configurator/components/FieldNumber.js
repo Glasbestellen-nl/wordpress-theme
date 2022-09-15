@@ -21,25 +21,6 @@ const FieldNumber = ({
   } = useContext(ConfiguratorContext);
   const [value, setValue] = useState(null);
 
-  useEffect(() => {
-    if (!configuration) return;
-    if (formula) {
-      let value = calculateValueByFormula(formula, configuration);
-      setValue(Math.round(value));
-    } else if (configuration[id]) {
-      setValue(configuration[id]);
-    }
-  }, [configuration]);
-
-  useEffect(() => {
-    setConfiguration((prevConfig) => {
-      if (prevConfig[id] && prevConfig[id] !== value) {
-        return { ...prevConfig, [id]: value };
-      }
-      return prevConfig;
-    });
-  }, [value]);
-
   const handleChange = (e) => {
     let value = e.target.value;
     if (value && sizeUnit === "cm") value *= 10;

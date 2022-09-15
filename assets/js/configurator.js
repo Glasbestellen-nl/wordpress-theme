@@ -2547,27 +2547,6 @@ const FieldNumber = _ref => {
     removeInvalidField
   } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
   const [value, setValue] = useState(null);
-  useEffect(() => {
-    if (!configuration) return;
-
-    if (formula) {
-      let value = (0,_utils_formulas__WEBPACK_IMPORTED_MODULE_2__.calculateValueByFormula)(formula, configuration);
-      setValue(Math.round(value));
-    } else if (configuration[id]) {
-      setValue(configuration[id]);
-    }
-  }, [configuration]);
-  useEffect(() => {
-    setConfiguration(prevConfig => {
-      if (prevConfig[id] && prevConfig[id] !== value) {
-        return { ...prevConfig,
-          [id]: value
-        };
-      }
-
-      return prevConfig;
-    });
-  }, [value]);
 
   const handleChange = e => {
     let value = e.target.value;
