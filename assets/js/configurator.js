@@ -2168,20 +2168,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _main_functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../main/functions */ "./src/main/functions.js");
-/* harmony import */ var _utils_validation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/validation */ "./src/configurator/utils/validation.js");
-/* harmony import */ var _utils_sizeUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/sizeUnit */ "./src/configurator/utils/sizeUnit.js");
-/* harmony import */ var _utils_steps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/steps */ "./src/configurator/utils/steps.js");
-/* harmony import */ var _utils_configuration__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/configuration */ "./src/configurator/utils/configuration.js");
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
-/* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
-/* harmony import */ var _StickyBar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./StickyBar */ "./src/configurator/components/StickyBar.js");
+/* harmony import */ var _reducers_configuratorReducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../reducers/configuratorReducer */ "./src/configurator/reducers/configuratorReducer.js");
+/* harmony import */ var _utils_steps__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/steps */ "./src/configurator/utils/steps.js");
+/* harmony import */ var _utils_configuration__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/configuration */ "./src/configurator/utils/configuration.js");
+/* harmony import */ var _utils_sizeUnit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/sizeUnit */ "./src/configurator/utils/sizeUnit.js");
+/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
+/* harmony import */ var _main_functions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../main/functions */ "./src/main/functions.js");
+/* harmony import */ var _utils_validation__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/validation */ "./src/configurator/utils/validation.js");
+/* harmony import */ var _Step__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Step */ "./src/configurator/components/Step.js");
+/* harmony import */ var _StickyBar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./StickyBar */ "./src/configurator/components/StickyBar.js");
 
 const {
-  useContext,
   useEffect,
   useState,
-  useRef
+  useRef,
+  useReducer
 } = wp.element;
 
 
@@ -2191,30 +2192,33 @@ const {
 
 
 
-const stepsMap = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsMap)();
+
+const stepsMap = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_2__.getStepsMap)();
+const steps = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_2__.getStepsData)().filter(step => !step.parent_step);
 
 const Configurator = () => {
-  const steps = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_4__.getStepsData)().filter(step => !step.parent_step);
-  const {
-    configuration,
-    totalPriceHtml,
-    setTotalPriceHtml,
-    loading,
-    submitting,
-    setSubmitting,
-    sizeUnit,
-    setInvalidFields
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_6__.ConfiguratorContext);
-  const [quantity, setQuantity] = useState(1);
-  const [message, setMessage] = useState("");
+  const [state, dispatch] = useReducer(_reducers_configuratorReducer__WEBPACK_IMPORTED_MODULE_1__.configuratorReducer, _reducers_configuratorReducer__WEBPACK_IMPORTED_MODULE_1__.initialState);
   const ref = useRef();
   const isMounted = useRef(false);
   const [configInit, setConfigInit] = useState(false);
+  const [totalPriceHtml, setTotalPriceHtml] = useState("");
+  useEffect(() => {
+    (async () => {
+      const response = await (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_3__.getConfiguration)(window.configurator.configuratorId);
+
+      if (response && response.data && response.data.configuration) {
+        dispatch({
+          type: "set_configuration",
+          payload: response.data.configuration
+        });
+      }
+    })();
+  }, []);
   useEffect(() => {
     if (totalPriceHtml !== "") updatePriceOutsideConfigurator();
   }, [totalPriceHtml]);
   useEffect(() => {
-    if (isMounted.current && configuration) {
+    if (isMounted.current && state.configuration) {
       // To not validate when loading for first time
       if (configInit) validateForm();else setConfigInit(true);
 
@@ -2224,7 +2228,7 @@ const Configurator = () => {
             productId
           } = window.configurator; // Store configuration in server session and receive total price html
 
-          const response = await (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_5__.storeConfiguration)(productId, configuration);
+          const response = await (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_3__.storeConfiguration)(productId, state.configuration);
 
           if (response && response.data && response.data.price_html) {
             setTotalPriceHtml(response.data.price_html);
@@ -2236,7 +2240,7 @@ const Configurator = () => {
     } else {
       isMounted.current = true;
     }
-  }, [configuration]);
+  }, [state.configuration]);
 
   const handleSubmitButtonClick = async e => {
     e.preventDefault();
@@ -2245,15 +2249,24 @@ const Configurator = () => {
       scrollToInvalidFields();
     } else {
       try {
-        setSubmitting(true);
+        dispatch({
+          type: "submitting",
+          payload: true
+        });
         const cartUrl = await addToCart();
 
         if (cartUrl) {
-          setSubmitting(false);
+          dispatch({
+            type: "submitting",
+            payload: false
+          });
           window.location.replace(cartUrl);
         }
       } catch (err) {
-        setSubmitting(false);
+        dispatch({
+          type: "submitting",
+          payload: false
+        });
         console.err(err);
       }
     }
@@ -2269,35 +2282,36 @@ const Configurator = () => {
     }
   };
 
-  const updatePriceOutsideConfigurator = () => {
-    jQuery(".js-config-total-price").html(totalPriceHtml); // Temporary set with jQuery
-  };
-
   const addToCart = async () => {
     var _window, _window$configurator, _response$data;
 
-    const response = await (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_5__.addConfigurationToCart)((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId, quantity, message);
+    const response = await (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_3__.addConfigurationToCart)((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : _window$configurator.productId, state.quantity, state.message);
     return response === null || response === void 0 ? void 0 : (_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.url;
   };
 
   const scrollToInvalidFields = () => {
-    jQuery(".js-configurator-steps").scrollTo(-100);
+    jQuery(".js-configurator-steps").scrollTo(-100); // Temporary set with jQuery
+  };
+
+  const updatePriceOutsideConfigurator = () => {
+    jQuery(".js-config-total-price").html(totalPriceHtml); // Temporary set with jQuery
   };
 
   const showSaveButtonModal = () => {
     var _window2, _window2$configurator;
 
-    (0,_main_functions__WEBPACK_IMPORTED_MODULE_1__.showModalForm)("Samenstelling als offerte ontvangen", "save-configuration", (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$configurator = _window2.configurator) === null || _window2$configurator === void 0 ? void 0 : _window2$configurator.configuratorId, () => jQuery(".js-form-content-field").val(message));
+    (0,_main_functions__WEBPACK_IMPORTED_MODULE_6__.showModalForm)("Samenstelling als offerte ontvangen", "save-configuration", (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$configurator = _window2.configurator) === null || _window2$configurator === void 0 ? void 0 : _window2$configurator.configuratorId, () => jQuery(".js-form-content-field").val(state.message) // Temporary set with jQuery
+    );
   };
 
   const validate = (value, required, rules, sizeUnit) => {
-    let validationResult = required ? (0,_utils_validation__WEBPACK_IMPORTED_MODULE_2__.validateBasic)(value) : {
+    let validationResult = required ? (0,_utils_validation__WEBPACK_IMPORTED_MODULE_7__.validateBasic)(value) : {
       valid: true,
       message: ""
     };
 
     if (validationResult.valid) {
-      if (rules) validationResult = (0,_utils_validation__WEBPACK_IMPORTED_MODULE_2__.validateByRules)(value, rules, configuration, sizeUnit);
+      if (rules) validationResult = (0,_utils_validation__WEBPACK_IMPORTED_MODULE_7__.validateByRules)(value, rules, state.configuration, sizeUnit);
     }
 
     return validationResult;
@@ -2312,10 +2326,10 @@ const Configurator = () => {
         options,
         rules
       } = step;
-      let value = configuration[id];
+      let value = state.configuration[id];
 
       if (options) {
-        const optionValue = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_4__.getOptionValue)(id, value);
+        const optionValue = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_2__.getOptionValue)(id, value);
         if (optionValue) value = optionValue;
         invalid = { ...invalid,
           ...getInvalidOptionCombinations(id)
@@ -2325,17 +2339,21 @@ const Configurator = () => {
       const {
         valid,
         message
-      } = validate(value, required, rules, sizeUnit);
-      if (!valid) invalid[id] = (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_3__.formatTextBySizeUnit)(message, sizeUnit);
+      } = validate(value, required, rules, state.sizeUnit);
+      if (!valid) invalid[id] = (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_4__.formatTextBySizeUnit)(message, state.sizeUnit);
+    }); //setInvalidFields(invalid);
+
+    dispatch({
+      type: "set_invalid_fields",
+      payload: invalid
     });
-    setInvalidFields(invalid);
     return Object.keys(invalid).length === 0;
   };
 
   const getInvalidOptionCombinations = id => {
     let invalid = {};
 
-    if (configuration[id]) {
+    if (state.configuration[id]) {
       const selectedOption = getSelectedOption(id);
       if (!selectedOption || !selectedOption.rules) return invalid;
       const {
@@ -2349,11 +2367,11 @@ const Configurator = () => {
           message
         } = rule;
 
-        if (configuration[step]) {
-          const compareConfig = configuration[step];
+        if (state.configuration[step]) {
+          const compareConfig = state.configuration[step];
 
           if (options.includes(compareConfig)) {
-            invalid[id] = (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_3__.formatTextBySizeUnit)(message, sizeUnit);
+            invalid[id] = (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_4__.formatTextBySizeUnit)(message, state.sizeUnit);
           }
         }
       });
@@ -2363,15 +2381,17 @@ const Configurator = () => {
   };
 
   const getSelectedOption = id => {
-    if (!stepsMap[id] || !stepsMap[id].options || !configuration[id]) return;
-    return stepsMap[id].options.find(option => option.id === configuration[id]);
+    if (!stepsMap[id] || !stepsMap[id].options || !state.configuration[id]) return;
+    return stepsMap[id].options.find(option => option.id === state.configuration[id]);
   };
 
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_5__.ConfiguratorContext.Provider, {
+    value: [state, dispatch]
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-rows js-configurator-steps",
     ref: ref
   }, steps.map(step => {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Step__WEBPACK_IMPORTED_MODULE_8__["default"], {
       key: step.id,
       step: step,
       validate: validate,
@@ -2387,8 +2407,11 @@ const Configurator = () => {
     class: "form-control",
     placeholder: `Maximaal ${235} karakters`,
     maxlength: "235",
-    onChange: e => setMessage(e.target.value),
-    value: message
+    onChange: e => dispatch({
+      type: "update_message",
+      payload: e.target.value
+    }),
+    value: state.message
   }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-row space-below"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -2397,8 +2420,11 @@ const Configurator = () => {
     className: "configurator__form-col configurator__form-input"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     className: "dropdown configurator__form-control",
-    onChange: e => setQuantity(e.target.value),
-    value: quantity
+    onChange: e => dispatch({
+      type: "update_quantity",
+      payload: e.target.value
+    }),
+    value: state.quantity
   }, (() => {
     const options = [];
 
@@ -2414,20 +2440,20 @@ const Configurator = () => {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "btn btn--primary btn--block btn--next",
     onClick: handleSubmitButtonClick,
-    disabled: loading
-  }, !submitting && "In winkelwagen" || "Een moment..")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    disabled: state.loading
+  }, !state.submitting && "In winkelwagen" || "Een moment..")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-button space-below"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "btn btn--block btn--aside",
     onClick: handleSaveButtonClick,
-    disabled: loading
+    disabled: state.loading
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
     class: "fas fa-file-import"
-  }), " \xA0\xA0 Mail mij een offerte"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StickyBar__WEBPACK_IMPORTED_MODULE_8__["default"], {
+  }), " \xA0\xA0 Mail mij een offerte"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StickyBar__WEBPACK_IMPORTED_MODULE_9__["default"], {
     submitButtonHandler: handleSubmitButtonClick,
     saveButtonHandler: handleSaveButtonClick,
     scrollTargetRef: ref
-  }));
+  })));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Configurator);
@@ -2462,13 +2488,10 @@ const FieldDropdown = _ref => {
     options,
     changeHandler
   } = _ref;
-  const {
-    configuration,
-    invalidFields
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
+  const [state] = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
 
   const getValue = () => {
-    return configuration && configuration[id];
+    return state.configuration && state.configuration[id];
   };
 
   const getDefault = () => {
@@ -2483,7 +2506,7 @@ const FieldDropdown = _ref => {
 
   const getClassNames = () => {
     const classNames = ["dropdown configurator__dropdown", "configurator__form-control"];
-    if (invalidFields[id]) classNames.push("invalid");else classNames.push("valid");
+    if (state.invalidFields[id]) classNames.push("invalid");else classNames.push("valid");
     return classNames.join(" ");
   };
 
@@ -2640,9 +2663,7 @@ const Option = _ref => {
     title,
     price
   } = option;
-  const {
-    sizeUnit
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_3__.ConfiguratorContext);
+  const [state] = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_3__.ConfiguratorContext);
 
   const getId = () => {
     return id;
@@ -2671,7 +2692,7 @@ const Option = _ref => {
       }
     }
 
-    return (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_2__.formatTextBySizeUnit)(finalTitle.join(" "), sizeUnit);
+    return (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_2__.formatTextBySizeUnit)(finalTitle.join(" "), state.sizeUnit);
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
@@ -2732,20 +2753,15 @@ const Step = _ref => {
     disabled,
     formula
   } = step;
-  const {
-    setConfiguration,
-    sizeUnit,
-    invalidFields
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
+  const [state, dispatch] = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_2__.ConfiguratorContext);
   const selectedOption = getSelectedOption(id);
   useEffect( // Remove element from configuration when unmounting
   () => () => {
-    setConfiguration(prevConfig => {
-      const {
-        [id]: removedItem,
-        ...rest
-      } = prevConfig;
-      return rest;
+    dispatch({
+      type: "remove_configuration_item",
+      payload: {
+        id
+      }
     });
   }, []);
 
@@ -2758,9 +2774,13 @@ const Step = _ref => {
   };
 
   const changeHandler = value => {
-    setConfiguration(prevConfig => ({ ...prevConfig,
-      [id]: value
-    }));
+    dispatch({
+      type: "update_configuration",
+      payload: {
+        id,
+        value
+      }
+    });
   };
 
   const renderInputField = () => {
@@ -2815,16 +2835,16 @@ const Step = _ref => {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "configurator__form-label",
     "data-explanation-id": getDescriptionId()
-  }, (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(title, sizeUnit)), " ", required && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "*")), getDescriptionId() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_1__.formatTextBySizeUnit)(title, state.sizeUnit)), " ", required && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "*")), getDescriptionId() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "configurator__form-col configurator__form-info"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
     className: "fas fa-info-circle configurator__info-icon js-popup-explanation",
     "data-explanation-id": getDescriptionId()
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: getInputRowClassNames()
-  }, renderInputField(), invalidFields[id] && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, renderInputField(), state.invalidFields[id] && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     class: "invalid-feedback js-invalid-feedback"
-  }, invalidFields[id]))), selectedOption === null || selectedOption === void 0 ? void 0 : (_selectedOption$child = selectedOption.child_steps) === null || _selectedOption$child === void 0 ? void 0 : _selectedOption$child.map(stepId => {
+  }, state.invalidFields[id]))), selectedOption === null || selectedOption === void 0 ? void 0 : (_selectedOption$child = selectedOption.child_steps) === null || _selectedOption$child === void 0 ? void 0 : _selectedOption$child.map(stepId => {
     const childStep = stepsMap[stepId];
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Step, {
       key: childStep.id,
@@ -2869,9 +2889,7 @@ const StickyBar = _ref => {
   } = _ref;
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
-  const {
-    loading
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
+  const [state] = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
   useEffect(() => {
     const showOnScroll = () => {
       const viewportTop = window.scrollY;
@@ -2913,14 +2931,14 @@ const StickyBar = _ref => {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "btn btn--block btn--primary btn--tiny",
     onClick: submitButtonHandler,
-    disabled: loading
+    disabled: state.loading
   }, "In winkelwagen"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "d-none d-md-flex align-items-center justify-content-center btn btn--block btn--aside js-configurator-save-button small-space-left",
     "data-popup-title": "",
     "data-formtype": "save-configuration",
     "data-meta": "",
     onClick: saveButtonHandler,
-    disabled: loading
+    disabled: state.loading
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
     className: "fas fa-file-import"
   }), " \xA0\xA0 Offerte")))))));
@@ -2939,71 +2957,120 @@ const StickyBar = _ref => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ConfiguratorContext": () => (/* binding */ ConfiguratorContext),
-/* harmony export */   "ConfiguratorProvider": () => (/* binding */ ConfiguratorProvider)
+/* harmony export */   "ConfiguratorContext": () => (/* binding */ ConfiguratorContext)
 /* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utils_configuration__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/configuration */ "./src/configurator/utils/configuration.js");
-
 const {
-  createContext,
-  useState,
-  useEffect
+  createContext
 } = wp.element;
-
 const ConfiguratorContext = createContext();
-const ConfiguratorProvider = props => {
-  var _window, _window$configurator, _window$configurator$;
 
-  const [sizeUnit] = useState(((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : (_window$configurator$ = _window$configurator.settings) === null || _window$configurator$ === void 0 ? void 0 : _window$configurator$.size_unit) || "mm");
-  const [configuration, setConfiguration] = useState(false);
-  const [totalPriceHtml, setTotalPriceHtml] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [invalidFields, setInvalidFields] = useState({});
-  useEffect(() => {
-    (async () => {
-      const response = await (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfiguration)(window.configurator.configuratorId);
+/***/ }),
 
-      if (response && response.data && response.data.configuration) {
-        setConfiguration(response.data.configuration);
-        setLoading(false);
-      }
-    })();
-  }, []);
+/***/ "./src/configurator/reducers/configuratorReducer.js":
+/*!**********************************************************!*\
+  !*** ./src/configurator/reducers/configuratorReducer.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-  const addInvalidField = (id, message) => {
-    setInvalidFields(prevFields => ({ ...prevFields,
-      [id]: message
-    }));
-  };
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "configuratorReducer": () => (/* binding */ configuratorReducer),
+/* harmony export */   "initialState": () => (/* binding */ initialState)
+/* harmony export */ });
+/* harmony import */ var _utils_steps__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/steps */ "./src/configurator/utils/steps.js");
+/* harmony import */ var _utils_formulas__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/formulas */ "./src/configurator/utils/formulas.js");
+var _window, _window$configurator, _window$configurator$;
 
-  const removeInvalidField = id => {
-    setInvalidFields(prevFields => {
-      if (prevFields[id]) delete prevFields[id];
-      return { ...prevFields
+
+
+const steps = (0,_utils_steps__WEBPACK_IMPORTED_MODULE_0__.getStepsData)().filter(step => !step.parent_step);
+const initialState = {
+  configuration: {},
+  invalidFields: {},
+  sizeUnit: ((_window = window) === null || _window === void 0 ? void 0 : (_window$configurator = _window.configurator) === null || _window$configurator === void 0 ? void 0 : (_window$configurator$ = _window$configurator.settings) === null || _window$configurator$ === void 0 ? void 0 : _window$configurator$.size_unit) || "mm",
+  loading: false,
+  submitting: false,
+  quantity: 1,
+  message: ""
+};
+const configuratorReducer = (state, action) => {
+  const {
+    type,
+    payload
+  } = action;
+
+  switch (type) {
+    case "set_configuration":
+      return { ...state,
+        configuration: payload,
+        loading: false
       };
-    });
-  };
 
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(ConfiguratorContext.Provider, {
-    value: {
-      configuration,
-      setConfiguration,
-      sizeUnit,
-      totalPriceHtml,
-      setTotalPriceHtml,
-      loading,
-      setLoading,
-      submitting,
-      setSubmitting,
-      invalidFields,
-      setInvalidFields,
-      addInvalidField,
-      removeInvalidField
-    }
-  }, props.children);
+    case "update_configuration":
+      const configuration = state.configuration ? { ...state.configuration
+      } : {};
+      configuration[payload.id] = payload.value;
+      steps.forEach(step => {
+        if (step.formula) {
+          const calculatedValue = (0,_utils_formulas__WEBPACK_IMPORTED_MODULE_1__.calculateValueByFormula)(step.formula, configuration);
+          configuration[step.id] = Math.round(calculatedValue);
+        }
+      });
+      return { ...state,
+        configuration
+      };
+
+    case "remove_configuration_item":
+      const {
+        [payload.id]: removedItem,
+        ...rest
+      } = state;
+      return rest;
+
+    case "set_invalid_fields":
+      return { ...state,
+        invalidFields: payload
+      };
+
+    case "add_invalid_field":
+      return { ...state,
+        invalidFields: { ...state.invalidFields,
+          [payload.id]: payload.message
+        }
+      };
+
+    case "remove_invalid_field":
+      const invalidFields = { ...(state === null || state === void 0 ? void 0 : state.invalidFields)
+      };
+      if (invalidFields[payload.id]) delete invalidFields[payload.id];
+      return { ...state,
+        invalidFields
+      };
+
+    case "loading":
+      return { ...state,
+        loading: payload
+      };
+
+    case "submitting":
+      return { ...state,
+        submitting: payload
+      };
+
+    case "update_quantity":
+      return { ...state,
+        quantity: payload
+      };
+
+    case "update_message":
+      return { ...state,
+        message: payload
+      };
+
+    default:
+      return state;
+  }
 };
 
 /***/ }),
@@ -3206,12 +3273,12 @@ const getStepsMap = () => {
   }), {});
 };
 const getOptionValue = (stepId, optionId) => {
+  if (!stepId || !optionId) return;
   const steps = getStepsData();
   const step = steps.find(step => step.id === stepId);
   if (!step || !step.options) return;
   const option = step.options.find(option => parseInt(option.id) === parseInt(optionId));
-  if (option && option.value) return option.value;
-  return;
+  return option && option.value || null;
 };
 
 /***/ }),
@@ -5675,17 +5742,15 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./context/ConfiguratorContext */ "./src/configurator/context/ConfiguratorContext.js");
-/* harmony import */ var _components_Configurator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Configurator */ "./src/configurator/components/Configurator.js");
+/* harmony import */ var _components_Configurator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Configurator */ "./src/configurator/components/Configurator.js");
 
 const {
   render
 } = wp.element;
 
 
-
 if (document.getElementById("react_configurator")) {
-  render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorProvider, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Configurator__WEBPACK_IMPORTED_MODULE_2__["default"], null)), document.getElementById("react_configurator"));
+  render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Configurator__WEBPACK_IMPORTED_MODULE_1__["default"], null), document.getElementById("react_configurator"));
 }
 })();
 

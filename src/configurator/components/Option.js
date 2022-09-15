@@ -5,7 +5,7 @@ import { ConfiguratorContext } from "../context/ConfiguratorContext";
 
 const Option = ({ option, defaultOption }) => {
   const { id, title, price } = option;
-  const { sizeUnit } = useContext(ConfiguratorContext);
+  const [state] = useContext(ConfiguratorContext);
 
   const getId = () => {
     return id;
@@ -31,7 +31,7 @@ const Option = ({ option, defaultOption }) => {
         finalTitle.push("+ " + plusFormattedPrice);
       }
     }
-    return formatTextBySizeUnit(finalTitle.join(" "), sizeUnit);
+    return formatTextBySizeUnit(finalTitle.join(" "), state.sizeUnit);
   };
 
   return <option value={getId()}>{getTitle()}</option>;

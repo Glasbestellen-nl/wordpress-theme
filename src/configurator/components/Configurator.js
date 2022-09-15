@@ -1,42 +1,51 @@
-const { useContext, useEffect, useState, useRef } = wp.element;
-import { showModalForm } from "../../main/functions";
-import { validateBasic, validateByRules } from "../utils/validation";
-import { formatTextBySizeUnit } from "../utils/sizeUnit";
+const { useEffect, useState, useRef, useReducer } = wp.element;
+import {
+  configuratorReducer,
+  initialState,
+} from "../reducers/configuratorReducer";
 import { getStepsData, getStepsMap, getOptionValue } from "../utils/steps";
 import {
   addConfigurationToCart,
   storeConfiguration,
+  getConfiguration,
 } from "../utils/configuration";
+import { formatTextBySizeUnit } from "../utils/sizeUnit";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
+import { showModalForm } from "../../main/functions";
+import { validateBasic, validateByRules } from "../utils/validation";
 import Step from "./Step";
 import StickyBar from "./StickyBar";
 
 const stepsMap = getStepsMap();
+const steps = getStepsData().filter((step) => !step.parent_step);
 
 const Configurator = () => {
-  const steps = getStepsData().filter((step) => !step.parent_step);
-  const {
-    configuration,
-    totalPriceHtml,
-    setTotalPriceHtml,
-    loading,
-    submitting,
-    setSubmitting,
-    sizeUnit,
-    setInvalidFields,
-  } = useContext(ConfiguratorContext);
-  const [quantity, setQuantity] = useState(1);
-  const [message, setMessage] = useState("");
+  const [state, dispatch] = useReducer(configuratorReducer, initialState);
   const ref = useRef();
   const isMounted = useRef(false);
   const [configInit, setConfigInit] = useState(false);
+  const [totalPriceHtml, setTotalPriceHtml] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const response = await getConfiguration(
+        window.configurator.configuratorId
+      );
+      if (response && response.data && response.data.configuration) {
+        dispatch({
+          type: "set_configuration",
+          payload: response.data.configuration,
+        });
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     if (totalPriceHtml !== "") updatePriceOutsideConfigurator();
   }, [totalPriceHtml]);
 
   useEffect(() => {
-    if (isMounted.current && configuration) {
+    if (isMounted.current && state.configuration) {
       // To not validate when loading for first time
       if (configInit) validateForm();
       else setConfigInit(true);
@@ -45,7 +54,10 @@ const Configurator = () => {
         try {
           const { productId } = window.configurator;
           // Store configuration in server session and receive total price html
-          const response = await storeConfiguration(productId, configuration);
+          const response = await storeConfiguration(
+            productId,
+            state.configuration
+          );
           if (response && response.data && response.data.price_html) {
             setTotalPriceHtml(response.data.price_html);
           }
@@ -56,7 +68,7 @@ const Configurator = () => {
     } else {
       isMounted.current = true;
     }
-  }, [configuration]);
+  }, [state.configuration]);
 
   const handleSubmitButtonClick = async (e) => {
     e.preventDefault();
@@ -64,14 +76,14 @@ const Configurator = () => {
       scrollToInvalidFields();
     } else {
       try {
-        setSubmitting(true);
+        dispatch({ type: "submitting", payload: true });
         const cartUrl = await addToCart();
         if (cartUrl) {
-          setSubmitting(false);
+          dispatch({ type: "submitting", payload: false });
           window.location.replace(cartUrl);
         }
       } catch (err) {
-        setSubmitting(false);
+        dispatch({ type: "submitting", payload: false });
         console.err(err);
       }
     }
@@ -86,21 +98,21 @@ const Configurator = () => {
     }
   };
 
-  const updatePriceOutsideConfigurator = () => {
-    jQuery(".js-config-total-price").html(totalPriceHtml); // Temporary set with jQuery
-  };
-
   const addToCart = async () => {
     const response = await addConfigurationToCart(
       window?.configurator?.productId,
-      quantity,
-      message
+      state.quantity,
+      state.message
     );
     return response?.data?.url;
   };
 
   const scrollToInvalidFields = () => {
-    jQuery(".js-configurator-steps").scrollTo(-100);
+    jQuery(".js-configurator-steps").scrollTo(-100); // Temporary set with jQuery
+  };
+
+  const updatePriceOutsideConfigurator = () => {
+    jQuery(".js-config-total-price").html(totalPriceHtml); // Temporary set with jQuery
   };
 
   const showSaveButtonModal = () => {
@@ -108,7 +120,7 @@ const Configurator = () => {
       "Samenstelling als offerte ontvangen",
       "save-configuration",
       window?.configurator?.configuratorId,
-      () => jQuery(".js-form-content-field").val(message)
+      () => jQuery(".js-form-content-field").val(state.message) // Temporary set with jQuery
     );
   };
 
@@ -121,7 +133,7 @@ const Configurator = () => {
         validationResult = validateByRules(
           value,
           rules,
-          configuration,
+          state.configuration,
           sizeUnit
         );
     }
@@ -132,32 +144,38 @@ const Configurator = () => {
     let invalid = {};
     steps?.forEach((step) => {
       const { id, required, options, rules } = step;
-      let value = configuration[id];
+      let value = state.configuration[id];
       if (options) {
         const optionValue = getOptionValue(id, value);
         if (optionValue) value = optionValue;
         invalid = { ...invalid, ...getInvalidOptionCombinations(id) };
       }
-      const { valid, message } = validate(value, required, rules, sizeUnit);
-      if (!valid) invalid[id] = formatTextBySizeUnit(message, sizeUnit);
+      const { valid, message } = validate(
+        value,
+        required,
+        rules,
+        state.sizeUnit
+      );
+      if (!valid) invalid[id] = formatTextBySizeUnit(message, state.sizeUnit);
     });
-    setInvalidFields(invalid);
+    //setInvalidFields(invalid);
+    dispatch({ type: "set_invalid_fields", payload: invalid });
     return Object.keys(invalid).length === 0;
   };
 
   const getInvalidOptionCombinations = (id) => {
     let invalid = {};
-    if (configuration[id]) {
+    if (state.configuration[id]) {
       const selectedOption = getSelectedOption(id);
       if (!selectedOption || !selectedOption.rules) return invalid;
       const { exclude } = selectedOption.rules;
       if (!exclude) return invalid;
       exclude?.forEach((rule) => {
         const { step, options, message } = rule;
-        if (configuration[step]) {
-          const compareConfig = configuration[step];
+        if (state.configuration[step]) {
+          const compareConfig = state.configuration[step];
           if (options.includes(compareConfig)) {
-            invalid[id] = formatTextBySizeUnit(message, sizeUnit);
+            invalid[id] = formatTextBySizeUnit(message, state.sizeUnit);
           }
         }
       });
@@ -166,84 +184,95 @@ const Configurator = () => {
   };
 
   const getSelectedOption = (id) => {
-    if (!stepsMap[id] || !stepsMap[id].options || !configuration[id]) return;
+    if (!stepsMap[id] || !stepsMap[id].options || !state.configuration[id])
+      return;
     return stepsMap[id].options.find(
-      (option) => option.id === configuration[id]
+      (option) => option.id === state.configuration[id]
     );
   };
 
   return (
     <>
-      <div className="configurator__form-rows js-configurator-steps" ref={ref}>
-        {steps.map((step) => {
-          return (
-            <Step
-              key={step.id}
-              step={step}
-              validate={validate}
-              getSelectedOption={getSelectedOption}
-            />
-          );
-        })}
-        <div className="configurator__form-row">
-          <div className="configurator__form-col configurator__form-label">
-            <label>{`Opmerking`}</label>
-          </div>
+      <ConfiguratorContext.Provider value={[state, dispatch]}>
+        <div
+          className="configurator__form-rows js-configurator-steps"
+          ref={ref}
+        >
+          {steps.map((step) => {
+            return (
+              <Step
+                key={step.id}
+                step={step}
+                validate={validate}
+                getSelectedOption={getSelectedOption}
+              />
+            );
+          })}
+          <div className="configurator__form-row">
+            <div className="configurator__form-col configurator__form-label">
+              <label>{`Opmerking`}</label>
+            </div>
 
-          <div className="configurator__form-col configurator__form-input">
-            <textarea
-              class="form-control"
-              placeholder={`Maximaal ${235} karakters`}
-              maxlength="235"
-              onChange={(e) => setMessage(e.target.value)}
-              value={message}
-            ></textarea>
-          </div>
-        </div>
-        <div className="configurator__form-row space-below">
-          <div className="configurator__form-col configurator__form-label">
-            <label>Aantal</label>
-          </div>
-          <div className="configurator__form-col configurator__form-input">
-            <select
-              className="dropdown configurator__form-control"
-              onChange={(e) => setQuantity(e.target.value)}
-              value={quantity}
-            >
-              {(() => {
-                const options = [];
-                for (let number = 1; number <= 10; number++) {
-                  options.push(<option value={number}>{number}</option>);
+            <div className="configurator__form-col configurator__form-input">
+              <textarea
+                class="form-control"
+                placeholder={`Maximaal ${235} karakters`}
+                maxlength="235"
+                onChange={(e) =>
+                  dispatch({ type: "update_message", payload: e.target.value })
                 }
-                return options;
-              })()}
-            </select>
+                value={state.message}
+              ></textarea>
+            </div>
+          </div>
+          <div className="configurator__form-row space-below">
+            <div className="configurator__form-col configurator__form-label">
+              <label>Aantal</label>
+            </div>
+            <div className="configurator__form-col configurator__form-input">
+              <select
+                className="dropdown configurator__form-control"
+                onChange={(e) =>
+                  dispatch({ type: "update_quantity", payload: e.target.value })
+                }
+                value={state.quantity}
+              >
+                {(() => {
+                  const options = [];
+                  for (let number = 1; number <= 10; number++) {
+                    options.push(<option value={number}>{number}</option>);
+                  }
+                  return options;
+                })()}
+              </select>
+            </div>
+          </div>
+          <div className="configurator__form-button small-space-below">
+            <button
+              className="btn btn--primary btn--block btn--next"
+              onClick={handleSubmitButtonClick}
+              disabled={state.loading}
+            >
+              {(!state.submitting && "In winkelwagen") || "Een moment.."}
+            </button>
+          </div>
+          <div className="configurator__form-button space-below">
+            <button
+              className="btn btn--block btn--aside"
+              onClick={handleSaveButtonClick}
+              disabled={state.loading}
+            >
+              <i class="fas fa-file-import"></i> &nbsp;&nbsp; Mail mij een
+              offerte
+            </button>
           </div>
         </div>
-        <div className="configurator__form-button small-space-below">
-          <button
-            className="btn btn--primary btn--block btn--next"
-            onClick={handleSubmitButtonClick}
-            disabled={loading}
-          >
-            {(!submitting && "In winkelwagen") || "Een moment.."}
-          </button>
-        </div>
-        <div className="configurator__form-button space-below">
-          <button
-            className="btn btn--block btn--aside"
-            onClick={handleSaveButtonClick}
-            disabled={loading}
-          >
-            <i class="fas fa-file-import"></i> &nbsp;&nbsp; Mail mij een offerte
-          </button>
-        </div>
-      </div>
-      <StickyBar
-        submitButtonHandler={handleSubmitButtonClick}
-        saveButtonHandler={handleSaveButtonClick}
-        scrollTargetRef={ref}
-      />
+        <StickyBar
+          submitButtonHandler={handleSubmitButtonClick}
+          saveButtonHandler={handleSaveButtonClick}
+          scrollTargetRef={ref}
+        />
+      </ConfiguratorContext.Provider>
     </>
   );
 };

@@ -8,7 +8,7 @@ const StickyBar = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
-  const { loading } = useContext(ConfiguratorContext);
+  const [state] = useContext(ConfiguratorContext);
 
   useEffect(() => {
     const showOnScroll = () => {
@@ -46,7 +46,7 @@ const StickyBar = ({
                 <button
                   className="btn btn--block btn--primary btn--tiny"
                   onClick={submitButtonHandler}
-                  disabled={loading}
+                  disabled={state.loading}
                 >
                   In winkelwagen
                 </button>
@@ -56,7 +56,7 @@ const StickyBar = ({
                   data-formtype="save-configuration"
                   data-meta=""
                   onClick={saveButtonHandler}
-                  disabled={loading}
+                  disabled={state.loading}
                 >
                   <i className="fas fa-file-import"></i> &nbsp;&nbsp; Offerte
                 </button>

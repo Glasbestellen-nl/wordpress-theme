@@ -18,17 +18,13 @@ const Step = ({ step, validate, getSelectedOption }) => {
     disabled,
     formula,
   } = step;
-  const { setConfiguration, sizeUnit, invalidFields } =
-    useContext(ConfiguratorContext);
+  const [state, dispatch] = useContext(ConfiguratorContext);
   const selectedOption = getSelectedOption(id);
 
   useEffect(
     // Remove element from configuration when unmounting
     () => () => {
-      setConfiguration((prevConfig) => {
-        const { [id]: removedItem, ...rest } = prevConfig;
-        return rest;
-      });
+      dispatch({ type: "remove_configuration_item", payload: { id } });
     },
     []
   );
@@ -42,10 +38,7 @@ const Step = ({ step, validate, getSelectedOption }) => {
   };
 
   const changeHandler = (value) => {
-    setConfiguration((prevConfig) => ({
-      ...prevConfig,
-      [id]: value,
-    }));
+    dispatch({ type: "update_configuration", payload: { id, value } });
   };
 
   const renderInputField = () => {
@@ -104,7 +97,7 @@ const Step = ({ step, validate, getSelectedOption }) => {
             className="configurator__form-label"
             data-explanation-id={getDescriptionId()}
           >
-            {formatTextBySizeUnit(title, sizeUnit)}
+            {formatTextBySizeUnit(title, state.sizeUnit)}
           </label>{" "}
           {required && <span>*</span>}
         </div>
@@ -118,9 +111,9 @@ const Step = ({ step, validate, getSelectedOption }) => {
         )}
         <div class={getInputRowClassNames()}>
           {renderInputField()}
-          {invalidFields[id] && (
+          {state.invalidFields[id] && (
             <div class="invalid-feedback js-invalid-feedback">
-              {invalidFields[id]}
+              {state.invalidFields[id]}
             </div>
           )}
         </div>
