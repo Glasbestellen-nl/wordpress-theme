@@ -2534,32 +2534,38 @@ const FieldNumber = _ref => {
     required,
     rules,
     disabled,
-    formula,
     changeHandler,
     validate
   } = _ref;
-  const {
-    configuration,
-    setConfiguration,
-    sizeUnit,
-    invalidFields,
-    addInvalidField,
-    removeInvalidField
-  } = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
+  const [state, dispatch] = useContext(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext);
   const [value, setValue] = useState(null);
+  useEffect(() => {
+    setValue(state.configuration[id]);
+  }, [state.configuration[id]]);
 
   const handleChange = e => {
     let value = e.target.value;
-    if (value && sizeUnit === "cm") value *= 10;
+    if (value && state.sizeUnit === "cm") value *= 10;
     const {
       valid,
       message
-    } = validate(value, required, rules, sizeUnit);
+    } = validate(value, required, rules, state.sizeUnit);
 
     if (!valid) {
-      addInvalidField(id, message);
+      dispatch({
+        type: "add_invalid_field",
+        payload: {
+          id,
+          message
+        }
+      });
     } else {
-      removeInvalidField(id);
+      dispatch({
+        type: "remove_invalid_field",
+        payload: {
+          id
+        }
+      });
     }
 
     setValue(value);
@@ -2571,14 +2577,14 @@ const FieldNumber = _ref => {
 
   const getClassNames = () => {
     const classNames = ["form-control", "configurator__form-control"];
-    if (invalidFields[id]) classNames.push("invalid");else if (value && !disabled) classNames.push("valid");
+    if (state.invalidFields[id]) classNames.push("invalid");else if (value && !disabled) classNames.push("valid");
     return classNames.join(" ");
   };
 
   const getValue = () => {
     if (!value) return "";
 
-    if (sizeUnit === "cm") {
+    if (state.sizeUnit === "cm") {
       return value / 10;
     }
 
@@ -2588,7 +2594,7 @@ const FieldNumber = _ref => {
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "number",
     className: getClassNames(),
-    placeholder: sizeUnit,
+    placeholder: state.sizeUnit,
     onChange: handleChange,
     onBlur: handleBlur,
     value: getValue(),
