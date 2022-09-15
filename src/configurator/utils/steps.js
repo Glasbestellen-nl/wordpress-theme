@@ -18,3 +18,5 @@ export const getOptionValue = (stepId, optionId) => {
   if (option && option.value) return option.value;
   return;
 };
+
+export const getStepFormula = (stepId) => {};

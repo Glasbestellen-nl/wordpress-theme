@@ -7,28 +7,20 @@ const FieldNumber = ({
   required,
   rules,
   disabled,
-  formula,
   changeHandler,
   validate,
 }) => {
-  const {
-    configuration,
-    setConfiguration,
-    sizeUnit,
-    invalidFields,
-    addInvalidField,
-    removeInvalidField,
-  } = useContext(ConfiguratorContext);
+  const [state, dispatch] = useContext(ConfiguratorContext);
   const [value, setValue] = useState(null);
 
   const handleChange = (e) => {
     let value = e.target.value;
-    if (value && sizeUnit === "cm") value *= 10;
-    const { valid, message } = validate(value, required, rules, sizeUnit);
+    if (value && state.sizeUnit === "cm") value *= 10;
+    const { valid, message } = validate(value, required, rules, state.sizeUnit);
     if (!valid) {
-      addInvalidField(id, message);
+      dispatch({ type: "add_invalid_field", payload: { id, message } });
     } else {
-      removeInvalidField(id);
+      dispatch({ type: "remove_invalid_field", payload: { id } });
     }
     setValue(value);
   };
@@ -39,14 +31,14 @@ const FieldNumber = ({
 
   const getClassNames = () => {
     const classNames = ["form-control", "configurator__form-control"];
-    if (invalidFields[id]) classNames.push("invalid");
+    if (state.invalidFields[id]) classNames.push("invalid");
     else if (value && !disabled) classNames.push("valid");
     return classNames.join(" ");
   };
 
   const getValue = () => {
     if (!value) return "";
-    if (sizeUnit === "cm") {
+    if (state.sizeUnit === "cm") {
       return value / 10;
     }
     return value;
@@ -56,7 +48,7 @@ const FieldNumber = ({
     <input
       type="number"
       className={getClassNames()}
-      placeholder={sizeUnit}
+      placeholder={state.sizeUnit}
       onChange={handleChange}
       onBlur={handleBlur}
       value={getValue()}

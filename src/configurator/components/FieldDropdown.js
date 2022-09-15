@@ -3,10 +3,10 @@ import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import Option from "./Option";
 
 const FieldDropdown = ({ id, options, changeHandler }) => {
-  const { configuration, invalidFields } = useContext(ConfiguratorContext);
+  const [state, dispatch] = useContext(ConfiguratorContext);
 
   const getValue = () => {
-    return configuration && configuration[id];
+    return state.configuration && state.configuration[id];
   };
 
   const getDefault = () => {
@@ -24,7 +24,7 @@ const FieldDropdown = ({ id, options, changeHandler }) => {
       "dropdown configurator__dropdown",
       "configurator__form-control",
     ];
-    if (invalidFields[id]) classNames.push("invalid");
+    if (state.invalidFields[id]) classNames.push("invalid");
     else classNames.push("valid");
     return classNames.join(" ");
   };
