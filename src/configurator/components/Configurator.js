@@ -31,14 +31,25 @@ const Configurator = () => {
       const response = await getConfiguration(
         window.configurator.configuratorId
       );
-      if (response && response.data && response.data.configuration) {
+      if (response?.data?.configuration) {
+        let configuration = response.data.configuration;
+        const parentStepIds = steps.map((step) => step.id);
+        for (const property in configuration) {
+          if (!parentStepIds.includes(property)) {
+            delete configuration[property];
+          }
+        }
         dispatch({
           type: "set_configuration",
-          payload: response.data.configuration,
+          payload: configuration,
         });
       }
     })();
   }, []);
+
+  useEffect(() => {
+    console.log(state.configuration);
+  }, [state.configuration]);
 
   useEffect(() => {
     if (totalPriceHtml !== "") updatePriceOutsideConfigurator();

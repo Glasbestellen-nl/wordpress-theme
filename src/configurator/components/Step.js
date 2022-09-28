@@ -21,13 +21,23 @@ const Step = ({ step, validate, getSelectedOption }) => {
   const [state, dispatch] = useContext(ConfiguratorContext);
   const selectedOption = getSelectedOption(id);
 
-  useEffect(
-    // Remove element from configuration when unmounting
-    () => () => {
+  useEffect(() => {
+    // Set step default when is child step
+    if (step.parent_step) {
+      dispatch({
+        type: "update_configuration",
+        payload: { id, value: getDefaultValue() },
+      });
+    }
+    return () => {
+      // Remove element from configuration when unmounting
       dispatch({ type: "remove_configuration_item", payload: { id } });
-    },
-    []
-  );
+    };
+  }, []);
+
+  const getDefaultValue = () => {
+    return (hasOptions() && options[0].id) || step.default;
+  };
 
   const getDescriptionId = () => {
     return description && description.id;

@@ -34,8 +34,8 @@ export const configuratorReducer = (state, action) => {
       });
       return { ...state, configuration };
     case "remove_configuration_item":
-      const { [payload.id]: removedItem, ...rest } = state;
-      return rest;
+      const { [payload.id]: removedItem, ...restConfig } = state.configuration;
+      return { ...state, configuration: restConfig };
     case "set_invalid_fields":
       return { ...state, invalidFields: payload };
     case "add_invalid_field":
