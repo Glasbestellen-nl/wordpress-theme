@@ -23,7 +23,8 @@ const Step = ({ step, validate, getSelectedOption }) => {
 
   useEffect(() => {
     // Set step default when is child step
-    if (step.parent_step) {
+    const parentStepId = step.parent_step;
+    if (parentStepId) {
       dispatch({
         type: "update_configuration",
         payload: { id, value: getDefaultValue() },
@@ -36,7 +37,12 @@ const Step = ({ step, validate, getSelectedOption }) => {
   }, []);
 
   const getDefaultValue = () => {
-    return (hasOptions() && options[0].id) || step.default;
+    if (hasOptions()) {
+      const defaultOption = options.find((option) => option.default);
+      return defaultOption?.id || null;
+    } else {
+      return step.default;
+    }
   };
 
   const getDescriptionId = () => {

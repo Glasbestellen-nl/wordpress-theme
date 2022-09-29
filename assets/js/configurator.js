@@ -2209,7 +2209,8 @@ const Configurator = () => {
       const response = await (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_3__.getConfiguration)(window.configurator.configuratorId);
 
       if (response !== null && response !== void 0 && (_response$data = response.data) !== null && _response$data !== void 0 && _response$data.configuration) {
-        let configuration = response.data.configuration;
+        let configuration = response.data.configuration; // Filter configuration on steps with parent on mount
+
         const parentStepIds = steps.map(step => step.id);
 
         for (const property in configuration) {
@@ -2355,8 +2356,7 @@ const Configurator = () => {
         message
       } = validate(value, required, rules, state.sizeUnit);
       if (!valid) invalid[id] = (0,_utils_sizeUnit__WEBPACK_IMPORTED_MODULE_4__.formatTextBySizeUnit)(message, state.sizeUnit);
-    }); //setInvalidFields(invalid);
-
+    });
     dispatch({
       type: "set_invalid_fields",
       payload: invalid
@@ -2771,7 +2771,9 @@ const Step = _ref => {
   const selectedOption = getSelectedOption(id);
   useEffect(() => {
     // Set step default when is child step
-    if (step.parent_step) {
+    const parentStepId = step.parent_step;
+
+    if (parentStepId) {
       dispatch({
         type: "update_configuration",
         payload: {
@@ -2793,7 +2795,12 @@ const Step = _ref => {
   }, []);
 
   const getDefaultValue = () => {
-    return hasOptions() && options[0].id || step.default;
+    if (hasOptions()) {
+      const defaultOption = options.find(option => option.default);
+      return (defaultOption === null || defaultOption === void 0 ? void 0 : defaultOption.id) || null;
+    } else {
+      return step.default;
+    }
   };
 
   const getDescriptionId = () => {
@@ -3042,7 +3049,8 @@ const configuratorReducer = (state, action) => {
     case "update_configuration":
       const configuration = state.configuration ? { ...state.configuration
       } : {};
-      configuration[payload.id] = payload.value;
+      configuration[payload.id] = payload.value; // Set configuration values by formula based on other values in configuration
+
       steps.forEach(step => {
         if (step.formula) {
           const calculatedValue = (0,_utils_formulas__WEBPACK_IMPORTED_MODULE_1__.calculateValueByFormula)(step.formula, configuration);

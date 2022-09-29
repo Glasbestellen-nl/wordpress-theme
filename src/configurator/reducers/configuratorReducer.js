@@ -23,6 +23,8 @@ export const configuratorReducer = (state, action) => {
         ? { ...state.configuration }
         : {};
       configuration[payload.id] = payload.value;
+
+      // Set configuration values by formula based on other values in configuration
       steps.forEach((step) => {
         if (step.formula) {
           const calculatedValue = calculateValueByFormula(

@@ -33,6 +33,8 @@ const Configurator = () => {
       );
       if (response?.data?.configuration) {
         let configuration = response.data.configuration;
+
+        // Filter configuration on steps with parent on mount
         const parentStepIds = steps.map((step) => step.id);
         for (const property in configuration) {
           if (!parentStepIds.includes(property)) {
@@ -169,7 +171,6 @@ const Configurator = () => {
       );
       if (!valid) invalid[id] = formatTextBySizeUnit(message, state.sizeUnit);
     });
-    //setInvalidFields(invalid);
     dispatch({ type: "set_invalid_fields", payload: invalid });
     return Object.keys(invalid).length === 0;
   };
