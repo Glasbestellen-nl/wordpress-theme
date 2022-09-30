@@ -28,7 +28,7 @@ const Configurator = () => {
   }, []);
 
   useEffect(() => {
-    console.log(state.steps);
+    //console.log(state.steps);
   }, [state.steps]);
 
   return (

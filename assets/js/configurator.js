@@ -2209,8 +2209,7 @@ const Configurator = () => {
       }
     })();
   }, []);
-  useEffect(() => {
-    console.log(state.steps);
+  useEffect(() => {//console.log(state.steps);
   }, [state.steps]);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_context_ConfiguratorContext__WEBPACK_IMPORTED_MODULE_1__.ConfiguratorContext.Provider, {
     value: [state, dispatch]
@@ -2629,6 +2628,40 @@ const initialState = {
   quantity: 1,
   message: ""
 };
+/**
+ * Updates active property based on parent value
+ */
+
+const updateStepsActiveProperty = steps => {
+  let updatedSteps = steps;
+  let activatedChildSteps = [];
+  steps.forEach((step, index) => {
+    updatedSteps[index].active = step.parent_step && !activatedChildSteps.includes(step.id) ? false : true;
+
+    if (step.active && step.options) {
+      const stepValue = step.value;
+      const selectedOption = step.options.find(option => option.id === stepValue);
+
+      if (selectedOption && selectedOption.child_steps) {
+        const {
+          child_steps
+        } = selectedOption;
+        const childStepIds = Array.isArray(child_steps) ? child_steps : [child_steps];
+        childStepIds.forEach(childStepId => updatedSteps = updatedSteps.map(step => {
+          if (step.id === childStepId) {
+            step.active = true;
+            activatedChildSteps.push(step.id);
+          }
+
+          return step;
+        }));
+      }
+    }
+  });
+  console.log(updatedSteps);
+  return steps;
+};
+
 const configuratorReducer = (state, action) => {
   const {
     type,
@@ -2644,32 +2677,18 @@ const configuratorReducer = (state, action) => {
         step.invalid = false;
         step.value = configuration[step.id] || null;
         return step;
-      }); // Set initial child/parent properties
-
-      steps.forEach((step, index) => {
-        if (step.active && step.options) {
-          const stepValue = step.value;
-          const selectedOption = step.options.find(option => option.id === stepValue);
-
-          if (selectedOption && selectedOption.child_steps) {
-            const {
-              child_steps
-            } = selectedOption;
-            const childStepIds = Array.isArray(child_steps) ? child_steps : [child_steps];
-            childStepIds.forEach(childStepId => steps[index].active = true);
-          }
-        }
       });
+      steps = updateStepsActiveProperty(steps);
       return { ...state,
         steps
       };
 
     case "update_step_value":
       return { ...state,
-        steps: state.steps.map(step => {
+        steps: updateStepsActiveProperty(state.steps.map(step => {
           if (step.id === payload.id) step.value = payload.value;
           return step;
-        })
+        }))
       };
   }
 };
