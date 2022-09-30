@@ -2,11 +2,11 @@ const { useContext } = wp.element;
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import Option from "./Option";
 
-const FieldDropdown = ({ id, options, changeHandler }) => {
+const FieldDropdown = ({ id, value, options, invalid, changeHandler }) => {
   const [state] = useContext(ConfiguratorContext);
 
   const getValue = () => {
-    return state.configuration && state.configuration[id];
+    return value;
   };
 
   const getDefault = () => {
@@ -24,7 +24,7 @@ const FieldDropdown = ({ id, options, changeHandler }) => {
       "dropdown configurator__dropdown",
       "configurator__form-control",
     ];
-    if (state.invalidFields[id]) classNames.push("invalid");
+    if (invalid) classNames.push("invalid");
     else classNames.push("valid");
     return classNames.join(" ");
   };

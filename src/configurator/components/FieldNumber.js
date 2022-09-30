@@ -9,43 +9,45 @@ const FieldNumber = ({
   disabled,
   changeHandler,
   validate,
+  invalid,
+  value,
 }) => {
   const [state, dispatch] = useContext(ConfiguratorContext);
-  const [value, setValue] = useState(null);
+  const [fieldValue, setFieldValue] = useState(null);
 
   useEffect(() => {
-    setValue(state.configuration[id]);
-  }, [state.configuration[id]]);
+    setFieldValue(value);
+  }, [value]);
 
   const handleChange = (e) => {
     let value = e.target.value;
     if (value && state.sizeUnit === "cm") value *= 10;
-    const { valid, message } = validate(value, required, rules, state.sizeUnit);
-    if (!valid) {
-      dispatch({ type: "add_invalid_field", payload: { id, message } });
-    } else {
-      dispatch({ type: "remove_invalid_field", payload: { id } });
-    }
-    setValue(value);
+    //const { valid, message } = validate(value, required, rules, state.sizeUnit);
+    // if (!valid) {
+    //   dispatch({ type: "add_invalid_field", payload: { id, message } });
+    // } else {
+    //   dispatch({ type: "remove_invalid_field", payload: { id } });
+    // }
+    setFieldValue(value);
   };
 
   const handleBlur = () => {
-    changeHandler(value);
+    changeHandler(fieldValue);
   };
 
   const getClassNames = () => {
     const classNames = ["form-control", "configurator__form-control"];
-    if (state.invalidFields[id]) classNames.push("invalid");
-    else if (value && !disabled) classNames.push("valid");
+    if (invalid) classNames.push("invalid");
+    else if (fieldValue && !disabled) classNames.push("valid");
     return classNames.join(" ");
   };
 
   const getValue = () => {
-    if (!value) return "";
+    if (!fieldValue) return "";
     if (state.sizeUnit === "cm") {
-      return value / 10;
+      return fieldValue / 10;
     }
-    return value;
+    return fieldValue;
   };
 
   return (
