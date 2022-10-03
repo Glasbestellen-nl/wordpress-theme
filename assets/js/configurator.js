@@ -2380,7 +2380,7 @@ const Configurator = () => {
   };
 
   const scrollToInvalidFields = () => {
-    jQuery(".js-configurator-steps").scrollTo(-100); // Temporary set with jQuery
+    jQuery(".js-invalid-configurator-step").scrollTo(-100); // Temporary set with jQuery
   };
 
   const updatePriceOutsideConfigurator = () => {
@@ -2762,6 +2762,7 @@ const Step = _ref => {
 
   const getClassNames = () => {
     const classNames = ["configurator__form-row"];
+    if (invalid) classNames.push("js-invalid-configurator-step");
     return classNames.join(" ");
   };
 
@@ -3083,6 +3084,16 @@ const configuratorReducer = (state, action) => {
 
           return step;
         })
+      };
+
+    case "update_quantity":
+      return { ...state,
+        quantity: payload
+      };
+
+    case "update_message":
+      return { ...state,
+        message: payload
       };
 
     case "submitting":

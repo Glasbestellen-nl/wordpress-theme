@@ -21,6 +21,7 @@ const Step = ({ step }) => {
 
   const getClassNames = () => {
     const classNames = ["configurator__form-row"];
+    if (invalid) classNames.push("js-invalid-configurator-step");
     return classNames.join(" ");
   };
 

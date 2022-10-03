@@ -110,6 +110,10 @@ export const configuratorReducer = (state, action) => {
           return step;
         }),
       };
+    case "update_quantity":
+      return { ...state, quantity: payload };
+    case "update_message":
+      return { ...state, message: payload };
     case "submitting":
       return { ...state, submitting: payload };
     default:
