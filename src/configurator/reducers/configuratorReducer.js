@@ -39,7 +39,6 @@ const updateStepsActiveProperty = (steps) => {
       }
     }
   });
-  console.log(updatedSteps);
   return steps;
 };
 
@@ -48,7 +47,6 @@ export const configuratorReducer = (state, action) => {
   switch (type) {
     case "init_steps":
       const configuration = payload.configuration;
-      // Create initial step objects
       let steps = payload.steps.map((step) => {
         step.active = step.parent_step ? false : true;
         step.invalid = false;
@@ -57,7 +55,14 @@ export const configuratorReducer = (state, action) => {
       });
       steps = updateStepsActiveProperty(steps);
       return { ...state, steps };
-
+    case "update_step":
+      return {
+        ...state,
+        steps: state.steps.map((step) => {
+          if (step.id === payload.id) step[payload.property] = payload.value;
+          return step;
+        }),
+      };
     case "update_step_value":
       return {
         ...state,
@@ -68,5 +73,25 @@ export const configuratorReducer = (state, action) => {
           })
         ),
       };
+
+    case "update_invalid_steps":
+      return {
+        ...state,
+        steps: state.steps.map((step) => {
+          step.invalid = false;
+          if (payload) {
+            payload.forEach((invalid) => {
+              if (invalid.id === step.id) {
+                step.invalid = invalid.message;
+              }
+            });
+          }
+          return step;
+        }),
+      };
+    case "submitting":
+      return { ...state, submitting: payload };
+    default:
+      return state;
   }
 };

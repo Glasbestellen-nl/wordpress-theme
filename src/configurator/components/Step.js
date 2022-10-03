@@ -70,6 +70,8 @@ const Step = ({ step }) => {
       return (
         <FieldNumber
           id={id}
+          value={value}
+          invalid={invalid}
           changeHandler={changeHandler}
           rules={rules}
           required={required}

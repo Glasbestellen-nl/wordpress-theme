@@ -1,6 +1,8 @@
 const { useState, useContext, useEffect } = wp.element;
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import { calculateValueByFormula } from "../utils/formulas";
+import { validate } from "../utils/validation";
+import { getConfigurationFromSteps } from "../utils/configuration";
 
 const FieldNumber = ({
   id,
@@ -8,7 +10,6 @@ const FieldNumber = ({
   rules,
   disabled,
   changeHandler,
-  validate,
   invalid,
   value,
 }) => {
@@ -22,12 +23,24 @@ const FieldNumber = ({
   const handleChange = (e) => {
     let value = e.target.value;
     if (value && state.sizeUnit === "cm") value *= 10;
-    //const { valid, message } = validate(value, required, rules, state.sizeUnit);
-    // if (!valid) {
-    //   dispatch({ type: "add_invalid_field", payload: { id, message } });
-    // } else {
-    //   dispatch({ type: "remove_invalid_field", payload: { id } });
-    // }
+    const { valid, message } = validate(
+      value,
+      required,
+      rules,
+      getConfigurationFromSteps(state.steps),
+      state.sizeUnit
+    );
+    if (!valid) {
+      dispatch({
+        type: "update_step",
+        payload: { id, property: "invalid", value: message },
+      });
+    } else {
+      dispatch({
+        type: "update_step",
+        payload: { id, property: "invalid", value: false },
+      });
+    }
     setFieldValue(value);
   };
 

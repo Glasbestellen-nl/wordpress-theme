@@ -88,3 +88,14 @@ export const validateByRules = (
   }
   return { valid, message };
 };
+
+export const validate = (value, required, rules, configuration, sizeUnit) => {
+  let validationResult = required
+    ? validateBasic(value)
+    : { valid: true, message: "" };
+  if (validationResult.valid) {
+    if (rules)
+      validationResult = validateByRules(value, rules, configuration, sizeUnit);
+  }
+  return validationResult;
+};

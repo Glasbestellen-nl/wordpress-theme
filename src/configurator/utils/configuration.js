@@ -3,6 +3,14 @@ import qs from "qs";
 
 const { ajaxUrl, ajaxNonce } = window.gb;
 
+export const getConfigurationFromSteps = (steps) => {
+  let configuration = {};
+  steps.forEach((step) => {
+    if (step.value && step.active) configuration[step.id] = step.value;
+  });
+  return configuration;
+};
+
 export const getConfiguration = async (configuratorId) => {
   const response = await axios.post(
     ajaxUrl,
