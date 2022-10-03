@@ -1,3 +1,6 @@
+import { calculateValueByFormula } from "../utils/formulas";
+import { getConfigurationFromSteps } from "../utils/configuration";
+
 export const initialState = {
   steps: [],
   sizeUnit: window?.configurator?.settings?.size_unit || "mm",
@@ -42,6 +45,23 @@ const updateStepsActiveProperty = (steps) => {
   return steps;
 };
 
+/**
+ * Sets step values by formula based on other step values
+ */
+const updateStepsValueByFormula = (steps) => {
+  const configuration = getConfigurationFromSteps(steps);
+  return steps.map((step) => {
+    if (step.formula) {
+      const calculatedValue = calculateValueByFormula(
+        step.formula,
+        configuration
+      );
+      step.value = Math.round(calculatedValue);
+    }
+    return step;
+  });
+};
+
 export const configuratorReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
@@ -53,7 +73,7 @@ export const configuratorReducer = (state, action) => {
         step.value = configuration[step.id] || null;
         return step;
       });
-      steps = updateStepsActiveProperty(steps);
+      steps = updateStepsValueByFormula(updateStepsActiveProperty(steps));
       return { ...state, steps };
     case "update_step":
       return {
@@ -66,14 +86,15 @@ export const configuratorReducer = (state, action) => {
     case "update_step_value":
       return {
         ...state,
-        steps: updateStepsActiveProperty(
-          state.steps.map((step) => {
-            if (step.id === payload.id) step.value = payload.value;
-            return step;
-          })
+        steps: updateStepsValueByFormula(
+          updateStepsActiveProperty(
+            state.steps.map((step) => {
+              if (step.id === payload.id) step.value = payload.value;
+              return step;
+            })
+          )
         ),
       };
-
     case "update_invalid_steps":
       return {
         ...state,

@@ -2969,7 +2969,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "configuratorReducer": () => (/* binding */ configuratorReducer),
 /* harmony export */   "initialState": () => (/* binding */ initialState)
 /* harmony export */ });
+/* harmony import */ var _utils_formulas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/formulas */ "./src/configurator/utils/formulas.js");
+/* harmony import */ var _utils_configuration__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/configuration */ "./src/configurator/utils/configuration.js");
 var _window, _window$configurator, _window$configurator$;
+
+
 
 const initialState = {
   steps: [],
@@ -3011,6 +3015,22 @@ const updateStepsActiveProperty = steps => {
   });
   return steps;
 };
+/**
+ * Sets step values by formula based on other step values
+ */
+
+
+const updateStepsValueByFormula = steps => {
+  const configuration = (0,_utils_configuration__WEBPACK_IMPORTED_MODULE_1__.getConfigurationFromSteps)(steps);
+  return steps.map(step => {
+    if (step.formula) {
+      const calculatedValue = (0,_utils_formulas__WEBPACK_IMPORTED_MODULE_0__.calculateValueByFormula)(step.formula, configuration);
+      step.value = Math.round(calculatedValue);
+    }
+
+    return step;
+  });
+};
 
 const configuratorReducer = (state, action) => {
   const {
@@ -3027,7 +3047,7 @@ const configuratorReducer = (state, action) => {
         step.value = configuration[step.id] || null;
         return step;
       });
-      steps = updateStepsActiveProperty(steps);
+      steps = updateStepsValueByFormula(updateStepsActiveProperty(steps));
       return { ...state,
         steps
       };
@@ -3042,10 +3062,10 @@ const configuratorReducer = (state, action) => {
 
     case "update_step_value":
       return { ...state,
-        steps: updateStepsActiveProperty(state.steps.map(step => {
+        steps: updateStepsValueByFormula(updateStepsActiveProperty(state.steps.map(step => {
           if (step.id === payload.id) step.value = payload.value;
           return step;
-        }))
+        })))
       };
 
     case "update_invalid_steps":
