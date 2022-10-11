@@ -1,4 +1,4 @@
-const { useState, useContext, useEffect } = wp.element;
+const { useState, useContext, useEffect, useRef } = wp.element;
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import { calculateValueByFormula } from "../utils/formulas";
 import { validate } from "../utils/validation";
@@ -15,12 +15,14 @@ const FieldNumber = ({
 }) => {
   const [state, dispatch] = useContext(ConfiguratorContext);
   const [fieldValue, setFieldValue] = useState(null);
+  const [touched, setTouched] = useState(false);
 
   useEffect(() => {
     setFieldValue(value);
   }, [value]);
 
   const handleChange = (e) => {
+    if (!touched) setTouched(true);
     let value = e.target.value;
     if (value && state.sizeUnit === "cm") value *= 10;
     const { valid, message } = validate(
@@ -45,13 +47,14 @@ const FieldNumber = ({
   };
 
   const handleBlur = () => {
+    if (!touched) setTouched(true);
     changeHandler(fieldValue);
   };
 
   const getClassNames = () => {
     const classNames = ["form-control", "configurator__form-control"];
     if (invalid) classNames.push("invalid");
-    else if (fieldValue && !disabled) classNames.push("valid");
+    else if (touched && fieldValue && !disabled) classNames.push("valid");
     return classNames.join(" ");
   };
 
