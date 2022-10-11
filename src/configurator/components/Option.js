@@ -3,7 +3,7 @@ import { priceIncludingVat, formatPrice } from "../utils/price";
 import { formatTextBySizeUnit } from "../utils/sizeUnit";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 
-const Option = ({ option, defaultOption }) => {
+const Option = ({ stepId, option, defaultOption }) => {
   const { id, title, price } = option;
   const [state] = useContext(ConfiguratorContext);
 
@@ -29,6 +29,9 @@ const Option = ({ option, defaultOption }) => {
       if (parseInt(plusPrice) !== 0 && !isNaN(plusPrice)) {
         const plusFormattedPrice = formatPrice(priceIncludingVat(plusPrice));
         finalTitle.push("+ " + plusFormattedPrice);
+      }
+      if (["coating", "glasstype"].includes(stepId)) {
+        finalTitle.push(" / m2");
       }
     }
     return formatTextBySizeUnit(finalTitle.join(" "), state.sizeUnit);

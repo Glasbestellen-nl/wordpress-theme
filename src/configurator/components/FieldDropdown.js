@@ -36,6 +36,7 @@ const FieldDropdown = ({ id, value, options, invalid, changeHandler }) => {
         options.length > 0 &&
         options.map((option) => (
           <Option
+            stepId={id}
             key={option.id}
             option={option}
             defaultOption={getDefault()}

@@ -2521,6 +2521,7 @@ const FieldDropdown = _ref => {
   }, !getDefault() && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: ""
   }, "Geen"), options && options.length > 0 && options.map(option => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Option__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    stepId: id,
     key: option.id,
     option: option,
     defaultOption: getDefault()
@@ -2671,6 +2672,7 @@ const {
 
 const Option = _ref => {
   let {
+    stepId,
     option,
     defaultOption
   } = _ref;
@@ -2705,6 +2707,10 @@ const Option = _ref => {
       if (parseInt(plusPrice) !== 0 && !isNaN(plusPrice)) {
         const plusFormattedPrice = (0,_utils_price__WEBPACK_IMPORTED_MODULE_1__.formatPrice)((0,_utils_price__WEBPACK_IMPORTED_MODULE_1__.priceIncludingVat)(plusPrice));
         finalTitle.push("+ " + plusFormattedPrice);
+      }
+
+      if (["coating", "glasstype"].includes(stepId)) {
+        finalTitle.push(" / m2");
       }
     }
 
