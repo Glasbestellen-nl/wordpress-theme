@@ -70,99 +70,11 @@ if ( post_password_required() ) {
 		<p><?php echo sprintf( __( 'Klik voor meer informatie op het %s symbool.', 'glasbestellen' ), '<i class="fas fa-info-circle configurator__info-icon"></i>' ); ?></p>
 	</div>
 
+	<div></div>
+
 	<form method="post" class="configurator__form js-configurator-blur-update js-configurator-form">
 
-		<?php
-		while ( $configurator->have_steps() ) {
-			$configurator->the_step();
-			$step_id = $configurator->get_step_id();
-
-			$label_class = '';
-			$explanation_id = false;
-			if ( $configurator->get_step_explanation_id() ) {
-				$label_class    = 'configurator__form-label--link js-popup-explanation';
-				$explanation_id = $configurator->get_step_explanation_id();
-			}
-			$options = $configurator->get_step_options();
-			?>
-
-			<div class="configurator__form-row <?php echo $configurator->get_step_class( $step_id ); ?>" data-step-id="<?php echo $step_id; ?>">
-
-				<div class="configurator__form-col">
-					<label class="configurator__form-label <?php echo $label_class; ?>" data-explanation-id="<?php echo $explanation_id; ?>"><?php echo $configurator->get_step_title(); ?></label>
-					<?php if ( ( $configurator->is_step_required() && ! $options ) || ( $configurator->is_step_required() && $options && count( $options ) > 1 ) ) { ?>
-						<span>*</span>
-					<?php } ?>
-				</div>
-
-				<div class="configurator__form-col configurator__form-info <?php echo ( ! $explanation_id ) ? 'd-none d-md-block' : ''; ?>">
-					<?php if ( $explanation_id ) { ?>
-						<i class="fas fa-info-circle configurator__info-icon js-popup-explanation" data-explanation-id="<?php echo $explanation_id; ?>"></i>
-					<?php } ?>
-				</div>
-
-				<?php
-				if ( $options ) {
-					if ( count( $options ) > 1 || ( count( $options ) == 1 && ! $configurator->is_step_required() )  ) { ?>
-
-						<div class="configurator__form-col configurator__form-input js-form-group">
-							<select name="configuration[<?php echo $step_id; ?>]" class="dropdown configurator__dropdown configurator__form-control js-form-validate js-step-input-<?php echo $step_id; ?>" data-step-title="<?php echo $configurator->get_step_title(); ?>" data-step-id="<?php echo $step_id; ?>" data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>'>
-							<?php $configurator->render_step_options(); ?>
-							</select>
-							<div class="invalid-feedback js-invalid-feedback"></div>
-						</div>
-
-					<?php } else { ?>
-						<div class="configurator__form-col configurator__form-input configurator__form-input--default">
-							<span><?php echo $options[0]->get_title(); ?></span>
-							<input type="hidden" name="configuration[<?php echo $step_id; ?>]" value="<?php echo $options[0]->get_id(); ?>" class="js-input-hidden">
-						</div>
-					<?php } ?>
-
-				<?php } else { ?>
-					<div class="configurator__form-col configurator__form-input js-form-group">
-						<input type="number" name="configuration[<?php echo $step_id; ?>]" class="form-control configurator__form-control js-form-validate" placeholder="<?php echo $configurator->get_size_unit(); ?>" <?php echo ( $configurator->is_step_required() ) ? 'data-required="true"' : ''; ?> data-validation-rules='<?php echo $configurator->get_validation_rules(); ?>' value="<?php echo $configurator->get_step_value( $step_id, true ); ?>" />
-						<div class="invalid-feedback js-invalid-feedback"></div>
-					</div>
-				<?php } ?>
-			</div>
-
-		<?php } ?>
-
-		<div class="configurator__form-row">
-
-			<div class="configurator__form-col configurator__form-label">
-				<label><?php _e( 'Opmerking', 'glasbestellen' ) ?></label>
-			</div>
-
-			<div class="configurator__form-col configurator__form-input">
-				<textarea class="form-control js-configurator-message" placeholder="<?php echo sprintf( __( 'Maximaal %d karakters', 'glasbestellen' ), 235 ); ?>" maxlength="235"></textarea>
-			</div>
-
-		</div>
-
-		<div class="configurator__form-row space-below">
-			<div class="configurator__form-col configurator__form-label">
-				<label><?php _e( 'Aantal', 'glasbestellen' ) ?></label>
-			</div>
-			<div class="configurator__form-col configurator__form-input">
-				<select class="dropdown configurator__form-control js-configurator-quantity">
-					<?php for ( $i = 1; $i <= 10; $i ++ ) { ?>
-						<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-					<?php } ?>
-				</select>
-			</div>
-		</div>
-
-		<div class="configurator__form-button small-space-below">
-			<button class="btn btn--primary btn--block btn--next js-configurator-cart-button"><?php _e( 'In winkelwagen', 'glasbestellen' ); ?></button>
-		</div>
-
-		<?php if ( ! get_field( 'disable_quote_button' ) ) { ?>
-			<div class="configurator__form-button space-below">
-				<span class="btn btn--block btn--aside js-configurator-save-button" data-popup-title="<?php _e( 'Samenstelling als offerte ontvangen', 'glasbestellen' ); ?>" data-formtype="save-configuration" data-meta="<?php echo $product->get_configurator_id(); ?>"><i class="fas fa-file-import"></i> &nbsp;&nbsp;<?php _e( 'Mail mij een offerte', 'glasbestellen' ); ?></span>
-			</div>
-		<?php } ?>
+		<div id="react_configurator"></div>
 
 		<ul class="configurator__checks space-below">
 			<?php

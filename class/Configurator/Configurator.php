@@ -54,6 +54,13 @@ class Configurator {
    }
 
    /**
+    * Returns default configuration
+    */
+   public function get_default_configuration() {
+      return $this->_default_configuration;
+   }
+
+   /**
     * Return total calculated price
     *
     * @param bool $round whether change the price so the vat included price is
@@ -221,11 +228,11 @@ class Configurator {
          'id' => $index + 1,
          'title' => $value . ' mm',
          'value' => $value,
-         'default' => $index == 1
+         'default' => $index == 0
       ];
    }
 
-   protected function insert_step_options_from_matrix( $step ) {
+   public function insert_step_options_from_matrix( $step ) {
 
       if ( empty( $step ) ) return;
       $matrix = $this->get_price_matrix();
@@ -503,6 +510,11 @@ class Configurator {
       return $value;
    }
 
+   public function is_step_disabled( string $step_id ) {
+      $this->set_current_step( $step_id );
+      return $this->_current_step->is_disabled();
+   }
+
    /**
     * Returns the current step type
     *
@@ -652,10 +664,10 @@ class Configurator {
     */
    public function get_step_default( string $step_id = '' ) {
       $this->set_current_step( $step_id );
-      $args = [
-         'size_unit' => $this->get_size_unit()
-      ];
-      return $this->_current_step->get_default( $args );
+      // $args = [
+      //    'size_unit' => $this->get_size_unit()
+      // ];
+      return $this->_current_step->get_default();
    }
 
    /**
@@ -734,7 +746,7 @@ class Configurator {
 
          if ( ! empty( $input ) ) {
             $option_title = $this->get_option_title( $step_id, $input );
-            $value = $option_title ? $option_title : $input;
+            $value = $option_title ? $option_title : \Utilities::convert_mm_string_to_cm( $input, $this->get_size_unit() );
          } elseif ( 0 == $input ) {
             $value = 0;
          } else {

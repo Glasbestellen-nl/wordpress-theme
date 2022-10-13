@@ -75,8 +75,6 @@ get_header( 'shop' );
 		</div>
 	</div>
 	
-	<?php wc_get_template_part( 'single-product/sticky-bar' ); ?>
-
 </main>	
 
 <?php

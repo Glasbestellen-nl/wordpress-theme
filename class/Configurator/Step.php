@@ -91,6 +91,10 @@ class Step {
       return $this->get_field( 'parent_step' );
    }
 
+   public function is_disabled() {
+      return $this->get_field( 'disabled' );
+   }
+
    public function get_class( array $additional_classes = [] ) {
 
       $classes = [
@@ -163,12 +167,7 @@ class Step {
    }
 
    protected function convert_mm_string_to_cm( $value = '', $size_unit = 'mm' ) {
-      $value = ( $size_unit == 'cm' && is_numeric( $value ) ) ? $value / 10 : $value;
-      $value = preg_replace_callback( '/\d+(?:[,.]\d+)?(?=\s*(?:mm))/', function( $matches ) {
-         return ( $matches[0] / 10 );
-      }, $value );
-      $value = str_replace( 'mm', 'cm', $value );
-      return $value;
+      return \Utilities::convert_mm_string_to_cm( $value, $size_unit );
    }
 
 }

@@ -22,18 +22,12 @@ class Led_Mirror extends \Configurator\Configurator {
          $width  = $configuration['width'];
          $height = $configuration['height'];
 
-         if ( $this->get_size_unit() == 'cm' ) {
-            $width  = $this->convert_to_mm( $width );
-            $height = $this->convert_to_mm( $height );
-         }
-
          if ( $price_matrix = $this->get_price_matrix() ) {
             $price_table['size'] = $price_matrix->get_price( $width, $height );
             if ( $margin_number = $this->get_metadata( 'price_matrix_margin_number' ) ) {
                $price_table['size'] /= $margin_number;
             }
          }
-
 
          // Extra shipping large products
          if ( ( $width > 1200 ) || ( $height > 1200 ) ) {
@@ -55,7 +49,6 @@ class Led_Mirror extends \Configurator\Configurator {
             }
             $price_table['large_size'] = $price_addition;
          }
-
       }
 
       foreach ( $configuration as $step_id => $input ) {
