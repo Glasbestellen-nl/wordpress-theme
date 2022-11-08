@@ -43,6 +43,7 @@ const FieldNumber = ({
         payload: { id, property: "invalid", value: false },
       });
     }
+    if (valid && value === 0) value = value.toString(); // to allow number 0
     setFieldValue(value);
   };
 

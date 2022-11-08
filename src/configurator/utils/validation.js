@@ -3,7 +3,7 @@ import { convertNumberBySizeUnit } from "./sizeUnit";
 import { getOptionValue } from "./steps";
 
 export const validateBasic = (value) => {
-  if (!value || value === "") {
+  if (value === "") {
     return { valid: false, message: msg.enterField };
   } else {
     return { valid: true, message: "" };
