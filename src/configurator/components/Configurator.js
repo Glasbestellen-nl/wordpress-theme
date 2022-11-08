@@ -1,5 +1,6 @@
 const { useReducer, useState, useEffect, useRef } = wp.element;
-import { isEqual, isEmpty } from "lodash";
+import isEmpty from "lodash/isEmpty";
+import isEqual from "lodash/isEqual";
 import { ConfiguratorContext } from "../context/ConfiguratorContext";
 import StickyBar from "./StickyBar";
 import {

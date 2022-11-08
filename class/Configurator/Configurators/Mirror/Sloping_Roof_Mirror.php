@@ -73,10 +73,10 @@ class Sloping_Roof_Mirror extends \Configurator\Configurator {
       if ( $width == 0 ) $width = $this->get_step_default( 'width_top' );
       if ( $height == 0 ) $height = $this->get_step_default( 'height_top' );
 
-      if ( $this->get_size_unit() == 'cm' ) {
-         $width  = $this->convert_to_mm( $width );
-         $height = $this->convert_to_mm( $height );
-      }
+      // if ( $this->get_size_unit() == 'cm' ) {
+      //    $width  = $this->convert_to_mm( $width );
+      //    $height = $this->convert_to_mm( $height );
+      // }
 
       if ( $price_matrix = $this->get_price_matrix() ) {
          $price_table['size'] = $price_matrix->get_price( $width, $height );

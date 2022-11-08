@@ -231,9 +231,12 @@ add_action( 'woocommerce_process_product_meta', 'gb_process_product_meta', 10 );
 function gb_single_product_wrapper_class() {
     global $product;
     $classes = [];
-    if ( 'configurable' == $product->get_type() ) {
-        $classes[] = 'configurator';
-        $classes[] = 'js-configurator';
+    if ( ! is_a( $product, 'WC_Product' ) ) {
+        $product = wc_get_product( get_the_id() );
+        if ( 'configurable' == $product->get_type() ) {
+            $classes[] = 'configurator';
+            $classes[] = 'js-configurator';
+        }
     }
     $classes = apply_filters( 'gb_single_product_wrapper_class', $classes, $product );
     return implode( ' ', $classes );
