@@ -5,6 +5,12 @@ import {
   loadModalContent,
 } from "./functions";
 
+const { render } = wp.element;
+import LeadForm from "./components/LeadForm";
+if (document.getElementById("react_lead_form")) {
+  render(<LeadForm />, document.getElementById("react_lead_form"));
+}
+
 /**
  * jQuery plugin: Checks whether element in viewport
  */

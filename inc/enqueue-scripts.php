@@ -17,7 +17,7 @@ function gb_enqueue_scripts() {
 
    // Scripts
    wp_enqueue_script( 'masonry' );
-   wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], $version, true );
+   wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', ['jquery', 'wp-element'], $version, true );
 
    // Localize scripts
    $l10n = [

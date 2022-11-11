@@ -33,7 +33,9 @@ get_header();
 
                <div class="col-12 col-lg-8">
 
-                  <form method="post" enctype="multipart/form-data" class="layout__column js-form-validation" novalidate>
+                  <div id="react_lead_form"></div>
+
+                  <!-- <form method="post" enctype="multipart/form-data" class="layout__column js-form-validation" novalidate>
 
                      <p class="js-error-alert alert alert--danger" style="display: none;"></p>
 
@@ -86,7 +88,7 @@ get_header();
 
                      </div>
 
-                  </form>
+                  </form> -->
 
                </div>
 
