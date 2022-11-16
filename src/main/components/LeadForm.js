@@ -1,4 +1,5 @@
 const { useReducer } = wp.element;
+import axios from "axios";
 import { emailIsValid } from "../functions";
 import FileUploader from "./FileUploader";
 
@@ -6,10 +7,10 @@ const initialState = {
   errors: {},
   valid: {},
   fields: {
-    message: "",
-    name: "",
-    email: "",
-    place: "",
+    content: "dfdfsd",
+    name: "test",
+    email: "test@test.nl",
+    residence: "oosterhout",
     phone: "",
   },
   files: [],
@@ -96,7 +97,7 @@ const LeadForm = () => {
     return valid;
   };
 
-  const handleSubmitButtonClick = (e) => {
+  const handleSubmitButtonClick = async (e) => {
     e.preventDefault();
     let valid = true;
     const fieldNames = Object.keys(state.fields);
@@ -107,7 +108,27 @@ const LeadForm = () => {
       }
     });
     if (valid) {
-      console.log("Go!");
+      const formData = new FormData();
+      formData.append("action", "handle_lead_form_submit");
+      formData.append("nonce", gb.ajaxNonce);
+      formData.append("request_uri", gb.requestURI);
+
+      // Append fields
+      Object.keys(state.fields).forEach((name) => {
+        formData.append(`lead[${name}]`, state.fields[name]);
+      });
+
+      // Append files
+      if (state.files.length > 0) {
+        state.files.forEach((file) => formData.append("attachment[]", file));
+      }
+
+      const response = await axios.post(gb.ajaxUrl, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response);
     }
   };
 
@@ -129,15 +150,15 @@ const LeadForm = () => {
             Beschrijf uw wensen en uw situatie <span className="req">*</span>
           </label>
           <textarea
-            name="message"
-            className={`form-control ${getFieldClassName("message")}`}
+            name="content"
+            className={`form-control ${getFieldClassName("content")}`}
             rows="6"
             placeholder="Beschrijf uw wensen en uw situatie"
             onChange={handleChange}
-            value={state.fields.message}
+            value={state.fields.content}
           ></textarea>
-          {state.errors.message && (
-            <div className="invalid-feedback">{state.errors.message}</div>
+          {state.errors.content && (
+            <div className="invalid-feedback">{state.errors.content}</div>
           )}
         </div>
         <div className="mb-4 grid md:grid-cols-2 gap-5">
@@ -180,15 +201,15 @@ const LeadForm = () => {
               Woonplaats: <span className="req">*</span>
             </label>
             <input
-              name="place"
+              name="residence"
               type="text"
-              className={`form-control ${getFieldClassName("place")}`}
+              className={`form-control ${getFieldClassName("residence")}`}
               placeholder="Woonplaats"
               onChange={handleChange}
-              value={state.fields.place}
+              value={state.fields.residence}
             />
             {state.errors.place && (
-              <div className="invalid-feedback">{state.errors.place}</div>
+              <div className="invalid-feedback">{state.errors.residence}</div>
             )}
           </div>
 
