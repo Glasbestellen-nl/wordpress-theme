@@ -54,3 +54,10 @@ export const loadModalContent = (html, title = "", callback) => {
   jQuery(".js-modal-inner").fadeIn(300);
   if (callback) callback(jQuery(".js-modal"));
 };
+
+/**
+ * Checks whether an email is valid
+ */
+export const emailIsValid = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};

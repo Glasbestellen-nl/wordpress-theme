@@ -3,6 +3,7 @@ import {
   showModal,
   hideModal,
   loadModalContent,
+  emailIsValid,
 } from "./functions";
 
 const { render } = wp.element;
@@ -509,7 +510,14 @@ jQuery.fn.scrollTo = function (offset) {
     let formtype = $(this).data("formtype");
     let metadata = $(this).data("meta");
 
-    showModalForm(title, formtype, metadata);
+    if (formtype === "lead") {
+      title = "Contactformulier";
+      showModal(title);
+      loadModalContent();
+      render(<LeadForm />, document.getElementById("modal_body"));
+    } else {
+      showModalForm(title, formtype, metadata); // Later convert to full react approach
+    }
   });
 
   /**
@@ -637,13 +645,6 @@ function isInvalid(element, msg) {
   jQuery(element).removeClass("valid");
   jQuery(element).addClass("invalid");
   feedback.show().text(msg);
-}
-
-/**
- * Checks whether an email is valid
- */
-function emailIsValid(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 /**

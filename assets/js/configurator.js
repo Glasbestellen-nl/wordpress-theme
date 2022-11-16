@@ -3464,6 +3464,7 @@ const validate = (value, required, rules, configuration, sizeUnit) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "emailIsValid": () => (/* binding */ emailIsValid),
 /* harmony export */   "hideModal": () => (/* binding */ hideModal),
 /* harmony export */   "loadModalContent": () => (/* binding */ loadModalContent),
 /* harmony export */   "showModal": () => (/* binding */ showModal),
@@ -3529,6 +3530,13 @@ const loadModalContent = function (html) {
   jQuery(".js-modal-loader").hide();
   jQuery(".js-modal-inner").fadeIn(300);
   if (callback) callback(jQuery(".js-modal"));
+};
+/**
+ * Checks whether an email is valid
+ */
+
+const emailIsValid = email => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
 
 /***/ }),

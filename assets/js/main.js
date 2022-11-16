@@ -16,7 +16,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 
 const {
-  useRef
+  useRef,
+  useState
 } = wp.element;
 
 const FileUploader = _ref => {
@@ -26,6 +27,7 @@ const FileUploader = _ref => {
     removeFileHandler
   } = _ref;
   const fileFieldRef = useRef();
+  const [error, setError] = useState(false);
   const headClassNames = ["p-2 flex border border-gray-300 bg-[#fcfcfc] rounded-tl rounded-tr"];
 
   if (files.length === 0) {
@@ -38,12 +40,30 @@ const FileUploader = _ref => {
   };
 
   const handleChange = e => {
-    const files = e.target.files;
-    if (!files) return;
-    addFilesHandler([...files]);
+    setError(false);
+    const newFiles = e.target.files;
+    if (!newFiles) return;
+    const maxCombinedFileSize = 8000000;
+    const allowedFileTypes = window.gb.allowedFileTypes;
+    let combinedFileSize = 0;
+    let notAllowedFileType = false; // File size and type check
+
+    [...files, ...newFiles].forEach(file => {
+      if (!Object.values(allowedFileTypes).includes(file.type)) notAllowedFileType = file.type;
+      combinedFileSize += file.size;
+    });
+
+    if (combinedFileSize > maxCombinedFileSize) {
+      setError(gb.msg.fileUploadLimit.replace("{0}", maxCombinedFileSize / 1000000));
+    } else if (notAllowedFileType) {
+      setError(gb.msg.fileTypeNotAllowed.replace("{0}", notAllowedFileType));
+    } else {
+      addFilesHandler([...newFiles]);
+    }
   };
 
   const handleFileDeleteButtonClick = index => {
+    setError(false);
     removeFileHandler(index);
   };
 
@@ -57,7 +77,9 @@ const FileUploader = _ref => {
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
   };
 
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, error && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "alert alert--danger mb-2"
+  }, error), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "shadow-sm"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: headClassNames.join(" ")
@@ -96,7 +118,7 @@ const FileUploader = _ref => {
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
       d: "M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
     }), " ")));
-  }))));
+  })))));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FileUploader);
@@ -116,58 +138,202 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _FileUploader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FileUploader */ "./src/main/components/FileUploader.js");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../functions */ "./src/main/functions.js");
+/* harmony import */ var _FileUploader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FileUploader */ "./src/main/components/FileUploader.js");
 
 const {
-  useState,
-  useEffect
+  useReducer
 } = wp.element;
 
 
-const LeadForm = () => {
-  const [errors, setErrors] = useState([]);
-  const [formData, setFormData] = useState({
+const initialState = {
+  errors: {},
+  valid: {},
+  fields: {
+    message: "",
     name: "",
     email: "",
     place: "",
-    phone: "",
-    files: []
-  });
+    phone: ""
+  },
+  files: []
+};
+
+const reducer = (state, action) => {
   const {
-    files
-  } = formData;
+    type,
+    payload
+  } = action;
+
+  switch (type) {
+    case "add_files":
+      return { ...state,
+        files: [...state.files, ...payload.files]
+      };
+
+    case "remove_file":
+      return { ...state,
+        files: state.files.filter((file, i) => i !== payload.index)
+      };
+
+    case "set_field":
+      return { ...state,
+        fields: { ...state.fields,
+          [payload.name]: payload.value
+        }
+      };
+
+    case "set_field_error":
+      return { ...state,
+        errors: { ...state.errors,
+          [payload.name]: payload.message
+        },
+        valid: { ...state.valid,
+          [payload.name]: false
+        }
+      };
+
+    case "set_field_valid":
+      return { ...state,
+        valid: { ...state.valid,
+          [payload.name]: true
+        },
+        errors: { ...state.errors,
+          [payload.name]: false
+        }
+      };
+
+    default:
+      return state;
+  }
+};
+
+const LeadForm = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const addFilesHandler = files => {
-    setFormData(prevData => {
-      return { ...prevData,
-        files: [...prevData.files, ...files]
-      };
+    dispatch({
+      type: "add_files",
+      payload: {
+        files
+      }
     });
   };
 
   const removeFileHandler = index => {
-    setFormData(prevData => {
-      return { ...prevData,
-        files: files.filter((file, i) => i !== index)
-      };
+    dispatch({
+      type: "remove_file",
+      payload: {
+        index
+      }
     });
+  };
+
+  const handleChange = e => {
+    const name = e.target.name;
+    const value = e.target.value;
+    dispatch({
+      type: "set_field",
+      payload: {
+        name,
+        value
+      }
+    });
+    validate(name, value);
+  };
+
+  const validate = (name, value) => {
+    let valid = true;
+    let errorMessage = "";
+
+    switch (name) {
+      case "email":
+        if (value.length === 0 || !(0,_functions__WEBPACK_IMPORTED_MODULE_1__.emailIsValid)(value)) {
+          valid = false;
+          errorMessage = gb.msg.enterValidEmail;
+        }
+
+        break;
+
+      case "phone":
+        valid = true;
+        break;
+
+      default:
+        if (value.length === 0) {
+          valid = false;
+          errorMessage = gb.msg.enterField;
+        }
+
+    }
+
+    if (valid && value.length > 0) {
+      dispatch({
+        type: "set_field_valid",
+        payload: {
+          name
+        }
+      });
+    } else {
+      dispatch({
+        type: "set_field_error",
+        payload: {
+          name,
+          message: errorMessage
+        }
+      });
+    }
+
+    return valid;
+  };
+
+  const handleSubmitButtonClick = e => {
+    e.preventDefault();
+    let valid = true;
+    const fieldNames = Object.keys(state.fields);
+    fieldNames.forEach(name => {
+      const value = state.fields[name];
+
+      if (!validate(name, value)) {
+        valid = false;
+      }
+    });
+
+    if (valid) {
+      console.log("Go!");
+    }
+  };
+
+  const getFieldClassName = name => {
+    const classNames = [];
+
+    if (state.errors[name]) {
+      classNames.push("invalid");
+    } else if (state.valid[name]) {
+      classNames.push("valid");
+    }
+
+    return classNames.join(" ");
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     className: "p-6 md:p-8"
-  }, errors && errors.length > 0 && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    className: "js-error-alert alert alert--danger"
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mb-4"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "form-label"
   }, "Beschrijf uw wensen en uw situatie ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "req"
   }, "*")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("textarea", {
-    className: "form-control",
+    name: "message",
+    className: `form-control ${getFieldClassName("message")}`,
     rows: "6",
-    placeholder: "Beschrijf uw wensen en uw situatie"
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    placeholder: "Beschrijf uw wensen en uw situatie",
+    onChange: handleChange,
+    value: state.fields.message
+  }), state.errors.message && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "invalid-feedback"
+  }, state.errors.message)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mb-4 grid md:grid-cols-2 gap-5"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: ""
@@ -176,56 +342,69 @@ const LeadForm = () => {
   }, "Naam: ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "req"
   }, "*")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    name: "name",
     type: "text",
-    className: "form-control",
-    placeholder: "Naam"
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "invalid-feedback js-invalid-feedback"
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `form-control ${getFieldClassName("name")}`,
+    placeholder: "Naam",
+    onChange: handleChange,
+    value: state.fields.name
+  }), state.errors.name && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "invalid-feedback"
+  }, state.errors.name)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: ""
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "form-label"
   }, "E-mail: ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "req"
   }, "*")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    name: "email",
     type: "email",
-    className: "form-control",
-    placeholder: "E-mail"
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "invalid-feedback js-invalid-feedback"
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `form-control ${getFieldClassName("email")}`,
+    placeholder: "E-mail",
+    onChange: handleChange,
+    value: state.fields.email
+  }), state.errors.email && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "invalid-feedback"
+  }, state.errors.email)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: ""
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "form-label"
   }, "Woonplaats: ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "req"
   }, "*")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    name: "place",
     type: "text",
-    className: "form-control",
-    placeholder: "Woonplaats"
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "invalid-feedback js-invalid-feedback"
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: `form-control ${getFieldClassName("place")}`,
+    placeholder: "Woonplaats",
+    onChange: handleChange,
+    value: state.fields.place
+  }), state.errors.place && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "invalid-feedback"
+  }, state.errors.place)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: ""
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "form-label"
   }, "Telefoonnummer:"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    name: "phone",
     type: "phone",
-    className: "form-control",
-    placeholder: "Telefoonnummer"
+    className: `form-control ${getFieldClassName("phone")}`,
+    placeholder: "Telefoonnummer",
+    onChange: handleChange,
+    value: state.phone
   }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mb-6"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "form-label"
-  }, "Voeg foto's of tekeningen toe."), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FileUploader__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    files: files,
+  }, "Voeg foto's of tekeningen toe."), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FileUploader__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    files: state.files,
     addFilesHandler: addFilesHandler,
     removeFileHandler: removeFileHandler
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "flex justify-end"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "btn btn--primary btn--next w-full block md:inline md:w-auto",
-    type: "submit"
+    type: "submit",
+    onClick: handleSubmitButtonClick
   }, "Verstuur"))));
 };
 
@@ -4369,6 +4548,7 @@ const LeadForm = () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "emailIsValid": () => (/* binding */ emailIsValid),
 /* harmony export */   "hideModal": () => (/* binding */ hideModal),
 /* harmony export */   "loadModalContent": () => (/* binding */ loadModalContent),
 /* harmony export */   "showModal": () => (/* binding */ showModal),
@@ -4434,6 +4614,13 @@ const loadModalContent = function (html) {
   jQuery(".js-modal-loader").hide();
   jQuery(".js-modal-inner").fadeIn(300);
   if (callback) callback(jQuery(".js-modal"));
+};
+/**
+ * Checks whether an email is valid
+ */
+
+const emailIsValid = email => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
 
 /***/ }),
@@ -4935,7 +5122,15 @@ jQuery.fn.scrollTo = function (offset) {
     let title = $(this).data("popup-title");
     let formtype = $(this).data("formtype");
     let metadata = $(this).data("meta");
-    (0,_functions__WEBPACK_IMPORTED_MODULE_1__.showModalForm)(title, formtype, metadata);
+
+    if (formtype === "lead") {
+      title = "Contactformulier";
+      (0,_functions__WEBPACK_IMPORTED_MODULE_1__.showModal)(title);
+      (0,_functions__WEBPACK_IMPORTED_MODULE_1__.loadModalContent)();
+      render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_LeadForm__WEBPACK_IMPORTED_MODULE_2__["default"], null), document.getElementById("modal_body"));
+    } else {
+      (0,_functions__WEBPACK_IMPORTED_MODULE_1__.showModalForm)(title, formtype, metadata); // Later convert to full react approach
+    }
   });
   /**
    * Popup pin
@@ -5015,7 +5210,7 @@ function validateInput(element) {
     }
   } else {
     if (type == "email") {
-      if (!emailIsValid(value)) {
+      if (!(0,_functions__WEBPACK_IMPORTED_MODULE_1__.emailIsValid)(value)) {
         valid = false;
         msg = gb.msg.enterValidEmail;
       }
@@ -5066,14 +5261,6 @@ function isInvalid(element, msg) {
   jQuery(element).removeClass("valid");
   jQuery(element).addClass("invalid");
   feedback.show().text(msg);
-}
-/**
- * Checks whether an email is valid
- */
-
-
-function emailIsValid(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 /**
  * Shows error alert
