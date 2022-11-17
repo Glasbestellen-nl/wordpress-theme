@@ -75,8 +75,7 @@ function gb_handle_lead_form_submit() {
          do_action( 'gb_lead_form_submit_before_redirect', $lead_id, $_POST );
 
          // Set redirect url on success
-         $response['redirect'] = 'https://www.google.com/';
-         //$response['redirect'] = apply_filters( 'gb_lead_form_submit_redirect_url', get_permalink( get_option( 'page_lead_success' ) ), $_POST );
+         $response['redirect'] = apply_filters( 'gb_lead_form_submit_redirect_url', get_permalink( get_option( 'page_lead_success' ) ), $_POST );
 
       } else {
          $response['error'] = $error;
