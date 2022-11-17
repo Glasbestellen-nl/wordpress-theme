@@ -252,7 +252,9 @@ const LeadForm = () => {
         </div>
 
         <div className="mb-6">
-          <label className="form-label">Voeg foto's of tekeningen toe.</label>
+          <label className="form-label">
+            Voeg foto's of tekeningen toe ter verduidelijking.
+          </label>
           <FileUploader
             files={state.files}
             addFilesHandler={addFilesHandler}
