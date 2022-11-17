@@ -4620,9 +4620,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "showModal": () => (/* binding */ showModal),
 /* harmony export */   "showModalForm": () => (/* binding */ showModalForm)
 /* harmony export */ });
+const {
+  unmountComponentAtNode
+} = wp.element;
 /**
  * Shows modal form
  */
+
 const showModalForm = (title, formtype, metadata, callback) => {
   showModal(title);
   let data = {
@@ -4656,11 +4660,12 @@ const showModal = function (title) {
  * Hides modal
  */
 
-const hideModal = () => {
+const hideModal = node => {
   const modal = jQuery(".js-modal");
 
   if (modal !== null) {
     modal.removeClass("show");
+    if (node) unmountComponentAtNode(node);
     jQuery(".js-modal-body").html("");
   }
 };
@@ -4713,10 +4718,11 @@ const {
 if (document.getElementById("react_lead_form")) {
   render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_LeadForm__WEBPACK_IMPORTED_MODULE_2__["default"], null), document.getElementById("react_lead_form"));
 }
+
+const modalBodyNode = document.getElementById("modal_body");
 /**
  * jQuery plugin: Checks whether element in viewport
  */
-
 
 jQuery.fn.isInViewport = function () {
   var elementTop = jQuery(this).offset().top;
@@ -4983,7 +4989,7 @@ jQuery.fn.scrollTo = function (offset) {
 
 
       if (e.target.closest(".js-close-modal") || e.target.matches(".js-modal")) {
-        (0,_functions__WEBPACK_IMPORTED_MODULE_1__.hideModal)();
+        (0,_functions__WEBPACK_IMPORTED_MODULE_1__.hideModal)(modalBodyNode);
         return;
       }
       /**
@@ -5193,7 +5199,7 @@ jQuery.fn.scrollTo = function (offset) {
       title = "Contactformulier";
       (0,_functions__WEBPACK_IMPORTED_MODULE_1__.showModal)(title);
       (0,_functions__WEBPACK_IMPORTED_MODULE_1__.loadModalContent)();
-      render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_LeadForm__WEBPACK_IMPORTED_MODULE_2__["default"], null), document.getElementById("modal_body"));
+      render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_LeadForm__WEBPACK_IMPORTED_MODULE_2__["default"], null), modalBodyNode);
     } else {
       (0,_functions__WEBPACK_IMPORTED_MODULE_1__.showModalForm)(title, formtype, metadata); // Later convert to full react approach
     }

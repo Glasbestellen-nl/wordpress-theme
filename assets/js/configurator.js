@@ -1362,9 +1362,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "showModal": () => (/* binding */ showModal),
 /* harmony export */   "showModalForm": () => (/* binding */ showModalForm)
 /* harmony export */ });
+const {
+  unmountComponentAtNode
+} = wp.element;
 /**
  * Shows modal form
  */
+
 const showModalForm = (title, formtype, metadata, callback) => {
   showModal(title);
   let data = {
@@ -1398,11 +1402,12 @@ const showModal = function (title) {
  * Hides modal
  */
 
-const hideModal = () => {
+const hideModal = node => {
   const modal = jQuery(".js-modal");
 
   if (modal !== null) {
     modal.removeClass("show");
+    if (node) unmountComponentAtNode(node);
     jQuery(".js-modal-body").html("");
   }
 };

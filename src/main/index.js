@@ -11,6 +11,7 @@ import LeadForm from "./components/LeadForm";
 if (document.getElementById("react_lead_form")) {
   render(<LeadForm />, document.getElementById("react_lead_form"));
 }
+const modalBodyNode = document.getElementById("modal_body");
 
 /**
  * jQuery plugin: Checks whether element in viewport
@@ -303,7 +304,7 @@ jQuery.fn.scrollTo = function (offset) {
         e.target.closest(".js-close-modal") ||
         e.target.matches(".js-modal")
       ) {
-        hideModal();
+        hideModal(modalBodyNode);
         return;
       }
 
@@ -514,7 +515,7 @@ jQuery.fn.scrollTo = function (offset) {
       title = "Contactformulier";
       showModal(title);
       loadModalContent();
-      render(<LeadForm />, document.getElementById("modal_body"));
+      render(<LeadForm />, modalBodyNode);
     } else {
       showModalForm(title, formtype, metadata); // Later convert to full react approach
     }
