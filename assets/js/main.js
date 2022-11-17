@@ -158,7 +158,8 @@ const initialState = {
     residence: "oosterhout",
     phone: ""
   },
-  files: []
+  files: [],
+  submitting: false
 };
 
 const reducer = (state, action) => {
@@ -168,6 +169,11 @@ const reducer = (state, action) => {
   } = action;
 
   switch (type) {
+    case "set_submitting":
+      return { ...state,
+        submitting: payload.submitting
+      };
+
     case "add_files":
       return { ...state,
         files: [...state.files, ...payload.files]
@@ -295,46 +301,71 @@ const LeadForm = () => {
   };
 
   const handleSubmitButtonClick = async e => {
-    e.preventDefault();
-    let valid = true;
-    const fieldNames = Object.keys(state.fields);
-    fieldNames.forEach(name => {
-      const value = state.fields[name];
+    try {
+      e.preventDefault();
+      let valid = true;
+      const fieldNames = Object.keys(state.fields);
+      fieldNames.forEach(name => {
+        const value = state.fields[name];
 
-      if (!validate(name, value)) {
-        valid = false;
-      }
-    });
-
-    if (valid) {
-      const formData = new FormData();
-      formData.append("action", "handle_lead_form_submit");
-      formData.append("nonce", gb.ajaxNonce);
-      formData.append("request_uri", gb.requestURI); // Append fields
-
-      Object.keys(state.fields).forEach(name => {
-        formData.append(`lead[${name}]`, state.fields[name]);
-      }); // Append files
-
-      if (state.files.length > 0) {
-        state.files.forEach(file => formData.append("attachment[]", file));
-      } // Append Google Analytics client id
-
-
-      const gclid = window.dataLayer && window.dataLayer.find(obj => obj.clientId).clientId || null;
-
-      if (gclid) {
-        console.log(gclid);
-        formData.append("client[gclid]", gclid);
-      }
-
-      console.log([...formData]);
-      const response = await axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(gb.ajaxUrl, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
+        if (!validate(name, value)) {
+          valid = false;
         }
       });
-      console.log(response);
+
+      if (valid) {
+        var _window$dataLayer$fin;
+
+        dispatch({
+          type: "set_submitting",
+          payload: {
+            submitting: true
+          }
+        });
+        const formData = new FormData();
+        formData.append("action", "handle_lead_form_submit");
+        formData.append("nonce", gb.ajaxNonce);
+        formData.append("request_uri", gb.requestURI); // Append fields
+
+        Object.keys(state.fields).forEach(name => {
+          formData.append(`lead[${name}]`, state.fields[name]);
+        }); // Append files
+
+        if (state.files.length > 0) {
+          state.files.forEach(file => formData.append("attachment[]", file));
+        } // Append Google Analytics client id
+
+
+        const gclid = window.dataLayer && ((_window$dataLayer$fin = window.dataLayer.find(obj => obj.clientId)) === null || _window$dataLayer$fin === void 0 ? void 0 : _window$dataLayer$fin.clientId) || null;
+
+        if (gclid) {
+          formData.append("client[gclid]", gclid);
+        }
+
+        const response = await axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(gb.ajaxUrl, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
+
+        if (response.data && !response.data.error && response.data.redirect) {
+          window.location.href = response.data.redirect;
+        } else {
+          dispatch({
+            type: "set_submitting",
+            payload: {
+              submitting: false
+            }
+          });
+        }
+      }
+    } catch (err) {
+      dispatch({
+        type: "set_submitting",
+        payload: {
+          submitting: false
+        }
+      });
     }
   };
 
@@ -438,8 +469,9 @@ const LeadForm = () => {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "btn btn--primary btn--next w-full block md:inline md:w-auto",
     type: "submit",
-    onClick: handleSubmitButtonClick
-  }, "Verstuur"))));
+    onClick: handleSubmitButtonClick,
+    disabled: state.submitting
+  }, state.submitting ? "Aan het versturen..." : "Verstuur"))));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LeadForm);

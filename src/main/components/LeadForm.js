@@ -14,11 +14,14 @@ const initialState = {
     phone: "",
   },
   files: [],
+  submitting: false,
 };
 
 const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
+    case "set_submitting":
+      return { ...state, submitting: payload.submitting };
     case "add_files":
       return { ...state, files: [...state.files, ...payload.files] };
     case "remove_file":
@@ -102,49 +105,55 @@ const LeadForm = () => {
   };
 
   const handleSubmitButtonClick = async (e) => {
-    e.preventDefault();
-    let valid = true;
-    const fieldNames = Object.keys(state.fields);
-    fieldNames.forEach((name) => {
-      const value = state.fields[name];
-      if (!validate(name, value)) {
-        valid = false;
-      }
-    });
-    if (valid) {
-      const formData = new FormData();
-      formData.append("action", "handle_lead_form_submit");
-      formData.append("nonce", gb.ajaxNonce);
-      formData.append("request_uri", gb.requestURI);
-
-      // Append fields
-      Object.keys(state.fields).forEach((name) => {
-        formData.append(`lead[${name}]`, state.fields[name]);
+    try {
+      e.preventDefault();
+      let valid = true;
+      const fieldNames = Object.keys(state.fields);
+      fieldNames.forEach((name) => {
+        const value = state.fields[name];
+        if (!validate(name, value)) {
+          valid = false;
+        }
       });
+      if (valid) {
+        dispatch({ type: "set_submitting", payload: { submitting: true } });
+        const formData = new FormData();
+        formData.append("action", "handle_lead_form_submit");
+        formData.append("nonce", gb.ajaxNonce);
+        formData.append("request_uri", gb.requestURI);
 
-      // Append files
-      if (state.files.length > 0) {
-        state.files.forEach((file) => formData.append("attachment[]", file));
+        // Append fields
+        Object.keys(state.fields).forEach((name) => {
+          formData.append(`lead[${name}]`, state.fields[name]);
+        });
+
+        // Append files
+        if (state.files.length > 0) {
+          state.files.forEach((file) => formData.append("attachment[]", file));
+        }
+
+        // Append Google Analytics client id
+        const gclid =
+          (window.dataLayer &&
+            window.dataLayer.find((obj) => obj.clientId)?.clientId) ||
+          null;
+        if (gclid) {
+          formData.append("client[gclid]", gclid);
+        }
+
+        const response = await axios.post(gb.ajaxUrl, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        if (response.data && !response.data.error && response.data.redirect) {
+          window.location.href = response.data.redirect;
+        } else {
+          dispatch({ type: "set_submitting", payload: { submitting: false } });
+        }
       }
-
-      // Append Google Analytics client id
-      const gclid =
-        (window.dataLayer &&
-          window.dataLayer.find((obj) => obj.clientId).clientId) ||
-        null;
-      if (gclid) {
-        console.log(gclid);
-        formData.append("client[gclid]", gclid);
-      }
-
-      console.log([...formData]);
-
-      const response = await axios.post(gb.ajaxUrl, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(response);
+    } catch (err) {
+      dispatch({ type: "set_submitting", payload: { submitting: false } });
     }
   };
 
@@ -256,8 +265,9 @@ const LeadForm = () => {
             className="btn btn--primary btn--next w-full block md:inline md:w-auto"
             type="submit"
             onClick={handleSubmitButtonClick}
+            disabled={state.submitting}
           >
-            Verstuur
+            {state.submitting ? "Aan het versturen..." : "Verstuur"}
           </button>
         </div>
       </div>
