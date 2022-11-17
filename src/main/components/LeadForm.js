@@ -27,6 +27,7 @@ const reducer = (state, action) => {
         files: state.files.filter((file, i) => i !== payload.index),
       };
     case "set_field":
+      console.log(type, payload);
       return {
         ...state,
         fields: { ...state.fields, [payload.name]: payload.value },
@@ -80,6 +81,9 @@ const LeadForm = () => {
       case "phone":
         valid = true;
         break;
+      case "gclid":
+        valid = true;
+        break;
       default:
         if (value.length === 0) {
           valid = false;
@@ -122,6 +126,18 @@ const LeadForm = () => {
       if (state.files.length > 0) {
         state.files.forEach((file) => formData.append("attachment[]", file));
       }
+
+      // Append Google Analytics client id
+      const gclid =
+        (window.dataLayer &&
+          window.dataLayer.find((obj) => obj.clientId).clientId) ||
+        null;
+      if (gclid) {
+        console.log(gclid);
+        formData.append("client[gclid]", gclid);
+      }
+
+      console.log([...formData]);
 
       const response = await axios.post(gb.ajaxUrl, formData, {
         headers: {
