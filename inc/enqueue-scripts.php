@@ -17,13 +17,14 @@ function gb_enqueue_scripts() {
 
    // Scripts
    wp_enqueue_script( 'masonry' );
-   wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', ['jquery'], $version, true );
+   wp_enqueue_script( 'main-js', get_template_directory_uri() . '/assets/js/main.js', ['jquery', 'wp-element'], $version, true );
 
    // Localize scripts
    $l10n = [
       'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
       'ajaxNonce'  => wp_create_nonce( GB_NONCE ),
       'requestURI' => $_SERVER['REQUEST_URI'],
+      'allowedFileTypes' => get_allowed_mime_types(),
       'msg' => [
          'enterField'             => __( 'Vul a.u.b. dit veld in.', 'glasbestellen' ),
          'dimensionValueTooSmall' => __( 'Voer een maat in groter of gelijk aan {0}.', 'glasbestellen' ),
@@ -35,7 +36,8 @@ function gb_enqueue_scripts() {
          'inspiration'            => __( 'Inspiratie', 'glasbestellen' ),
          'pleaseWait'             => __( 'Bezig..', 'glasbestellen' ),
          'sent'                   => __( 'Verstuurd!', 'glasbestellen' ),
-         'fileUploadLimit'        => __( 'Uw bijlages overschrijden het maximale upload limiet van {0}MB. Stuur a.u.b. grotere bijlages naar ' . get_bloginfo( 'admin_email' ) . '.', 'glasbestellen' )
+         'fileUploadLimit'        => __( 'Uw bijlages overschrijden het maximale upload limiet van {0}MB. Stuur a.u.b. grotere bijlages naar ' . get_bloginfo( 'admin_email' ) . '.', 'glasbestellen' ),
+         'fileTypeNotAllowed'     => __( 'Een van uw bijlages kan niet worden verstuurd, omdat het bestandstype "{0}" is. Probeer een ander bestandstype of mail naar ' . get_bloginfo( 'admin_email' ) . '.' )
       ],
    ];
    if ( is_singular() ) {

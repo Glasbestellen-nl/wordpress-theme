@@ -3,7 +3,15 @@ import {
   showModal,
   hideModal,
   loadModalContent,
+  emailIsValid,
 } from "./functions";
+
+const { render } = wp.element;
+import LeadForm from "./components/LeadForm";
+if (document.getElementById("react_lead_form")) {
+  render(<LeadForm />, document.getElementById("react_lead_form"));
+}
+const modalBodyNode = document.getElementById("modal_body");
 
 /**
  * jQuery plugin: Checks whether element in viewport
@@ -296,7 +304,7 @@ jQuery.fn.scrollTo = function (offset) {
         e.target.closest(".js-close-modal") ||
         e.target.matches(".js-modal")
       ) {
-        hideModal();
+        hideModal(modalBodyNode);
         return;
       }
 
@@ -503,7 +511,14 @@ jQuery.fn.scrollTo = function (offset) {
     let formtype = $(this).data("formtype");
     let metadata = $(this).data("meta");
 
-    showModalForm(title, formtype, metadata);
+    if (formtype === "lead") {
+      title = "Contactformulier";
+      showModal(title);
+      loadModalContent();
+      render(<LeadForm />, modalBodyNode);
+    } else {
+      showModalForm(title, formtype, metadata); // Later convert to full react approach
+    }
   });
 
   /**
@@ -631,13 +646,6 @@ function isInvalid(element, msg) {
   jQuery(element).removeClass("valid");
   jQuery(element).addClass("invalid");
   feedback.show().text(msg);
-}
-
-/**
- * Checks whether an email is valid
- */
-function emailIsValid(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 /**

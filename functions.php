@@ -9,9 +9,8 @@ require __DIR__ . '/vendor/autoload.php';
 /**
  * Starts a PHP session
  */
-function gb_start_session() {
-	if ( ! session_id() )
-	   session_start();
+function gb_start_session() {   
+   if ( ! headers_sent() && '' == session_id() ) session_start();
 }
 add_action( 'init', 'gb_start_session', 1 );
 

@@ -9,7 +9,7 @@
          </div>
       </div>
 
-      <div class="modal__body js-modal-body">
+      <div class="modal__body js-modal-body" id="modal_body">
       </div>
 
    </div>

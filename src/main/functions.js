@@ -1,3 +1,4 @@
+const { unmountComponentAtNode } = wp.element;
 /**
  * Shows modal form
  */
@@ -34,10 +35,11 @@ export const showModal = (title, size = "small") => {
 /**
  * Hides modal
  */
-export const hideModal = () => {
+export const hideModal = (node) => {
   const modal = jQuery(".js-modal");
   if (modal !== null) {
     modal.removeClass("show");
+    if (node) unmountComponentAtNode(node);
     jQuery(".js-modal-body").html("");
   }
 };
@@ -53,4 +55,11 @@ export const loadModalContent = (html, title = "", callback) => {
   jQuery(".js-modal-loader").hide();
   jQuery(".js-modal-inner").fadeIn(300);
   if (callback) callback(jQuery(".js-modal"));
+};
+
+/**
+ * Checks whether an email is valid
+ */
+export const emailIsValid = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };

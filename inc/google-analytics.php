@@ -53,7 +53,7 @@ function gb_push_order_data_to_google_analytics( $order_id ) {
 
       $analytics->setTransactionId( $order_id )
          ->setAffiliation( 'online' )
-         ->setRevenue( $order->get_total() )
+         ->setRevenue( $order->get_subtotal() )
          ->setShipping( $order->get_shipping_total() )
          ->setTax( $order->get_total_tax() )
          ->sendTransaction();
@@ -71,7 +71,7 @@ function gb_push_order_data_to_google_analytics( $order_id ) {
                ->setItemName( $item->get_name() )
                ->setItemCode( $item->get_product_id() )
                ->setItemCategory( $category_id )
-               ->setItemPrice( $item->get_total() )
+               ->setItemPrice( $item->get_subtotal() )
                ->setItemQuantity( $item->get_quantity() )
                ->sendItem();
 
