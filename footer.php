@@ -37,8 +37,8 @@
                      <ul class="footer-list">
                         <li class="footer-list__item"><?php echo get_option( 'company_street' ) . ' ' . get_option( 'company_number' ); ?></li>
                         <li class="footer-list__item"><?php echo get_option( 'company_zipcode' ) . ', ' . get_option( 'company_city' ); ?></li>
-                        <li class="footer-list__item">T: <?php echo get_option( 'company_phone_number' ); ?></li>
-                        <li class="footer-list__item">E: <?php echo get_option( 'company_email' ); ?></li>
+                        <li class="footer-list__item">T: <a href="tel:<?php echo get_option( 'company_phone_number' ); ?>" class="footer-list__link"><?php echo get_option( 'company_phone_number' ); ?></a></li>
+                        <li class="footer-list__item">E: <a href="mailto:<?php echo get_option( 'company_email' ); ?>" class="footer-list__link"><?php echo get_option( 'company_email' ); ?></a></li>
                      </ul>
 
                      <div class="social-icons social-icons--footer">
