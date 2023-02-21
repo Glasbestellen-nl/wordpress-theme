@@ -3171,7 +3171,8 @@ Contact details
   line-height: 1.25em;
 }
 
-.contact-details--dark-bg .contact-details__item {
+.contact-details--dark-bg .contact-details__item,
+.contact-details--dark-bg .contact-details__item a {
   color: #fff;
 }
 
