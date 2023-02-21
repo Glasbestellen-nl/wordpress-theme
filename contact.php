@@ -56,8 +56,8 @@ get_header();
                            <ul class="contact-details--dark-bg space-below">
                               <li class="contact-details__item"><?php echo get_option( 'company_street' ) . ' ' . get_option( 'company_number' ); ?></li>
                               <li class="contact-details__item"><?php echo get_option( 'company_zipcode' ) . ', ' . get_option( 'company_city' ); ?></li>
-                              <li class="contact-details__item"><i class="fas fa-phone-alt contact-detail__icon"></i> <?php echo get_option( 'company_phone_number' ); ?></li>
-                              <li class="contact-details__item"><i class="fas fa-envelope contact-detail__icon"></i> <?php echo get_option( 'company_email' ); ?></li>
+                              <li class="contact-details__item"><i class="fas fa-phone-alt contact-detail__icon"></i> <a href="tel:<?php echo get_option( 'company_phone_number' ); ?>"><?php echo get_option( 'company_phone_number' ); ?></a></li>
+                              <li class="contact-details__item"><i class="fas fa-envelope contact-detail__icon"></i> <a href="mailto:<?php echo get_option( 'company_email' ); ?>"><?php echo get_option( 'company_email' ); ?></a></li>
                               <li class="contact-details__item"><?php echo get_option( 'company_coc_number' ); ?></li>
                               <li class="contact-details__item"><?php echo get_option( 'company_vat_number' ); ?></li>
                            </ul>
