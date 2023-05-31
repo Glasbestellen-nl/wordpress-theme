@@ -70,6 +70,7 @@ function gb_add_user_role_caps() {
 
    $role->add_cap('manage_woocommerce');
    $role->add_cap('edit_shop_order');
+   $role->add_cap('read_published_shop_order');
    $role->add_cap('edit_others_shop_orders');
    $role->add_cap('edit_published_shop_orders');
    $role->add_cap('publish_shop_orders');
