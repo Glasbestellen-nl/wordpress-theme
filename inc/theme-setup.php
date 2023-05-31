@@ -65,7 +65,7 @@ function gb_add_user_roles() {
 add_action('after_setup_theme', 'gb_add_user_roles');
 
 function gb_add_user_role_caps() {
-   
+
    $role = get_role('employee');
 
    $role->add_cap('manage_woocommerce');
@@ -99,7 +99,7 @@ function gb_add_user_role_caps() {
       $role->add_cap('manage_crm');
    }
 }
-add_action('after_setup_theme', 'gb_add_user_role_caps');
+add_action('after_setup_theme', 'gb_add_user_role_caps', 1);
 
 /**
  * Creates custom upload directories
