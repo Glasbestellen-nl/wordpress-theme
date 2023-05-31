@@ -52,8 +52,37 @@ function gb_add_user_roles() {
        )
    );
 
+   add_role(
+      'employee',
+      'Employee',
+      [
+         'read' => true,
+         'edit_posts' => true,
+         'delete_posts' => true
+      ]
+   );
 }
-add_action( 'after_switch_theme', 'gb_add_user_roles' );
+add_action('after_setup_theme', 'gb_add_user_roles');
+
+function gb_add_user_role_caps() {
+
+   $role = get_role('employee');
+
+   $role->add_cap('edit_shop_order');
+   $role->add_cap('edit_others_shop_orders');
+   $role->add_cap('edit_published_shop_orders');
+   $role->add_cap('publish_shop_orders');
+   $role->add_cap('delete_shop_order');
+   $role->add_cap('delete_others_shop_orders');
+   $role->add_cap('read_shop_order');
+   $role->add_cap('read_private_shop_orders');
+   $role->add_cap('edit_private_shop_orders');
+   $role->add_cap('delete_private_shop_orders');
+
+   //var_dump($role);
+   // die;
+}
+add_action('init', 'gb_add_user_role_caps', 1);
 
 /**
  * Creates custom upload directories

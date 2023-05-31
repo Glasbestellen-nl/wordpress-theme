@@ -3,7 +3,7 @@
  * Registers admin menu pages
  */
 function gb_crm_admin_menu() {
-	add_menu_page( __( 'Leads', 'glasbestellen' ), __( 'Leads', 'glasbestellen' ), 'edit_theme_options', 'crm', 'gb_crm_admin_page', 'dashicons-email-alt', 1 );
+	add_menu_page( __( 'Leads', 'glasbestellen' ), __( 'Leads', 'glasbestellen' ), 'manage_crm', 'crm', 'gb_crm_admin_page', 'dashicons-email-alt', 1 );
 }
 add_action( 'admin_menu', 'gb_crm_admin_menu' );
 
