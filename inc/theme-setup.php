@@ -79,8 +79,16 @@ function gb_add_user_role_caps() {
    $role->add_cap('edit_private_shop_orders');
    $role->add_cap('delete_private_shop_orders');
 
-   //var_dump($role);
-   // die;
+   $roles = array(
+      'administrator',
+      'editor',
+      'employee'
+   );
+
+   foreach ($roles as $role_name) {
+      $role = get_role($role_name);
+      $role->add_cap('manage_crm');
+   } 
 }
 add_action('init', 'gb_add_user_role_caps', 1);
 
