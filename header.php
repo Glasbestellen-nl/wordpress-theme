@@ -29,7 +29,7 @@
 
                   <div class="header-inner__contact-options">
 
-                     <a href="mailto:<?php echo get_option( 'company_email' ); ?>" class="contact-option contact-option--email" target="_blank">
+                     <a href="mailto:<?php echo get_option( 'company_email' ); ?>" class="contact-option contact-option--email" target="_blank" rel="nofollow">
                         <div class="contact-option__icon"></div>
                         <div class="contact-option__text">
                            <span class="contact-option__headline"><?php _e( 'Stuur ons een email', 'glasbestellen' ); ?></span>
@@ -37,7 +37,7 @@
                         </div>
                      </a>
 
-                     <a href="tel:<?php echo str_replace( ' ', '', get_option( 'company_phone_number' ) ); ?>" class="contact-option contact-option--phone" target="_blank">
+                     <a href="tel:<?php echo str_replace( ' ', '', get_option( 'company_phone_number' ) ); ?>" class="contact-option contact-option--phone" target="_blank" rel="nofollow">
                         <div class="contact-option__icon"></div>
                         <div class="contact-option__text">
                            <span class="contact-option__headline"><?php _e( 'Bel ons gerust', 'glasbestellen' ); ?></span>
@@ -51,7 +51,7 @@
 
                <div class="col-4 col-lg-1 offset-md-4 offset-lg-0 d-flex">
                   <div class="header-inner__cart">
-                     <a href="<?php echo wc_get_cart_url(); ?>" class="cart-button btn--aside cart-customlocation">
+                     <a href="<?php echo wc_get_cart_url(); ?>" class="cart-button btn--aside cart-customlocation" rel="nofollow">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-button__quantity"><?php echo WC()->cart->cart_contents_count; ?></span>
                      </a>
