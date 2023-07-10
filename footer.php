@@ -156,7 +156,7 @@
 
                            <li class="footer-bottom__inline-item">
                               &middot;
-                              <a href="<?php echo $menu_item->url; ?>" class="footer-bottom__inline-link" rel="nofollow"><?php echo $menu_item->title; ?></a>
+                              <a href="<?php echo $menu_item->url; ?>" class="footer-bottom__inline-link" <?php echo !empty($menu_item->xfn) ? 'rel="' . $menu_item->xfn . '"' : ''; ?>><?php echo $menu_item->title; ?></a>
                            </li>
 
                         <?php } ?>
