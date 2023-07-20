@@ -121,6 +121,7 @@ const LeadForm = () => {
         formData.append("action", "handle_lead_form_submit");
         formData.append("nonce", gb.ajaxNonce);
         formData.append("request_uri", gb.requestURI);
+        formData.append("client[remote_address]", gb.remoteAddress);
 
         // Append fields
         Object.keys(state.fields).forEach((name) => {
@@ -140,12 +141,10 @@ const LeadForm = () => {
         if (gclientId) formData.append("client[gclid]", gclientId);
 
         // Append Google Adwords click id
-        console.log(window.dataLayer);
         const gclid =
           (window.dataLayer &&
             window.dataLayer.find((obj) => obj.gclid)?.gclid) ||
           null;
-        console.log(gclid);
         if (gclid) formData.append("client[ads_gclid]", gclid);
 
         const response = await axios.post(gb.ajaxUrl, formData, {

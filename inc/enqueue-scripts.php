@@ -21,10 +21,11 @@ function gb_enqueue_scripts() {
 
    // Localize scripts
    $l10n = [
-      'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-      'ajaxNonce'  => wp_create_nonce( GB_NONCE ),
-      'requestURI' => $_SERVER['REQUEST_URI'],
-      'allowedFileTypes' => get_allowed_mime_types(),
+      'ajaxUrl'            => admin_url( 'admin-ajax.php' ),
+      'ajaxNonce'          => wp_create_nonce( GB_NONCE ),
+      'requestURI'         => $_SERVER['REQUEST_URI'],
+      'remoteAddress'      => $_SERVER['REMOTE_ADDR'],
+      'allowedFileTypes'   => get_allowed_mime_types(),
       'msg' => [
          'enterField'             => __( 'Vul a.u.b. dit veld in.', 'glasbestellen' ),
          'dimensionValueTooSmall' => __( 'Voer een maat in groter of gelijk aan {0}.', 'glasbestellen' ),
