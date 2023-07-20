@@ -140,10 +140,12 @@ const LeadForm = () => {
         if (gclientId) formData.append("client[gclid]", gclientId);
 
         // Append Google Adwords click id
+        console.log(window.dataLayer);
         const gclid =
           (window.dataLayer &&
-            window.dataLayer.find((obj) => obj.ads_gclid)?.ads_gclid) ||
+            window.dataLayer.find((obj) => obj.gclid)?.gclid) ||
           null;
+        console.log(gclid);
         if (gclid) formData.append("client[ads_gclid]", gclid);
 
         const response = await axios.post(gb.ajaxUrl, formData, {
