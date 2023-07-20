@@ -67,7 +67,7 @@ add_action('after_setup_theme', 'gb_add_user_roles');
 function gb_add_user_role_caps() {
 
    $role = get_role('employee');
-
+   if (!$role) return;
    $role->add_cap('manage_woocommerce');
    $role->add_cap('edit_shop_order');
    $role->add_cap('edit_shop_orders');
