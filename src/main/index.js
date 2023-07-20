@@ -465,6 +465,8 @@ jQuery.fn.scrollTo = function (offset) {
           }
         }
 
+        console.log(window.dataLayer);
+
         // Append Google Analytics client id
         const gclientId =
           (window.dataLayer &&
