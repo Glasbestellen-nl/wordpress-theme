@@ -436,6 +436,7 @@ jQuery.fn.scrollTo = function (offset) {
         formData.append("action", action);
         formData.append("nonce", gb.ajaxNonce);
         formData.append("request_uri", gb.requestURI);
+        formData.append("client[remote_address]", gb.remoteAddress);
 
         // Handle files
         let fileField = form.querySelector(".js-file-input-field");
@@ -463,6 +464,21 @@ jQuery.fn.scrollTo = function (offset) {
             }
           }
         }
+
+        // Append Google Analytics client id
+        const gclientId =
+          (window.dataLayer &&
+            window.dataLayer.find((obj) => obj.clientId)?.clientId) ||
+          null;
+        if (gclientId) formData.append("client[gclid]", gclientId);
+
+        // Append Google Adwords click id
+        const gclid =
+          (window.dataLayer &&
+            window.dataLayer.find((obj) => obj.gclid)?.gclid) ||
+          null;
+        if (gclid) formData.append("client[ads_gclid]", gclid);
+
         $.ajax({
           url: gb.ajaxUrl,
           data: formData,
