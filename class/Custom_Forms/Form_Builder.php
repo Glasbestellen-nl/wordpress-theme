@@ -1,6 +1,6 @@
 <?php
-use Custom_Forms\Form_Settings;
 namespace Custom_Forms;
+use Custom_Forms\Form_Settings;
 
 class Form_Builder {
 
@@ -76,6 +76,7 @@ class Form_Builder {
    public function get_form_hidden_fields_html() {
       $html  = '<input type="hidden" name="client[remote_address]" value="' . $_SERVER['REMOTE_ADDR'] . '">';
       $html .= '<input type="hidden" name="client[gclid]" class="gclid_field" value="">';
+      $html .= '<input type="hidden" name="client[ads_gclid]" class="ads_gclid_field" value="">';
       $html .= '<input type="hidden" name="action" class="js-form-action" value="' . $this->get_form_action() . '" />';
       $html .= '<input type="hidden" name="form_id" value="' . $this->_form_id . '">';
       return $html;

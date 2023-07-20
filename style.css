@@ -1,7 +1,7 @@
 /*
 Theme Name: Glasbestellen.nl Theme
 Author: Robbert Vermeulen
-Version: 4.5.4
+Version: 4.5.3
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: glasbestellen
@@ -3171,8 +3171,7 @@ Contact details
   line-height: 1.25em;
 }
 
-.contact-details--dark-bg .contact-details__item,
-.contact-details--dark-bg .contact-details__item a {
+.contact-details--dark-bg .contact-details__item {
   color: #fff;
 }
 

@@ -81,6 +81,7 @@ class CRM {
          LEFT JOIN wp_leadmeta o ON l.lead_id = o.lead_id AND o.meta_key = 'lead_owner'
          LEFT JOIN wp_users u ON l.lead_relation = u.ID"
       ;
+
       if ( isset( $where ) ) {
          $query .= " " . $where;
       }

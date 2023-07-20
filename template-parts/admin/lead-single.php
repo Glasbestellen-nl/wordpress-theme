@@ -165,6 +165,13 @@ use Offline_Conversion_Tracking\Dashboard_UI;
                         </div>
                      <?php } ?>
 
+                     <?php if ($ads_gclid = CRM::get_lead_meta( $_GET['lead_id'], 'ads_gclid', true ) ) { ?>
+                        <div class="form-row">
+                           <label class="form-row-label"><?php _e( 'Google Ads Click ID', 'glasbestellen' ); ?>:</label>
+                           <div class="form-row-text"><?php echo $ads_gclid; ?></div>
+                        </div>
+                     <?php } ?>
+
                      <?php if ( $pushed = CRM::get_lead_meta( $_GET['lead_id'], 'conversion_data_pushed', true ) ) { ?>
                         <div class="form-row">
                            <label class="form-row-label"><?php _e( 'Verzonden naar Google Analytics', 'glasbestellen' ); ?>:</label>

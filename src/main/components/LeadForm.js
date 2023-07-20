@@ -1,4 +1,4 @@
-const { useReducer } = wp.element;
+const { useReducer, useState } = wp.element;
 import axios from "axios";
 import { emailIsValid } from "../functions";
 import FileUploader from "./FileUploader";
@@ -133,13 +133,18 @@ const LeadForm = () => {
         }
 
         // Append Google Analytics client id
-        const gclid =
+        const gclientId =
           (window.dataLayer &&
             window.dataLayer.find((obj) => obj.clientId)?.clientId) ||
           null;
-        if (gclid) {
-          formData.append("client[gclid]", gclid);
-        }
+        if (gclientId) formData.append("client[gclid]", gclientId);
+
+        // Append Google Adwords click id
+        const gclid =
+          (window.dataLayer &&
+            window.dataLayer.find((obj) => obj.ads_gclid)?.ads_gclid) ||
+          null;
+        if (gclid) formData.append("client[ads_gclid]", gclid);
 
         const response = await axios.post(gb.ajaxUrl, formData, {
           headers: {
