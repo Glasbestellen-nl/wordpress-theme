@@ -417,6 +417,86 @@ jQuery.fn.scrollTo = function (offset) {
   });
 
   /**
+   * Full form validation on submit
+   */
+  $(document).on("submit", ".js-form-validation", function (e) {
+    e.preventDefault();
+
+    const form = this;
+
+    validateForm(form, function (form) {
+      //Create formdata object
+      const formData = new FormData(form);
+      const action = form.querySelector(".js-form-action").value;
+      const submitButton = jQuery('button[type="submit"]', form);
+      const submitButtonText = submitButton.text();
+
+      if (action !== undefined) {
+        // Append action, nonce and request uri
+        formData.append("action", action);
+        formData.append("nonce", gb.ajaxNonce);
+        formData.append("request_uri", gb.requestURI);
+
+        // Handle files
+        let fileField = form.querySelector(".js-file-input-field");
+        if (fileField !== null) {
+          let files = fileField.files;
+          if (files.length > 0) {
+            let combinedFilesize = 0;
+            for (let i = 0; i < files.length; i++) {
+              let file = files[i];
+              combinedFilesize += file.size;
+              formData.append("attachment[]", file);
+            }
+
+            // Check combined file size does not exceed max file size
+            const maxCombinedFileSize = 8000000;
+            if (combinedFilesize > maxCombinedFileSize) {
+              showErrorAlert(
+                gb.msg.fileUploadLimit.replace(
+                  "{0}",
+                  maxCombinedFileSize / 1000000
+                ),
+                form
+              );
+              return;
+            }
+          }
+        }
+        $.ajax({
+          url: gb.ajaxUrl,
+          data: formData,
+          method: "POST",
+          processData: false,
+          contentType: false,
+          beforeSend: function () {
+            // Disable submit button
+            submitButton.attr("disabled", true).text(gb.msg.pleaseWait);
+          },
+          success: function (response) {
+            if (response) {
+              submitButton.attr("disabled", false).text(gb.msg.sent);
+              let parsed = JSON.parse(response);
+              if (parsed.error) {
+                showErrorAlert(parsed.error, form);
+              } else {
+                hideErrorAlert(form);
+                if (parsed.redirect) {
+                  window.location.href = parsed.redirect;
+                }
+              }
+            }
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status);
+            console.log(thrownError);
+          },
+        });
+      }
+    });
+  });
+
+  /**
    * Form validation per input on blur
    */
   $(document).on("blur", ".js-form-validation .js-form-validate", function () {

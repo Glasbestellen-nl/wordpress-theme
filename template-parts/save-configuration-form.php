@@ -53,8 +53,7 @@ if ( ! empty( $_GET['metadata'] ) ) {
 
       <input type="hidden" name="configurator_id" value="<?php echo $configurator->get_id(); ?>">
       <input type="hidden" name="configuration" value='<?php echo json_encode( $configurator->get_configuration() ); ?>'>
-
-      <?php get_template_part( 'template-parts/form-hidden-fields' ); ?>
+      <input type="hidden" name="action" class="js-form-action" value="handle_lead_form_submit">
 
    </form>
 
