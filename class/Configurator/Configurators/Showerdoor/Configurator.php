@@ -25,22 +25,22 @@ class Configurator extends \Configurator\Configurator {
       }
 
       if ( ! empty( $default['glasstype'] ) ) {
-         $price_table['glass'] = $m2s * $this->get_option_price( 'glasstype', $default['glasstype'] );
+         $price_table['glass'] = $m2s * $this->get_option_price( $default['glasstype'], 'glasstype' );
       }
 
       foreach ( $configuration as $step_id => $input ) {
 
          $option_price = 0;
 
-         if ( $this->get_option_price( $step_id, $input ) ) {
-            $option_price = $this->get_option_price( $step_id, $input );
+         if ( $this->get_option_price( $input, $step_id ) ) {
+            $option_price = $this->get_option_price( $input, $step_id );
          }
 
          switch ( $step_id ) {
 
             case 'glasstype' :
                if ( ! empty( $default['glasstype'] ) ) {
-                  $price_default         = $this->get_option_price( 'glasstype', $default['glasstype'] );
+                  $price_default         = $this->get_option_price( $default['glasstype'], 'glasstype' );
                   $price_table[$step_id] = $m2s * ( $option_price - $price_default );
                }
                break;

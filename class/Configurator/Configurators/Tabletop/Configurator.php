@@ -33,8 +33,8 @@ class Configurator extends \Configurator\Configurator {
 
          $option_price = 0;
 
-         if ( $this->get_option_price( $step_id, $input ) ) {
-            $option_price = $this->get_option_price( $step_id, $input );
+         if ( $this->get_option_price( $input, $step_id ) ) {
+            $option_price = $this->get_option_price( $input, $step_id );
          }
 
          switch ( $step_id ) {

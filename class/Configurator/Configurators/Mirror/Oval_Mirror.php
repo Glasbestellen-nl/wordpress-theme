@@ -22,10 +22,10 @@ class Oval_Mirror extends \Configurator\Configurator {
          $height = $configuration['height'];
 
          if ( $this->get_step_options( 'width' ) ) {
-            $width = $this->get_option_value( 'width', $configuration['width'] );
+            $width = $this->get_option_value( $configuration['width'], 'width' );
          }
          if ( $this->get_step_options( 'height' ) ) {
-            $height = $this->get_option_value( 'height', $configuration['height'] );
+            $height = $this->get_option_value( $configuration['height'], 'height' );
          }
 
          if ( $price_matrix = $this->get_price_matrix() ) {
@@ -68,8 +68,8 @@ class Oval_Mirror extends \Configurator\Configurator {
 
          $option_price = 0;
 
-         if ( $this->get_option_price( $step_id, $input ) !== false ) {
-            $option_price = $this->get_option_price( $step_id, $input );
+         if ( $this->get_option_price( $input, $step_id ) !== false ) {
+            $option_price = $this->get_option_price( $input, $step_id );
             $price_table[$step_id] = $option_price;
          }
 

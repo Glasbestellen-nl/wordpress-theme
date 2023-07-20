@@ -42,7 +42,7 @@ class Configurator_Hooks {
       $version = $theme->get( 'Version' );
       $configurator_id = get_post_meta( $post->ID, 'configurator', true );
       $configurator_settings = get_post_meta( $configurator_id, 'configurator_settings', true );
-
+      if ( empty( $configurator_settings['steps'] ) ) return;
       $configurator_settings['steps'] = $this->map_configurator_steps( $configurator_settings['steps'], $product->get_configurator() );
       $product_tax_object = WC_Tax::get_rates( $product->get_tax_class() );
       $data = [
