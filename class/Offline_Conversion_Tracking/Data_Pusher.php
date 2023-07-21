@@ -33,11 +33,14 @@ class Data_Pusher {
       $conversions = $this->get_conversions();
       if (!$conversions) return;
 
-      foreach ( $conversions as $conversion ) {
+      echo 'Test conv';
+
+      $url = get_option('offline_conversion_tracking_webhook_url');
+      if (!$url) return;
+
+      foreach ($conversions as $conversion) {
 
          // Make webhook call
-         $url = get_option('offline_conversion_tracking_webhook_url');
-         if (!$url) return;
          $data = [
             'lead_id' => $conversion['lead_id'],
             'revenue' => $conversion['revenue'],
@@ -63,7 +66,7 @@ class Data_Pusher {
 
       foreach ( $leads as $lead ) {
 
-         if ( ! CRM::get_lead_meta( $lead->lead_id, 'conversion_data_pushed', true ) ) {
+         if (!CRM::get_lead_meta( $lead->lead_id, 'conversion_data_pushed', true)) {
 
             $conversion_data = CRM::get_lead_meta( $lead->lead_id, 'conversion_data', true );
             $client_id = CRM::get_lead_meta( $lead->lead_id, 'gclid', 'true' );
