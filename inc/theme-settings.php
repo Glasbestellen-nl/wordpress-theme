@@ -159,6 +159,11 @@ function gb_init_theme_options() {
 	add_settings_field( $id, __( 'GTM Container ID', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id ) );
 	register_setting( 'theme-settings', $id );
 
+	// Offline conversion webhook url
+	$id = 'offline_conversion_webhook_url';
+	add_settings_field( $id, __( 'Offline conversion webhook URL', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
+	register_setting( 'theme-settings', $id );
+
 	/**
 	 * Payment settings
 	 */

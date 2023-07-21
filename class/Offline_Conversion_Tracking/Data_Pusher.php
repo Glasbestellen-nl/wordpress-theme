@@ -5,8 +5,6 @@ use \CRM;
 class Data_Pusher {
 
    public function make_webhook_post_request($url, $data) {
-
-      var_dump($data);
       
       $headers = [
          'Content-Type' => 'application/json',
@@ -33,13 +31,13 @@ class Data_Pusher {
    public function upload_offline_conversions() {
 
       $conversions = $this->get_conversions();
-      var_dump($conversions);
       if (!$conversions) return;
 
       foreach ( $conversions as $conversion ) {
 
          // Make webhook call
-         $url = 'https://hooks.zapier.com/hooks/catch/2193997/3mnllm3/';
+         $url = get_option('offline_conversion_tracking_webhook_url');
+         if (!$url) return;
          $data = [
             'lead_id' => $conversion['lead_id'],
             'revenue' => $conversion['revenue'],
@@ -52,7 +50,7 @@ class Data_Pusher {
 
          //CRM::update_lead_meta( $conversion['lead_id'],  'conversion_data_pushed', 1 );
       }
-
+      return $conversions;
    }
 
    public function get_conversions() {
