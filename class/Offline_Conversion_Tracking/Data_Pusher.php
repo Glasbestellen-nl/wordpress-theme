@@ -34,6 +34,7 @@ class Data_Pusher {
    public function upload_offline_conversions() {
 
       $conversions = $this->get_conversions();
+      var_dump($conversions);
       if (!$conversions) return;
 
       foreach ( $conversions as $conversion ) {
