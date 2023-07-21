@@ -72,7 +72,7 @@ class Data_Pusher {
             $client_id = CRM::get_lead_meta( $lead->lead_id, 'gclid', 'true' );
             $gclid = CRM::get_lead_meta( $lead->lead_id, 'ads_gclid', 'true' );
 
-            if ( $conversion_data && $client_id ) {
+            if ( $conversion_data ) {
 
                $conversion = [
                   'lead_id' => $lead->lead_id,
