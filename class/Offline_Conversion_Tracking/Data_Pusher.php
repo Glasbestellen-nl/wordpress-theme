@@ -47,6 +47,8 @@ class Data_Pusher {
             'client_id' => $conversion['client_id'],
             'gclid' => $conversion['gclid']
          ];
+         var_dump($data) . PHP_EOL;
+         echo $url;
          $this->make_webhook_post_request($url, $data);
 
          //CRM::update_lead_meta( $conversion['lead_id'],  'conversion_data_pushed', 1 );
