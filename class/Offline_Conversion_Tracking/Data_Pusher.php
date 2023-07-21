@@ -27,7 +27,6 @@ class Data_Pusher {
       if ( $response_code !== 200 ) {
          return false;
       }
-
       return true;
    }
 
@@ -72,7 +71,7 @@ class Data_Pusher {
             $client_id = CRM::get_lead_meta( $lead->lead_id, 'gclid', 'true' );
             $gclid = CRM::get_lead_meta( $lead->lead_id, 'ads_gclid', 'true' );
 
-            if ( $conversion_data ) {
+            if ($conversion_data && ($client_id || $gclid)) {
 
                $conversion = [
                   'lead_id' => $lead->lead_id,
