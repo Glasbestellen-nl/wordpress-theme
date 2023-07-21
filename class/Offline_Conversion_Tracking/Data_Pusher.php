@@ -39,7 +39,7 @@ class Data_Pusher {
       foreach ( $conversions as $conversion ) {
 
          // Make webhook call
-         $url = 'https://hooks.zapier.com/hooks/catch/5305329/3mwkk6n/';
+         $url = 'https://hooks.zapier.com/hooks/catch/2193997/3mnllm3/';
          $data = [
             'lead_id' => $conversion['lead_id'],
             'revenue' => $conversion['revenue'],
