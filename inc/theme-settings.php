@@ -22,8 +22,8 @@ function gb_theme_settings_page() {
       <form method="post" action="options.php">
          <?php
 			settings_fields( 'theme-settings' );
-         do_settings_sections( 'theme-settings-page' );
-         submit_button();
+			do_settings_sections( 'theme-settings-page' );
+			submit_button();
 			?>
       </form>
 

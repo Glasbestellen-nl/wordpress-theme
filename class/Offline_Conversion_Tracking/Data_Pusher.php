@@ -1,48 +1,63 @@
 <?php
 namespace Offline_Conversion_Tracking;
-
-use TheIconic\Tracking\GoogleAnalytics\Analytics;
+use \CRM;
 
 class Data_Pusher {
 
+   public function make_webhook_post_request($url, $data) {
+
+      var_dump($data);
+      
+      $headers = [
+         'Content-Type' => 'application/json',
+         'Accept' => 'application/json'
+      ];
+
+      $response = wp_remote_post( $url, [
+         'headers' => $headers,
+         'body' => json_encode( $data )
+      ] );
+
+      if ( is_wp_error( $response ) ) {
+         return false;
+      }
+
+      $response_code = wp_remote_retrieve_response_code( $response );
+
+      if ( $response_code !== 200 ) {
+         return false;
+      }
+
+      return true;
+   }
+
    public function upload_offline_conversions() {
 
-      if ( ! $this->get_conversions() ) return;
+      $conversions = $this->get_conversions();
+      if (!$conversions) return;
 
-      $analytics = new Analytics();
+      foreach ( $conversions as $conversion ) {
 
-      foreach ( $this->get_conversions() as $conversion ) {
+         // Make webhook call
+         $url = 'https://hooks.zapier.com/hooks/catch/5305329/3mwkk6n/';
+         $data = [
+            'lead_id' => $conversion['lead_id'],
+            'revenue' => $conversion['revenue'],
+            'shipping_price' => $conversion['shipping_price'],
+            'items' => $conversion['items'],
+            'client_id' => $conversion['client_id'],
+            'gclid' => $conversion['gclid']
+         ];
+         $this->make_webhook_post_request($url, $data);
 
-         $analytics->setProtocolVersion('1')
-            ->setTrackingId( get_option( 'ga_tracking_id' ) )
-            ->setClientId( $conversion['client_id'] );
-
-         $analytics->setTransactionId( $conversion['lead_id'] )
-            ->setAffiliation( 'form' )
-            ->setRevenue( $conversion['revenue'] )
-            ->setShipping( $conversion['shipping_price'] )
-            ->setTax( \Money::vat( $conversion['revenue'] ) )
-            ->sendTransaction();
-
-         if ( ! empty( $conversion['items'] ) ) {
-            foreach ( $conversion['items'] as $item ) {
-               $analytics->setTransactionId( $conversion['lead_id'] )
-                  ->setItemName( $item['name'] )
-                  ->setItemPrice( $item['price'] )
-                  ->setItemQuantity( $item['quantity'] )
-                  ->sendItem();
-            }
-         }
-
-         \CRM::update_lead_meta( $conversion['lead_id'], 'conversion_data_pushed', 1 );
-
+         //CRM::update_lead_meta( $conversion['lead_id'],  'conversion_data_pushed', 1 );
       }
 
    }
 
    public function get_conversions() {
 
-      $leads = \CRM::get_leads_by_status( 'order' );
+      $leads = CRM::get_leads_by_status( 'order' );
 
       if ( empty( $leads ) ) return;
 
@@ -50,10 +65,11 @@ class Data_Pusher {
 
       foreach ( $leads as $lead ) {
 
-         if ( ! \CRM::get_lead_meta( $lead->lead_id, 'conversion_data_pushed', true ) ) {
+         if ( ! CRM::get_lead_meta( $lead->lead_id, 'conversion_data_pushed', true ) ) {
 
-            $conversion_data = \CRM::get_lead_meta( $lead->lead_id, 'conversion_data', true );
-            $client_id = \CRM::get_lead_meta( $lead->lead_id, 'gclid', 'true' );
+            $conversion_data = CRM::get_lead_meta( $lead->lead_id, 'conversion_data', true );
+            $client_id = CRM::get_lead_meta( $lead->lead_id, 'gclid', 'true' );
+            $gclid = CRM::get_lead_meta( $lead->lead_id, 'ads_gclid', 'true' );
 
             if ( $conversion_data && $client_id ) {
 
@@ -62,18 +78,14 @@ class Data_Pusher {
                   'revenue' => $conversion_data['revenue'],
                   'shipping_price' => ! empty( $conversion_data['shipping_price'] ) ? $conversion_data['shipping_price'] : 0,
                   'items' => ! empty( $conversion_data['items'] ) ? $conversion_data['items'] : [],
-                  'client_id' => $client_id
+                  'client_id' => $client_id,
+                  'gclid' => $gclid
                ];
-
                $conversions[] = $conversion;
-
             }
-
          }
       }
-
       return $conversions;
-
    }
 
 }
