@@ -33,9 +33,7 @@ class Data_Pusher {
       $conversions = $this->get_conversions();
       if (!$conversions) return;
 
-      echo 'Test conv';
-
-      $url = get_option('offline_conversion_tracking_webhook_url');
+      $url = get_option('offline_conversion_webhook_url');
       if (!$url) return;
 
       foreach ($conversions as $conversion) {
