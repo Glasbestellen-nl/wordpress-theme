@@ -77,7 +77,8 @@ class Data_Pusher {
                   'shipping_price' => ! empty( $conversion_data['shipping_price'] ) ? $conversion_data['shipping_price'] : 0,
                   'items' => ! empty( $conversion_data['items'] ) ? $conversion_data['items'] : [],
                   'client_id' => $client_id,
-                  'gclid' => $gclid
+                  'gclid' => $gclid,
+                  'timestamp' => time()
                ];
                $conversions[] = $conversion;
             }
