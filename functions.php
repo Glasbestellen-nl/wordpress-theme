@@ -38,11 +38,10 @@ foreach ( $files as $file ) {
 
 $offline_conversion_tracking = new Offline_Conversion_Tracking\Core;
 
-
 function gb_test_offline_conversions() {
    if ( ! isset( $_GET['test_offline_conversions'] ) ) return;
    echo 'Started..' . PHP_EOL;
    $data_pusher = new Offline_Conversion_Tracking\Data_Pusher;
    var_dump($data_pusher->upload_offline_conversions());
 }
-add_action('init', 'gb_test_offline_conversions');
+// add_action('init', 'gb_test_offline_conversions');
