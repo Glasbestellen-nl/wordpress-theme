@@ -85,8 +85,6 @@ function gb_handle_lead_form_submit() {
 
    }
 
-   echo json_encode( $response );
-
    wp_die();
 
 }
@@ -146,8 +144,6 @@ function gb_handle_review_form_submit() {
 
       }
    }
-
-   echo json_encode( $response );
 
    wp_die();
 }

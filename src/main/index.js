@@ -490,7 +490,6 @@ jQuery.fn.scrollTo = function (offset) {
             submitButton.attr("disabled", true).text(gb.msg.pleaseWait);
           },
           success: function (response) {
-            console.log(response, "response");
             if (response) {
               submitButton.attr("disabled", false).text(gb.msg.sent);
               let parsed = JSON.parse(response);
