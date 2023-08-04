@@ -152,6 +152,7 @@ const LeadForm = () => {
             "Content-Type": "multipart/form-data",
           },
         });
+        console.log(response, "123");
         if (response.data && !response.data.error && response.data.redirect) {
           window.location.href = response.data.redirect;
         } else {
