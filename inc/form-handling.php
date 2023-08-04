@@ -9,8 +9,6 @@ function gb_handle_lead_form_submit() {
    $response = [];
    $error = false;
 
-   var_dump($_POST);
-
    // Check nonce for security
    check_ajax_referer( GB_NONCE, 'nonce' );
 
@@ -85,6 +83,7 @@ function gb_handle_lead_form_submit() {
 
    }
 
+   wp_send_json( $response );
    wp_die();
 
 }
@@ -145,6 +144,7 @@ function gb_handle_review_form_submit() {
       }
    }
 
+   wp_send_json( $response );
    wp_die();
 }
 add_action( 'wp_ajax_handle_review_form_submit', 'gb_handle_review_form_submit' );
