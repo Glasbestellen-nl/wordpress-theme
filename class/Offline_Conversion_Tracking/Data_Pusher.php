@@ -50,7 +50,7 @@ class Data_Pusher {
          ];
          $this->make_webhook_post_request($url, $data);
 
-         //CRM::update_lead_meta( $conversion['lead_id'],  'conversion_data_pushed', 1 );
+         CRM::update_lead_meta( $conversion['lead_id'],  'conversion_data_pushed', 1 );
       }
       return $conversions;
    }
