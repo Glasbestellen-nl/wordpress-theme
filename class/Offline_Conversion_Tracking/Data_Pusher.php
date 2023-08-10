@@ -128,8 +128,8 @@ class Data_Pusher {
          if (!CRM::get_lead_meta( $lead->lead_id, 'conversion_data_pushed', true)) {
 
             $conversion_data = CRM::get_lead_meta( $lead->lead_id, 'conversion_data', true );
-            $client_id = CRM::get_lead_meta( $lead->lead_id, 'gclid', 'true' );
-            $gclid = CRM::get_lead_meta( $lead->lead_id, 'ads_gclid', 'true' );
+            $client_id = CRM::get_lead_meta( $lead->lead_id, 'gclid', true );
+            $gclid = CRM::get_lead_meta( $lead->lead_id, 'ads_gclid', true );
 
             if ($conversion_data && ($client_id || $gclid)) {
 
