@@ -14,8 +14,6 @@ class Data_Pusher {
 
       foreach ($conversions as $conversion) {
 
-         var_dump($conversion);
-
          // Send data to Google Analytics 4 when client id is available
          if (!empty($conversion['client_id'])) {
             $this->send_offline_conversion_to_ga4($conversion);
