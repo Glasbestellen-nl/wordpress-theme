@@ -164,6 +164,16 @@ function gb_init_theme_options() {
 	add_settings_field( $id, __( 'Offline conversion webhook URL', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
 	register_setting( 'theme-settings', $id );
 
+	// Google analytics 4 measurement id
+	$id = 'ga4_measurement_id';
+	add_settings_field( $id, __( 'Google Analytics 4 Measurement ID', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
+	register_setting( 'theme-settings', $id );
+
+	// Google analytics 4 api secret
+	$id = 'ga4_api_secret';
+	add_settings_field( $id, __( 'Google Analytics 4 API secret', 'glasbestellen' ), 'gb_settings_text_field', $page, $section, array( 'id' => $id, 'label_for' => $id, 'large_field' => true ) );
+	register_setting( 'theme-settings', $id );
+
 	/**
 	 * Payment settings
 	 */

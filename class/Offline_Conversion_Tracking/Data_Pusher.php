@@ -25,8 +25,8 @@ class Data_Pusher {
             'revenue' => $conversion['revenue'],
             'shipping_price' => $conversion['shipping_price'],
             'items' => $conversion['items'],
-            'client_id' => $conversion['client_id'],
-            'gclid' => $conversion['gclid'],
+            'client_id' => $conversion['client_id'] ?? null,
+            'gclid' => $conversion['gclid'] ?? null,
             'timestamp' => $conversion['timestamp']
          ];
          $this->make_webhook_post_request($url, $data);
@@ -62,22 +62,21 @@ class Data_Pusher {
 
    public function send_offline_conversion_to_ga4($conversion) {
 
-      $measurement_id = 'G-XXXXXXXXXX';
-      $api_secret = '<secret_value>'; 
+      $measurement_id = get_option('ga4_measurement_id');
+      $api_secret = get_option('ga4_api_secret');
+      if (!$measurement_id || !$api_secret) return false;
       $request_url = "https://www.google-analytics.com/mp/collect?measurement_id={$measurement_id}&api_secret={$api_secret}";
   
       $client = new \GuzzleHttp\Client();
   
-      $items = [];
       if (!empty($conversion['items'])) {
-         foreach ($conversion['items'] as $item) {
-            $items[] = [
+         $items = array_map(function($item) {
+            return [
                'item_name' => $item['name'],
-               'currency'  => 'EUR',
-               'quantity'  => 'quantity',
-               'shipping'  => $conversion['shipping_price']
+               'quantity'  => $item['quantity'],
+               'shipping'  => $item['shipping_price']
             ];
-         }
+         }, $conversion['items']);
       }
   
       $body = [
@@ -99,12 +98,10 @@ class Data_Pusher {
           $response = $client->post($request_url, [
               'json' => $body,
           ]);
-  
           if ($response->getStatusCode() !== 200) {
               // Handle non-successful response
               return false;
           }
-  
           return true;
       } catch (\Exception $e) {
           // Handle exception
