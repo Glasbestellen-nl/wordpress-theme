@@ -96,7 +96,7 @@ class Data_Pusher {
   
       try {
           $response = $client->post($request_url, [
-              'json' => $body,
+              'body' => $body,
           ]);
           var_dump($response);
           if ($response->getStatusCode() !== 200) {
