@@ -64,6 +64,7 @@ class Data_Pusher {
 
       $measurement_id = get_option('ga4_measurement_id');
       $api_secret = get_option('ga4_api_secret');
+      var_dump($measurement_id . ' ' . $api_secret);
       if (!$measurement_id || !$api_secret) return false;
       $request_url = "https://www.google-analytics.com/mp/collect?measurement_id={$measurement_id}&api_secret={$api_secret}";
   
