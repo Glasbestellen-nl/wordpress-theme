@@ -133,6 +133,9 @@ class Data_Pusher {
 
             if ($conversion_data && ($client_id || $gclid)) {
 
+               echo 'CLIENT ID: ';
+               var_dump($client_id);
+
                $conversion = [
                   'lead_id' => $lead->lead_id,
                   'revenue' => $conversion_data['revenue'],
