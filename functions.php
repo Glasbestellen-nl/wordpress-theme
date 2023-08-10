@@ -44,4 +44,4 @@ function gb_test_offline_conversions() {
    $data_pusher = new Offline_Conversion_Tracking\Data_Pusher;
    var_dump($data_pusher->upload_offline_conversions());
 }
-// add_action('init', 'gb_test_offline_conversions');
+add_action('init', 'gb_test_offline_conversions');
