@@ -76,7 +76,7 @@ class Data_Pusher {
             return [
                'item_name' => $item['name'],
                'quantity'  => $item['quantity'],
-               'shipping'  => $item['shipping_price']
+               'shipping'  => $item['shipping_price'] ?? 0,
             ];
          }, $conversion['items']);
       }
