@@ -102,7 +102,7 @@ class Data_Pusher {
               // Handle non-successful response
               return false;
           }
-          var_dump($response->getBody()->getContents());
+          var_dump($response->getStatusCode());
           return true;
       } catch (\Exception $e) {
           // Handle exception
