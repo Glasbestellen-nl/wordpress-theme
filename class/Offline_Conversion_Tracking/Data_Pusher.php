@@ -66,7 +66,6 @@ class Data_Pusher {
 
       $measurement_id = get_option('ga4_measurement_id');
       $api_secret = get_option('ga4_api_secret');
-      var_dump($measurement_id . ' ' . $api_secret);
       if (!$measurement_id || !$api_secret) return false;
       $request_url = "https://www.google-analytics.com/mp/collect?measurement_id={$measurement_id}&api_secret={$api_secret}";
   
@@ -96,8 +95,6 @@ class Data_Pusher {
               ],
           ],
       ];
-
-      var_dump($body);
   
       try {
           $response = $client->post($request_url, [
@@ -130,10 +127,6 @@ class Data_Pusher {
             $conversion_data = CRM::get_lead_meta( $lead->lead_id, 'conversion_data', true );
             $client_id = CRM::get_lead_meta( $lead->lead_id, 'gclid', true );
             $gclid = CRM::get_lead_meta( $lead->lead_id, 'ads_gclid', true );
-
-            echo '|||';
-            var_dump($client_id);
-            var_dump($gclid);
 
             if ($conversion_data && ($client_id || $gclid)) {
 
