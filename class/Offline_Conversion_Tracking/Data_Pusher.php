@@ -46,7 +46,7 @@ class Data_Pusher {
       $response = wp_remote_post( $url, [
          'headers' => $headers,
          'body' => json_encode( $data )
-      ] );
+      ]);
 
       if ( is_wp_error( $response ) ) {
          return false;
@@ -95,15 +95,25 @@ class Data_Pusher {
       ];
   
       try {
-          $response = $client->post($request_url, [
-              'body' => json_encode($body),
-          ]);
-          var_dump($response->getStatusCode());
-          if ($response->getStatusCode() !== 200) {
-              // Handle non-successful response
-              return false;
-          }
-          return true;
+         $headers = [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+         ];
+         $response = wp_remote_post( $url, [
+            'headers' => $headers,
+            'body' => json_encode($body)
+         ]);
+
+         if ( is_wp_error( $response ) ) {
+            return false;
+         }
+         $response_code = wp_remote_retrieve_response_code( $response );
+   
+         if ( $response_code !== 200 ) {
+            return false;
+         }
+         return true;
+   
       } catch (\Exception $e) {
           // Handle exception
           var_dump($e->getMessage());
