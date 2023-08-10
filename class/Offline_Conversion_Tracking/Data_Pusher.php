@@ -66,9 +66,7 @@ class Data_Pusher {
       $api_secret = get_option('ga4_api_secret');
       if (!$measurement_id || !$api_secret) return false;
       $request_url = "https://www.google-analytics.com/mp/collect?measurement_id={$measurement_id}&api_secret={$api_secret}";
-  
-      $client = new \GuzzleHttp\Client();
-  
+    
       if (!empty($conversion['items'])) {
          $items = array_map(function($item) {
             return [
@@ -99,7 +97,7 @@ class Data_Pusher {
             'Content-Type' => 'application/json',
             'Accept' => 'application/json'
          ];
-         $response = wp_remote_post( $url, [
+         $response = wp_remote_post( $request_url, [
             'headers' => $headers,
             'body' => json_encode($body)
          ]);
