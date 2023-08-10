@@ -98,11 +98,11 @@ class Data_Pusher {
           $response = $client->post($request_url, [
               'body' => $body,
           ]);
-          var_dump($response);
           if ($response->getStatusCode() !== 200) {
               // Handle non-successful response
               return false;
           }
+          var_dump($response->getBody()->getContents());
           return true;
       } catch (\Exception $e) {
           // Handle exception
