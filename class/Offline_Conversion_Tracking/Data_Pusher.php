@@ -131,10 +131,11 @@ class Data_Pusher {
             $client_id = CRM::get_lead_meta( $lead->lead_id, 'gclid', true );
             $gclid = CRM::get_lead_meta( $lead->lead_id, 'ads_gclid', true );
 
-            if ($conversion_data && ($client_id || $gclid)) {
+            echo '|||';
+            var_dump($client_id);
+            var_dump($gclid);
 
-               echo 'CLIENT ID: ';
-               var_dump($client_id);
+            if ($conversion_data && ($client_id || $gclid)) {
 
                $conversion = [
                   'lead_id' => $lead->lead_id,
