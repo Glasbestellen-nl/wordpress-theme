@@ -492,13 +492,12 @@ jQuery.fn.scrollTo = function (offset) {
           success: function (response) {
             if (response) {
               submitButton.attr("disabled", false).text(gb.msg.sent);
-              let parsed = JSON.parse(response);
-              if (parsed.error) {
-                showErrorAlert(parsed.error, form);
+              if (response.error) {
+                showErrorAlert(response.error, form);
               } else {
                 hideErrorAlert(form);
-                if (parsed.redirect) {
-                  window.location.href = parsed.redirect;
+                if (response.redirect) {
+                  window.location.href = response.redirect;
                 }
               }
             }
