@@ -87,7 +87,7 @@
 </main>
 
 
-<div class="fixed-bottom-wrapper fixed-bottom-wrapper--mobile js-hide-when" data-hide-when="#react_lead_form">
+<div class="sticky-bar js-hide-when" data-hide-when="#react_lead_form">
     <div class="container">
         <span class="btn btn--primary btn--next btn--block js-scroll-to" data-scroll-to="#react_lead_form"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
     </div>
