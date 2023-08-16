@@ -71,8 +71,7 @@
 
                     <?php } ?>
 
-                    <div class="form form--lead sticky" id="lead_form">
-                        <?php get_template_part( 'template-parts/lead-form' ); ?>
+                    <div class="form form--lead sticky" id="react_lead_form">
                     </div>
 
                 </div>
@@ -88,9 +87,9 @@
 </main>
 
 
-<div class="fixed-bottom-wrapper fixed-bottom-wrapper--mobile js-hide-when" data-hide-when="#lead_form">
+<div class="fixed-bottom-wrapper fixed-bottom-wrapper--mobile js-hide-when" data-hide-when="#react_lead_form">
     <div class="container">
-        <span class="btn btn--primary btn--next btn--block js-scroll-to" data-scroll-to="#lead_form"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
+        <span class="btn btn--primary btn--next btn--block js-scroll-to" data-scroll-to="#react_lead_form"><?php _e( 'Ontvang offerte', 'glasbestellen' ); ?></span>
     </div>
 </div>
 
