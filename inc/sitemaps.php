@@ -5,7 +5,7 @@
 function sitemap_exclude_post_type( $value, $post_type ) {
   if ( $post_type == 'product' ) return true;
 }
-//add_filter( 'wpseo_sitemap_exclude_post_type', 'sitemap_exclude_post_type', 10, 2 );
+add_filter( 'wpseo_sitemap_exclude_post_type', 'sitemap_exclude_post_type', 10, 2 );
 
 /**
  * Change products sitemap
@@ -15,7 +15,7 @@ function gb_change_products_sitemap() {
   if ( empty( $wpseo_sitemaps ) ) return;
   $wpseo_sitemaps->register_sitemap( 'products', 'create_product_sitemap' );
 }
-//add_action( 'init', 'gb_change_products_sitemap', 99 );
+add_action( 'init', 'gb_change_products_sitemap', 99 );
 
 /**
  * Create products sitemap
@@ -63,7 +63,7 @@ function gb_enable_custom_sitemap() {
     $wpseo_sitemaps->register_sitemap( 'external', 'create_external_sitemap' );
   }
 }
-//add_action( 'init', 'gb_enable_custom_sitemap' );
+add_action( 'init', 'gb_enable_custom_sitemap' );
 
 /**
  * Create products sitemap
@@ -77,4 +77,4 @@ function gb_add_sitemap_custom_items( $sitemap_custom_items ) {
    ';
    return $sitemap_custom_items;
 }
-//add_filter( 'wpseo_sitemap_index', 'gb_add_sitemap_custom_items' );
+add_filter( 'wpseo_sitemap_index', 'gb_add_sitemap_custom_items' );

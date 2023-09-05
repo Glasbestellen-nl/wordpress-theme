@@ -349,13 +349,3 @@ add_filter('rewrite_rules_array', function($rules) {
     ];
     return $new_rules + $rules;
 });
-
-/**
- * Adds last modified date meta data to term on save
- */
-function save_product_cat_last_modified_date( $term_id, $taxonomy ) {
-    if ( $taxonomy == 'product_cat' ) {
-        update_term_meta( $term_id, 'last_modified_date', time() );
-    }
-}
-add_action( 'edited_terms', 'save_product_cat_last_modified_date', 10, 2 );
