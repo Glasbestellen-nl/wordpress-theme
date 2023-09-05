@@ -80,7 +80,7 @@ function gb_add_sitemap_custom_items( $sitemap_custom_items ) {
     'order'       => 'DESC',
   ]);
 
-  if ( empty( $products_query->terms ) ) {
+  if (!empty( $products_query->terms) ) {
     $first_term = $products_query->terms[0];
     $lastmod = get_term_meta( $first_term->term_id, 'last_modified_date', true );
   } else {
