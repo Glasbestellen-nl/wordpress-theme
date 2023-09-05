@@ -343,9 +343,9 @@ add_filter( 'woocommerce_return_to_shop_redirect', 'gb_change_return_shop_url' )
 add_filter('rewrite_rules_array', function($rules) {
     $new_rules = [
         'producten/$' => 'index.php?is_product_cat_archive=1',
-        'producten/([^/]+)/$' => 'index.php?product_cat=$matches[1]',
-        'producten/([^/]+)/([^/]+)/$' => 'index.php?product_cat=$matches[1]&product=$matches[2]',
-        'producten/([^/]+)/page/([0-9]{1,})/$' => 'index.php?product_cat=$matches[1]&paged=$matches[2]',
+        'producten/([^/]+)/?$' => 'index.php?product_cat=$matches[1]',
+        'producten/([^/]+)/([^/]+)/?$' => 'index.php?product_cat=$matches[1]&product=$matches[2]',
+        'producten/([^/]+)/page/([0-9]{1,})/?$' => 'index.php?product_cat=$matches[1]&paged=$matches[2]',
     ];
     return $new_rules + $rules;
 });
