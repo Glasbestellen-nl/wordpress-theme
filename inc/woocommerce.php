@@ -354,6 +354,7 @@ add_filter('rewrite_rules_array', function($rules) {
  * Adds last modified date meta data to term on save
  */
 function save_product_cat_last_modified_date( $term_id ) {
+    die;
     update_term_meta( $term_id, 'last_modified_date', time() );
 }
 add_action( 'edited_product_cat', 'save_product_cat_last_modified_date', 10, 2 );
