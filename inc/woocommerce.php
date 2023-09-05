@@ -355,6 +355,7 @@ add_filter('rewrite_rules_array', function($rules) {
  */
 function save_product_cat_last_modified_date( $term_id, $taxonomy ) {
     if ( $taxonomy == 'product_cat' ) {
+        die;
         update_term_meta( $term_id, 'last_modified_date', time() );
     }
 }
