@@ -41,7 +41,9 @@ function create_product_sitemap() {
     if (!$lastmod) {
       $lastmod = time();
     }
-    //$lastmod = date( 'Y-m-d H:i', $lastmod ) . ' +00:00';
+    // Convert lastmod to iso date
+    $lastmod = date( 'c', $lastmod );
+
 
     $sitemap .= '
       <url>
