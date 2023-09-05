@@ -38,15 +38,15 @@ function create_product_sitemap() {
 
     $url = get_term_link( $term );
     $lastmod = get_term_meta( $term->term_id, 'last_modified_date', true );
-    if (!$lastmod) {
-      $lastmod = time();
-    }
-    $lastmod = date( 'c', $lastmod );
+    // if (!$lastmod) {
+    //   $lastmod = time();
+    // }
+    //$lastmod = date( 'c', $lastmod );
 
     $sitemap .= '
       <url>
         <loc>' . $url . '</loc>
-        <lastmod>' . $term->term_id . '</lastmod>
+        <lastmod>' . print_r($lastmod, true) . '</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
       </url>';
