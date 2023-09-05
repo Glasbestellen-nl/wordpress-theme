@@ -40,6 +40,8 @@ function create_product_sitemap() {
     $lastmod = get_term_meta( $term->term_id, 'last_modified_date', true ) ?? time();
     $lastmod = date( 'c', $lastmod );
 
+    echo $lastmod;
+
     $sitemap .= '
       <url>
         <loc>' . $url . '</loc>
