@@ -70,12 +70,30 @@ add_action( 'init', 'gb_enable_custom_sitemap' );
  * Create products sitemap
  */
 function gb_add_sitemap_custom_items( $sitemap_custom_items ) {
-   $sitemap_custom_items .= '
-      <sitemap>
-        <loc>' . site_url( 'products-sitemap.xml' ) . '</loc>
-        <lastmod></lastmod>
+
+  // Get all product cats ordered by latest first
+  $products_query = new WP_Term_Query([
+    'taxonomy'    => 'product_cat',
+    'hide_empty'  => false,
+    'meta_key'    => 'last_modified_date',
+    'orderby'     => 'meta_value_num',
+    'order'       => 'DESC',
+  ]);
+
+  if ( empty( $products_query->terms ) ) {
+    $first_term = $products_query->terms[0];
+    $lastmod = get_term_meta( $first_term->term_id, 'last_modified_date', true );
+  } else {
+    $lastmod = time();
+  }
+  $lastmod = date( 'c', $lastmod );
+
+  $sitemap_custom_items .= '
+    <sitemap>
+      <loc>' . site_url( 'products-sitemap.xml' ) . '</loc>
+      <lastmod>' . $lastmod . '</lastmod>
     </sitemap>
-   ';
-   return $sitemap_custom_items;
+  ';
+  return $sitemap_custom_items;
 }
 add_filter( 'wpseo_sitemap_index', 'gb_add_sitemap_custom_items' );
