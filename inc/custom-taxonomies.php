@@ -2,35 +2,6 @@
 // Registers custom Taxonomies
 function gb_register_taxonomies() {
 
-	// Product categorie
-	$labels = array(
-		'name'                       => _x( 'Categorie', 'Taxonomy General Name', 'glasbestellen' ),
-		'singular_name'              => _x( 'Categorie', 'Taxonomy Singular Name', 'glasbestellen' ),
-		'menu_name'                  => __( 'Categorie&euml;n', 'glasbestellen' ),
-		'all_items'                  => __( 'Alle Categorieen', 'glasbestellen' ),
-		'parent_item'                => __( 'Parent Categorie', 'glasbestellen' ),
-		'parent_item_colon'          => __( 'Parent Categorie:', 'glasbestellen' ),
-		'new_item_name'              => __( 'Nieuwe Categorie naam', 'glasbestellen' ),
-		'add_new_item'               => __( 'Voeg nieuwe Categorie toe', 'glasbestellen' ),
-		'edit_item'                  => __( 'Bewerk Categorie', 'glasbestellen' ),
-		'update_item'                => __( 'Update Categorie', 'glasbestellen' ),
-		'separate_items_with_commas' => __( 'Scheidt Categorie&euml;n door komma\'s', 'glasbestellen' ),
-		'search_items'               => __( 'Zoek Categorie&euml;n', 'glasbestellen' ),
-		'add_or_remove_items'        => __( 'Voeg toe of verwijder Categorie', 'glasbestellen' ),
-		'choose_from_most_used'      => __( 'Kies uit meest gebruikte Categorie&euml;n', 'glasbestellen' ),
-		'not_found'                  => __( 'Niet gevonden', 'glasbestellen' ),
-	);
-	$args = array(
-		'labels'                     => $labels,
-		'hierarchical'               => false,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	// register_taxonomy( 'product-categorie', array( 'product' ), $args );
-
 	// Review product
 	$labels = array(
 		'name'                       => _x( 'Categorie', 'Taxonomy General Name', 'glasbestellen' ),
@@ -59,7 +30,6 @@ function gb_register_taxonomies() {
 		'show_tagcloud'              => true,
 	);
 	register_taxonomy( 'review-product', array( 'review' ), $args );
-
 
 	// Onderwerp
 	$labels = array(
