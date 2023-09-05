@@ -91,7 +91,7 @@ function gb_add_sitemap_custom_items( $sitemap_custom_items ) {
   $sitemap_custom_items .= '
     <sitemap>
       <loc>' . site_url( 'products-sitemap.xml' ) . '</loc>
-      <lastmod>' . $lastmod . '</lastmod>
+      <lastmod>' . count($products_query->terms) . '</lastmod>
     </sitemap>
   ';
   return $sitemap_custom_items;
