@@ -5,7 +5,7 @@
 function sitemap_exclude_post_type( $value, $post_type ) {
   if ( $post_type == 'product' ) return true;
 }
-add_filter( 'wpseo_sitemap_exclude_post_type', 'sitemap_exclude_post_type', 10, 2 );
+//add_filter( 'wpseo_sitemap_exclude_post_type', 'sitemap_exclude_post_type', 10, 2 );
 
 /**
  * Change products sitemap
