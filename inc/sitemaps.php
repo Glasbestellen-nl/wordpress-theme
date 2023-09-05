@@ -43,7 +43,7 @@ function create_product_sitemap() {
     $sitemap .= '
       <url>
         <loc>' . $url . '</loc>
-        <lastmod>' . $lastmod . '</lastmod>
+        <lastmod>' . 10 . '</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
       </url>';
