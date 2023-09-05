@@ -355,6 +355,7 @@ add_filter('rewrite_rules_array', function($rules) {
  */
 function save_product_cat_last_modified_date( $term_id ) {
     var_dump(update_term_meta( $term_id, 'last_modified_date', time() ));
+    var_dump(get_term_meta( $term_id, 'last_modified_date', true ));
     die;
 }
 add_action( 'edited_product_cat', 'save_product_cat_last_modified_date', 10, 2 );
