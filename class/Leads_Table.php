@@ -82,6 +82,7 @@ class Leads_Table extends WP_List_Table {
       if ( current_user_can( 'administrator' ) ) {
          $columns['gclid'] = __( 'GCLID', 'glasbestellen' );
          $columns['client_id'] = __( 'Client ID', 'glasbestellen' );
+         $columns['data_pushed'] = __( 'DP', 'glasbestellen' );
       }
 
       return $columns;
@@ -136,6 +137,12 @@ class Leads_Table extends WP_List_Table {
                return '<span class="dashicons dashicons-yes-alt" style="color: green;"></span>';
             }
             break;      
+         case 'data_pushed' :
+            $data_pushed = CRM::get_lead_meta( $item['lead_id'], 'conversion_data_pushed', true );
+            if ( $data_pushed ) {
+               return '<span class="dashicons dashicons-yes-alt" style="color: green;"></span>';
+            }
+            break;
          default :
             return print_r( $item, true ) ;
       }
