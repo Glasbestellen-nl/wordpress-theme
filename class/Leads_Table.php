@@ -82,8 +82,8 @@ class Leads_Table extends WP_List_Table {
       if ( current_user_can( 'administrator' ) ) {
          $columns['gclid'] = __( 'GCLID', 'glasbestellen' );
          $columns['client_id'] = __( 'Client ID', 'glasbestellen' );
-         $columns['ga_data_pushed'] = __( 'Pushed GA4', 'glasbestellen' );
-         $columns['ads_data_pushed'] = __( 'Pushed GAds', 'glasbestellen' );
+         $columns['ga_data_pushed'] = __( 'GA4 push', 'glasbestellen' );
+         $columns['ads_data_pushed'] = __( 'GAds push', 'glasbestellen' );
       }
 
       return $columns;
