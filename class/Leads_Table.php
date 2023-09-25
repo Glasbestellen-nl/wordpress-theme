@@ -75,9 +75,16 @@ class Leads_Table extends WP_List_Table {
          'phone'        => __( 'Telefoonnummer', 'glasbestellen' ),
          'residence'    => __( 'Woonplaats', 'glasbestellen' ),
          'configuration'=> __( 'Configuratie', 'glasbestellen' ),
-         'request_uri'  => __( 'URL', 'glasbestellen' )
-     );
-     return $columns;
+         'request_uri'  => __( 'URL', 'glasbestellen' ),
+      );
+
+     // If admin show extra columns
+      if ( current_user_can( 'administrator' ) ) {
+         $columns['gclid'] = __( 'GCLID', 'glasbestellen' );
+         $columns['client_id'] = __( 'Client ID', 'glasbestellen' );
+      }
+
+      return $columns;
    }
 
    /**
@@ -117,6 +124,18 @@ class Leads_Table extends WP_List_Table {
                if ( ! empty( $parsed['path'] ) ) return $parsed['path'];
             }
             break;
+         case 'gclid' :
+            $gclid = CRM::get_lead_meta( $item['lead_id'], 'ads_gclid', true );
+            if ( $gclid ) {
+               return '<span class="dashicons dashicons-yes-alt" style="color: green;"></span>';
+            }
+            break;
+         case 'client_id' :
+            $client_id = CRM::get_lead_meta( $item['lead_id'], 'gclid', true );
+            if ( $client_id ) {
+               return '<span class="dashicons dashicons-yes-alt" style="color: green;"></span>';
+            }
+            break;      
          default :
             return print_r( $item, true ) ;
       }
