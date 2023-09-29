@@ -22,7 +22,7 @@ class Data_Pusher {
          }
 
          // Make webhook call
-         if ($webhook_url && !empty($conversion['gclid']) && !CRM::get_lead_meta( $lead->lead_id, 'ads_conversion_data_pushed', true)) {
+         if ($webhook_url && !empty($conversion['gclid']) && !CRM::get_lead_meta( $conversion['lead_id'], 'ads_conversion_data_pushed', true)) {
             $data = [
                'lead_id' => $conversion['lead_id'],
                'revenue' => $conversion['revenue'],
