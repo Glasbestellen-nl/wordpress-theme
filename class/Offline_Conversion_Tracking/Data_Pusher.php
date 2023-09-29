@@ -13,6 +13,8 @@ class Data_Pusher {
 
       foreach ($conversions as $conversion) {
 
+         var_dump($conversion);
+
          // Send data to Google Analytics 4 when client id is available
          if (!empty($conversion['client_id']) && !CRM::get_lead_meta( $conversion['lead_id'], 'conversion_data_pushed', true)) {
             $success = $this->send_offline_conversion_to_ga4($conversion);
