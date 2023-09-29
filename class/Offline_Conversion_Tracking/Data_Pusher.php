@@ -99,6 +99,7 @@ class Data_Pusher {
               ],
           ],
       ];
+      var_dump($body);
   
       try {
          $headers = [
