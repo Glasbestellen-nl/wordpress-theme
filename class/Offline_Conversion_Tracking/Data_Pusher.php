@@ -114,6 +114,7 @@ class Data_Pusher {
             return false;
          }
          $response_code = wp_remote_retrieve_response_code( $response );
+         var_dump($response_code);
    
          if ( $response_code !== 200 ) {
             return false;
