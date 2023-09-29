@@ -99,7 +99,6 @@ class Data_Pusher {
               ],
           ],
       ];
-      var_dump($body);
   
       try {
          $headers = [
@@ -115,9 +114,8 @@ class Data_Pusher {
             return false;
          }
          $response_code = wp_remote_retrieve_response_code( $response );
-         var_dump($response_code);
    
-         if ( $response_code !== 200 ) {
+         if ( $response_code !== 200 || $response_code !== 204 ) {
             return false;
          }
          return true;
