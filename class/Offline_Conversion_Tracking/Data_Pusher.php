@@ -89,7 +89,6 @@ class Data_Pusher {
               [
                   'name' => 'offline_purchase',
                   'params' => [
-                     'offline' => true,
                      'transaction_id' => 'L_' . $conversion['lead_id'],
                      'value' => $conversion['revenue'],
                      'currency' => 'EUR',
