@@ -17,6 +17,7 @@ class Data_Pusher {
          if (!empty($conversion['client_id']) && !CRM::get_lead_meta( $conversion['lead_id'], 'conversion_data_pushed', true)) {
             var_dump($conversion['client_id']);
             $success = $this->send_offline_conversion_to_ga4($conversion);
+            var_dump($success);
             if ($success) {
                CRM::update_lead_meta($conversion['lead_id'],  'conversion_data_pushed', 1);
             }
