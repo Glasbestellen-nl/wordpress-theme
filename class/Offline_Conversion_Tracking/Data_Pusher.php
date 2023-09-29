@@ -115,7 +115,7 @@ class Data_Pusher {
          }
          $response_code = wp_remote_retrieve_response_code( $response );
          var_dump($response_code);
-         if (in_array($response_code, [200, 201])) {
+         if (in_array($response_code, [200, 201, 204])) {
             return true;
          }
    
