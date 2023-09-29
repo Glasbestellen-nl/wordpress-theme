@@ -114,11 +114,10 @@ class Data_Pusher {
             return false;
          }
          $response_code = wp_remote_retrieve_response_code( $response );
-   
-         if ( $response_code !== 200 || $response_code !== 204 ) {
-            return false;
+         var_dump($response_code);
+         if (in_array($response_code, [200, 201])) {
+            return true;
          }
-         return true;
    
       } catch (\Exception $e) {
           // Handle exception
