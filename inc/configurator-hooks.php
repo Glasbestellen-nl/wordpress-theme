@@ -34,23 +34,35 @@ class Configurator_Hooks {
 
       global $post;
 
-      if ( ! is_singular( 'product' ) ) return;
+      if ( ! is_singular( 'product' ) ) 
+         return;
+
       $product = wc_get_product( $post->ID );
-      if ( ! $product || ! $product->is_type( 'configurable' ) ) return;
+      if ( ! $product || ! $product->is_type( 'configurable' ) ) 
+         return;
 
       $theme = wp_get_theme();
       $version = $theme->get( 'Version' );
       $configurator_id = get_post_meta( $post->ID, 'configurator', true );
       $configurator_settings = get_post_meta( $configurator_id, 'configurator_settings', true );
-      if ( empty( $configurator_settings['steps'] ) ) return;
+
+      if ( empty( $configurator_settings['steps'] ) ) 
+         return;
+
       $configurator_settings['steps'] = $this->map_configurator_steps( $configurator_settings['steps'], $product->get_configurator() );
       $product_tax_object = WC_Tax::get_rates( $product->get_tax_class() );
+
+      // Quotation disabled
+      $quotation_disabled = get_post_meta( $post->ID, 'quotation_disabled', true );
+      $quotation_disabled = empty($quotation_disabled) ? false : true;
+
       $data = [
          'productId' => $post->ID,
          'configuratorId' => $configurator_id,
          'settings' => $configurator_settings,
          'tax' => reset( $product_tax_object ),
-         'currency' => get_woocommerce_currency()
+         'currency' => get_woocommerce_currency(),
+         'quotationDisabled' => $quotation_disabled,
       ];
 
       wp_enqueue_script( 'configurator', get_template_directory_uri() . '/assets/js/configurator.js', ['jquery', 'wp-element', 'main-js'], $version, true );

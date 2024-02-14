@@ -49,7 +49,8 @@ function gb_product_rich_snippets_head() {
       // Product images
       if ( $gallery_images = get_field( 'gallery_images', 'term_' . $queried_object_id ) ) {
          foreach ( $gallery_images as $image ) {
-            $json['image'][] = $image['url'];
+            if (!empty($image['url']))
+               $json['image'][] = $image['url'];
          }
       }
 

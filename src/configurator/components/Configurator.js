@@ -21,6 +21,7 @@ import {
 import Step from "./Step";
 
 const Configurator = () => {
+  const settings = window.configurator;
   const [state, dispatch] = useReducer(configuratorReducer, initialState);
   const ref = useRef();
   const isMounted = useRef(false);
@@ -31,9 +32,7 @@ const Configurator = () => {
   useEffect(() => {
     (async () => {
       const steps = getStepsData();
-      const response = await getConfiguration(
-        window.configurator.configuratorId
-      );
+      const response = await getConfiguration(settings.configuratorId);
       if (response?.data?.configuration) {
         const { configuration } = response.data;
         dispatch({ type: "init_steps", payload: { steps, configuration } });
@@ -56,7 +55,7 @@ const Configurator = () => {
       else setConfigInit(true);
       (async () => {
         try {
-          const { productId } = window.configurator;
+          const { productId } = settings;
           // Store configuration in server session and receive total price html
           const response = await storeConfiguration(productId, configuration);
           if (response && response.data && response.data.price_html) {
@@ -181,7 +180,7 @@ const Configurator = () => {
     showModalForm(
       "Samenstelling als offerte ontvangen",
       "save-configuration",
-      window.configurator.configuratorId,
+      settings.configuratorId,
       () => jQuery(".js-form-content-field").val(state.message) // Temporary set with jQuery
     );
   };
@@ -243,15 +242,19 @@ const Configurator = () => {
             {(!state.submitting && "In winkelwagen") || "Een moment.."}
           </button>
         </div>
-        <div className="configurator__form-button space-below">
-          <button
-            className="btn btn--block btn--aside"
-            onClick={handleSaveButtonClick}
-            disabled={state.loading}
-          >
-            <i class="fas fa-file-import"></i> &nbsp;&nbsp; Mail mij een offerte
-          </button>
-        </div>
+        {!settings.quotationDisabled && (
+          <div className="configurator__form-button space-below">
+            <button
+              className="btn btn--block btn--aside"
+              onClick={handleSaveButtonClick}
+              disabled={state.loading}
+            >
+              <i class="fas fa-file-import"></i> &nbsp;&nbsp; Mail mij een
+              offerte
+            </button>
+          </div>
+        )}
+
         <StickyBar
           submitButtonHandler={handleSubmitButtonClick}
           saveButtonHandler={handleSaveButtonClick}
