@@ -45,3 +45,13 @@ function gb_test_offline_conversions() {
    $data_pusher->upload_offline_conversions();
 }
 add_action('init', 'gb_test_offline_conversions');
+
+/**
+ * Remove breadcrumbs from yoast schema
+ */
+function gb_remove_breadcrumbs_from_schema( $pieces, $context ) {
+	return \array_filter( $pieces, function( $piece ) {
+    	return ! $piece instanceof \Yoast\WP\SEO\Generators\Schema\Breadcrumb;
+	});
+}
+add_filter( 'wpseo_schema_graph_pieces', 'gb_remove_breadcrumbs_from_schema', 11, 2 );
