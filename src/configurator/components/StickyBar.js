@@ -5,6 +5,7 @@ const StickyBar = ({
   submitButtonHandler,
   saveButtonHandler,
   scrollTargetRef,
+  disableQuoteButton,
 }) => {
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
@@ -50,16 +51,18 @@ const StickyBar = ({
                 >
                   In winkelwagen
                 </button>
-                <button
-                  className="d-none d-md-flex align-items-center justify-content-center btn btn--block btn--aside js-configurator-save-button small-space-left"
-                  data-popup-title=""
-                  data-formtype="save-configuration"
-                  data-meta=""
-                  onClick={saveButtonHandler}
-                  disabled={state.loading}
-                >
-                  <i className="fas fa-file-import"></i> &nbsp;&nbsp; Offerte
-                </button>
+                {!disableQuoteButton && (
+                  <button
+                    className="d-none d-md-flex align-items-center justify-content-center btn btn--block btn--aside js-configurator-save-button small-space-left"
+                    data-popup-title=""
+                    data-formtype="save-configuration"
+                    data-meta=""
+                    onClick={saveButtonHandler}
+                    disabled={state.loading}
+                  >
+                    <i className="fas fa-file-import"></i> &nbsp;&nbsp; Offerte
+                  </button>
+                )}
               </div>
             </div>
           </div>

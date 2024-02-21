@@ -316,7 +316,8 @@ const Configurator = () => {
   }), " \xA0\xA0 Mail mij een offerte")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_StickyBar__WEBPACK_IMPORTED_MODULE_4__["default"], {
     submitButtonHandler: handleSubmitButtonClick,
     saveButtonHandler: handleSaveButtonClick,
-    scrollTargetRef: ref
+    scrollTargetRef: ref,
+    disableQuoteButton: settings.quotationDisabled
   })));
 };
 
@@ -751,7 +752,8 @@ const StickyBar = _ref => {
   let {
     submitButtonHandler,
     saveButtonHandler,
-    scrollTargetRef
+    scrollTargetRef,
+    disableQuoteButton
   } = _ref;
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
@@ -798,7 +800,7 @@ const StickyBar = _ref => {
     className: "btn btn--block btn--primary btn--tiny",
     onClick: submitButtonHandler,
     disabled: state.loading
-  }, "In winkelwagen"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }, "In winkelwagen"), !disableQuoteButton && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "d-none d-md-flex align-items-center justify-content-center btn btn--block btn--aside js-configurator-save-button small-space-left",
     "data-popup-title": "",
     "data-formtype": "save-configuration",

@@ -259,6 +259,7 @@ const Configurator = () => {
           submitButtonHandler={handleSubmitButtonClick}
           saveButtonHandler={handleSaveButtonClick}
           scrollTargetRef={ref}
+          disableQuoteButton={settings.quotationDisabled}
         />
       </ConfiguratorContext.Provider>
     </>
