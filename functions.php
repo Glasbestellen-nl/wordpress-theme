@@ -57,8 +57,58 @@ function gb_remove_breadcrumbs_from_schema( $pieces, $context ) {
 add_filter( 'wpseo_schema_graph_pieces', 'gb_remove_breadcrumbs_from_schema', 11, 2 );
 
 
+/**
+ * Modify the schema markup for WebPage.
+ */
 function custom_wpseo_schema_webpage( $data ) {
+   // Add @type to breadcrumb.
    $data['breadcrumb']['@type'] = 'BreadcrumbList';
+
+   // Get the current URL path.
+   $current_url = wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
+
+   // Split the URL path into segments.
+   $url_segments = explode( '/', trim( $current_url, '/' ) );
+
+   // Initialize the breadcrumb items array.
+   $breadcrumb_items = array();
+
+   // Add Home as the first breadcrumb item.
+   $breadcrumb_items[] = array(
+       '@type' => 'ListItem',
+       'position' => 1,
+       'name' => 'Home',
+       'item' => get_home_url(),
+   );
+
+   // Construct breadcrumb items dynamically based on URL segments.
+   $url = get_home_url();
+   $position = 1;
+   foreach ( $url_segments as $segment ) {
+       $url .= '/' . $segment;
+       $position++;
+
+       // Get the title for the current URL segment.
+       $title = '';
+       if ( $segment !== '' ) { // Exclude empty segments.
+           $page = get_page_by_path( $segment );
+           if ( $page ) {
+               $title = $page->post_title;
+           }
+       }
+
+       // Add the current URL segment as a breadcrumb item.
+       $breadcrumb_items[] = array(
+           '@type' => 'ListItem',
+           'position' => $position,
+           'name' => $title,
+           'item' => $url,
+       );
+   }
+
+   // Add breadcrumb list items to the schema.
+   $data['breadcrumb']['itemListElement'] = $breadcrumb_items;
+
    return $data;
 }
 add_filter( 'wpseo_schema_webpage', 'custom_wpseo_schema_webpage' );
