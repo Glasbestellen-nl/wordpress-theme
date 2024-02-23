@@ -6,7 +6,7 @@
 
         <?php
         if ( function_exists( 'yoast_breadcrumb' ) ) {
-            yoast_breadcrumb( '<div class="breadcrumbs space-below">', '</div>' );
+            yoast_breadcrumb( '<div id="breadcrumbs" class="breadcrumbs space-below">', '</div>' );
         }
         ?>
 

@@ -63,7 +63,7 @@ $configurator = get_field( 'configurator', 'term_' . $term_id ); ?>
 
 					<?php
 					if ( function_exists( 'yoast_breadcrumb' ) ) {
-						yoast_breadcrumb( '<div class="breadcrumbs space-below">', '</div>' );
+						yoast_breadcrumb( '<div id="breadcrumbs" class="breadcrumbs space-below">', '</div>' );
 					}
 					echo '<h2 class="h1">' . sprintf( __( '%s op maat', 'glasbestellen' ), single_term_title( null, false ) ) . '</h2>';
 					echo term_description();
