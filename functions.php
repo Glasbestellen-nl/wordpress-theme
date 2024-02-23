@@ -55,3 +55,10 @@ function gb_remove_breadcrumbs_from_schema( $pieces, $context ) {
 	});
 }
 add_filter( 'wpseo_schema_graph_pieces', 'gb_remove_breadcrumbs_from_schema', 11, 2 );
+
+
+function custom_wpseo_schema_webpage( $data ) {
+   $data['breadcrumb']['@type'] = 'BreadcrumbList';
+   return $data;
+}
+add_filter( 'wpseo_schema_webpage', 'custom_wpseo_schema_webpage' );
