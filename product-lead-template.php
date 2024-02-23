@@ -66,7 +66,7 @@
 
                         <?php
                         if ( function_exists( 'yoast_breadcrumb' ) ) {
-                           yoast_breadcrumb( '<div class="breadcrumbs space-below">', '</div>' );
+                           yoast_breadcrumb( '<div class="breadcrumb space-below">', '</div>' );
                         }
                         echo '<h2 class="h1">' . sprintf( __( '%s op maat', 'glasbestellen' ), get_the_title() ) . '</h2>';
                         the_content();

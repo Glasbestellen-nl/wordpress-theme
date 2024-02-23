@@ -17,7 +17,7 @@ get_header( 'shop' );
 
 					<?php
 					if ( function_exists( 'yoast_breadcrumb' ) ) {
-						yoast_breadcrumb( '<div id="breadcrumbs" class="breadcrumbs small-space-below">', '</div>' );
+						yoast_breadcrumb( '<div id="breadcrumb" class="breadcrumbs small-space-below">', '</div>' );
 					}
 					?>
 
