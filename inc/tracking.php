@@ -43,23 +43,15 @@ class Tracking {
             return;
         }
 
-        $email = $relation->get_email();
-        $full_name = $relation->get_name();
-        $name_parts = explode(' ', $full_name);
-        $first_name = $name_parts[0];
-        $last_name = implode(' ', array_slice($name_parts, 1));
-        $phone = $relation->get_phone();
-        $city = $relation->get_residence();
+        $email = $relation->get_email() ? hash('sha256', $relation->get_email()) : '';
+        $phone = $relation->get_phone() ? hash('sha256', $relation->get_phone()) : '';
         ?>
 
         <script>
             var dataLayer = window.dataLayer || [];
             dataLayer.push({
                 'lead.user.email': '<?php echo $email; ?>',
-                'lead.user.firstName': '<?php echo $first_name; ?>',
-                'lead.user.lastName': '<?php echo $last_name; ?>',
                 'lead.user.phone': '<?php echo $phone; ?>',
-                'lead.user.city': '<?php echo $city; ?>'
             });
         </script>
 
