@@ -75,7 +75,9 @@ function gb_handle_lead_form_submit() {
          do_action( 'gb_lead_form_submit_before_redirect', $lead_id, $_POST );
 
          // Set redirect url on success
-         $response['redirect'] = apply_filters( 'gb_lead_form_submit_redirect_url', get_permalink( get_option( 'page_lead_success' ) ), $_POST );
+         $redirect_url = add_query_arg('lid', $lead_id, get_permalink(get_option('page_lead_success')));
+         $redirect_url = apply_filters('gb_lead_form_submit_redirect_url', $redirect_url, $_POST);
+         $response['redirect'] = $redirect_url;
 
       } else {
          $response['error'] = $error;
